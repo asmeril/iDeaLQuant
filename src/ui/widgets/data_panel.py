@@ -61,9 +61,122 @@ class DataPanel(QWidget):
         filter_group = self._create_filter_group()
         layout.addWidget(filter_group)
         
-        # Önizleme tablosu
+        # Önizleme tablosu (esnek boyutlu olması için stretch veriyoruz, ama altına süreç kutusunu ekleyeceğiz)
         preview_group = self._create_preview_group()
-        layout.addWidget(preview_group, 1)  # Stretch
+        
+        # Süreç Başlatma Grubu (Yeni Tasarım)
+        self.process_group = self._create_process_group()
+        self.process_group.setEnabled(False) # Veri yüklenene kadar kapalı
+        
+        # Splitter veya stretch mantığını korumak için
+        top_layout = QVBoxLayout()
+        top_layout.addWidget(self.source_tabs)
+        top_layout.addWidget(filter_group)
+        top_layout.addWidget(preview_group, 1)
+        
+        layout.addLayout(top_layout, 1)
+        layout.addWidget(self.process_group)
+    
+    def _create_process_group(self) -> QGroupBox:
+        """Yeni Süreç Başlatma UI Grubu"""
+        group = QGroupBox("Merkezi Süreç Başlatma (Strateji Ayarları)")
+        group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #c8a2c8; margin-top: 10px; } QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 3px 0 3px; }")
+        layout = QHBoxLayout(group)
+        
+        # Strateji
+        layout.addWidget(QLabel("Strateji:"))
+        self.strategy_combo = QComboBox()
+        self.strategy_combo.addItems([
+            "0: ScoreBased (Gatekeeper)", 
+            "1: ARS Trend v2", 
+            "2: Paradise (Trend+Breakout)", 
+            "3: TOMA + Mom"
+        ])
+        layout.addWidget(self.strategy_combo)
+        
+        # Vade Tipi
+        layout.addWidget(QLabel("Vade Tipi:"))
+        self.vade_combo = QComboBox()
+        self.vade_combo.addItems(["ENDEKS", "SPOT"])
+        layout.addWidget(self.vade_combo)
+        
+        # Yön Modu
+        layout.addWidget(QLabel("Yön Modu:"))
+        self.yon_combo = QComboBox()
+        self.yon_combo.addItems(["CIFT", "SADECE_AL", "SADECE_SAT"])
+        layout.addWidget(self.yon_combo)
+        
+        layout.addStretch()
+        
+        self.create_process_btn = QPushButton("▶ Süreci Başlat ve Kilitle")
+        self.create_process_btn.setObjectName("primaryButton")
+        self.create_process_btn.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold; padding: 8px 15px;")
+        self.create_process_btn.clicked.connect(self._on_create_process_clicked)
+        layout.addWidget(self.create_process_btn)
+        
+        return group
+        
+    def _on_create_process_clicked(self):
+        """Kullanıcı butona bastığında süreci oluştur ve sinyal gönder"""
+        if self.df is None or len(self.df) == 0:
+            QMessageBox.warning(self, "Hata", "Önce veri yüklemelisiniz!")
+            return
+            
+        # UI'dan değerleri al
+        strategy_index = self.strategy_combo.currentIndex()
+        vade_tipi = self.vade_combo.currentText()
+        yon_modu = self.yon_combo.currentText()
+        
+        # Hangi kaynaktan yüklendiğini bul
+        current_tab = self.source_tabs.currentIndex()
+        if current_tab == 0:
+            # IdealData
+            chart_data = self.ideal_path_edit.text()
+            market = self.market_combo.currentText()
+            symbol = self.symbol_combo.currentText()
+            period = self.period_combo.currentText()
+            
+            from src.data.ideal_parser import get_file_path, PERIOD_MAP
+            found_path = get_file_path(chart_data, market, symbol, period)
+            if found_path:
+                data_file_path = found_path
+            else:
+                period_info = PERIOD_MAP.get(period, {'folder': period, 'ext': f'.{period}'})
+                data_file_path = Path(chart_data) / market / period_info['folder'] / f"{symbol}{period_info['ext']}"
+                
+            full_symbol = f"{market}_{symbol}"
+            per_str = f"{period}dk" if period.isdigit() else period
+            
+        else:
+            # CSV
+            csv_path = self.csv_path_edit.text().strip()
+            fname = Path(csv_path).stem
+            parts = fname.split('_')
+            full_symbol = parts[0] if parts else 'UNKNOWN'
+            per_str = parts[1] if len(parts) > 1 else '1dk'
+            data_file_path = str(Path(csv_path).resolve())
+            
+        # Veritabanında süreci oluştur
+        process_id = db.create_process(
+            symbol=full_symbol,
+            period=per_str,
+            data_file=str(data_file_path),
+            data_rows=len(self.df),
+            strategy_index=strategy_index,
+            vade_tipi=vade_tipi,
+            yon_modu=yon_modu
+        )
+        self.current_process_id = process_id
+        
+        # Diğer panellere sinyalleri fırlat
+        self.data_loaded.emit(self.df)
+        self.process_created.emit(process_id)
+        
+        QMessageBox.information(
+            self, 
+            "Süreç Oluşturuldu", 
+            f"Süreç ID: {process_id}\n\nStrateji: {strategy_index}\nVade: {vade_tipi}\nYön: {yon_modu}\n\nAyarlar kilitlendi. Optimizasyon sekmesine geçebilirsiniz."
+        )
     
     def _create_ideal_tab(self) -> QWidget:
         """IdealData veri kaynağı tab'ı"""
@@ -313,40 +426,9 @@ class DataPanel(QWidget):
             self.df_raw = df.copy()  # Filtre için ham veriyi sakla
             self._update_preview()
             
-            # Süreç oluştur - tam dosya yolunu hesapla
-            from src.data.ideal_parser import get_file_path
-            
-            # Doğru dosya yolunu bul (parser mantığıyla)
-            found_path = get_file_path(chart_data, market, symbol, period)
-            
-            # Eğer bulunamazsa yine de fallback oluştur (v1.0 mantığı)
-            if found_path:
-                data_file_path = found_path
-            else:
-                from src.data.ideal_parser import PERIOD_MAP
-                period_info = PERIOD_MAP.get(period, {'folder': period, 'ext': f'.{period}'})
-                data_file_path = Path(chart_data) / market / period_info['folder'] / f"{symbol}{period_info['ext']}"
-            
-            full_symbol = f"{market}_{symbol}"
-            process_id = db.create_process(
-                symbol=full_symbol,
-                period=f"{period}dk" if period.isdigit() else period,
-                data_file=str(data_file_path),
-                data_rows=len(df)
-            )
-            self.current_process_id = process_id
-            
-            # Signals gönder
-            self.data_loaded.emit(self.df)
-            self.process_created.emit(process_id)
-            
-            QMessageBox.information(
-                self, 
-                "Başarılı", 
-                f"{len(df):,} bar yüklendi.\n"
-                f"Süreç: {process_id}\n"
-                f"Tarih: {df['DateTime'].min()} - {df['DateTime'].max()}"
-            )
+            # Veri yüklendi, Süreç başlatma kutusunu aktif et
+            self.process_group.setEnabled(True)
+            self.stats_label.setText(self.stats_label.text() + " - Yüklendi, Süreç Başlatılması Bekleniyor...")
             
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Veri yüklenirken hata: {str(e)}")
@@ -394,34 +476,9 @@ class DataPanel(QWidget):
             self.df_raw = df.copy()  # Filtre için ham veriyi sakla
             self._update_preview()
             
-            # CSV dosya adından sembol ve periyot çıkar
-            fname = Path(csv_path).stem
-            parts = fname.split('_')
-            symbol = parts[0] if parts else 'UNKNOWN'
-            period = parts[1] if len(parts) > 1 else '1dk'
-            
-            # Süreç oluştur
-            process_id = db.create_process(
-                symbol=symbol,
-                period=period,
-                data_file=str(Path(csv_path).resolve()),
-                data_rows=len(df)
-            )
-            self.current_process_id = process_id
-            
-            # Signals gönder
-            print(f"[DEBUG] DataPanel: Emitting data_loaded (Shape: {df.shape})")
-            self.data_loaded.emit(self.df)
-            print(f"[DEBUG] DataPanel: Emitting process_created ({process_id})")
-            self.process_created.emit(process_id)
-            
-            QMessageBox.information(
-                self, 
-                "Başarılı", 
-                f"{len(df):,} satır yüklendi.\n"
-                f"Süreç: {process_id}\n"
-                f"Tarih: {df['DateTime'].min()} - {df['DateTime'].max()}"
-            )
+            # Veri yüklendi, Süreç başlatma kutusunu aktif et
+            self.process_group.setEnabled(True)
+            self.stats_label.setText(self.stats_label.text() + " - Yüklendi, Süreç Başlatılması Bekleniyor...")
             
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Veri yüklenirken hata: {str(e)}")

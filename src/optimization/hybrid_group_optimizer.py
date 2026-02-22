@@ -664,13 +664,14 @@ def backtest_with_trades(closes, signals, exits_long, exits_short, commission: f
 class HybridGroupOptimizer:
     def __init__(self, groups: List[ParameterGroup], process_id: str = None, strategy_index: int = 0, 
                  is_cancelled_callback=None, on_progress_callback=None, n_parallel: int = 4, 
-                 commission: float = 0.0, slippage: float = 0.0):
+                 commission: float = 0.0, slippage: float = 0.0, vade_tipi: str = "ENDEKS"):
         self.groups = groups
         self.independent_groups = [g for g in groups if g.is_independent]
         self.cascaded_groups = [g for g in groups if not g.is_independent]
         self.process_id, self.strategy_index, self.n_parallel, self._is_cancelled = process_id, strategy_index, n_parallel, is_cancelled_callback
         self.on_progress = on_progress_callback
         self.commission, self.slippage = commission, slippage
+        self.vade_tipi = vade_tipi
         self.group_results, self.combined_results, self.final_results = {}, [], []
         self.pool = None  # Process pool for termination support
 
@@ -706,7 +707,7 @@ class HybridGroupOptimizer:
         combos = self.generate_combinations(group.params)
         results = []
         if self.n_parallel > 1:
-            tasks = [({**base_params, **c}, self.strategy_index, self.commission, self.slippage) for c in combos]
+            tasks = [({**base_params, **c, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage) for c in combos]
             try:
                 self.pool = Pool(processes=self.n_parallel, initializer=_init_group_pool, initargs=(self.strategy_index,))
                 raw = self.pool.map(_eval_combo_wrapper, tasks)
@@ -726,7 +727,7 @@ class HybridGroupOptimizer:
             _init_group_pool(self.strategy_index)
             for combo in combos:
                 if self._is_cancelled and self._is_cancelled(): break
-                score = _evaluate_params_static({**base_params, **combo}, self.strategy_index, self.commission, self.slippage)
+                score = _evaluate_params_static({**base_params, **combo, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage)
                 if score['net_profit'] > 0: results.append({'group': group.name, **combo, **score})
         results.sort(key=lambda x: x['net_profit'], reverse=True)
         top = results[:10]

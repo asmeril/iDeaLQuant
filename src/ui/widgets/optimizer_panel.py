@@ -699,7 +699,7 @@ class OptimizationWorker(QThread):
                         res = fast_backtest_strategy4(
                             closes, toma_trend, toma_val,
                             hhv1, llv1, dummy_hhv2, dummy_llv2, dummy_hhv3, dummy_llv3,
-                            dummy_mom, dummy_trix, mask_arr,
+                            dummy_mom, dummy_trix, mask_arr, cache.times_arr,
                             p_mom_low_dummy, p_mom_high_dummy,
                             100, 100, # Dummy Trix LBs
                             0.0, 0.0 # No Risk
@@ -752,6 +752,7 @@ class OptimizationWorker(QThread):
                 'hhv1': hhv1,
                 'llv1': llv1,
                 'mask': mask_arr,
+                'times_arr': cache.times_arr,
                 'mom': {mp: cache.get_mom(mp) for mp in mom_periods},
                 'trix': {tp: cache.get_trix(tp) for tp in trix_periods},
                 'hhv': {hp: cache.get_hhv(hp) for hp in set(list(hhv2_ranges) + list(hhv3_ranges))},
@@ -922,6 +923,7 @@ class OptimizationWorker(QThread):
                 'hhv1': hhv1,
                 'llv1': llv1,
                 'mask': mask_arr,
+                'times_arr': cache.times_arr,
                 'hhv2_fixed': hhv2,
                 'llv2_fixed': llv2,
                 'mom_fixed': mom_arr,
@@ -1099,22 +1101,22 @@ class OptimizationWorker(QThread):
                 oos_res = self._validate_s4_result(r)
                 r.update(oos_res)
             
-            # === OOS-AWARE RE-RANKING ===
-            # Test karı negatif olanları cezalandır
+            # === OOS-AWARE RE-RANKING via Advanced Fitness ===
+            from src.optimization.fitness import quick_fitness
             for r in top_results[:50]:
                 test_net = r.get('test_net', None)
                 if test_net is not None:
-                    base = r.get('robust_fitness', r.get('fitness', 0))
-                    if test_net < 0:
-                        # Test'te zarar → agresif ceza (%90 düşür)
-                        r['oos_penalized_fitness'] = base * 0.10
-                    elif test_net > 0:
-                        # Test'te kâr → bonus (%0-30 arası, test kâlitesine göre)
-                        test_pf = r.get('test_pf', 1.0)
-                        oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                        r['oos_penalized_fitness'] = base * (1.0 + oos_bonus)
-                    else:
-                        r['oos_penalized_fitness'] = base * 0.50
+                    r['oos_penalized_fitness'] = quick_fitness(
+                        net_profit=r.get('net_profit', r.get('NP', 0)),
+                        pf=r.get('pf', r.get('PF', 0)),
+                        max_dd=r.get('max_dd', r.get('DD', 0)),
+                        trades=r.get('trades', r.get('Tr', 0)),
+                        initial_capital=100000.0,
+                        active_days=r.get('active_days', 0),
+                        total_days=r.get('total_days', 0),
+                        test_net_profit=test_net,
+                        test_pf=r.get('test_pf')
+                    )
                 else:
                     r['oos_penalized_fitness'] = r.get('robust_fitness', r.get('fitness', 0))
             
@@ -1180,6 +1182,8 @@ class OptimizationWorker(QThread):
                 except Exception:
                     pass
         
+        vade_tipi = self.config.get('vade_tipi', "ENDEKS")
+        
         optimizer = HybridGroupOptimizer(
             synced_groups, 
             process_id=self.process_id, 
@@ -1188,7 +1192,8 @@ class OptimizationWorker(QThread):
             on_progress_callback=_hybrid_progress,
             n_parallel=self.n_parallel,
             commission=self.commission,
-            slippage=self.slippage
+            slippage=self.slippage,
+            vade_tipi=vade_tipi
         )
         self.current_optimizer = optimizer
         
@@ -1215,19 +1220,22 @@ class OptimizationWorker(QThread):
                  oos_res = self._validate_result(params)
                  res.update(oos_res)
              
-             # === OOS-AWARE RE-RANKING ===
+             # === OOS-AWARE RE-RANKING via Advanced Fitness ===
+             from src.optimization.fitness import quick_fitness
              for r in results:
                  test_net = r.get('test_net', None)
                  if test_net is not None:
-                     base = r.get('robust_fitness', r.get('fitness', 0))
-                     if test_net < 0:
-                         r['oos_penalized_fitness'] = base * 0.10
-                     elif test_net > 0:
-                         test_pf = r.get('test_pf', 1.0)
-                         oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                         r['oos_penalized_fitness'] = base * (1.0 + oos_bonus)
-                     else:
-                         r['oos_penalized_fitness'] = base * 0.50
+                     r['oos_penalized_fitness'] = quick_fitness(
+                         net_profit=r.get('net_profit', r.get('NP', 0)),
+                         pf=r.get('pf', r.get('PF', 0)),
+                         max_dd=r.get('max_dd', r.get('DD', 0)),
+                         trades=r.get('trades', r.get('Tr', 0)),
+                         initial_capital=100000.0,
+                         active_days=r.get('active_days', 0),
+                         total_days=r.get('total_days', 0),
+                         test_net_profit=test_net,
+                         test_pf=r.get('test_pf')
+                     )
                  else:
                      r['oos_penalized_fitness'] = r.get('robust_fitness', r.get('fitness', 0))
              
@@ -1261,6 +1269,8 @@ class OptimizationWorker(QThread):
             mutation_rate=0.15
         )
         
+        vade_tipi = self.config.get('vade_tipi', "ENDEKS")
+        
         optimizer = GeneticOptimizer(
             self.data, 
             config, 
@@ -1269,7 +1279,8 @@ class OptimizationWorker(QThread):
             commission=self.commission,
             slippage=self.slippage,
             is_cancelled_callback=lambda: not self._is_running,
-            narrowed_ranges=self.narrowed_ranges  # Cascade icin dar aralik
+            narrowed_ranges=self.narrowed_ranges,  # Cascade icin dar aralik
+            vade_tipi=vade_tipi
         )
         self.current_optimizer = optimizer
         
@@ -1338,18 +1349,23 @@ class OptimizationWorker(QThread):
                 oos_res = self._validate_result(best_params)
                 formatted_result.update(oos_res)
                 
-                # === OOS-AWARE RE-RANKING ===
+                # === OOS-AWARE RE-RANKING via Advanced Fitness ===
+                from src.optimization.fitness import quick_fitness
                 test_net = formatted_result.get('test_net', None)
                 if test_net is not None:
-                    base = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
-                    if test_net < 0:
-                        formatted_result['oos_penalized_fitness'] = base * 0.10
-                    elif test_net > 0:
-                        test_pf = formatted_result.get('test_pf', 1.0)
-                        oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                        formatted_result['oos_penalized_fitness'] = base * (1.0 + oos_bonus)
-                    else:
-                        formatted_result['oos_penalized_fitness'] = base * 0.50
+                    formatted_result['oos_penalized_fitness'] = quick_fitness(
+                        net_profit=formatted_result.get('net_profit', 0),
+                        pf=formatted_result.get('pf', 0),
+                        max_dd=formatted_result.get('max_dd', 0),
+                        trades=formatted_result.get('trades', 0),
+                        initial_capital=100000.0,
+                        active_days=formatted_result.get('active_days', 0),
+                        total_days=formatted_result.get('total_days', 0),
+                        test_net_profit=test_net,
+                        test_pf=formatted_result.get('test_pf')
+                    )
+                else:
+                    formatted_result['oos_penalized_fitness'] = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
                 
             self.result_ready.emit([formatted_result])
         else:
@@ -1375,6 +1391,8 @@ class OptimizationWorker(QThread):
         else:
             self._emit_progress(5, f"Bayesian Optimizer baslatiliyor ({strategy_name})...")
         
+        vade_tipi = self.config.get('vade_tipi', "ENDEKS")
+        
         n_trials = 500  # Deneme sayısı (Artırıldı)
         
         self._emit_progress(10, f"Optuna calismasi olusturuluyor...")
@@ -1386,7 +1404,8 @@ class OptimizationWorker(QThread):
             commission=self.commission,
             slippage=self.slippage,
             is_cancelled_callback=lambda: not self._is_running,
-            narrowed_ranges=self.narrowed_ranges  # Cascade icin dar aralik
+            narrowed_ranges=self.narrowed_ranges,  # Cascade icin dar aralik
+            vade_tipi=vade_tipi
         )
         self.current_optimizer = optimizer
         
@@ -1451,18 +1470,23 @@ class OptimizationWorker(QThread):
                 oos_res = self._validate_result(best_params)
                 formatted_result.update(oos_res)
                 
-                # === OOS-AWARE RE-RANKING ===
+                # === OOS-AWARE RE-RANKING via Advanced Fitness ===
+                from src.optimization.fitness import quick_fitness
                 test_net = formatted_result.get('test_net', None)
                 if test_net is not None:
-                    base = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
-                    if test_net < 0:
-                        formatted_result['oos_penalized_fitness'] = base * 0.10
-                    elif test_net > 0:
-                        test_pf = formatted_result.get('test_pf', 1.0)
-                        oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                        formatted_result['oos_penalized_fitness'] = base * (1.0 + oos_bonus)
-                    else:
-                        formatted_result['oos_penalized_fitness'] = base * 0.50
+                    formatted_result['oos_penalized_fitness'] = quick_fitness(
+                        net_profit=formatted_result.get('net_profit', 0),
+                        pf=formatted_result.get('pf', 0),
+                        max_dd=formatted_result.get('max_dd', 0),
+                        trades=formatted_result.get('trades', 0),
+                        initial_capital=100000.0,
+                        active_days=formatted_result.get('active_days', 0),
+                        total_days=formatted_result.get('total_days', 0),
+                        test_net_profit=test_net,
+                        test_pf=formatted_result.get('test_pf')
+                    )
+                else:
+                    formatted_result['oos_penalized_fitness'] = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
             
             self.result_ready.emit([formatted_result])
         else:
@@ -1696,22 +1720,29 @@ class OptimizerPanel(QWidget):
         
         top_row.addSpacing(20)
         
-        # Periyot secimi (timeframe scaling icin)
+        # Periyot secimi (Sadece gösterim, süreçten gelecek)
         top_row.addWidget(QLabel("Periyot:"))
         self.period_combo = QComboBox()
         self.period_combo.addItems(["1 dk", "5 dk", "15 dk", "60 dk"])
         self.period_combo.setCurrentText("5 dk")
+        self.period_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.period_combo.currentIndexChanged.connect(self._on_period_changed)
         top_row.addWidget(self.period_combo)
         
         top_row.addSpacing(10)
         
-        # Strateji seçimi
+        # Strateji seçimi (Sadece gösterim, süreçten gelecek)
         top_row.addWidget(QLabel("Strateji:"))
         self.strategy_combo = QComboBox()
         self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum"])
+        self.strategy_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         top_row.addWidget(self.strategy_combo)
+        
+        # Vade ve Yön Bilgisi (Sadece okunur, süreçten okunacak)
+        self.process_info_label = QLabel("Vade: - | Yön: -")
+        self.process_info_label.setStyleSheet("color: #E65100; font-weight: bold; padding: 0 10px;")
+        top_row.addWidget(self.process_info_label)
         
         top_row.addSpacing(20)
         
@@ -2233,6 +2264,24 @@ class OptimizerPanel(QWidget):
         for method in self.method_tables.keys():
             self.method_tables[method].setRowCount(0)
             self.method_results[method] = []
+            
+        # UI Ayarlarını kilitle ve DB'den çek
+        proc = db.get_process(self.current_process_id)
+        if proc:
+            if 'strategy_index' in proc:
+                self.strategy_combo.setCurrentIndex(int(proc['strategy_index']))
+            
+            per_str = proc.get('period', '5dk')
+            per_formatted = per_str.replace("dk", " dk")
+            idx = self.period_combo.findText(per_formatted)
+            if idx >= 0:
+                self.period_combo.setCurrentIndex(idx)
+                
+            self.config['vade_tipi'] = proc.get('vade_tipi', 'ENDEKS')
+            self.config['yon_modu'] = proc.get('yon_modu', 'CIFT')
+            self.process_info_label.setText(f"Vade: {self.config['vade_tipi']} | Yön: {self.config['yon_modu']}")
+            
+            self._setup_strategy_params()
         
         # Veritabanından yükle
         results = db.get_optimization_results(self.current_process_id)
@@ -2277,7 +2326,7 @@ class OptimizerPanel(QWidget):
 
     
     def set_process(self, process_id: str):
-        """DataPanel'den gelen süreç ID'sini ayarla"""
+        """DataPanel'den gelen süreç ID'sini ayarla ve UI'yi kilitle"""
         print(f"[DEBUG] OptimizerPanel.set_process called with {process_id}")
         self.current_process_id = process_id
         self._refresh_processes()
@@ -2287,6 +2336,30 @@ class OptimizerPanel(QWidget):
             if self.process_combo.itemData(i) == process_id:
                 self.process_combo.setCurrentIndex(i)
                 break
+                
+        # Tablodan süreç detaylarını çek ve kilitle
+        proc = db.get_process(process_id)
+        if proc:
+            # Strateji
+            if 'strategy_index' in proc:
+                self.strategy_combo.setCurrentIndex(int(proc['strategy_index']))
+            
+            # Periyot
+            per_str = proc.get('period', '5dk')
+            per_formatted = per_str.replace("dk", " dk")
+            idx = self.period_combo.findText(per_formatted)
+            if idx >= 0:
+                self.period_combo.setCurrentIndex(idx)
+                
+            # Config objesine Vade Tipi ve Yön Modunu aktar
+            self.config['vade_tipi'] = proc.get('vade_tipi', 'ENDEKS')
+            self.config['yon_modu'] = proc.get('yon_modu', 'CIFT')
+            
+            # Bilgi etiketini güncelle
+            self.process_info_label.setText(f"Vade: {self.config['vade_tipi']} | Yön: {self.config['yon_modu']}")
+            
+            # Değişiklikler yapıldıktan sonra grup update'i tetikle
+            self._setup_strategy_params()
     
     def _on_method_changed(self, index: int):
         """Yöntem değiştiğinde UI'ı güncelle"""

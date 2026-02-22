@@ -93,12 +93,13 @@ class BayesianObjective:
     
     def __init__(self, cache: IndicatorCache, fitness_config: Optional[FitnessConfig] = None, 
                  strategy_index: int = 1, commission: float = 0.0, slippage: float = 0.0,
-                 narrowed_ranges: dict = None):
+                 narrowed_ranges: dict = None, vade_tipi: str = "ENDEKS"):
         self.cache = cache
         self.fitness_config = fitness_config or FitnessConfig()
         self.strategy_index = strategy_index
         self.commission = commission
         self.slippage = slippage
+        self.vade_tipi = vade_tipi
         
         # Orijinal parametre tanimlarini kopyala
         if strategy_index == 0:
@@ -147,6 +148,8 @@ class BayesianObjective:
                 params[name] = trial.suggest_int(name, int(min_val), int(max_val), step=int(step))
             else:
                 params[name] = trial.suggest_float(name, min_val, max_val, step=step)
+                
+        params['vade_tipi'] = self.vade_tipi
         
         # Strateji bazlı backtest/evaluate
         if self.strategy_index == 0:
@@ -333,8 +336,12 @@ class BayesianObjective:
             hhv3 = cache.get_hhv(hhv3_p)
             llv3 = cache.get_llv(llv3_p)
             
-            # Mask (Default: All True)
-            mask_arr = np.ones(len(self.cache.closes), dtype=bool)
+            # Mask (Get from dataframe based on vade_tipi)
+            if hasattr(self.cache.df, 'get_trading_mask'):
+                mask_series = self.cache.df.get_trading_mask(self.vade_tipi)
+                mask_arr = mask_series.values
+            else:
+                mask_arr = np.ones(len(self.cache.closes), dtype=bool)
             
             # Run Fast Backtest
             result = fast_backtest_strategy4(
@@ -344,13 +351,13 @@ class BayesianObjective:
                 hhv2, llv2, 
                 hhv3, llv3, 
                 mom_arr, trix_arr, 
-                mask_arr, 
+                mask_arr, cache.times_arr,
                 ml, mh, 
                 trix_lb1, trix_lb2, 
                 ka / 100.0, iz / 100.0
             )
             
-            np_val, trades, pf, max_dd, sharpe = result
+            np_val, trades, pf, max_dd, sharpe, active_days, total_days = result
             
             if trades == 0 or np_val <= -999:
                 return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
@@ -358,6 +365,7 @@ class BayesianObjective:
             # Fitness Calc
             fitness = quick_fitness(
                 np_val, pf, max_dd, trades, sharpe=sharpe,
+                active_days=active_days, total_days=total_days,
                 commission=0.0, slippage=0.0
             )
             
@@ -622,7 +630,8 @@ class BayesianOptimizer:
         commission: float = 0.0,
         slippage: float = 0.0,
         is_cancelled_callback: Optional[Callable[[], bool]] = None,
-        narrowed_ranges: dict = None
+        narrowed_ranges: dict = None,
+        vade_tipi: str = "ENDEKS"
     ):
         """
         Args:
@@ -642,12 +651,13 @@ class BayesianOptimizer:
         self.n_parallel = n_parallel
         self.commission = commission
         self.slippage = slippage
+        self.vade_tipi = vade_tipi
         self.is_cancelled_callback = is_cancelled_callback
         
         self.cache = IndicatorCache(df)
         self.objective = BayesianObjective(
             self.cache, self.fitness_config, strategy_index, 
-            commission, slippage, narrowed_ranges  # Cascade destegi
+            commission, slippage, narrowed_ranges, self.vade_tipi
         )
         self.study = None
         self.on_trial_complete = None # Callback function(trial_no, max_trials, best_fitness)

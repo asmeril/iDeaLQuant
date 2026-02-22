@@ -58,6 +58,16 @@ class IndicatorCache:
         self.typical = df['Tipik'].values
         self.n = len(self.closes)
         self.lots = df['Lot'].values  # Volume data (Lot)
+        if 'Tarih' in df.columns:
+            self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+        elif 'date' in df.columns:
+            self.times_arr = df['date'].values.astype(np.int64) // 10**9
+        elif 'DateTime' in df.columns:
+            self.times_arr = df['DateTime'].values.astype(np.int64) // 10**9
+        elif 'time' in df.columns:
+            self.times_arr = df['time'].values.astype(np.int64) // 10**9
+        else:
+            self.times_arr = np.zeros(len(df), dtype=np.int64)
         
         self.ars_cache = {}
         self.rsi_cache = {}
@@ -132,17 +142,17 @@ class IndicatorCache:
         return self.vol_hhv_cache[key]
 
 # --- WORKER INIT ---
-def worker_init():
+def worker_init(vade_tipi="ENDEKS"):
     global g_cache, g_mask
     df = load_data()
     if df is not None:
         g_cache = IndicatorCache(df)
-        g_mask = df.get_trading_mask("ENDEKS").values if hasattr(df, 'get_trading_mask') else np.ones(len(df), dtype=bool)
+        g_mask = df.get_trading_mask(vade_tipi).values if hasattr(df, 'get_trading_mask') else np.ones(len(df), dtype=bool)
 
 # --- FAST BACKTEST (Strategy 2 Logic) ---
 @jit(nopython=True)
 def fast_backtest_strategy2(closes, highs, lows, volumes, ars_arr, hhv, llv, mom, rsi,
-                            mfi_arr, mfi_hhv, mfi_llv, vol_hhv, mask_arr,
+                            mfi_arr, mfi_hhv, mfi_llv, vol_hhv, mask_arr, times_arr,
                             mom_p, brk_p, rsi_p, kar_al, iz_stop,
                             rsi_ob, rsi_os, use_mfi, use_vol):
     n = len(closes)
@@ -171,6 +181,11 @@ def fast_backtest_strategy2(closes, highs, lows, volumes, ars_arr, hhv, llv, mom
     peak_equity = 0.0
     current_equity = 0.0
     
+    last_trade_day = -1
+    active_days = 0
+    total_days = 0
+    last_day = -1
+    
     # Constants scaled
     kar_al_ratio = kar_al / 100.0
     iz_stop_ratio = iz_stop / 100.0
@@ -187,6 +202,10 @@ def fast_backtest_strategy2(closes, highs, lows, volumes, ars_arr, hhv, llv, mom
     current_trend = 0
     
     for i in range(50, n):
+        if times_arr[i] != last_day:
+            total_days += 1
+            last_day = times_arr[i]
+
         # --- TRADING MASK CHECK ---
         if not mask_arr[i]:
             if pos != 0:
@@ -292,6 +311,9 @@ def fast_backtest_strategy2(closes, highs, lows, volumes, ars_arr, hhv, llv, mom
                     entry_price = closes[i]
                     extreme_price = closes[i]
                     trades += 1
+                    if times_arr[i] != last_trade_day:
+                        active_days += 1
+                        last_trade_day = times_arr[i]
                     
             elif current_trend == -1:
                 # SHORT Conditions
@@ -312,11 +334,14 @@ def fast_backtest_strategy2(closes, highs, lows, volumes, ars_arr, hhv, llv, mom
                     entry_price = closes[i]
                     extreme_price = closes[i]
                     trades += 1
+                    if times_arr[i] != last_trade_day:
+                        active_days += 1
+                        last_trade_day = times_arr[i]
 
     net_profit = gross_profit - gross_loss
-    pf = (gross_profit / gross_loss) if gross_loss > 0 else 999
+    pf = (gross_profit / gross_loss) if gross_loss > 0 else 999.0
     
-    return net_profit, trades, pf, max_dd
+    return net_profit, trades, pf, max_dd, active_days, total_days
 
 # --- WORKER TASK ---
 def solve_chunk(args):
@@ -367,10 +392,10 @@ def solve_chunk(args):
             for ka in kar_als:
                 for iz in iz_stops:
                     
-                    np_val, tr, pf, dd = fast_backtest_strategy2(
+                    np_val, tr, pf, dd, active_days, total_days = fast_backtest_strategy2(
                         closes, g_cache.highs, g_cache.lows, volumes,
                         ars_arr, hhv_arr, llv_arr, mom_arr, rsi_arr,
-                        mfi_arr, mfi_hhv, mfi_llv, vol_hhv, g_mask,
+                        mfi_arr, mfi_hhv, mfi_llv, vol_hhv, g_mask, g_cache.times_arr,
                         mp, bp, rsi_p, ka, iz, rsi_ob, rsi_os, use_mfi, use_vol
                     )
                     
@@ -379,7 +404,8 @@ def solve_chunk(args):
                             'NP': np_val, 'PF': pf, 'DD': dd, 'Tr': tr,
                             'ARS_E': ars_ema, 'ARS_A': ars_atr_p, 'ARS_M': ars_atr_m,
                             'MOM': mp, 'BRK': bp, 'TP': ka, 'TS': iz,
-                            'MFI': mfi_period, 'VOL': vol_period
+                            'MFI': mfi_period, 'VOL': vol_period,
+                            'active_days': active_days, 'total_days': total_days
                         })
                         
     return results
@@ -404,7 +430,7 @@ def run_parallel_stage(stage_name, params_grid):
     final_results = []
     start_time = time()
     
-    with Pool(processes=min(32, cpu_count()), initializer=worker_init) as pool:
+    with Pool(processes=min(16, cpu_count()), initializer=worker_init, initargs=(vade_tipi,)) as pool:
         for res in pool.imap_unordered(solve_chunk, tasks):
             final_results.extend(res)
             
@@ -413,7 +439,8 @@ def run_parallel_stage(stage_name, params_grid):
     
     return final_results
 
-def run_strategy2_optimization():
+def run_strategy2_optimization(vade_tipi="ENDEKS"):
+    print(f"--- S2 (ARS Trend v2) Optimization Starting ({vade_tipi}) ---")
     if not os.path.exists("d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"):
         print("Veri dosyasi yok!")
         return
@@ -438,8 +465,23 @@ def run_strategy2_optimization():
     
     if not results1: return
     
+    import sys
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+    from src.optimization.fitness import quick_fitness
+    
     df1 = pd.DataFrame(results1)
-    df1['Score'] = df1['NP'] * df1['PF'] / (1 + df1['DD']/1000)
+    
+    for idx, row in df1.iterrows():
+         df1.at[idx, 'Score'] = quick_fitness(
+             net_profit=row['NP'],
+             pf=row['PF'],
+             max_dd=row['DD'],
+             trades=row['Tr'],
+             initial_capital=100000.0,
+             active_days=row.get('active_days', 0),
+             total_days=row.get('total_days', 0)
+         )
+         
     best = df1.nlargest(1, 'Score').iloc[0]
     
     print(f"\nSTAGE 1 BEST:\n{best.to_string()}")
@@ -471,7 +513,17 @@ def run_strategy2_optimization():
         return
     
     df2 = pd.DataFrame(results2)
-    df2['Score'] = df2['NP'] * df2['PF'] / (1 + df2['DD']/1000)
+    for idx, row in df2.iterrows():
+         df2.at[idx, 'Score'] = quick_fitness(
+             net_profit=row['NP'],
+             pf=row['PF'],
+             max_dd=row['DD'],
+             trades=row['Tr'],
+             initial_capital=100000.0,
+             active_days=row.get('active_days', 0),
+             total_days=row.get('total_days', 0)
+         )
+         
     df2 = df2.sort_values('Score', ascending=False)
     
     # === OOS VALIDATION (Top 50) ===
@@ -501,36 +553,40 @@ def run_strategy2_optimization():
                 mfi_llv = test_cache.get_mfi_llv(mfi_p, mfi_p)
                 vol_hhv = test_cache.get_volume_hhv(vol_p)
                 
-                np_val, tr, pf, dd = fast_backtest_strategy2(
+                np_val, tr, pf, dd, adays, tdays = fast_backtest_strategy2(
                     test_cache.closes, test_cache.highs, test_cache.lows, test_cache.lots,
                     ars_arr, hhv_arr, llv_arr, mom_arr, rsi_arr,
-                    mfi_arr, mfi_hhv, mfi_llv, vol_hhv, test_mask,
-                    int(r['MOM']), int(r['BRK']), 14,
-                    float(r['TP']), float(r['TS']),
+                    mfi_arr, mfi_hhv, mfi_llv, vol_hhv, test_mask, test_cache.times_arr,
+                    int(r['MOM']), int(r['BRK']), 14, float(r['TP']), float(r['TS']),
                     70, 30, True, True
                 )
                 r['test_net'] = np_val
                 r['test_trades'] = tr
                 r['test_pf'] = pf
+                r['test_dd'] = dd
             except Exception as e:
                 print(f"  OOS hata: {e}")
                 r['test_net'] = None
             
-            # === OOS-AWARE RE-RANKING ===
+            # === OOS-AWARE RE-RANKING via Advanced Fitness ===
             test_net = r.get('test_net', None)
-            base = r.get('Score', 0)
             if test_net is not None:
-                if test_net < 0:
-                    r['oos_penalized_score'] = base * 0.10
-                elif test_net > 0:
-                    test_pf = r.get('test_pf', 1.0)
-                    oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                    r['oos_penalized_score'] = base * (1.0 + oos_bonus)
-                else:
-                    r['oos_penalized_score'] = base * 0.50
+                new_score = quick_fitness(
+                    net_profit=r['NP'],
+                    pf=r['PF'],
+                    max_dd=r['DD'],
+                    trades=r['Tr'],
+                    initial_capital=100000.0,
+                    active_days=r.get('active_days', 0),
+                    total_days=r.get('total_days', 0),
+                    test_net_profit=r['test_net'],
+                    test_pf=r['test_pf']
+                )
+                r['oos_penalized_score'] = new_score
             else:
-                r['oos_penalized_score'] = base
-        
+                r['oos_penalized_score'] = r.get('Score', 0)
+                
+        # Re-rank by OOS penalized score
         top50.sort(key=lambda x: x.get('oos_penalized_score', 0), reverse=True)
         df_final = pd.DataFrame(top50)
         

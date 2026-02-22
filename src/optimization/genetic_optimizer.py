@@ -278,7 +278,7 @@ class ParameterSpace:
 class FitnessEvaluator:
     """Fitness değerlendirici - Her iki strateji için backtest wrapper"""
     
-    def __init__(self, df: pd.DataFrame, strategy_index: int = 1, commission: float = 0.0, slippage: float = 0.0):
+    def __init__(self, df: pd.DataFrame, strategy_index: int = 1, commission: float = 0.0, slippage: float = 0.0, vade_tipi: str = "ENDEKS"):
         """
         Args:
             df: Veri DataFrame'i
@@ -290,6 +290,7 @@ class FitnessEvaluator:
         self.strategy_index = strategy_index
         self.commission = commission
         self.slippage = slippage
+        self.vade_tipi = vade_tipi
         
         # Hem İngilizce hem Türkçe kolon isimlerini destekle
         open_col = 'Acilis' if 'Acilis' in df.columns else 'Open'
@@ -325,6 +326,7 @@ class FitnessEvaluator:
     
     def evaluate(self, params: Dict[str, Any]) -> Dict[str, float]:
         """Birey fitness'ını hesapla - strateji bazlı"""
+        params['vade_tipi'] = self.vade_tipi
         try:
             if self.strategy_index == 0:
                 return self._evaluate_strategy1(params)
@@ -561,8 +563,12 @@ class FitnessEvaluator:
             hhv3 = cache.get_hhv(hhv3_p)
             llv3 = cache.get_llv(llv3_p)
             
-            # Mask (Default: All True)
-            mask_arr = np.ones(len(self.closes), dtype=bool)
+            # Mask (Get from dataframe based on vade_tipi)
+            if hasattr(self.df, 'get_trading_mask'):
+                mask_series = self.df.get_trading_mask(self.vade_tipi)
+                mask_arr = mask_series.values
+            else:
+                mask_arr = np.ones(len(self.closes), dtype=bool)
             
             # Run Fast Backtest
             result = fast_backtest_strategy4(
@@ -572,13 +578,13 @@ class FitnessEvaluator:
                 hhv2, llv2, 
                 hhv3, llv3, 
                 mom_arr, trix_arr, 
-                mask_arr, 
+                mask_arr, cache.times_arr,
                 ml, mh, 
                 trix_lb1, trix_lb2, 
                 ka / 100.0, iz / 100.0
             )
             
-            np_val, trades, pf, max_dd, sharpe = result
+            np_val, trades, pf, max_dd, sharpe, active_days, total_days = result
             
             if trades == 0 or np_val <= -999:
                 return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
@@ -586,6 +592,7 @@ class FitnessEvaluator:
             # Fitness Calc
             fitness = quick_fitness(
                 np_val, pf, max_dd, trades, sharpe=sharpe,
+                active_days=active_days, total_days=total_days,
                 commission=0.0, slippage=0.0
             )
             
@@ -610,9 +617,9 @@ class FitnessEvaluator:
 # Global variable for pool workers to avoid data copying (pickling)
 _global_evaluator: Optional['FitnessEvaluator'] = None
 
-def _init_pool(df, strategy_index, commission=0.0, slippage=0.0):
+def _init_pool(df, strategy_index, commission=0.0, slippage=0.0, vade_tipi="ENDEKS"):
     global _global_evaluator
-    _global_evaluator = FitnessEvaluator(df, strategy_index, commission, slippage)
+    _global_evaluator = FitnessEvaluator(df, strategy_index, commission, slippage, vade_tipi)
 
 def _evaluate_individual(individual_and_param_space):
     individual, param_space = individual_and_param_space
@@ -627,7 +634,7 @@ class GeneticOptimizer:
                  strategy_index: int = 1, n_parallel: int = 4,
                  commission: float = 0.0, slippage: float = 0.0,
                  is_cancelled_callback: Optional[Callable[[], bool]] = None,
-                 narrowed_ranges: dict = None):
+                 narrowed_ranges: dict = None, vade_tipi: str = "ENDEKS"):
         """
         Args:
             df: Veri DataFrame'i
@@ -642,8 +649,9 @@ class GeneticOptimizer:
         self.n_parallel = n_parallel
         self.commission = commission
         self.slippage = slippage
+        self.vade_tipi = vade_tipi
         self.param_space = ParameterSpace(strategy_index, narrowed_ranges)  # Cascade destegi
-        self.evaluator = FitnessEvaluator(df, strategy_index, commission, slippage)
+        self.evaluator = FitnessEvaluator(df, strategy_index, commission, slippage, vade_tipi)
         self.is_cancelled_callback = is_cancelled_callback
         
         self.population: List[np.ndarray] = []
@@ -674,7 +682,7 @@ class GeneticOptimizer:
                 results = pool.map(_evaluate_individual, tasks)
             else:
                 with Pool(processes=self.n_parallel, initializer=_init_pool, 
-                         initargs=(self.df, self.strategy_index, self.commission, self.slippage)) as p:
+                         initargs=(self.df, self.strategy_index, self.commission, self.slippage, self.vade_tipi)) as p:
                     results = p.map(_evaluate_individual, tasks)
                 
             for i, (individual, result) in enumerate(results):
@@ -747,7 +755,7 @@ class GeneticOptimizer:
         # Pool'u bir kez oluştur ve tüm run boyunca kullan
         pool = None
         if self.n_parallel > 1:
-            pool = Pool(processes=self.n_parallel, initializer=_init_pool, initargs=(self.df, self.strategy_index, self.commission, self.slippage))
+            pool = Pool(processes=self.n_parallel, initializer=_init_pool, initargs=(self.df, self.strategy_index, self.commission, self.slippage, self.vade_tipi))
             
         try:
             # İlk popülasyon

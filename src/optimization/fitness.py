@@ -68,7 +68,12 @@ def quick_fitness(
     win_count: int = 0,
     initial_capital: float = 10000.0,
     commission: float = 0.0,
-    slippage: float = 0.0
+    slippage: float = 0.0,
+    test_net_profit: float = 0.0,
+    test_pf: float = 0.0,
+    r2_score: float = 0.0,
+    active_days: int = 0,
+    total_days: int = 0
 ) -> float:
     """
     Dengeli çok faktörlü fitness hesaplama.
@@ -128,19 +133,23 @@ def quick_fitness(
     quality_score = pf_score + sharpe_score  # 0-100
     
     # =========================================================================
-    # 3. RISK SCORE (0-100) — DD ve avg trade
+    # 3. RISK SCORE (0-100) — DD ve avg trade (Exponential Penalty)
     # =========================================================================
-    # Drawdown oranı (düşük = iyi)
+    # Drawdown oranı (düşük = iyi). Eksponansiyel Ceza Modeli.
     dd_ratio = max_dd / initial_capital if initial_capital > 0 else 1.0
-    if dd_ratio <= 0.10:
-        dd_score = 50                    # Mükemmel: DD < %10
-    elif dd_ratio <= 0.20:
-        dd_score = 40                    # İyi: DD < %20
-    elif dd_ratio <= 0.30:
-        dd_score = 25                    # Riskli: DD < %30
-    else:
-        dd_score = max(0, 15 - (dd_ratio - 0.30) * 50)  # Tehlikeli
     
+    if dd_ratio <= 0.05:
+        dd_score = 50
+    elif dd_ratio <= 0.15:
+        dd_score = 40
+    elif dd_ratio <= 0.25:
+        dd_score = 25
+    else:
+        # Exponential cezası: Risk limiti aşıldıkça puan sertçe 0'a, hatta negatife düşer
+        # 0.25'ten sonraki her %1'lik DD artışı, 50 üzerinden eksponansiyel siler
+        penalty_factor = math.exp((dd_ratio - 0.25) * 10) - 1
+        dd_score = max(0, 25 - penalty_factor * 20)
+        
     # İşlem başı kâr
     avg_pnl = adj_profit / trades
     if avg_pnl >= 30:
@@ -169,10 +178,52 @@ def quick_fitness(
         trade_score = max(30, 90 - (trades - 1500) / 500 * 30)  # Overtrading cezası
     
     # =========================================================================
+    # 5. DENSITY & SMOOTHNESS & OOS PENALTY MULTIPLIERS
+    # =========================================================================
+    density_multiplier = 1.0
+    if active_days > 0 and total_days > 0:
+        # Trade Density Ratio: Ne kadar sık piyasada kalındı? (Dengeli olmalı)
+        # Çok az gün işlem yapıp kâr edenler şans eseri olabilir. En az %5-%10 gün işlem görmeli.
+        trade_day_ratio = active_days / total_days
+        if trade_day_ratio < 0.02:   # < %2 gün
+            density_multiplier = 0.5
+        elif trade_day_ratio < 0.05: # < %5 gün
+            density_multiplier = 0.8
+        elif trade_day_ratio > 0.50: # > %50 gün (over-active)
+            density_multiplier = 0.9
+
+    smoothness_multiplier = 1.0
+    if r2_score > 0:
+        # R-Squared (0-1)
+        if r2_score < 0.6:
+            smoothness_multiplier = 0.7
+        elif r2_score > 0.9:
+            smoothness_multiplier = 1.2
+            
+    oos_multiplier = 1.0
+    if test_net_profit != 0 or test_pf > 0:
+        # OOS (Out-of-Sample) Tutarlılık Cezası
+        if test_net_profit < 0:
+            # Zarar ediyorsa acımasız ceza
+            oos_multiplier = 0.1
+        else:
+            pf_degradation = test_pf / pf if pf > 0 else 1.0
+            profit_degradation = test_net_profit / adj_profit if adj_profit > 0 else 1.0
+            
+            if pf_degradation < 0.5 or profit_degradation < 0.3:
+                oos_multiplier = 0.4
+            elif pf_degradation < 0.8:
+                oos_multiplier = 0.8  # Hafif ceza
+            elif pf_degradation > 1.0 and profit_degradation > 1.0:
+                oos_multiplier = 1.2  # OOS'de daha iyi performans (Nadir)
+                
+    # =========================================================================
     # BİRLEŞİK SKOR (4 faktör eşit ağırlıklı)
     # =========================================================================
     # Her biri 0-100 arası → toplam 0-400 → normalize 0-10000
-    fitness = (profit_score * quality_score * risk_score * trade_score) / 10000
+    base_fitness = (profit_score * quality_score * risk_score * trade_score) / 10000
+    
+    fitness = base_fitness * density_multiplier * smoothness_multiplier * oos_multiplier
     
     # Minör ayar: çok küçük sonuçları filtrele
     if fitness < 0.01:

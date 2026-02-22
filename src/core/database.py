@@ -67,7 +67,10 @@ class Database:
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 commission REAL DEFAULT 0,
-                slippage REAL DEFAULT 0
+                slippage REAL DEFAULT 0,
+                strategy_index INTEGER DEFAULT 0,
+                vade_tipi TEXT DEFAULT 'ENDEKS',
+                yon_modu TEXT DEFAULT 'CIFT'
             )
         """)
         
@@ -149,6 +152,15 @@ class Database:
                 
             if 'slippage' not in columns:
                 cursor.execute("ALTER TABLE processes ADD COLUMN slippage REAL DEFAULT 0")
+
+            if 'strategy_index' not in columns:
+                cursor.execute("ALTER TABLE processes ADD COLUMN strategy_index INTEGER DEFAULT 0")
+                
+            if 'vade_tipi' not in columns:
+                cursor.execute("ALTER TABLE processes ADD COLUMN vade_tipi TEXT DEFAULT 'ENDEKS'")
+                
+            if 'yon_modu' not in columns:
+                cursor.execute("ALTER TABLE processes ADD COLUMN yon_modu TEXT DEFAULT 'CIFT'")
                 
             # optimization_results tablosuna sharpe ekle
             cursor.execute("PRAGMA table_info(optimization_results)")
@@ -173,7 +185,8 @@ class Database:
     # =========================================================================
     
     def create_process(self, symbol: str, period: str, data_file: str, 
-                       data_rows: int = 0) -> str:
+                       data_rows: int = 0, strategy_index: int = 0, 
+                       vade_tipi: str = "ENDEKS", yon_modu: str = "CIFT") -> str:
         """Yeni süreç oluştur, process_id döndür"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         process_id = f"{symbol}_{period}_{timestamp}"
@@ -182,9 +195,9 @@ class Database:
         cursor = conn.cursor()
         
         cursor.execute("""
-            INSERT INTO processes (process_id, symbol, period, data_file, data_rows, status, commission, slippage)
-            VALUES (?, ?, ?, ?, ?, 'pending', 0, 0)
-        """, (process_id, symbol, period, data_file, data_rows))
+            INSERT INTO processes (process_id, symbol, period, data_file, data_rows, status, commission, slippage, strategy_index, vade_tipi, yon_modu)
+            VALUES (?, ?, ?, ?, ?, 'pending', 0, 0, ?, ?, ?)
+        """, (process_id, symbol, period, data_file, data_rows, strategy_index, vade_tipi, yon_modu))
         
         conn.commit()
         conn.close()

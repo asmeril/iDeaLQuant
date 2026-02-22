@@ -532,6 +532,11 @@ class ValidationPanel(QWidget):
         refresh_btn.clicked.connect(self._refresh_processes)
         process_row.addWidget(refresh_btn)
         
+        # Vade ve Yön Bilgisi (Sadece okunur, süreçten okunacak)
+        self.process_info_label = QLabel("Vade: - | Yön: -")
+        self.process_info_label.setStyleSheet("color: #E65100; font-weight: bold; padding: 0 10px;")
+        process_row.addWidget(self.process_info_label)
+        
         process_row.addStretch()
         layout.addLayout(process_row)
         
@@ -1126,18 +1131,29 @@ YORUM:
             self._load_comparison_data()
     
     def _on_process_changed(self, text: str):
-        """Süreç seçimi değiştiğinde"""
+        """Süreç değiştiğinde sonuçları yükle ve bilgileri güncelle"""
         idx = self.process_combo.currentIndex()
-        if idx >= 0:
-            self.current_process_id = self.process_combo.itemData(idx)
-            self._load_comparison_data()
-    
-    def _load_comparison_data(self):
-        """Karşılaştırma tablosunu DB'den doldur"""
-        if not self.current_process_id:
-            return
+        if idx < 0: return
         
-        results = db.get_optimization_results(self.current_process_id)
+        process_id = self.process_combo.itemData(idx)
+        if not process_id: return
+        self.current_process_id = process_id
+        
+        # DB'den çek
+        proc = db.get_process(process_id)
+        if proc:
+            vade_tipi = proc.get('vade_tipi', 'ENDEKS')
+            yon_modu = proc.get('yon_modu', 'CIFT')
+            self.process_info_label.setText(f"Vade: {vade_tipi} | Yön: {yon_modu}")
+            
+        results = db.get_optimization_results(process_id)
+        self.optimization_results = results
+        self.compare_table.setRowCount(0)
+        
+        # Seçili ID yi temizle
+        self._selected_opt_id = None
+        self.set_final_btn.setEnabled(False)
+        self.batch_analyze_btn.setEnabled(False)
         
         if not results:
             self.compare_table.setRowCount(0)
@@ -1424,13 +1440,18 @@ YORUM:
             print(f"[VAL] Yeni veri seti alindi: {len(df)} bar")
 
     def set_process(self, process_id: str):
-        """Dışarıdan süreç ayarla"""
-        self.current_process_id = process_id
+        """Dışarıdan süreç ayarla ve UI'yi kilitle"""
+        print(f"[DEBUG] ValidationPanel.set_process: {process_id}")
         self._refresh_processes()
         
-        # Combo'da ilgili süreci seç
         for i in range(self.process_combo.count()):
             if self.process_combo.itemData(i) == process_id:
                 self.process_combo.setCurrentIndex(i)
                 break
-
+                
+        # Tablodan süreç detaylarını çek ve kilitle
+        proc = db.get_process(process_id)
+        if proc:
+            vade_tipi = proc.get('vade_tipi', 'ENDEKS')
+            yon_modu = proc.get('yon_modu', 'CIFT')
+            self.process_info_label.setText(f"Vade: {vade_tipi} | Yön: {yon_modu}")

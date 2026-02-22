@@ -72,7 +72,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 - [x] Strateji 4 Python Portu: `toma_strategy.py` (TOMA + Momentum)
 - [x] IdealData Kaynak Kodları: `S1`, `S2`, `Paradise`, `TOMA_S4`
 - [x] **v4.2 Uyumu:** Tüm stratejiler (S1-S4) senkronize edildi, cache desteği ve C# export eklendi.
-- [x] **Numba Optimizasyonu:** Tüm backtest motorları `jit` ile 100x hızlandırıldı.
+- [x] **Numba Optimizasyonu & Tip Düzeltmeleri:** `times_arr` Python PyObject array'lerinden `np.int64` Unix damgalarına dönüştürülerek Numba TypingError çökmesi giderildi.
 - [x] **Global OOS Penalty:** Tüm optimizer metodları ve standalone scriptlere (S1-S4) OOS-aware re-ranking entegre edildi.
 
 ---

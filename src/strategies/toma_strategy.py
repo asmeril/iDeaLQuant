@@ -42,6 +42,8 @@ class TomaStrategy:
         self.toma_period = int(params.get('toma_period', 2))
         self.toma_opt = params.get('toma_opt', 2.1)
         
+        self.yon_modu = params.get('yon_modu', 'CIFT')
+        
         # Minimum veri gereksinimi (Momentum 1900 en büyüğü)
         self.min_bars = self.mom_period + 10
         self.cache = None
@@ -67,7 +69,9 @@ class TomaStrategy:
             'llv3_period': config.get('llv3_period', 190),
             
             'trix_lb1': config.get('trix_lb1', 145),
-            'trix_lb2': config.get('trix_lb2', 160)
+            'trix_lb2': config.get('trix_lb2', 160),
+            
+            'yon_modu': config.get('yon_modu', 'CIFT')
         }
         
         instance = cls(params)
@@ -96,24 +100,38 @@ class TomaStrategy:
         exits_long = [False] * n
         exits_short = [False] * n
         
-        # Always-in system: opposite signal = exit
+        # Always-in system: opposite signal = exit, except when single direction
         pos = 0  # 0=flat, 1=long, -1=short
         for i in range(n):
-            if signals[i] == Signal.LONG:
+            sig = signals[i]
+            
+            # Yön Modu Filtresi (SADECE_AL / SADECE_SAT)
+            if self.yon_modu == "SADECE_AL" and sig == Signal.SHORT:
+                sig = Signal.FLAT
+            elif self.yon_modu == "SADECE_SAT" and sig == Signal.LONG:
+                sig = Signal.FLAT
+                
+            if sig == Signal.LONG:
                 if pos == -1:
                     exits_short[i] = True  # Close short
                 pos = 1
-            elif signals[i] == Signal.SHORT:
+            elif sig == Signal.SHORT:
                 if pos == 1:
                     exits_long[i] = True  # Close long
                 pos = -1
+            elif sig == Signal.FLAT:
+                if pos == 1:
+                    exits_long[i] = True
+                elif pos == -1:
+                    exits_short[i] = True
+                pos = 0
         
         # Convert Signal enum to int for backtest compatibility
         int_signals = [0] * n
         for i in range(n):
-            if signals[i] == Signal.LONG:
+            if signals[i] == Signal.LONG and self.yon_modu != "SADECE_SAT":
                 int_signals[i] = 1
-            elif signals[i] == Signal.SHORT:
+            elif signals[i] == Signal.SHORT and self.yon_modu != "SADECE_AL":
                 int_signals[i] = -1
         
         return int_signals, exits_long, exits_short

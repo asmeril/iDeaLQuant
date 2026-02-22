@@ -26,10 +26,30 @@ g_mask = None
 # --- INDICATOR CACHE ---
 class IndicatorCache:
     def __init__(self, df):
-        self.opens = df['open'].values
-        self.highs = df['high'].values
-        self.lows = df['low'].values
-        self.closes = df['close'].values
+        if 'close' in df.columns:
+            self.closes = df['close'].values
+            self.highs = df['high'].values
+            self.lows = df['low'].values
+            self.opens = df['open'].values
+            self.volumes = df['volume'].values if 'volume' in df.columns else np.zeros_like(df['close'].values)
+        else: # Assume Turkish column names
+            self.closes = df['Kapanis'].values
+            self.highs = df['Yuksek'].values
+            self.lows = df['Dusuk'].values
+            self.opens = df['Acilis'].values
+            self.volumes = df['Lot'].values if 'Lot' in df.columns else np.zeros_like(df['Kapanis'].values)
+            
+        if 'date' in df.columns:
+            self.times_arr = df['date'].values.astype(np.int64) // 10**9
+        elif 'Tarih' in df.columns:
+            self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+        elif 'DateTime' in df.columns:
+            self.times_arr = df['DateTime'].values.astype(np.int64) // 10**9
+        elif 'time' in df.columns:
+            self.times_arr = df['time'].values.astype(np.int64) // 10**9
+        else:
+            self.times_arr = np.zeros(len(df), dtype=np.int64)
+
         self.typical = (self.highs + self.lows + self.closes) / 3.0
         
         # Volume/Lot check
@@ -93,9 +113,9 @@ def load_data_and_mask(vade_tipi="ENDEKS"):
         print(f"Hata: {e}")
         return None, None
 
-def worker_init():
+def worker_init(vade_tipi="ENDEKS"):
     global g_cache, g_mask
-    df, mask = load_data_and_mask()
+    df, mask = load_data_and_mask(vade_tipi)
     if df is not None:
         g_cache = IndicatorCache(df)
         g_mask = mask.values
@@ -105,7 +125,7 @@ def worker_init():
 def fast_backtest_score(
     closes, ars_arr, adx_arr, macd_arr, sig_arr, netlot_ma_arr,
     bb_u, bb_m, bb_l, 
-    mask_arr,
+    mask_arr, times_arr,
     # Params
     min_score, exit_score, contra_max,
     adx_thr, macd_thr, netlot_thr,
@@ -122,6 +142,11 @@ def fast_backtest_score(
     max_dd = 0.0
     peak_equity = 0.0
     current_equity = 0.0
+    
+    last_trade_day = -1
+    active_days = 0
+    total_days = 0
+    last_day = -1
     
     # Pre-calc BB Width & Avg manually or pass it?
     # Doing it inside logic for simplicity (Numba handles loops well)
@@ -146,6 +171,17 @@ def fast_backtest_score(
             
     # Main Loop
     for i in range(100, n):
+        # Time array values to compute total_days
+        current_day = 0 # Dummy integer for Numba performance instead of datetime compare
+                        # Or properly convert datetime array -> integer before numba.
+                        # Wait, Numba doesn't like datetime array. We must map times_arr to integers in Python space.
+        pass
+        
+    for i in range(1, n):
+        if times_arr[i] != last_day:
+            total_days += 1
+            last_day = times_arr[i]
+            
         # --- TRADING MASK CHECK ---
         if not mask_arr[i]:
             if pos != 0:
@@ -243,15 +279,21 @@ def fast_backtest_score(
                 pos = 1
                 entry_price = closes[i]
                 trades += 1
+                if times_arr[i] != last_trade_day:
+                    active_days += 1
+                    last_trade_day = times_arr[i]
             # SHORT
             elif s_score >= min_score and l_score < contra_max:
                 pos = -1
                 entry_price = closes[i]
                 trades += 1
+                if times_arr[i] != last_trade_day:
+                    active_days += 1
+                    last_trade_day = times_arr[i]
                 
     net_profit = gross_profit - gross_loss
     pf = (gross_profit / gross_loss) if gross_loss > 0 else 999.0
-    return net_profit, trades, pf, max_dd
+    return net_profit, trades, pf, max_dd, active_days, total_days
 
 # --- WORKER TASK ---
 def solve_chunk(args):
@@ -280,9 +322,9 @@ def solve_chunk(args):
     for ms in min_scores:
         for es in exit_scores:
             for at in adx_thrs:
-                np_val, tr, pf, dd = fast_backtest_score(
+                np_val, tr, pf, dd, active_days, total_days = fast_backtest_score(
                     g_cache.closes, ars_arr, adx_arr, macdv, sig, netlot_ma,
-                    bb_u, bb_m, bb_l, g_mask,
+                    bb_u, bb_m, bb_l, g_mask, g_cache.times_arr,
                     ms, es, 2, # contra_max fixed
                     at, 0.0, 20.0, # macd_thr, netlot_thr fixed
                     20.0, 2, 0.8, 0.25, 10 # Filter params fixed
@@ -292,12 +334,22 @@ def solve_chunk(args):
                     results.append({
                         'NP': np_val, 'PF': pf, 'DD': dd, 'Tr': tr,
                         'ARS_P': ars_p, 'ARS_K': ars_k,
-                        'MinS': ms, 'ExitS': es, 'ADX_T': at
+                        'MinS': ms, 'ExitS': es, 'ADX_T': at,
+                        'active_days': active_days, 'total_days': total_days
                     })
     return results
 
-def run_strategy1_optimization():
-    print("--- S1 (Score) Optimization Starting (Numba + Mask) ---")
+def worker_init(vade_tipi):
+    global g_cache, g_mask
+    df, mask = load_data_and_mask(vade_tipi)
+    if df is not None:
+        g_cache = IndicatorCache(df)
+        g_mask = mask.values
+
+def run_strategy1_optimization(vade_tipi="ENDEKS"):
+    print(f"--- S1 (Score) Optimization Starting ({vade_tipi}) ---")
+    df, mask = load_data_and_mask(vade_tipi)
+    if df is None: return
     
     grid = {
         'min_scores': [3, 4],
@@ -319,16 +371,32 @@ def run_strategy1_optimization():
     start_time = time()
     final_results = []
     
-    with Pool(processes=min(16, cpu_count()), initializer=worker_init) as pool:
+    with Pool(processes=min(16, cpu_count()), initializer=worker_init, initargs=(vade_tipi,)) as pool:
         for res in pool.imap_unordered(solve_chunk, tasks):
             final_results.extend(res)
             
     elapsed = time() - start_time
     print(f"Done in {elapsed:.1f}s. Results: {len(final_results)}")
     
-    if final_results:
+        if final_results:
+        import sys
+        sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+        from src.optimization.fitness import quick_fitness
+        
         df = pd.DataFrame(final_results)
-        df['Score'] = df['NP'] * df['PF']
+        
+        # OOS Validasyonu Öncesi Hızlı Fitness
+        for idx, row in df.iterrows():
+             df.at[idx, 'Score'] = quick_fitness(
+                 net_profit=row['NP'],
+                 pf=row['PF'],
+                 max_dd=row['DD'],
+                 trades=row['Tr'],
+                 initial_capital=100000.0,
+                 active_days=row.get('active_days', 0),
+                 total_days=row.get('total_days', 0)
+             )
+             
         df = df.sort_values('Score', ascending=False)
         
         # === OOS VALIDATION ===
@@ -350,9 +418,9 @@ def run_strategy1_optimization():
                     netlot_ma = test_cache.get_netlot_ma(5)
                     bb_u, bb_m, bb_l = test_cache.get_bb(20, 2.0)
                     
-                    np_val, tr, pf, dd = fast_backtest_score(
+                    np_val, tr, pf, dd, adays, tdays = fast_backtest_score(
                         test_cache.closes, ars_arr, adx_arr, macdv, sig, netlot_ma,
-                        bb_u, bb_m, bb_l, mask_test,
+                        bb_u, bb_m, bb_l, mask_test, test_cache.times_arr,
                         int(r['MinS']), int(r['ExitS']), 2,
                         float(r['ADX_T']), 0.0, 20.0,
                         20.0, 2, 0.8, 0.25, 10
@@ -360,24 +428,31 @@ def run_strategy1_optimization():
                     r['test_net'] = np_val
                     r['test_trades'] = tr
                     r['test_pf'] = pf
+                    r['test_dd'] = dd
+                    r['test_active_days'] = adays
+                    r['test_total_days'] = tdays
                 except Exception as e:
                     print(f"  OOS hata: {e}")
                     r['test_net'] = None
                 
-                # === OOS-AWARE RE-RANKING ===
+                # === OOS-AWARE RE-RANKING via Advanced Fitness ===
                 test_net = r.get('test_net', None)
-                base = r.get('Score', 0)
                 if test_net is not None:
-                    if test_net < 0:
-                        r['oos_penalized_score'] = base * 0.10
-                    elif test_net > 0:
-                        test_pf = r.get('test_pf', 1.0)
-                        oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                        r['oos_penalized_score'] = base * (1.0 + oos_bonus)
-                    else:
-                        r['oos_penalized_score'] = base * 0.50
+                    # quick_fitness will apply strict OOS penalty directly
+                    new_score = quick_fitness(
+                        net_profit=r['NP'],
+                        pf=r['PF'],
+                        max_dd=r['DD'],
+                        trades=r['Tr'],
+                        initial_capital=100000.0,
+                        active_days=r.get('active_days', 0),
+                        total_days=r.get('total_days', 0),
+                        test_net_profit=r['test_net'],
+                        test_pf=r['test_pf']
+                    )
+                    r['oos_penalized_score'] = new_score
                 else:
-                    r['oos_penalized_score'] = base
+                    r['oos_penalized_score'] = r.get('Score', 0)
             
             # Re-rank by OOS penalized score
             top50.sort(key=lambda x: x.get('oos_penalized_score', 0), reverse=True)

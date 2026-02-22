@@ -39,6 +39,17 @@ class IndicatorCache:
             self.volume = df['Lot'].values if 'Lot' in df.columns else df['Hacim'].values
         else:
             raise ValueError("DataFrame must contain 'close' or 'Kapanis' columns")
+            
+        if 'date' in df.columns:
+            self.times_arr = df['date'].values.astype(np.int64) // 10**9
+        elif 'Tarih' in df.columns:
+            self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+        elif 'DateTime' in df.columns:
+            self.times_arr = df['DateTime'].values.astype(np.int64) // 10**9
+        elif 'time' in df.columns:
+            self.times_arr = df['time'].values.astype(np.int64) // 10**9
+        else:
+            self.times_arr = np.zeros(len(df), dtype=np.int64)
         
         self.toma_cache = {}    # (period, opt_pct) -> (toma, trend)
         self.mom_cache = {}     # period -> values
@@ -155,9 +166,9 @@ def load_data_and_mask(vade_tipi="ENDEKS"):
         print(f"Hata: {e}")
         return None, None
 
-def worker_init():
+def worker_init(vade_tipi="ENDEKS"):
     global g_cache, g_mask
-    df, mask = load_data_and_mask()
+    df, mask = load_data_and_mask(vade_tipi)
     if df is not None:
         g_cache = IndicatorCache(df)
         g_mask = mask # it is already a numpy array
@@ -197,7 +208,7 @@ def s4_p2_eval(params):
         g['hhv1'], g['llv1'],
         g['hhv'][h2p], g['llv'][l2p],
         dummy, dummy,
-        g['mom'][mom_p], g['trix'][trix_p], g['mask'],
+        g['mom'][mom_p], g['trix'][trix_p], g['mask'], g['times_arr'],
         -9999.0, mh,
         lb1, 100,
         0.0, 0.0
@@ -210,7 +221,8 @@ def s4_p2_eval(params):
             'mom_limit_high': mh, 'trix_lb1': lb1,
             'hhv2': h2p, 'llv2': l2p,
             'net_profit': res[0], 'trades': res[1], 'pf': res[2],
-            'max_dd': res[3], 'sharpe': res[4]
+            'max_dd': res[3], 'sharpe': res[4],
+            'active_days': res[5], 'total_days': res[6]
         })
     return None
 
@@ -230,16 +242,16 @@ def s4_p3_eval(params):
         g['hhv1'], g['llv1'],
         g['hhv2_fixed'], g['llv2_fixed'],
         g['hhv'][h3p], g['llv'][l3p],
-        g['mom_fixed'], g['trix_fixed'], g['mask'],
+        g['mom_fixed'], g['trix_fixed'], g['mask'], g['times_arr'],
         ml, meta['fix_mh'],
         meta['fix_lb1'], lb2,
         ka / 100.0, iz / 100.0
     )
     
-    np_val, tr, pf, dd, sh = res
+    np_val, tr, pf, dd, sh, adays, tdays = res
     # Erken filtreleme: anlamsız sonuçları worker'da ele
     if np_val > 0 and pf >= 1.0 and tr >= 5:
-        fitness = quick_fitness(np_val, pf, dd, tr, sharpe=sh)
+        fitness = quick_fitness(np_val, pf, dd, tr, active_days=adays, total_days=tdays, sharpe=sh)
         if fitness > 0:
             return {
                 'toma_period': meta['fix_tp'], 'toma_opt': meta['fix_to'],
@@ -251,7 +263,8 @@ def s4_p3_eval(params):
                 'hhv3_period': h3p, 'llv3_period': l3p,
                 'kar_al': ka, 'iz_stop': iz,
                 'net_profit': np_val, 'trades': tr, 'pf': pf, 'max_dd': dd,
-                'sharpe': sh, 'fitness': fitness
+                'sharpe': sh, 'fitness': fitness,
+                'active_days': adays, 'total_days': tdays
             }
     return None
 
@@ -263,7 +276,7 @@ def fast_backtest_strategy4(closes,
                             hhv2, llv2, # Layer 1 Breakout (150/190)
                             hhv3, llv3, # Layer 2 Breakout (150/190)
                             mom_arr, trix_arr, # Indicators
-                            mask_arr, # Trading Mask
+                            mask_arr, times_arr, # Trading Mask & Dates
                             # Params
                             mom_limit_low, mom_limit_high, # 98, 101.5
                             trix_lookback1, trix_lookback2, # 110, 140
@@ -286,6 +299,11 @@ def fast_backtest_strategy4(closes,
     sum_pnl_sq = 0.0
     n_closed = 0
     
+    last_trade_day = -1
+    active_days = 0
+    total_days = 0
+    last_day = -1
+    
     # Constants for signal mapping
     # 0: None, 1: Long (A), -1: Short (S)
     
@@ -296,7 +314,10 @@ def fast_backtest_strategy4(closes,
     son_yon = 0 # Last Direction
     
     for i in range(min_warmup, n): # Dinamik warmup
-        
+        if times_arr[i] != last_day:
+            total_days += 1
+            last_day = times_arr[i]
+            
         # --- TRADING MASK CHECK ---
         if not mask_arr[i]:
             if pos != 0:
@@ -370,6 +391,9 @@ def fast_backtest_strategy4(closes,
             entry_price = closes[i]
             extreme_price = closes[i]
             trades += 1
+            if times_arr[i] != last_trade_day:
+                active_days += 1
+                last_trade_day = times_arr[i]
 
 
         # --- EXIT LOGIC (Kar Al / Stop) ---
@@ -432,7 +456,7 @@ def fast_backtest_strategy4(closes,
             std_pnl = var_pnl ** 0.5
             sharpe = mean_pnl / std_pnl
     
-    return net_profit, trades, pf, max_dd, sharpe
+    return net_profit, trades, pf, max_dd, sharpe, active_days, total_days
 
 # --- WORKER TASK ---
 def solve_chunk(args):
@@ -489,14 +513,14 @@ def solve_chunk(args):
                 for mh in mom_highs:
                     for lb1 in trix_lb1s:
                         for lb2 in trix_lb2s:
-                            np_val, tr, pf, dd, sh = fast_backtest_strategy4(
+                            np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy4(
                                 g_cache.closes, 
                                 toma_trend, toma_val,
                                 hhv1, llv1,
                                 hhv2, llv2,
                                 hhv3, llv3,
                                 mom_arr, trix_arr,
-                                g_mask,
+                                g_mask, g_cache.times_arr,
                                 ml, mh,
                                 lb1, lb2,
                                 ka/100.0, iz/100.0

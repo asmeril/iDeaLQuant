@@ -53,6 +53,9 @@ class ScoreConfig:
     
     # Vade Yönetimi
     vade_tipi: str = "ENDEKS"  # "ENDEKS" veya "SPOT"
+    
+    # Yön Modu
+    yon_modu: str = "CIFT"  # SADECE_AL, SADECE_SAT, CIFT
      
 
 
@@ -88,6 +91,7 @@ class ScoreBasedStrategy:
         self.typical = typical
         self.config = config or ScoreConfig()
         self.dates = dates or []
+        self.yon_modu = self.config.yon_modu
         
         # Warmup State (C# export ile uyumlu)
         cfg = self.config
@@ -342,7 +346,8 @@ class ScoreBasedStrategy:
             yatay_ars_bars=int(config_dict.get('yatay_ars_bars', 10)),
             yatay_adx_threshold=float(config_dict.get('yatay_adx_threshold', 20.0)),
             filter_score_threshold=int(config_dict.get('filter_score_threshold', 2)),
-            vade_tipi=config_dict.get('vade_tipi', 'ENDEKS'),
+            vade_tipi=config_dict.get('vade_tipi', "ENDEKS"),
+            yon_modu=config_dict.get('yon_modu', "CIFT")
         )
         
         return cls(
@@ -376,6 +381,12 @@ class ScoreBasedStrategy:
         
         for i in range(n):
             sig = self.get_signal(i, position)
+            
+            # Yön Modu Filtresi (SADECE_AL / SADECE_SAT)
+            if self.yon_modu == "SADECE_AL" and sig == Signal.SHORT:
+                sig = Signal.FLAT
+            elif self.yon_modu == "SADECE_SAT" and sig == Signal.LONG:
+                sig = Signal.FLAT
             
             if sig == Signal.LONG:
                 signals[i] = 1

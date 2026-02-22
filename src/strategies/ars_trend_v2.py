@@ -54,7 +54,10 @@ class StrategyConfigV2:
     
     # Vade Yönetimi
     vade_tipi: str = "ENDEKS" # "ENDEKS" veya "SPOT"
-
+    
+    # Yön Modu
+    yon_modu: str = "CIFT"  # SADECE_AL, SADECE_SAT, CIFT
+    
     # Legacy/Fallback (use_atr_exit=False için)
     kar_al_pct: float = 1.5        # Yüzde bazlı kar alma (ör: %1.5)
     iz_stop_pct: float = 0.8       # Yüzde bazlı izleyen stop (ör: %0.8)
@@ -110,6 +113,8 @@ class ARSTrendStrategyV2:
             for key, value in config_dict.items():
                 if hasattr(self.config, key):
                     setattr(self.config, key, value)
+        
+        self.yon_modu = self.config.yon_modu
         
         # İndikatörleri hesapla
         self._calculate_indicators()
@@ -243,7 +248,7 @@ class ARSTrendStrategyV2:
             
         Returns:
             dict: {
-                'in_warmup': bool,  # Warmup aktif mi?
+                'in_warmup': False,  # Warmup aktif mi?
                 'warmup_start': int,  # Warmup başlangıç barı
                 'warmup_remaining': int,  # Kalan bar sayısı
                 'skip_warmup': bool  # Warmup atlanacak mı? (sadece arefe sonrası)
@@ -589,11 +594,14 @@ class ARSTrendStrategyV2:
             exit_confirm_bars=config_dict.get('exit_confirm_bars', 2),
             exit_confirm_mult=config_dict.get('exit_confirm_mult', 1.0),
             volume_mult=config_dict.get('volume_mult', 0.8),
-            volume_llv_period=config_dict.get('volume_llv_period', 14),
-            use_atr_exit=config_dict.get('use_atr_exit', True),
-            vade_tipi=config_dict.get('vade_tipi', 'ENDEKS'),
+            volume_llv_period=int(config_dict.get('volume_llv_period', 14)),
+            
+            use_atr_exit=bool(config_dict.get('use_atr_exit', True)),
+            vade_tipi=config_dict.get('vade_tipi', "ENDEKS"),
+            yon_modu=config_dict.get('yon_modu', "CIFT"),
+            
             kar_al_pct=float(config_dict.get('kar_al_pct', 1.5)),
-            iz_stop_pct=float(config_dict.get('iz_stop_pct', 0.8)),
+            iz_stop_pct=float(config_dict.get('iz_stop_pct', 0.8))
         )
         
         # Data cache'den değerleri al
@@ -645,6 +653,12 @@ class ARSTrendStrategyV2:
                 extreme_price = min(extreme_price, self.lows[i])
             
             sig = self.get_signal(i, position, entry_price, extreme_price)
+            
+            # Yön Modu Filtresi (SADECE_AL / SADECE_SAT)
+            if self.yon_modu == "SADECE_AL" and sig == Signal.SHORT:
+                sig = Signal.FLAT
+            elif self.yon_modu == "SADECE_SAT" and sig == Signal.LONG:
+                sig = Signal.FLAT
             
             if sig == Signal.LONG:
                 signals[i] = 1

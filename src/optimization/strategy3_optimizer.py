@@ -26,10 +26,27 @@ g_mask = None
 # --- INDICATOR CACHE ---
 class IndicatorCache:
     def __init__(self, df):
-        self.closes = df['close'].values
-        self.highs = df['high'].values
-        self.lows = df['low'].values
-        self.volumes = df['volume'].values # Using 'volume' column
+        if 'close' in df.columns:
+            self.closes = df['close'].values
+            self.highs = df['high'].values
+            self.lows = df['low'].values
+            self.volumes = df['volume'].values # Using 'volume' column
+        else:
+            self.closes = df['Kapanis'].values
+            self.highs = df['Yuksek'].values
+            self.lows = df['Dusuk'].values
+            self.volumes = df['Lot'].values
+            
+        if 'date' in df.columns:
+            self.times_arr = df['date'].values.astype(np.int64) // 10**9
+        elif 'Tarih' in df.columns:
+            self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+        elif 'DateTime' in df.columns:
+            self.times_arr = df['DateTime'].values.astype(np.int64) // 10**9
+        elif 'time' in df.columns:
+            self.times_arr = df['time'].values.astype(np.int64) // 10**9
+        else:
+            self.times_arr = np.zeros(len(df), dtype=np.int64)
         
         # Determine actual volume column (lot vs volume)
         if 'lot' in df.columns:
@@ -102,9 +119,9 @@ def load_data_and_mask(vade_tipi="ENDEKS"):
         print(f"Hata: {e}")
         return None, None
 
-def worker_init():
+def worker_init(vade_tipi="ENDEKS"):
     global g_cache, g_mask
-    df, mask = load_data_and_mask()
+    df, mask = load_data_and_mask(vade_tipi)
     if df is not None:
         g_cache = IndicatorCache(df)
         g_mask = mask.values
@@ -114,7 +131,7 @@ def worker_init():
 def fast_backtest_paradise(closes, highs, lows, volumes,
                            ema_arr, dsma_arr, sma_arr, mom_arr, 
                            hh_arr, ll_arr, atr_arr, vol_hhv_arr,
-                           mask_arr,
+                           mask_arr, times_arr,
                            mom_limit_low, mom_limit_high, # 98, 102
                            atr_sl, atr_tp, atr_trail,
                            yon_modu_cift): # True=CIFT, False=SADECE_AL
@@ -132,12 +149,20 @@ def fast_backtest_paradise(closes, highs, lows, volumes,
     peak_equity = 0.0
     current_equity = 0.0
     
+    last_trade_day = -1
+    active_days = 0
+    total_days = 0
+    last_day = -1
+    
     # Logic:
     # AL: HH > Prev HH, EMA > DSMA, Close > SMA(20), Mom > 100, Vol > VolHHV * 0.8
     # SAT: LL < Prev LL, EMA < DSMA, Close < SMA(20), Mom < 100, Vol > VolHHV * 0.8
     
     for i in range(100, n): # Warmup
-        
+        if times_arr[i] != last_day:
+            total_days += 1
+            last_day = times_arr[i]
+            
         # --- TRADING MASK CHECK ---
         if not mask_arr[i]:
             if pos != 0:
@@ -232,6 +257,9 @@ def fast_backtest_paradise(closes, highs, lows, volumes,
                         entry_price = closes[i]
                         extreme_price = closes[i]
                         trades += 1
+                        if times_arr[i] != last_trade_day:
+                            active_days += 1
+                            last_trade_day = times_arr[i]
                         
                     # SHORT (if allowed)
                     elif yon_modu_cift and (ll_arr[i] < ll_arr[i-1] and 
@@ -243,16 +271,19 @@ def fast_backtest_paradise(closes, highs, lows, volumes,
                         entry_price = closes[i]
                         extreme_price = closes[i]
                         trades += 1
+                        if times_arr[i] != last_trade_day:
+                            active_days += 1
+                            last_trade_day = times_arr[i]
 
     net_profit = gross_profit - gross_loss
     pf = (gross_profit / gross_loss) if gross_loss > 0 else 999.0
     
-    return net_profit, trades, pf, max_dd
+    return net_profit, trades, pf, max_dd, active_days, total_days
 
 # --- WORKER TASK ---
 def solve_chunk(args):
     # params: atr_p, atr_sl, atr_tp, params_grid
-    atr_p, atr_sl, atr_tp, params_grid = args
+    atr_p, atr_sls, atr_tps, params_grid = args
     
     global g_cache, g_mask
     if g_cache is None: return []
@@ -282,30 +313,35 @@ def solve_chunk(args):
     mom_lows = params_grid.get('mom_lows', [98.0])
     mom_highs = params_grid.get('mom_highs', [102.0])
     
-    for trl in atr_trails:
-        for ml in mom_lows:
-            for mh in mom_highs:
-                np_val, tr, pf, dd = fast_backtest_paradise(
-                    g_cache.closes, g_cache.highs, g_cache.lows, g_cache.volumes,
-                    ema_arr, dsma_arr, sma_arr, mom_arr,
-                    hh_arr, ll_arr, atr_arr, vol_hhv_arr,
-                    g_mask,
-                    ml, mh,
-                    atr_sl, atr_tp, trl,
-                    True # yon_modu_cift
-                )
-                
-                if np_val > 0:
-                    results.append({
-                        'NP': np_val, 'PF': pf, 'DD': dd, 'Tr': tr,
-                        'ATR_P': atr_p, 'SL': atr_sl, 'TP': atr_tp, 'TRL': trl,
-                         'ML': ml, 'MH': mh
-                    })
+    # 2. Iterate fixed vars
+    for sl in atr_sls:
+        for tp in atr_tps:
+            for trl in atr_trails:
+                for ml in mom_lows:
+                    for mh in mom_highs:
+                        
+                        np_val, tr, pf, dd, active_days, total_days = fast_backtest_paradise(
+                            g_cache.closes, g_cache.highs, g_cache.lows, g_cache.volumes,
+                            ema_arr, dsma_arr, sma_arr, mom_arr,
+                            hh_arr, ll_arr, atr_arr, vol_hhv_arr,
+                            g_mask, g_cache.times_arr,
+                            ml, mh,
+                            sl, tp, trl,
+                            True # yon_modu_cift
+                        )
+                        
+                        if np_val > 0:
+                            results.append({
+                                'NP': np_val, 'PF': pf, 'DD': dd, 'Tr': tr,
+                                'ATR_P': atr_p, 'SL': sl, 'TP': tp, 'TRL': trl,
+                                 'ML': ml, 'MH': mh,
+                                 'active_days': active_days, 'total_days': total_days
+                            })
                         
     return results
 
-def run_strategy3_optimization():
-    print("--- S3 (Paradise) Optimization Starting (Numba + Mask) ---")
+def run_strategy3_optimization(vade_tipi="ENDEKS"):
+    print(f"--- S3 (Paradise) Optimization Starting ({vade_tipi}) ---")
     
     grid = {
         'atr_periods': [10, 14, 20],
@@ -327,7 +363,7 @@ def run_strategy3_optimization():
     start_time = time()
     final_results = []
     
-    with Pool(processes=min(16, cpu_count()), initializer=worker_init) as pool:
+    with Pool(processes=min(16, cpu_count()), initializer=worker_init, initargs=(vade_tipi,)) as pool:
         for res in pool.imap_unordered(solve_chunk, tasks):
             final_results.extend(res)
             
@@ -335,13 +371,28 @@ def run_strategy3_optimization():
     print(f"Done in {elapsed:.1f}s. Results: {len(final_results)}")
     
     if final_results:
+        import sys
+        sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+        from src.optimization.fitness import quick_fitness
+        
         df = pd.DataFrame(final_results)
-        df['Score'] = df['NP'] * df['PF'] # Simple Score
+        
+        for idx, row in df.iterrows():
+             df.at[idx, 'Score'] = quick_fitness(
+                 net_profit=row['NP'],
+                 pf=row['PF'],
+                 max_dd=row['DD'],
+                 trades=row['Tr'],
+                 initial_capital=100000.0,
+                 active_days=row.get('active_days', 0),
+                 total_days=row.get('total_days', 0)
+             )
+             
         df = df.sort_values('Score', ascending=False)
         
         # === OOS VALIDATION (Top 50) ===
         print("\n--- OOS Validation (Top 50) ---")
-        df_full, mask_full = load_data_and_mask()
+        df_full, mask_full = load_data_and_mask(vade_tipi)
         if df_full is not None:
             n = len(df_full)
             split = int(n * 0.7)
@@ -362,11 +413,11 @@ def run_strategy3_optimization():
                     atr_arr = test_cache.get_atr(atr_p)
                     vol_hhv_arr = test_cache.get_vol_hhv(14)
                     
-                    np_val, tr, pf, dd = fast_backtest_paradise(
+                    np_val, tr, pf, dd, adays, tdays = fast_backtest_paradise(
                         test_cache.closes, test_cache.highs, test_cache.lows, test_cache.volumes,
                         ema_arr, dsma_arr, sma_arr, mom_arr,
                         hh_arr, ll_arr, atr_arr, vol_hhv_arr,
-                        mask_test,
+                        mask_test, test_cache.times_arr,
                         float(r['ML']), float(r['MH']),
                         float(r['SL']), float(r['TP']), float(r['TRL']),
                         True  # yon_modu_cift
@@ -374,24 +425,28 @@ def run_strategy3_optimization():
                     r['test_net'] = np_val
                     r['test_trades'] = tr
                     r['test_pf'] = pf
+                    r['test_dd'] = dd
                 except Exception as e:
                     print(f"  OOS hata: {e}")
                     r['test_net'] = None
                 
-                # === OOS-AWARE RE-RANKING ===
+                # === OOS-AWARE RE-RANKING via Advanced Fitness ===
                 test_net = r.get('test_net', None)
-                base = r.get('Score', 0)
                 if test_net is not None:
-                    if test_net < 0:
-                        r['oos_penalized_score'] = base * 0.10
-                    elif test_net > 0:
-                        test_pf = r.get('test_pf', 1.0)
-                        oos_bonus = min(0.30, max(0, (test_pf - 1.0) * 0.30))
-                        r['oos_penalized_score'] = base * (1.0 + oos_bonus)
-                    else:
-                        r['oos_penalized_score'] = base * 0.50
+                    new_score = quick_fitness(
+                        net_profit=r['NP'],
+                        pf=r['PF'],
+                        max_dd=r['DD'],
+                        trades=r['Tr'],
+                        initial_capital=100000.0,
+                        active_days=r.get('active_days', 0),
+                        total_days=r.get('total_days', 0),
+                        test_net_profit=r['test_net'],
+                        test_pf=r['test_pf']
+                    )
+                    r['oos_penalized_score'] = new_score
                 else:
-                    r['oos_penalized_score'] = base
+                    r['oos_penalized_score'] = r.get('Score', 0)
             
             # Re-rank by OOS penalized score
             top50.sort(key=lambda x: x.get('oos_penalized_score', 0), reverse=True)

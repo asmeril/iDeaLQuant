@@ -54,7 +54,7 @@ def main():
     
     # Ana pencere
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     
     # Uygulama döngüsü
     exit_code = app.exec()

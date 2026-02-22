@@ -4,26 +4,29 @@
 // Sembol: VIP_X030-T
 // Periyot: 1 dakika
 // Vade Tipi: ENDEKS
-// Olusturma: 2026-02-22 01:37
+// Olusturma: 2026-02-22 02:12
 // ===============================================================================================
 
 // --- VADE TİPİ ---
 string VadeTipi = "ENDEKS";
 
 // --- PARAMETRELER ---
-var MOM_PERIOD = 1400;
-var MOM_UPPER = 100.0f;
-var MOM_LOWER = 99.0f;
-var TRIX_PERIOD = 110;
-var TRIX_LB1 = 40;
-var TRIX_LB2 = 20;
-var HH_LL_PERIOD = 375;
-var HHV2_PERIOD = 90;
-var LLV2_PERIOD = 405;
-var HHV3_PERIOD = 90;
-var LLV3_PERIOD = 30;
-var TOMA_PERIOD = 3;
-var TOMA_OPT = 0.9f;
+var MOM_PERIOD = 1460;
+var MOM_UPPER = 102.5f;
+var MOM_LOWER = 98.45f;
+var TRIX_PERIOD = 119;
+var TRIX_LB1 = 36;
+var TRIX_LB2 = 32;
+var HHV1_PERIOD = 392;
+var LLV1_PERIOD = 104;
+var HHV2_PERIOD = 86;
+var LLV2_PERIOD = 439;
+var HHV3_PERIOD = 175;
+var LLV3_PERIOD = 135;
+var TOMA_PERIOD = 2;
+var TOMA_OPT = 0.91f;
+var KAR_AL_YUZDE = 9.8f;
+var IZLEYEN_STOP_YUZDE = 3.95f;
 
 // ===============================================================================================
 // DİNAMİK BAYRAM TARİHLERİ (2024-2030)
@@ -51,6 +54,7 @@ DateTime R2027 = new DateTime(2027, 3, 9); DateTime K2027 = new DateTime(2027, 5
 string[] resmiTatiller = new string[] { "01.01","04.23","05.01","05.19","07.15","08.30","10.29" };
 
 var V = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
 var C = Sistem.GrafikFiyatSec("Kapanis");
 var H = Sistem.GrafikFiyatSec("Yuksek");
 var L = Sistem.GrafikFiyatSec("Dusuk");
@@ -87,10 +91,9 @@ Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
 
 // --- INDIKATORLER ---
 var TOMA_Line = Sistem.TOMA(TOMA_PERIOD, TOMA_OPT);
-// Sistem.TOMA sadece çizgiyi döner, trend yönünü değil. Kapanış ile karşılaştıracağız.
 
-var HH1 = Sistem.HHV(HH_LL_PERIOD, "Yuksek");
-var LL1 = Sistem.LLV(HH_LL_PERIOD, "Dusuk");
+var HH1 = Sistem.HHV(HHV1_PERIOD, "Yuksek");
+var LL1 = Sistem.LLV(LLV1_PERIOD, "Dusuk");
 
 var HH2 = Sistem.HHV(HHV2_PERIOD, "Yuksek");
 var LL2 = Sistem.LLV(LLV2_PERIOD, "Dusuk");
@@ -105,13 +108,15 @@ var TRIX2 = Sistem.TRIX(TRIX_PERIOD);
 // --- LOOP & SINYAL ---
 var SonYon = "";
 var Sinyal = "";
-double IslemFiyati = 0.0;
+double EntryPrice = 0.0;
+double ExtremePrice = 0.0;
 var Pos = 0;
 
 for (int i = 1; i < V.Count; i++) Sistem.Yon[i] = "";
 
-int vadeCooldownBar = Math.Max(MOM_PERIOD, TRIX_PERIOD + Math.Max(TRIX_LB1, TRIX_LB2)) + 10;
-int warmupBars = Math.Max(200, vadeCooldownBar);
+int warm1 = Math.Max(MOM_PERIOD, TRIX_PERIOD + Math.Max(TRIX_LB1, TRIX_LB2));
+int warm2 = Math.Max(HHV1_PERIOD, Math.Max(HHV2_PERIOD, Math.Max(LLV2_PERIOD, Math.Max(HHV3_PERIOD, LLV3_PERIOD))));
+int warmupBars = Math.Max(200, Math.Max(warm1, warm2)) + 10;
 int warmupBaslangicBar = -999;
 bool warmupAktif = false;
 bool arefeFlat = false;
@@ -134,7 +139,7 @@ for (int i = warmupBars; i < V.Count; i++)
                  dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
                  dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
                  dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
-                 
+                  
     if (arefe && vadeSonuGun && t > new TimeSpan(11,30,0))
     {
         if (SonYon != "F") Sinyal = "F";
@@ -165,7 +170,7 @@ for (int i = warmupBars; i < V.Count; i++)
         if (yeniSeans) warmupBaslangicBar = i;
     }
     if (warmupAktif && warmupBaslangicBar > 0) {
-        if ((i - warmupBaslangicBar) < vadeCooldownBar) continue;
+        if ((i - warmupBaslangicBar) < 100) continue; // Min 100 bar cooldown
         else warmupAktif = false;
     }
     if (arefeFlat && i>0 && dt.Date != V[i-1].Date.Date) arefeFlat = false;
@@ -173,14 +178,14 @@ for (int i = warmupBars; i < V.Count; i++)
 
     // --- STRATEJİ MANTIĞI ---
     
-    // Kural 1: MOM > ÜST SINIR (101.5)
+    // Kural 1: MOM > ÜST SINIR
     if (MOM1[i] > MOM_UPPER)
     {
         if (HH2[i] > HH2[i-1] && TRIX1[i] < TRIX1[i-TRIX_LB1] && TRIX1[i] > TRIX1[i-1]) Sinyal = "A"; 
         if (LL2[i] < LL2[i-1] && TRIX1[i] > TRIX1[i-TRIX_LB1] && TRIX1[i] < TRIX1[i-1]) Sinyal = "S"; 
     }
     
-    // Kural 2: MOM < ALT SINIR (98)
+    // Kural 2: MOM < ALT SINIR
     if (MOM1[i] < MOM_LOWER)
     {
         if (HH3[i] > HH3[i-1] && TRIX2[i] < TRIX2[i-TRIX_LB2] && TRIX2[i] > TRIX2[i-1]) Sinyal = "A"; 
@@ -191,15 +196,36 @@ for (int i = warmupBars; i < V.Count; i++)
     if (HH1[i] > HH1[i-1] && C[i] > TOMA_Line[i]) Sinyal = "A";
     if (LL1[i] < LL1[i-1] && C[i] < TOMA_Line[i]) Sinyal = "S";
 
-    // --- POZİSYON GÜNCELLEME ---
+    // --- POZİSYON GÜNCELLEME (Giriş / Reverse) ---
     if (Sinyal != "" && SonYon != Sinyal)
     {
         SonYon = Sinyal;
         Sistem.Yon[i] = SonYon;
-        IslemFiyati = C[i];
+        EntryPrice = C[i];
+        ExtremePrice = C[i];
         if (Sinyal == "A") Pos = 1;
         else if (Sinyal == "S") Pos = -1;
         else Pos = 0;
+    }
+
+    // --- EXIT LOGIC (Kar Al / İzleyen Stop) ---
+    if (Pos == 1) {
+        if (ExtremePrice < C[i]) ExtremePrice = C[i];
+        if (KAR_AL_YUZDE > 0 && C[i] >= EntryPrice * (1 + KAR_AL_YUZDE/100.0)) {
+            Sistem.Yon[i] = "F"; Pos = 0;
+        }
+        if (IZLEYEN_STOP_YUZDE > 0 && C[i] <= ExtremePrice * (1 - IZLEYEN_STOP_YUZDE/100.0)) {
+            Sistem.Yon[i] = "F"; Pos = 0;
+        }
+    }
+    else if (Pos == -1) {
+        if (ExtremePrice == 0 || ExtremePrice > C[i]) ExtremePrice = C[i];
+        if (KAR_AL_YUZDE > 0 && C[i] <= EntryPrice * (1 - KAR_AL_YUZDE/100.0)) {
+            Sistem.Yon[i] = "F"; Pos = 0;
+        }
+        if (IZLEYEN_STOP_YUZDE > 0 && C[i] >= ExtremePrice * (1 + IZLEYEN_STOP_YUZDE/100.0)) {
+            Sistem.Yon[i] = "F"; Pos = 0;
+        }
     }
 }
 

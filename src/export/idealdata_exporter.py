@@ -317,6 +317,7 @@ if (Sistem.Parametreler[3] == "X")
             'bb_width_multiplier': params.get('bb_width_multiplier', 0.8),
             'bb_avg_period': int(params.get('bb_avg_period', 50)),
             'filter_score_threshold': int(params.get('filter_score_threshold', 2)),
+            'yon_modu': params.get('yon_modu', 'CIFT')
         }
 
         
@@ -354,8 +355,9 @@ var BB_WIDTH_MULT = {p['bb_width_multiplier']}f;
 var BB_AVG_PERIOD = {p['bb_avg_period']};
 var FILTRE_SKOR_ESIK = {p['filter_score_threshold']};
 
-// --- VADE TİPİ ---
+// --- VADE TİPİ & YÖN MODU ---
 string VadeTipi = "{vade_tipi}";
+string YON_MODU = "{p['yon_modu']}";
 
 
 // ===============================================================================================
@@ -592,8 +594,8 @@ for (int i = warmupBars; i < Sistem.BarSayisi; i++)
     // --- GİRİŞ MANTIĞI ---
     if (Sinyal == "" && SonYon != "A" && SonYon != "S") {{
         if (YatayFiltre[i] == 1) {{
-            if (longScore >= MIN_ONAY_SKORU && shortScore < 2) Sinyal = "A";
-            else if (shortScore >= MIN_ONAY_SKORU && longScore < 2) Sinyal = "S";
+            if (longScore >= MIN_ONAY_SKORU && shortScore < 2 && YON_MODU != "SADECE_SAT") Sinyal = "A";
+            else if (shortScore >= MIN_ONAY_SKORU && longScore < 2 && YON_MODU != "SADECE_AL") Sinyal = "S";
         }}
     }}
     
@@ -646,9 +648,9 @@ Sistem.YaziEkle(info, 1, 15, 35, Color.Yellow, "Tahoma", 10);
             'atr_sl_mult': params.get('atr_sl_mult', 2.0),
             'atr_tp_mult': params.get('atr_tp_mult', 5.0),
             'atr_trail_mult': params.get('atr_trail_mult', 2.0),
-            'exit_confirm_bars': int(params.get('exit_confirm_bars', 2)),
             'exit_confirm_mult': params.get('exit_confirm_mult', 1.0),
             'volume_mult': params.get('volume_mult', 0.8),
+            'yon_modu': params.get('yon_modu', 'CIFT')
         }
         
         code = f'''// ===============================================================================================
@@ -660,8 +662,9 @@ Sistem.YaziEkle(info, 1, 15, 35, Color.Yellow, "Tahoma", 10);
 // Oluşturma: {datetime.now().strftime("%Y-%m-%d %H:%M")}
 // ===============================================================================================
 
-// --- VADE TİPİ ---
+// --- VADE TİPİ & YÖN MODU ---
 string VadeTipi = "{vade_tipi}";
+string YON_MODU = "{p['yon_modu']}";
 
 // --- ATR EXIT PARAMETRELER ---
 int ATR_Exit_Period = {p['atr_exit_p']};
@@ -935,7 +938,7 @@ for (int i = warmupBars; i < V.Count; i++)
     // === GİRİŞ MANTIĞI ===
     if (Sinyal == "" && SonYon != "A" && SonYon != "S")
     {{
-        if (TrendYonu[i] == 1)
+        if (TrendYonu[i] == 1 && YON_MODU != "SADECE_SAT")
         {{
             bool yeniZirve = H[i] >= HHV[i-1] && HHV[i] > HHV[i-1];
             bool pozitifMomentum = Momentum[i] > MOMENTUM_THRESHOLD;
@@ -943,7 +946,7 @@ for (int i = warmupBars; i < V.Count; i++)
             bool volumeOnay = Lot[i] >= Vol_HHV[i-1] * (float)VOLUME_MULT;
             if (yeniZirve && pozitifMomentum && mfiOnay && volumeOnay) Sinyal = "A";
         }}
-        else if (TrendYonu[i] == -1)
+        else if (TrendYonu[i] == -1 && YON_MODU != "SADECE_AL")
         {{
             bool yeniDip = L[i] <= LLV[i-1] && LLV[i] < LLV[i-1];
             bool negatifMomentum = Momentum[i] < (MOMENTUM_BASE - MOMENTUM_THRESHOLD);
@@ -1290,6 +1293,7 @@ Sistem.Cizgiler[2].Deger = MA;
 var LotSize = {lot_size};
 var Sembol = "{self.symbol}";
 var Periyot = "{self.period}";
+var YON_MODU = "{self.yon_modu if hasattr(self, 'yon_modu') else 'CIFT'}";
 
 // --- STRATEJİLERİ GETİR ---
 var Sistem1 = Sistem.SistemGetir("{self.strategy1_filename}", Sembol, Periyot);
@@ -1321,12 +1325,12 @@ var Yon2 = Sistem2.SonYon;  // A, S veya F
 string Sinyal = "";
 
 // Kapı LONG açık ve S2 LONG sinyali
-if (Yon1 == "A" && Yon2 == "A")
+if (Yon1 == "A" && Yon2 == "A" && YON_MODU != "SADECE_SAT")
 {{
     Sinyal = "A";
 }}
 // Kapı SHORT açık ve S2 SHORT sinyali
-else if (Yon1 == "S" && Yon2 == "S")
+else if (Yon1 == "S" && Yon2 == "S" && YON_MODU != "SADECE_AL")
 {{
     Sinyal = "S";
 }}
@@ -1426,19 +1430,21 @@ return null;
             'toma_opt': params.get('toma_opt', 2.1),
             'kar_al': params.get('kar_al', 0.0),
             'iz_stop': params.get('iz_stop', 0.0),
+            'yon_modu': params.get('yon_modu', 'CIFT')
         }
 
         code = f'''// ===============================================================================================
-// STRATEJI 4: TOMA + MOMENTUM (Karma Sistem)
+// STRATEJI 4: TOMA + MOMENTUM + TRIX SİSTEMİ
 // ===============================================================================================
 // Sembol: {self.symbol}
 // Periyot: {self.period} dakika
 // Vade Tipi: {vade_tipi}
-// Olusturma: {datetime.now().strftime("%Y-%m-%d %H:%M")}
+// Oluşturma: {datetime.now().strftime("%Y-%m-%d %H:%M")}
 // ===============================================================================================
 
-// --- VADE TİPİ ---
+// --- VADE TİPİ & YÖN MODU ---
 string VadeTipi = "{vade_tipi}";
+string YON_MODU = "{p['yon_modu']}";
 
 // --- PARAMETRELER ---
 var MOM_PERIOD = {p['mom_period']};
@@ -1611,20 +1617,20 @@ for (int i = warmupBars; i < V.Count; i++)
     // Kural 1: MOM > ÜST SINIR
     if (MOM1[i] > MOM_UPPER)
     {{
-        if (HH2[i] > HH2[i-1] && TRIX1[i] < TRIX1[i-TRIX_LB1] && TRIX1[i] > TRIX1[i-1]) Sinyal = "A"; 
-        if (LL2[i] < LL2[i-1] && TRIX1[i] > TRIX1[i-TRIX_LB1] && TRIX1[i] < TRIX1[i-1]) Sinyal = "S"; 
+        if (HH2[i] > HH2[i-1] && TRIX1[i] < TRIX1[i-TRIX_LB1] && TRIX1[i] > TRIX1[i-1] && YON_MODU != "SADECE_SAT") Sinyal = "A"; 
+        if (LL2[i] < LL2[i-1] && TRIX1[i] > TRIX1[i-TRIX_LB1] && TRIX1[i] < TRIX1[i-1] && YON_MODU != "SADECE_AL") Sinyal = "S"; 
     }}
     
     // Kural 2: MOM < ALT SINIR
     if (MOM1[i] < MOM_LOWER)
     {{
-        if (HH3[i] > HH3[i-1] && TRIX2[i] < TRIX2[i-TRIX_LB2] && TRIX2[i] > TRIX2[i-1]) Sinyal = "A"; 
-        if (LL3[i] < LL3[i-1] && TRIX2[i] > TRIX2[i-TRIX_LB2] && TRIX2[i] < TRIX2[i-1]) Sinyal = "S"; 
+        if (HH3[i] > HH3[i-1] && TRIX2[i] < TRIX2[i-TRIX_LB2] && TRIX2[i] > TRIX2[i-1] && YON_MODU != "SADECE_SAT") Sinyal = "A"; 
+        if (LL3[i] < LL3[i-1] && TRIX2[i] > TRIX2[i-TRIX_LB2] && TRIX2[i] < TRIX2[i-1] && YON_MODU != "SADECE_AL") Sinyal = "S"; 
     }}
     
     // Kural 3: TOMA + HHV/LLV (Ana Trend - Öncelikli, önceki sinyalleri ezer)
-    if (HH1[i] > HH1[i-1] && C[i] > TOMA_Line[i]) Sinyal = "A";
-    if (LL1[i] < LL1[i-1] && C[i] < TOMA_Line[i]) Sinyal = "S";
+    if (HH1[i] > HH1[i-1] && C[i] > TOMA_Line[i] && YON_MODU != "SADECE_SAT") Sinyal = "A";
+    if (LL1[i] < LL1[i-1] && C[i] < TOMA_Line[i] && YON_MODU != "SADECE_AL") Sinyal = "S";
 
     // --- POZİSYON GÜNCELLEME (Giriş / Reverse) ---
     if (Sinyal != "" && SonYon != Sinyal)
