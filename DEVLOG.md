@@ -6,13 +6,15 @@
 - **TypingError Fix (`times_arr`):** Tüm `IndicatorCache` (S1, S2, S3, S4) sınıflarında `df['date'].dt.date.values` kullanımı sebebiyle array'in Python objesi (PyObject) array'i olarak kalması ve Numba'nın (`@jit(nopython=True)`) bu array'i derleyemeyerek çökmesi engellendi.
   - **Çözüm:** Tüm tarih sütunları `values.astype(np.int64) // 10**9` ile saf `np.int64` tabanlı UNIX timestamp'e çevrildi. Kod C++ hızından taviz vermeden ve çökmeden çalışabilir hale geldi.
 - **Argüman Sayımı Doğrulamaları:** Tüm stratejilerin optimizer dosyaları içerisinde `fast_backtest_X` argüman eşleşmeleri (`fast_backtest_strategy4` için 19 argüman, S2 için 24 argüman vb.) baştan sona denetlendi ve tutarlılıkları test edildi.
+- **OOS Active Days Sayım Hatası Giderildi:** `IndicatorCache`'de saniyeye dönüşüm sırasında `df['datetime']` ile gelen objelerin Pandas 2.0 micro-seconds `[us]` çözünürlüğünde olması sebebiyle oluşan gün verisi kayıpları engellendi. 
+  - **S1, S2, S3, S4:** Tümü `astype('datetime64[s]')` kalıbıyla saniyeye zorlanarak sabitlendi. Yeni ceza puanlama sistemindeki `1 gün` ve saçma yoğunluk hesaplamaları düzeltildi.
 
 ### 📁 Değişen Dosyalar (4)
 `strategy1_optimizer.py`, `strategy2_optimizer.py`, `strategy3_optimizer.py`, `strategy4_optimizer.py`
 
 ### 📌 Mevcut Durum
-- **Aktif Faz:** Faz 6 - Desktop UI Testi & İyileştirme
-- **Sıradaki Adım:** Optimizer stabilite testleri (Hatasız tamamlanma kontrolü).
+- **Aktif Faz:** Faz 9 - Canlı Test & Robust Analizleri
+- **Sıradaki Adım:** Yeni OOS modelleri ile en sağlam S1, S2, S3 ve S4 setlerini belirleyip Live Trade verisine almak.
 
 ---
 

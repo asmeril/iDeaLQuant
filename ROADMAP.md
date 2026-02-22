@@ -20,7 +20,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 6 | ✅ | Desktop UI (PySide6) | - |
 | Faz 7 | ✅ | Veritabanı Entegrasyonu | - |
 | Faz 8 | 🔄 | Agent Dokümantasyonu | 🔴 Sürekli |
-| Faz 9 | 🔜 | Canlı Test & S5 Araştırma | 🟡 Düşük |
+| Faz 9 | 🔄 | Canlı Test & S5 Araştırma | 🟡 Düşük |
 
 ---
 

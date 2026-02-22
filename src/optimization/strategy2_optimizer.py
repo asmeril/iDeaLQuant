@@ -59,15 +59,15 @@ class IndicatorCache:
         self.n = len(self.closes)
         self.lots = df['Lot'].values  # Volume data (Lot)
         if 'datetime' in df.columns:
-            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
+            self.times_arr = df['datetime'].astype('datetime64[s]').astype(np.int64).values
         elif 'Tarih' in df.columns:
-            self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+            self.times_arr = df['Tarih'].astype('datetime64[s]').astype(np.int64).values
         elif 'date' in df.columns:
-            self.times_arr = df['date'].values.astype(np.int64) // 10**9
+            self.times_arr = df['date'].astype('datetime64[s]').astype(np.int64).values
         elif 'DateTime' in df.columns:
-            self.times_arr = df['DateTime'].values.astype(np.int64) // 10**9
+            self.times_arr = df['DateTime'].astype('datetime64[s]').astype(np.int64).values
         elif 'time' in df.columns:
-            self.times_arr = df['time'].values.astype(np.int64) // 10**9
+            self.times_arr = df['time'].astype('datetime64[s]').astype(np.int64).values
         else:
             self.times_arr = np.zeros(len(df), dtype=np.int64)
         
