@@ -40,7 +40,9 @@ class IndicatorCache:
         else:
             raise ValueError("DataFrame must contain 'close' or 'Kapanis' columns")
             
-        if 'date' in df.columns:
+        if 'datetime' in df.columns:
+            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
+        elif 'date' in df.columns:
             self.times_arr = df['date'].values.astype(np.int64) // 10**9
         elif 'Tarih' in df.columns:
             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
@@ -314,9 +316,10 @@ def fast_backtest_strategy4(closes,
     son_yon = 0 # Last Direction
     
     for i in range(min_warmup, n): # Dinamik warmup
-        if times_arr[i] != last_day:
+        current_day = times_arr[i] // 86400 # 1 gün = 86400 saniye
+        if current_day != last_day:
             total_days += 1
-            last_day = times_arr[i]
+            last_day = current_day
             
         # --- TRADING MASK CHECK ---
         if not mask_arr[i]:
@@ -391,9 +394,9 @@ def fast_backtest_strategy4(closes,
             entry_price = closes[i]
             extreme_price = closes[i]
             trades += 1
-            if times_arr[i] != last_trade_day:
+            if current_day != last_trade_day:
                 active_days += 1
-                last_trade_day = times_arr[i]
+                last_trade_day = current_day
 
 
         # --- EXIT LOGIC (Kar Al / Stop) ---

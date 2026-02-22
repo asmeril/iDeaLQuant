@@ -37,7 +37,9 @@ class IndicatorCache:
             self.lows = df['Dusuk'].values
             self.volumes = df['Lot'].values
             
-        if 'date' in df.columns:
+        if 'datetime' in df.columns:
+            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
+        elif 'date' in df.columns:
             self.times_arr = df['date'].values.astype(np.int64) // 10**9
         elif 'Tarih' in df.columns:
             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9

@@ -58,7 +58,9 @@ class IndicatorCache:
         self.typical = df['Tipik'].values
         self.n = len(self.closes)
         self.lots = df['Lot'].values  # Volume data (Lot)
-        if 'Tarih' in df.columns:
+        if 'datetime' in df.columns:
+            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
+        elif 'Tarih' in df.columns:
             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
         elif 'date' in df.columns:
             self.times_arr = df['date'].values.astype(np.int64) // 10**9

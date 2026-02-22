@@ -39,7 +39,9 @@ class IndicatorCache:
             self.opens = df['Acilis'].values
             self.volumes = df['Lot'].values if 'Lot' in df.columns else np.zeros_like(df['Kapanis'].values)
             
-        if 'date' in df.columns:
+        if 'datetime' in df.columns:
+            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
+        elif 'date' in df.columns:
             self.times_arr = df['date'].values.astype(np.int64) // 10**9
         elif 'Tarih' in df.columns:
             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9

@@ -1,0 +1,125 @@
+commit 916ee9889fa0329a0f01470e29bfa06de068294a
+Author: asmeril <asmeril@gmail.com>
+Date:   Sun Feb 22 16:19:14 2026 +0300
+
+    fix: indicatorcache times_arr missing datetime column fallback
+
+diff --git a/src/optimization/strategy1_optimizer.py b/src/optimization/strategy1_optimizer.py
+index 5a9153f..509d988 100644
+--- a/src/optimization/strategy1_optimizer.py
++++ b/src/optimization/strategy1_optimizer.py
+@@ -39,7 +39,9 @@ class IndicatorCache:
+             self.opens = df['Acilis'].values
+             self.volumes = df['Lot'].values if 'Lot' in df.columns else np.zeros_like(df['Kapanis'].values)
+             
+-        if 'date' in df.columns:
++        if 'datetime' in df.columns:
++            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
++        elif 'date' in df.columns:
+             self.times_arr = df['date'].values.astype(np.int64) // 10**9
+         elif 'Tarih' in df.columns:
+             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+diff --git a/src/optimization/strategy2_optimizer.py b/src/optimization/strategy2_optimizer.py
+index 2b7b45b..09c8d2b 100644
+--- a/src/optimization/strategy2_optimizer.py
++++ b/src/optimization/strategy2_optimizer.py
+@@ -58,7 +58,9 @@ class IndicatorCache:
+         self.typical = df['Tipik'].values
+         self.n = len(self.closes)
+         self.lots = df['Lot'].values  # Volume data (Lot)
+-        if 'Tarih' in df.columns:
++        if 'datetime' in df.columns:
++            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
++        elif 'Tarih' in df.columns:
+             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+         elif 'date' in df.columns:
+             self.times_arr = df['date'].values.astype(np.int64) // 10**9
+diff --git a/src/optimization/strategy3_optimizer.py b/src/optimization/strategy3_optimizer.py
+index 406ee07..805e5e5 100644
+--- a/src/optimization/strategy3_optimizer.py
++++ b/src/optimization/strategy3_optimizer.py
+@@ -37,7 +37,9 @@ class IndicatorCache:
+             self.lows = df['Dusuk'].values
+             self.volumes = df['Lot'].values
+             
+-        if 'date' in df.columns:
++        if 'datetime' in df.columns:
++            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
++        elif 'date' in df.columns:
+             self.times_arr = df['date'].values.astype(np.int64) // 10**9
+         elif 'Tarih' in df.columns:
+             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+diff --git a/src/optimization/strategy4_optimizer.py b/src/optimization/strategy4_optimizer.py
+index 51a14a0..5c6773b 100644
+--- a/src/optimization/strategy4_optimizer.py
++++ b/src/optimization/strategy4_optimizer.py
+@@ -40,7 +40,9 @@ class IndicatorCache:
+         else:
+             raise ValueError("DataFrame must contain 'close' or 'Kapanis' columns")
+             
+-        if 'date' in df.columns:
++        if 'datetime' in df.columns:
++            self.times_arr = df['datetime'].values.astype(np.int64) // 10**9
++        elif 'date' in df.columns:
+             self.times_arr = df['date'].values.astype(np.int64) // 10**9
+         elif 'Tarih' in df.columns:
+             self.times_arr = df['Tarih'].values.astype(np.int64) // 10**9
+@@ -314,9 +316,10 @@ def fast_backtest_strategy4(closes,
+     son_yon = 0 # Last Direction
+     
+     for i in range(min_warmup, n): # Dinamik warmup
+-        if times_arr[i] != last_day:
++        current_day = times_arr[i] // 86400 # 1 gün = 86400 saniye
++        if current_day != last_day:
+             total_days += 1
+-            last_day = times_arr[i]
++            last_day = current_day
+             
+         # --- TRADING MASK CHECK ---
+         if not mask_arr[i]:
+@@ -391,9 +394,9 @@ def fast_backtest_strategy4(closes,
+             entry_price = closes[i]
+             extreme_price = closes[i]
+             trades += 1
+-            if times_arr[i] != last_trade_day:
++            if current_day != last_trade_day:
+                 active_days += 1
+-                last_trade_day = times_arr[i]
++                last_trade_day = current_day
+ 
+ 
+         # --- EXIT LOGIC (Kar Al / Stop) ---
+diff --git a/test_date.py b/test_date.py
+new file mode 100644
+index 0000000..7597778
+--- /dev/null
++++ b/test_date.py
+@@ -0,0 +1,28 @@
++import sys
++import os
++import pandas as pd
++import numpy as np
++
++sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
++
++from src.engine.data import OHLCV
++from src.optimization.strategy4_optimizer import IndicatorCache
++
++csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"
++data = OHLCV.from_ideal_export(csv_path)
++
++cache = IndicatorCache(data.df)
++
++print("First 5 times_arr:", cache.times_arr[:5])
++print("First 5 times_arr // 86400:", cache.times_arr[:5] // 86400)
++print("Unique days in total data:", len(np.unique(cache.times_arr // 86400)))
++
++# Assume index 0 to 10000 is train, rest is test
++split_idx = int(len(data.df) * 0.70)
++test_df = data.df.iloc[split_idx:].copy()
++test_cache = IndicatorCache(test_df)
++
++print("\n--- TEST DATA ---")
++print("First 5 test times_arr:", test_cache.times_arr[:5])
++print("First 5 test times_arr // 86400:", test_cache.times_arr[:5] // 86400)
++print("Unique days in test data:", len(np.unique(test_cache.times_arr // 86400)))
