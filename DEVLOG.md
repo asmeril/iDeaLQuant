@@ -1,4 +1,20 @@
+## 2026-02-23 (Strateji 5: Oliver Kell & Chop Filter Discovery)
 
+### ✅ Strateji 5 (Oliver Kell) Prototiplemesi
+- **Giriş Kuralları:** `EMA10` ve `EMA20` üzerinde seyreden fiyatta, son 10 barın en yüksek noktası (`HH10`) yukarı hacimli kırıldığında (Base 'n Break) işleme girilir.
+- **Çıkış Kuralları:** `EMA10` ve `EMA20`'nin her ikisinin de altında kapanış yapıldığında (EMA Crossback) stop olunur. Karı kilitlemek için İz Süren Stop (Trailing Stop) eklendi.
+- **İdeal C# Export:** Spot (Sadece Long) ve VİOP (Çift Yönlü Long/Short) için iki ayrı sistem kodu `reference/Strateji_5_Spot.txt` ve `reference/Strateji_5_VIOP.txt` olarak eklendi.
+
+### 🧠 Kritik Algoritma Keşfi (Kullanıcı Geri Bildirimi)
+- **Problem:** Yatay (Chop) piyasadan kaçınmak için EMA'nın eğiminin yönünü ölçmek istedik. İlk aşamada iDeal platformunun `Sistem.LinearRegSlope()` fonksiyonu kullanıldı.
+- **Keşif:** Kullanıcının uyarısıyla `Sistem.LinearRegSlope()` fonksiyonunun **Hareketli Ortalamanın (EMA)** değil, doğrudan **Kapanış Fiyatının (C)** eğimini ölçtüğü fark edildi. Fiyat kısa süreliğine yukarı sekse bile EMA hala aşağı bakıyor olabilirdi.
+- **Çözüm:** En kesin, matematiksel ve risksiz yöntem olan türev mantığına (`EMA10[i] > EMA10[i-1]`) geri dönüldü. Bu sayede EMA'nın kafasını gerçekten yukarı kaldırıp kaldırmadığı (Burnunun yönü) hatasız filtrelenmiş oldu. 
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 10 - Strateji 5 (Oliver Kell) Entegrasyonu
+- **Sıradaki Adım:** Python tarafına `oliver_kell_s5.py` dosyasının yazılması ve Numba entegrasyonu.
+
+---
 
 ## 2026-02-22 (Numba TypingError & DataFrame Date Fixes)
 

@@ -1,0 +1,128 @@
+// --- OLIVER KELL STRATEJİSİ (VİOP - ÇİFT YÖNLÜ) ---
+// VİOP Endeks ve Pay Vadeliler için tasarlanmıştır.
+// Kaynak: 2020 US Investing Championship (%941)
+//
+// Kurallar:
+// 1. Long: EMA(10,20) üstü, Düşen (HH10) Kırılımı, Hacim Artışı, ADX>20.
+// 2. Short: EMA(10,20) altı, Yükselen (LL10) Kırılımı, Hacim Artışı, ADX>20.
+// 3. İz Süren Stop: Endeks için %1.5, hisseler için değiştiriniz.
+
+var V = Sistem.GrafikVerileri;
+var C = Sistem.GrafikFiyatOku(V, "Kapanis");
+var H = Sistem.GrafikFiyatOku(V, "Yuksek");
+var L = Sistem.GrafikFiyatOku(V, "Dusuk");
+var Vol = Sistem.GrafikFiyatOku(V, "Hacim");
+
+// --- GÖSTERGELER ---
+var EMA10 = Sistem.MA(C, "Exp", 10);
+var EMA20 = Sistem.MA(C, "Exp", 20);
+var VolMA = Sistem.MA(Vol, "Simple", 20);
+var ADX = Sistem.ADX(14);
+var HH10 = Sistem.HHV(10, "Yuksek");
+var LL10 = Sistem.LLV(10, "Dusuk"); // Short stratejisi için en düşük dip
+
+// --- EMA YÖNÜ TESTERE FİLTRESİ ---
+// Fiyatın EMA üzerinde olması yetmez, EMA'nın kendisinin de yönünün yukarı (veya aşağı) olması gerekir.
+// Bunu EMA10[i] > EMA10[i-1] mantığıyla garanti altına alacağız.
+Sistem.Cizgiler[0].Deger = EMA10;
+Sistem.Cizgiler[0].Aciklama = "10 EMA";
+Sistem.Cizgiler[0].Renk = Sistem.Renk(255, 0, 0, 255); 
+
+Sistem.Cizgiler[1].Deger = EMA20;
+Sistem.Cizgiler[1].Aciklama = "20 EMA";
+Sistem.Cizgiler[1].Renk = Sistem.Renk(255, 255, 0, 0); 
+
+// --- STRATEJİ DEĞİŞKENLERİ ---
+float IzSurenYuzde = 0.015f; // VİOP Endeks için %1.5 İz Süren Stop. (Pay vadelilerde 0.03 veya 0.04 yapılabilir)
+float UcUcMesafe = 0; // Pozisyonun gördüğü en iyi fiyat
+float StopSeviyesi = 0;
+string Pozisyon = "F"; // "A"=Long, "S"=Short, "F"=Nakit
+
+for (int i = 20; i < V.Count; i++)
+{
+    // LONG KOŞULLARI
+    bool longTrend = C[i] > EMA10[i] && C[i] > EMA20[i];
+    bool longBreak = C[i] > HH10[i-1]; 
+    
+    // LONG TESTERE FİLTRESİ: ADX>20 ve EMA10 Yönü Yukarı
+    bool trendGucuLong = ADX[i] > 20 && EMA10[i] > EMA10[i-1];
+    
+    // SHORT KOŞULLARI (Birebir Long'un tersi)
+    bool shortTrend = C[i] < EMA10[i] && C[i] < EMA20[i];
+    bool shortBreak = C[i] < LL10[i-1];
+    
+    // SHORT TESTERE FİLTRESİ: ADX>20 ve EMA10 Yönü Aşağı
+    bool trendGucuShort = ADX[i] > 20 && EMA10[i] < EMA10[i-1];
+
+    bool gucluHacim = Vol[i] > VolMA[i];
+    
+    // ÇIKIŞ ŞARTLARI (EMA Crossback)
+    bool emaCrossbackLongIcin = C[i] < EMA10[i] && C[i] < EMA20[i]; // Long'dan çıkış için fiyat EMA'ların altına inecek
+    bool emaCrossbackShortIcin = C[i] > EMA10[i] && C[i] > EMA20[i]; // Short'tan çıkış için fiyat EMA'ların üstüne çıkacak
+
+    if (Pozisyon == "F")
+    {
+        if (longTrend && longBreak && gucluHacim && trendGucuLong)
+        {
+            Sistem.Yon[i] = "A";
+            Pozisyon = "A";
+            UcUcMesafe = C[i];
+            StopSeviyesi = L[i]; 
+        }
+        else if (shortTrend && shortBreak && gucluHacim && trendGucuShort)
+        {
+            Sistem.Yon[i] = "S";
+            Pozisyon = "S";
+            UcUcMesafe = C[i];
+            StopSeviyesi = H[i]; // Short için ilk stop, barın en yükseği
+        }
+    }
+    else if (Pozisyon == "A") // LONGDAYSAK
+    {
+        // Kârı kilitle (İz süren stop yukarı çekilir)
+        if (C[i] > UcUcMesafe) {
+            UcUcMesafe = C[i];
+            float yeniStop = UcUcMesafe * (1.0f - IzSurenYuzde);
+            if (yeniStop > StopSeviyesi) StopSeviyesi = yeniStop; 
+        }
+
+        // Long Çıkış (Stop patladı VEYA trend terse döndü)
+        if (emaCrossbackLongIcin || C[i] <= StopSeviyesi)
+        {
+            // Eğer tam çıkış anında Short şartları da oluşmuşsa direkt Shortla
+            if (shortTrend && shortBreak && gucluHacim && trendGucuShort) {
+                Sistem.Yon[i] = "S";
+                Pozisyon = "S";
+                UcUcMesafe = C[i]; StopSeviyesi = H[i];
+            } else {
+                // Şartlar olgunlaşmadıysa güvenlice Nakite geç
+                Sistem.Yon[i] = "F"; 
+                Pozisyon = "F";
+            }
+        }
+    }
+    else if (Pozisyon == "S") // SHORTTAYSAK
+    {
+        // Kârı kilitle (İz süren stop aşağı çekilir)
+        if (C[i] < UcUcMesafe) {
+            UcUcMesafe = C[i];
+            float yeniStop = UcUcMesafe * (1.0f + IzSurenYuzde); 
+            if (yeniStop < StopSeviyesi || StopSeviyesi == 0) StopSeviyesi = yeniStop; 
+        }
+
+        // Short Çıkış (Stop patladı VEYA trend yukarı döndü)
+        if (emaCrossbackShortIcin || C[i] >= StopSeviyesi)
+        {
+            // Eğer tam çıkış anında Long şartları oluşmuşsa direkt Longla
+            if (longTrend && longBreak && gucluHacim && trendGucuLong) {
+                Sistem.Yon[i] = "A";
+                Pozisyon = "A";
+                UcUcMesafe = C[i]; StopSeviyesi = L[i];
+            } else {
+                // Değilse Nakite geç
+                Sistem.Yon[i] = "F"; 
+                Pozisyon = "F";
+            }
+        }
+    }
+}

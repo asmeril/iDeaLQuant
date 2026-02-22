@@ -1,0 +1,88 @@
+// --- OLIVER KELL STRATEJİSİ (SPOT PİYASA - SADECE LONG) ---
+// Günlük grafikler ve Hisse Senetleri (Spot) için tasarlanmıştır.
+// Kaynak: 2020 US Investing Championship (%941)
+//
+// Kurallar:
+// 1. 10 ve 20 EMA üzerinde olunacak.
+// 2. Base 'n Break: Son 10 barın en yükseği (HHV) yukarı kırılacak.
+// 3. Güçlü Hacim: O günkü hacim, 20 günlük hacim ortalamasından büyük olacak.
+// 4. Testere Filtresi: ADX > 20 ve 10 EMA yönü / eğimi yukarı olacak.
+// 5. Çıkış / Kar Al: %3 İz Süren Stop (Volatiliteye göre değiştiriniz) VEYA EMA Crossback (Kapanış < 10 & 20 EMA).
+
+var V = Sistem.GrafikVerileri;
+var C = Sistem.GrafikFiyatOku(V, "Kapanis");
+var H = Sistem.GrafikFiyatOku(V, "Yuksek");
+var L = Sistem.GrafikFiyatOku(V, "Dusuk");
+var Vol = Sistem.GrafikFiyatOku(V, "Hacim");
+
+// --- GÖSTERGELER ---
+var EMA10 = Sistem.MA(C, "Exp", 10);
+var EMA20 = Sistem.MA(C, "Exp", 20);
+var VolMA = Sistem.MA(Vol, "Simple", 20);
+var ADX = Sistem.ADX(14);
+var HH10 = Sistem.HHV(10, "Yuksek");
+
+// --- EMA YÖNÜ TESTERE FİLTRESİ ---
+// Fiyatın EMA üzerinde olması yetmez, EMA'nın kendisinin de yönünün yukarı (veya aşağı) olması gerekir.
+// Bunu EMA10[i] > EMA10[i-1] mantığıyla garanti altına alacağız.
+// Ekrana Çizdirelim
+Sistem.Cizgiler[0].Deger = EMA10;
+Sistem.Cizgiler[0].Aciklama = "10 EMA";
+Sistem.Cizgiler[0].Renk = Sistem.Renk(255, 0, 0, 255); // Mavi
+
+Sistem.Cizgiler[1].Deger = EMA20;
+Sistem.Cizgiler[1].Aciklama = "20 EMA";
+Sistem.Cizgiler[1].Renk = Sistem.Renk(255, 255, 0, 0); // Kırmızı
+
+// --- STRATEJİ DEĞİŞKENLERİ ---
+float IzSurenYuzde = 0.03f; // %3 İz Süren Stop (Hisse volatilitesine göre ayarlayın)
+float ZirveFiyat = 0;
+float StopSeviyesi = 0;
+bool LongPozisyonda = false;
+
+for (int i = 20; i < V.Count; i++)
+{
+    // YÖN VE TESTERE FİLTRELERİ
+    bool trendYukari = C[i] > EMA10[i] && C[i] > EMA20[i];
+    bool baseBreak = C[i] > HH10[i-1]; 
+    bool gucluHacim = Vol[i] > VolMA[i];
+    
+    // YENİ TESTERE FİLTRESİ (TAM SLOPE İLE - EMA YÖNÜ): 
+    // ADX > 20 OLACAK VE EĞİM KESİNLİKLE POZİTİF (EMA YÜKSELİYOR) OLACAK
+    bool trendVarFiltresi = ADX[i] > 20 && EMA10[i] > EMA10[i-1]; 
+
+    // ÇIKIŞ ŞARTI (EMA CROSSBACK)
+    // Fiyatın her iki hareketli ortalamanın da altında kapanması
+    bool emaCrossback = C[i] < EMA10[i] && C[i] < EMA20[i];
+
+    if (!LongPozisyonda)
+    {
+        // GİRİŞ: Trend var, kırılım geldi, hacim yüksek ve testere filtresi onay verdi
+        if (trendYukari && baseBreak && gucluHacim && trendVarFiltresi)
+        {
+            Sistem.Yon[i] = "A"; // AL
+            LongPozisyonda = true;
+            ZirveFiyat = C[i];
+            StopSeviyesi = L[i]; // İlk stop, kırılım yapılan barın en düşüğü
+        }
+    }
+    else
+    {
+        // POZİSYONDAYKEN İZ SÜREN STOP GÜNCELLEMESİ
+        if (C[i] > ZirveFiyat)
+        {
+            ZirveFiyat = C[i];
+            // Yeni zirve görüldükçe stop seviyesini %3 (veya belirlediğiniz oran) aşağısına taşı
+            float yeniStop = ZirveFiyat * (1.0f - IzSurenYuzde);
+            if (yeniStop > StopSeviyesi) StopSeviyesi = yeniStop; 
+        }
+
+        // ÇIKIŞ (SAT - NAKİTE GEÇ)
+        // Ya fiyattan iz süren stop patlar, ya da trend bozulup EMA'ların altına inilir
+        if (emaCrossback || C[i] <= StopSeviyesi)
+        {
+            Sistem.Yon[i] = "F"; // FLAT (Nakit)
+            LongPozisyonda = false;
+        }
+    }
+}

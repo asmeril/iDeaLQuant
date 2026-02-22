@@ -21,6 +21,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 7 | ✅ | Veritabanı Entegrasyonu | - |
 | Faz 8 | 🔄 | Agent Dokümantasyonu | 🔴 Sürekli |
 | Faz 9 | 🔄 | Canlı Test & S5 Araştırma | 🟡 Düşük |
+| Faz 10| 🔄 | **Strateji 5 (Oliver Kell)** | 🟢 Aktif |
 
 ---
 
@@ -148,6 +149,26 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 ### 7.1 AI Kuralları
 - [x] `CLAUDE.md` güncellendi (Gemini 3 Pro uyumu)
 - [ ] Yeni workflow dosyaları
+
+---
+
+## 🟢 FAZ 10: Strateji 5 (Oliver Kell) [YENİ]
+
+> [!NOTE]
+> 2020 US Investing Championship şampiyonu Oliver Kell'ın stratejisinin IdealQuant motoruna entegrasyonu.
+
+### 10.1 İdeal C# Prototiplemesi ✅
+- [x] Sadece Long (Hisse/Spot) versiyonu
+- [x] Çift Yönlü Long/Short (VİOP) versiyonu
+- [x] Testere (Chop) Filtresi: `EMA10[i] > EMA10[i-1]` (Lineer regresyon eğimi yerine gerçek hareketli ortalama türevi) ve `ADX > 20`
+- [x] Hacim Filtresi: `Volume > MA(Volume, 20)`
+- [x] İz Süren Stop Kar Al mekanizması
+
+### 10.2 Python Motoruna Entegrasyon
+- [ ] `src/strategies/oliver_kell_s5.py` oluştur
+- [ ] Numba tip optimizasyonları ve sinyal döngüleri
+- [ ] Optimizasyon parametrelerinin (EMA1, EMA2, ADX Periyot, ADX Sınır) belirlenmesi
+- [ ] Standalone test scriptinin yazılması
 
 ---
 
