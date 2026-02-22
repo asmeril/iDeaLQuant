@@ -13,3 +13,5 @@ venv/
 /data/
 /TARAMA_LOG/
 debug_*.txt
+
+src/crash_log.txt
