@@ -1,0 +1,57 @@
+commit 90b0574d13fd6fa0e2211bccfd264145f7292fca
+Author: asmeril <asmeril@gmail.com>
+Date:   Sun Feb 22 16:05:38 2026 +0300
+
+    fix: S4 tuple unpacking ValueError in Genetik and Bayesian validation
+
+diff --git a/src/ui/widgets/optimizer_panel.py b/src/ui/widgets/optimizer_panel.py
+index 5b459cc..30e7f9a 100644
+--- a/src/ui/widgets/optimizer_panel.py
++++ b/src/ui/widgets/optimizer_panel.py
+@@ -1364,12 +1364,14 @@ class OptimizationWorker(QThread):
+                         test_net_profit=test_net,
+                         test_pf=formatted_result.get('test_pf')
+                     )
++                    formatted_result['robust_fitness'] = formatted_result['oos_penalized_fitness']
+                 else:
+                     formatted_result['oos_penalized_fitness'] = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
+                 
+             self.result_ready.emit([formatted_result])
+         else:
+             self.result_ready.emit([])
++
+         
+         # Basarili tamamlanma: checkpoint temizle
+         ckpt.delete(job_id)
+@@ -1485,6 +1487,7 @@ class OptimizationWorker(QThread):
+                         test_net_profit=test_net,
+                         test_pf=formatted_result.get('test_pf')
+                     )
++                    formatted_result['robust_fitness'] = formatted_result['oos_penalized_fitness']
+                 else:
+                     formatted_result['oos_penalized_fitness'] = formatted_result.get('robust_fitness', formatted_result.get('fitness', 0))
+             
+@@ -1595,10 +1598,10 @@ class OptimizationWorker(QThread):
+             ka = float(params.get('kar_al', 0.0))
+             iz = float(params.get('iz_stop', 0.0))
+             
+-            np_val, tr, pf, dd, sh = fast_backtest_strategy4(
++            np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy4(
+                 closes, toma_trend, toma_val,
+                 hhv1, llv1, hhv2, llv2, hhv3, llv3,
+-                mom_arr, trix_arr, mask_arr,
++                mom_arr, trix_arr, mask_arr, test_cache.times_arr,
+                 ml, mh, lb1, lb2, ka / 100.0, iz / 100.0
+             )
+             
+@@ -1607,7 +1610,9 @@ class OptimizationWorker(QThread):
+                 'test_trades': tr,
+                 'test_pf': pf,
+                 'test_dd': dd,
+-                'test_sharpe': sh
++                'test_sharpe': sh,
++                'test_active_days': adays,
++                'test_total_days': tdays
+             }
+         except Exception as e:
+             print(f"S4 Validasyon hatasi: {e}")
