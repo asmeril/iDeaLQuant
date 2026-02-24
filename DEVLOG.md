@@ -1,4 +1,48 @@
-## 2026-02-25 (Pro Performance Panel & Plot Index Alignment)
+## 2026-02-25 (Strateji 5: Full-Stack Entegrasyon & Hibrit Optimizasyon)
+
+### ✅ Yapılanlar
+- **S5 Full-Stack Entegrasyon (10 dosya):**
+  - `oliver_kell_s5.py` — Strateji sınıfı (EMA/ADX/HH-LL kırılım/hacim/iz süren stop)
+  - `strategy5_optimizer.py` — Numba JIT kernel + IndicatorCache
+  - `genetic_optimizer.py` — STRATEGY5_PARAMS (7 param) + FitnessEvaluator
+  - `bayesian_optimizer.py` — Import + dispatch
+  - Tüm UI panelleri: Optimizer, Validation, Export, Strategy, Live Monitor
+  - `idealdata_exporter.py` — C# export template (18K karakter)
+
+- **Hibrit Optimizasyon Yeniden Yapılandırma:**
+  - Eski 3 grup (Trend / Chop / Risk) → Yeni 2 grup (Yapisal 6p + Risk cascade 1p)
+  - Trend + Chop Filter birleştirildi (interdependency korundu)
+  - `PARAM_TYPES`'a S5 parametreleri kaydedildi (Satellite-Drone adım boyutları)
+  - `_run_hybrid` dispatch'i `STRATEGY5_GROUPS` ile düzeltildi
+
+- **3-Mod Vade Tipi (S5):**
+  - `VIOP_ENDEKS` — Vadeli Endeks (VIP-X030), çift yön
+  - `VIOP_SPOT` — Vadeli Spot (VIP-THYAO), çift yön
+  - `SPOT` — Spot Hisse (EREGL), tek yön (AL/FLAT)
+  - C# template: short blokları SPOT modunda tamamen kaldırıldı
+  - Export panel: strateji seçimine bağlı dinamik `vade_combo`
+
+- **Bar-İçi İzleyen Stop (Intra-Bar Trailing Stop):**
+  - Stop kontrolleri `C[i]` → `L[i]` (long) / `H[i]` (short) olarak değiştirildi
+  - 3 dosyada tutarlı: Python strateji, Numba kernel, C# export
+  - Trailing güncelleme hala Close ile (ATH tracking), sadece çıkış kararı H/L ile
+
+- **Kritik Bug Düzeltmeleri:**
+  - `validation_panel.py` — S5 WFA/MC/Stabilite yanlış strateji (S2) kullanıyordu → düzeltildi
+  - `_run_hybrid` — S5, `STRATEGY1_GROUPS` ile çalışıyordu → `STRATEGY5_GROUPS` ile düzeltildi
+
+### 📁 Değişen Dosyalar (13)
+`oliver_kell_s5.py`, `strategy5_optimizer.py`, `genetic_optimizer.py`, `bayesian_optimizer.py`,
+`hybrid_group_optimizer.py`, `optimizer_panel.py`, `validation_panel.py`, `export_panel.py`,
+`strategy_panel.py`, `live_monitor_window.py`, `idealdata_exporter.py`, `ROADMAP.md`, `DEVLOG.md`
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 10 - Strateji 5 (Oliver Kell) ✅ Entegrasyon Tamamlandı
+- **Sıradaki Adım:** S5 ile gerçek veri optimizasyonu, S1-S4 için 3-mod vade tipi genişletmesi
+
+---
+
+
 
 ### ✅ Yapılanlar
 - **Pro Performans Paneli:**

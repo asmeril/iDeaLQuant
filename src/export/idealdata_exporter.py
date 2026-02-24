@@ -1807,6 +1807,192 @@ Sistem.Cizgiler[5].ActiveBool = false;
 '''
         return code
 
+    def _generate_strategy5_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
+        """Strateji 5 (Oliver Kell) IdealData kodu oluşturur."""
+        ema_fast = int(params.get('ema_fast', 10))
+        ema_slow = int(params.get('ema_slow', 20))
+        breakout_p = int(params.get('breakout_period', 10))
+        adx_p = int(params.get('adx_period', 14))
+        adx_thresh = float(params.get('adx_threshold', 20.0))
+        vol_ma_p = int(params.get('vol_ma_period', 20))
+        trail_pct = float(params.get('trailing_stop_pct', 1.5))
+
+        # Yön Modu (3 mod)
+        if vade_tipi == "SPOT":
+            yon_code = """
+// SPOT Hisse (EREGL, ASELS vb.): Sadece AL / FLAT
+string YON = "AL";
+"""
+            mode_label = "SPOT Hisse — Tek Yön (AL/FLAT)"
+        elif vade_tipi == "VIOP_SPOT":
+            yon_code = """
+// Vadeli Spot Hisse (VIP-THYAO vb.): Çift Yönlü + Vade Geçişi
+string YON = "CIFT";
+"""
+            mode_label = "VIOP Spot Vadeli — Çift Yön"
+        else:  # VIOP_ENDEKS (veya eski "ENDEKS")
+            yon_code = """
+// Vadeli Endeks (VIP-X030 vb.): Çift Yönlü + Vade Geçişi
+string YON = "CIFT";
+"""
+            mode_label = "VIOP Endeks Vadeli — Çift Yön"
+        
+        is_spot = (vade_tipi == "SPOT")
+
+        code = f'''// ===============================================================================================
+// STRATEJI 5: Oliver Kell — Base 'n Break
+// 2020 US Investing Championship Şampiyonu
+// Mod: {mode_label}
+// Otomatik: IdealQuant Export | Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+// ===============================================================================================
+{yon_code}
+
+// === PARAMETRELER ===
+int EMA_Fast_P = {ema_fast};
+int EMA_Slow_P = {ema_slow};
+int Breakout_P = {breakout_p};
+int ADX_P = {adx_p};
+float ADX_Threshold = {adx_thresh}f;
+int VolMA_P = {vol_ma_p};
+float TrailingStopPct = {trail_pct}f;
+
+// === İNDİKATÖRLER ===
+var EMA_Fast = Sistem.EMA(C, EMA_Fast_P);
+var EMA_Slow = Sistem.EMA(C, EMA_Slow_P);
+var ADX_Val = Sistem.ADX(H, L, C, ADX_P);
+var HH = Sistem.HHV(H, Breakout_P);
+var LL = Sistem.LLV(L, Breakout_P);
+
+// Hacim Ortalaması (SMA)
+var VolMA = Sistem.SMA(Sistem.Lot, VolMA_P);
+
+// === STRATEJI MANTIGI ===
+for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))) + 2; i < Grafikler.Count; i++)
+{{
+    if (Sistem.Yon[i] != "") continue; // Zaten sinyal var
+
+    // --- LONG KOSULLARI ---
+    bool longTrend = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
+    bool longBreak = C[i] > HH[i - 1];
+    bool longADX   = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] > EMA_Fast[i - 1];
+    bool gucluHacim = Sistem.Lot[i] > VolMA[i];
+
+    // --- SHORT KOSULLARI ---
+    bool shortTrend = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
+    bool shortBreak = C[i] < LL[i - 1];
+    bool shortADX   = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] < EMA_Fast[i - 1];
+
+    // --- GIRIS ---
+    if (longTrend && longBreak && longADX && gucluHacim)
+    {{
+        Sistem.Yon[i] = "A"; // AL
+    }}
+    {"" if is_spot else '''else if (shortTrend && shortBreak && shortADX && gucluHacim)
+    {
+        Sistem.Yon[i] = "S"; // SAT
+    }'''}
+}}
+
+// === ÇIKIŞ: EMA CROSSBACK + İZLEYEN STOP ===
+float iz_yuzde = TrailingStopPct / 100.0f;
+float ucUcMesafe = 0f;
+float stopSeviyesi = 0f;
+int pozisyon = 0; // 0=F, 1=A{'' if is_spot else ', -1=S'}
+
+for (int i = 1; i < Grafikler.Count; i++)
+{{
+    if (Sistem.Yon[i] == "A")
+    {{
+        {'' if is_spot else 'if (pozisyon == -1) { Sistem.Yon[i] = "A"; } // Reverse'}
+        pozisyon = 1;
+        ucUcMesafe = C[i];
+        stopSeviyesi = L[i];
+    }}
+    {'' if is_spot else '''else if (Sistem.Yon[i] == "S")
+    {{
+        if (pozisyon == 1) {{ Sistem.Yon[i] = "S"; }} // Reverse
+        pozisyon = -1;
+        ucUcMesafe = C[i];
+        stopSeviyesi = H[i];
+    }}'''}
+    else if (pozisyon == 1)
+    {{
+        // Trailing stop güncelle
+        if (C[i] > ucUcMesafe)
+        {{
+            ucUcMesafe = C[i];
+            float yeniStop = ucUcMesafe * (1.0f - iz_yuzde);
+            if (yeniStop > stopSeviyesi) stopSeviyesi = yeniStop;
+        }}
+        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: L[i] kontrol)
+        bool emaCrossback = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
+        if (emaCrossback || L[i] <= stopSeviyesi)
+        {{
+            Sistem.Yon[i] = "F"; // FLAT
+            pozisyon = 0;
+            ucUcMesafe = 0f;
+            stopSeviyesi = 0f;
+        }}
+    }}
+    {'' if is_spot else '''else if (pozisyon == -1)
+    {{
+        // Trailing stop güncelle
+        if (C[i] < ucUcMesafe)
+        {{
+            ucUcMesafe = C[i];
+            float yeniStop = ucUcMesafe * (1.0f + iz_yuzde);
+            if (yeniStop < stopSeviyesi || stopSeviyesi == 0) stopSeviyesi = yeniStop;
+        }}
+        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: H[i] kontrol)
+        bool emaCrossback = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
+        if (emaCrossback || H[i] >= stopSeviyesi)
+        {{
+            Sistem.Yon[i] = "F"; // FLAT
+            pozisyon = 0;
+            ucUcMesafe = 0f;
+            stopSeviyesi = 0f;
+        }}
+    }}'''}
+}}
+
+// === ÇİZİMLER (Index 3+ — Pro Performance Panel ile çakışmaz) ===
+Sistem.Cizgiler[3].Deger = EMA_Fast;
+Sistem.Cizgiler[3].Aciklama = "EMA {ema_fast}";
+Sistem.Cizgiler[3].ActiveBool = true;
+
+Sistem.Cizgiler[4].Deger = EMA_Slow;
+Sistem.Cizgiler[4].Aciklama = "EMA {ema_slow}";
+Sistem.Cizgiler[4].ActiveBool = true;
+
+Sistem.Cizgiler[5].Deger = HH;
+Sistem.Cizgiler[5].Aciklama = "HH {breakout_p}";
+Sistem.Cizgiler[5].ActiveBool = true;
+
+{self._get_performance_panel_code()}
+'''
+        return code
+
+    def export_strategy5(
+        self, 
+        params: Dict[str, Any], 
+        vade_tipi: str = "ENDEKS"
+    ) -> str:
+        """
+        Strateji 5 (Oliver Kell) Kodunu Export Eder
+        """
+        filename = self._generate_filename(5, vade_tipi)
+        
+        code = self._generate_strategy5_code(params, vade_tipi)
+        
+        filepath = self.output_dir / f"{filename}.cs"
+        filepath.write_text(code, encoding='utf-8')
+        
+        # Parametreleri JSON olarak da kaydet
+        params_path = self.output_dir / f"{filename}_params.json"
+        params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
+        
+        return str(filepath)
+
     def export_strategy3(
         self, 
         params: Dict[str, Any], 

@@ -215,6 +215,28 @@ STRATEGY4_PARAM_GROUPS = {
     }
 }
 
+# Strateji 5 Parametre Gruplari (Oliver Kell - 7 parametre, 2 grup)
+STRATEGY5_PARAM_GROUPS = {
+    'Yapisal': {
+        'label': 'Yapisal Parametreler (Trend + Chop)',
+        'params': {
+            'ema_fast': {'label': 'EMA Hizli', 'type': 'int', 'default': 10, 'min': 5, 'max': 20, 'step': 1},
+            'ema_slow': {'label': 'EMA Yavas', 'type': 'int', 'default': 20, 'min': 10, 'max': 50, 'step': 1},
+            'breakout_period': {'label': 'Kirilim Periyot', 'type': 'int', 'default': 10, 'min': 5, 'max': 30, 'step': 1},
+            'adx_period': {'label': 'ADX Periyot', 'type': 'int', 'default': 14, 'min': 7, 'max': 30, 'step': 1},
+            'adx_threshold': {'label': 'ADX Sinir', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 35.0, 'step': 1.0},
+            'vol_ma_period': {'label': 'Hacim MA Periyot', 'type': 'int', 'default': 20, 'min': 5, 'max': 40, 'step': 1},
+        }
+    },
+    'Risk': {
+        'label': 'Iz Suren Stop (Cascade)',
+        'params': {
+            'trailing_stop_pct': {'label': 'Trailing Stop %', 'type': 'float', 'default': 1.5, 'min': 0.5, 'max': 5.0, 'step': 0.25},
+        },
+        'is_cascaded': True
+    }
+}
+
 # ==============================================================================
 # TIMEFRAME-ADAPTIVE PARAMETER SCALING
 # ==============================================================================
@@ -233,7 +255,9 @@ SCALABLE_PARAMS = {
     'ema_period', 'dsma_period', 'ma_period', 'hh_period', 'vol_hhv_period',
     'mom_period', 'atr_period',
     # Strateji 4 (TOMA)
-    'toma_period', 'trix_lb1', 'trix_lb2' # Mom limits are dimensionless thresholds
+    'toma_period', 'trix_lb1', 'trix_lb2', # Mom limits are dimensionless thresholds
+    # Strateji 5 (Oliver Kell)
+    'ema_fast', 'ema_slow', 'breakout_period', 'adx_period', 'vol_ma_period',
 }
 
 REFERENCE_PERIOD = 5  # dk - Stratejilerin orijinal tasarim periyodu
@@ -1136,15 +1160,15 @@ class OptimizationWorker(QThread):
     def _run_hybrid(self):
         """Hibrit Grup optimizasyonu"""
         from src.optimization.hybrid_group_optimizer import (
-            HybridGroupOptimizer, IndicatorCache, STRATEGY1_GROUPS, STRATEGY2_GROUPS, STRATEGY3_GROUPS, ParameterGroup
+            HybridGroupOptimizer, IndicatorCache, STRATEGY1_GROUPS, STRATEGY2_GROUPS, STRATEGY3_GROUPS, STRATEGY5_GROUPS, ParameterGroup
         )
         
         self._emit_progress(5, "Cache olusturuluyor...")
         cache = IndicatorCache(self.data)
         
         # Strateji seçiminden orijinal grupları al
-        original_groups = {0: STRATEGY1_GROUPS, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS}.get(self.strategy_index, STRATEGY1_GROUPS)
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)"}.get(self.strategy_index, "Strateji 1")
+        original_groups = {0: STRATEGY1_GROUPS, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 4: STRATEGY5_GROUPS}.get(self.strategy_index, STRATEGY1_GROUPS)
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 4: "Strateji 5 (Oliver Kell)"}.get(self.strategy_index, "Strateji 1")
         
         # UI'dan gelen range'leri gruplara uyarla (Dynamic Sync)
         synced_groups = []
@@ -1739,7 +1763,7 @@ class OptimizerPanel(QWidget):
         # Strateji seçimi (Sadece gösterim, süreçten gelecek)
         top_row.addWidget(QLabel("Strateji:"))
         self.strategy_combo = QComboBox()
-        self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum"])
+        self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum", "Strateji 5 - Oliver Kell"])
         self.strategy_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         top_row.addWidget(self.strategy_combo)
@@ -2095,6 +2119,7 @@ class OptimizerPanel(QWidget):
         if strategy_idx == 0: group_defs = STRATEGY1_PARAM_GROUPS
         elif strategy_idx == 2: group_defs = STRATEGY3_PARAM_GROUPS
         elif strategy_idx == 3: group_defs = STRATEGY4_PARAM_GROUPS
+        elif strategy_idx == 4: group_defs = STRATEGY5_PARAM_GROUPS
         else: group_defs = STRATEGY2_PARAM_GROUPS
         
         row = 0
@@ -2224,6 +2249,8 @@ class OptimizerPanel(QWidget):
             print(f"[DEBUG S4] Loaded S4 Groups: {list(base_groups.keys())}")
             for k, v in base_groups.items():
                 print(f"  - {k}: {len(v.get('params', {}))} params")
+        elif index == 4:
+            base_groups = STRATEGY5_PARAM_GROUPS
         else:
             base_groups = STRATEGY2_PARAM_GROUPS
         period_dk = self._get_current_period_dk()

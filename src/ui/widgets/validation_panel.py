@@ -25,6 +25,7 @@ from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.paradise_strategy import ParadiseStrategy
 from src.strategies.toma_strategy import TomaStrategy
+from src.strategies.oliver_kell_s5 import OliverKellStrategy
 import pandas as pd
 
 
@@ -123,6 +124,8 @@ class WFAWorker(QThread):
                 strategy = ParadiseStrategy.from_config_dict(self.cache, self.params)
             elif self.strategy_idx == 3:
                 strategy = TomaStrategy.from_config_dict(self.cache, self.params)
+            elif self.strategy_idx == 4:
+                strategy = OliverKellStrategy.from_config_dict(self.cache, self.params)
             else:
                 strategy = ARSTrendStrategyV2.from_config_dict(self.cache, self.params)
                 
@@ -358,7 +361,7 @@ class BatchAnalysisWorker(QThread):
         scores = []
         # Sadece strateji parametrelerini seç (DB sonuç alanlarını hariç tut)
         import random
-        from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS
+        from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY5_PARAMS
         if idx == 0:
             valid_keys = set(STRATEGY1_PARAMS.keys())
         elif idx == 2:
@@ -366,6 +369,8 @@ class BatchAnalysisWorker(QThread):
         elif idx == 3:
              # S4 params (hardcoded for now or import from somewhere)
              valid_keys = {'toma_period', 'toma_opt', 'mom_period', 'mom_limit_high', 'mom_limit_low', 'trix_period', 'trix_lb1', 'trix_lb2', 'hhv1_period', 'llv1_period', 'hhv2_period', 'llv2_period', 'hhv3_period', 'llv3_period', 'kar_al', 'iz_stop'}
+        elif idx == 4:
+             valid_keys = set(STRATEGY5_PARAMS.keys())
         else:
             valid_keys = set(STRATEGY2_PARAMS.keys())
         keys = [k for k in params.keys() if k in valid_keys and isinstance(params[k], (int, float))]
@@ -390,6 +395,7 @@ class BatchAnalysisWorker(QThread):
         if idx == 0: s = ScoreBasedStrategy.from_config_dict(self.cache, params)
         elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
+        elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         sig, ex_l, ex_s = s.generate_all_signals()
         return backtest_with_summary(self.cache.closes, sig, ex_l, ex_s, 

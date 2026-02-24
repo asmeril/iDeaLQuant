@@ -165,11 +165,22 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 - [x] Hacim Filtresi: `Volume > MA(Volume, 20)`
 - [x] İz Süren Stop Kar Al mekanizması
 
-### 10.2 Python Motoruna Entegrasyon
-- [ ] `src/strategies/oliver_kell_s5.py` oluştur
-- [ ] Numba tip optimizasyonları ve sinyal döngüleri
-- [ ] Optimizasyon parametrelerinin (EMA1, EMA2, ADX Periyot, ADX Sınır) belirlenmesi
-- [ ] Standalone test scriptinin yazılması
+### 10.2 Python Motoruna Entegrasyon ✅
+- [x] `src/strategies/oliver_kell_s5.py` oluşturuldu (EMA/ADX/HH-LL/Volume/Trailing Stop)
+- [x] `src/optimization/strategy5_optimizer.py` — Numba JIT + IndicatorCache
+- [x] Genetik + Bayesian + Hibrit optimizer dispatch
+- [x] Hibrit Grup yeniden yapılandırma: Yapisal (6p) + Risk cascade (1p)
+- [x] Satellite-Drone adım boyutları (`PARAM_TYPES` kaydı)
+- [x] Tüm UI panelleri (Optimizer, Validation, Export, Strategy, Live Monitor)
+- [x] C# export template (`_generate_strategy5_code` + `export_strategy5`)
+
+### 10.3 3-Mod Vade Tipi Desteği (S5) ✅
+- [x] `VIOP_ENDEKS` — Vadeli Endeks (VIP-X030), çift yön, vade geçişi
+- [x] `VIOP_SPOT` — Vadeli Spot (VIP-THYAO), çift yön, vade geçişi
+- [x] `SPOT` — Spot Hisse (EREGL), tek yön (AL/FLAT), vade geçişi yok
+
+> [!WARNING]
+> **TODO:** S1-S4 stratejilerini de 3-mod vade tipi yapısına (VIOP_ENDEKS / VIOP_SPOT / SPOT) geçirmek gerekiyor. Şu an sadece S5'te aktif.
 
 ---
 

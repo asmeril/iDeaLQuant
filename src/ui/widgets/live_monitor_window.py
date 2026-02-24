@@ -32,6 +32,7 @@ from src.ui.widgets.optimizer_panel import (
     STRATEGY2_PARAM_GROUPS,
     STRATEGY3_PARAM_GROUPS,
     STRATEGY4_PARAM_GROUPS,
+    STRATEGY5_PARAM_GROUPS,
 )
 
 STRATEGY_PARAM_GROUPS = [
@@ -39,6 +40,7 @@ STRATEGY_PARAM_GROUPS = [
     STRATEGY2_PARAM_GROUPS,
     STRATEGY3_PARAM_GROUPS,
     STRATEGY4_PARAM_GROUPS,
+    STRATEGY5_PARAM_GROUPS,
 ]
 
 STRATEGY_NAMES = [
@@ -46,6 +48,7 @@ STRATEGY_NAMES = [
     "Strateji 2 — ARS Trend v2",
     "Strateji 3 — Paradise",
     "Strateji 4 — TOMA + Momentum",
+    "Strateji 5 — Oliver Kell",
 ]
 
 

@@ -85,7 +85,7 @@ def load_data() -> pd.DataFrame:
 # ==============================================================================
 
 # Genetik optimizer'dan parametre tanımlarını import et
-from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS
+from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS, STRATEGY5_PARAMS
 
 
 class BayesianObjective:
@@ -110,8 +110,10 @@ class BayesianObjective:
             base_params = STRATEGY3_PARAMS
         elif strategy_index == 3:
             base_params = STRATEGY4_PARAMS
+        elif strategy_index == 4:
+            base_params = STRATEGY5_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4 desteklenir.")
             
         self.param_defs = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         

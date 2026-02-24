@@ -91,6 +91,16 @@ class StrategyPanel(QWidget):
         'iz_stop': 0.0
     }
     
+    STRATEGY5_DEFAULTS = {
+        'ema_fast': 10,
+        'ema_slow': 20,
+        'breakout_period': 10,
+        'adx_period': 14,
+        'adx_threshold': 20.0,
+        'vol_ma_period': 20,
+        'trailing_stop_pct': 1.5,
+    }
+    
     def __init__(self):
         super().__init__()
         self.df = None
@@ -172,7 +182,8 @@ class StrategyPanel(QWidget):
             "Strateji 1 - Score-Based Gatekeeper",
             "Strateji 2 - ARS Trend Takip v2",
             "Strateji 3 - Paradise",
-            "Strateji 4 - TOMA + Momentum"
+            "Strateji 4 - TOMA + Momentum",
+            "Strateji 5 - Oliver Kell"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         layout.addWidget(self.strategy_combo, 1)
@@ -204,8 +215,10 @@ class StrategyPanel(QWidget):
             self._create_strategy2_params()
         elif index == 2:
             self._create_strategy3_params()
-        else:
+        elif index == 3:
             self._create_strategy4_params()
+        elif index == 4:
+            self._create_strategy5_params()
     
     def _create_strategy1_params(self):
         """Strateji 1 parametrelerini oluştur"""
@@ -381,6 +394,39 @@ class StrategyPanel(QWidget):
         
         self.params_layout.addStretch()
     
+    def _create_strategy5_params(self):
+        """Strateji 5 (Oliver Kell) parametrelerini oluştur"""
+        defaults = self.STRATEGY5_DEFAULTS
+        
+        # EMA Trend
+        trend_group = QGroupBox("📈 EMA Trend")
+        trend_layout = QFormLayout(trend_group)
+        self._add_spin('ema_fast', "EMA Hızlı:", 5, 20, defaults['ema_fast'], trend_layout)
+        self._add_spin('ema_slow', "EMA Yavaş:", 10, 50, defaults['ema_slow'], trend_layout)
+        self.params_layout.addWidget(trend_group)
+        
+        # Breakout
+        bo_group = QGroupBox("🚀 Kırılım")
+        bo_layout = QFormLayout(bo_group)
+        self._add_spin('breakout_period', "Kırılım Periyot:", 5, 30, defaults['breakout_period'], bo_layout)
+        self.params_layout.addWidget(bo_group)
+        
+        # Chop Filter
+        chop_group = QGroupBox("🔲 Testere (Chop) Filtresi")
+        chop_layout = QFormLayout(chop_group)
+        self._add_spin('adx_period', "ADX Periyot:", 7, 30, defaults['adx_period'], chop_layout)
+        self._add_double_spin('adx_threshold', "ADX Sınır:", 10.0, 35.0, defaults['adx_threshold'], chop_layout)
+        self._add_spin('vol_ma_period', "Hacim MA Periyot:", 5, 40, defaults['vol_ma_period'], chop_layout)
+        self.params_layout.addWidget(chop_group)
+        
+        # Risk
+        risk_group = QGroupBox("🛡️ İz Süren Stop")
+        risk_layout = QFormLayout(risk_group)
+        self._add_double_spin('trailing_stop_pct', "Trailing Stop %:", 0.5, 5.0, defaults['trailing_stop_pct'], risk_layout)
+        self.params_layout.addWidget(risk_group)
+        
+        self.params_layout.addStretch()
+    
     def _add_spin(self, name: str, label: str, min_val: int, max_val: int, default: int, layout: QFormLayout):
         """Integer SpinBox ekle"""
         spin = QSpinBox()
@@ -408,6 +454,10 @@ class StrategyPanel(QWidget):
             defaults = self.STRATEGY2_DEFAULTS
         elif index == 2:
             defaults = self.STRATEGY3_DEFAULTS
+        elif index == 3:
+            defaults = self.STRATEGY4_DEFAULTS
+        elif index == 4:
+            defaults = self.STRATEGY5_DEFAULTS
         else:
             defaults = self.STRATEGY4_DEFAULTS
         
@@ -465,6 +515,10 @@ class StrategyPanel(QWidget):
             strategy_name = "strateji2"
         elif idx == 2:
             strategy_name = "paradise"
+        elif idx == 3:
+            strategy_name = "strateji4"
+        elif idx == 4:
+            strategy_name = "oliver_kell"
         else:
             strategy_name = "strateji4"
         default_name = f"{strategy_name}_preset.json"
@@ -545,6 +599,13 @@ class StrategyPanel(QWidget):
                 from src.strategies.toma_strategy import TomaStrategy
                 strategy = TomaStrategy.from_config_dict(
                     {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'dates': dates},
+                    config,
+                    dates
+                )
+            elif strategy_idx == 5:
+                from src.strategies.oliver_kell_s5 import OliverKellStrategy
+                strategy = OliverKellStrategy.from_config_dict(
+                    {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
                     config,
                     dates
                 )

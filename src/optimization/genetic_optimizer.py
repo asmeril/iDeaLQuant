@@ -153,6 +153,22 @@ STRATEGY4_PARAMS = {
     'iz_stop': (0.0, 5.0, 0.25, False),
 }
 
+# Strateji 5 (Oliver Kell) Parametre Uzayi (7 parametre)
+STRATEGY5_PARAMS = {
+    # EMA Trend
+    'ema_fast': (5, 20, 1, True),
+    'ema_slow': (10, 50, 1, True),
+    # Breakout
+    'breakout_period': (5, 30, 1, True),
+    # ADX Chop Filter
+    'adx_period': (7, 30, 1, True),
+    'adx_threshold': (10.0, 35.0, 1.0, False),
+    # Volume
+    'vol_ma_period': (5, 40, 1, True),
+    # Risk / Trailing Stop
+    'trailing_stop_pct': (0.5, 5.0, 0.25, False),
+}
+
 # Import S4 Optimizer components
 # Try/Except block to avoid circular import issues during initialization if imported at top
 try:
@@ -182,8 +198,10 @@ class ParameterSpace:
             base_params = STRATEGY3_PARAMS
         elif strategy_index == 3:
             base_params = STRATEGY4_PARAMS
+        elif strategy_index == 4:
+            base_params = STRATEGY5_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4 desteklenir.")
             
         self.params = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -337,6 +355,8 @@ class FitnessEvaluator:
 
             elif self.strategy_index == 3:
                 return self._evaluate_strategy4(params)
+            elif self.strategy_index == 4:
+                return self._evaluate_strategy5(params)
             else:
                 raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         except Exception as e:
@@ -609,6 +629,73 @@ class FitnessEvaluator:
             # print(f"S4 Eval Error: {e}")
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
 
+    def _evaluate_strategy5(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 5 (Oliver Kell) icin fitness hesapla"""
+        try:
+            from src.optimization.strategy5_optimizer import fast_backtest_strategy5, IndicatorCache as S5IndicatorCache
+            import numpy as np
+            from src.optimization.fitness import quick_fitness
+            
+            # Cache Management
+            if 's5_cache' not in self._indicator_cache:
+                self._indicator_cache['s5_cache'] = S5IndicatorCache(self.df)
+            cache = self._indicator_cache['s5_cache']
+            
+            # Extract Params
+            ema_fast_p = int(params.get('ema_fast', 10))
+            ema_slow_p = int(params.get('ema_slow', 20))
+            breakout_p = int(params.get('breakout_period', 10))
+            adx_p = int(params.get('adx_period', 14))
+            adx_thresh = float(params.get('adx_threshold', 20.0))
+            vol_ma_p = int(params.get('vol_ma_period', 20))
+            trail_pct = float(params.get('trailing_stop_pct', 1.5))
+            
+            # Get Indicator Arrays (using cache)
+            ema_fast_arr = cache.get_ema(ema_fast_p)
+            ema_slow_arr = cache.get_ema(ema_slow_p)
+            adx_arr = cache.get_adx(adx_p)
+            hhv_arr = cache.get_hhv(breakout_p)
+            llv_arr = cache.get_llv(breakout_p)
+            vol_ma_arr = cache.get_vol_ma(vol_ma_p)
+            
+            # Mask
+            if hasattr(self.df, 'get_trading_mask'):
+                mask_series = self.df.get_trading_mask(self.vade_tipi)
+                mask_arr = mask_series.values
+            else:
+                mask_arr = np.ones(len(self.closes), dtype=bool)
+            
+            # Run Fast Backtest
+            result = fast_backtest_strategy5(
+                self.closes, self.highs, self.lows, self.volumes,
+                ema_fast_arr, ema_slow_arr,
+                adx_arr, hhv_arr, llv_arr, vol_ma_arr,
+                mask_arr, cache.times_arr,
+                adx_thresh, trail_pct / 100.0
+            )
+            
+            np_val, tr, pf_val, max_dd_val, sharpe_val, adays, tdays = result
+            
+            if tr == 0 or np_val <= -999:
+                return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
+            
+            fitness = quick_fitness(
+                np_val, pf_val, max_dd_val, tr, sharpe=sharpe_val,
+                active_days=adays, total_days=tdays,
+                commission=0.0, slippage=0.0
+            )
+            
+            return {
+                'net_profit': np_val,
+                'trades': tr,
+                'pf': pf_val,
+                'max_dd': max_dd_val,
+                'sharpe': sharpe_val,
+                'fitness': fitness
+            }
+            
+        except Exception as e:
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
 
 
 # ==============================================================================

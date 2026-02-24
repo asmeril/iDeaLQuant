@@ -77,6 +77,11 @@ PARAM_TYPES = {
     'hh_period': 'period_medium', 'vol_hhv_period': 'period_medium',
     'mom_period': 'period_long', 'mom_alt': 'momentum_band', 'mom_ust': 'momentum_band',
     'atr_period': 'period_medium', 'atr_sl': 'multiplier', 'atr_tp': 'multiplier_wide', 'atr_trail': 'multiplier',
+    # Strateji 5 (Oliver Kell)
+    'ema_fast': 'period_short_wide', 'ema_slow': 'period_medium',
+    'breakout_period': 'period_short_wide', 'adx_period': 'period_medium',
+    'adx_threshold': 'threshold_float', 'vol_ma_period': 'period_medium',
+    'trailing_stop_pct': 'multiplier',
 }
 
 def get_step(param_name: str, stage: str = 'satellite', user_step: float = None) -> float:
@@ -325,6 +330,35 @@ STRATEGY3_GROUPS = [
         },
         is_independent=False,
         default_values={'atr_period': 14, 'atr_sl': 2.0, 'atr_tp': 4.0, 'atr_trail': 2.5}
+    ),
+]
+
+# Strateji 5 (Oliver Kell) Grup Tanimlari
+# Trend + Chop Filter birlikte optimize edilir (birbirine bagimli)
+STRATEGY5_GROUPS = [
+    ParameterGroup(
+        name="Yapisal",
+        params={
+            'ema_fast': [5, 7, 8, 10, 12, 15, 18, 20],
+            'ema_slow': [10, 15, 18, 20, 25, 30, 35, 40, 50],
+            'breakout_period': [5, 7, 10, 12, 15, 18, 20, 25, 30],
+            'adx_period': [7, 10, 12, 14, 18, 20, 25, 30],
+            'adx_threshold': [10.0, 15.0, 18.0, 20.0, 22.0, 25.0, 28.0, 30.0, 35.0],
+            'vol_ma_period': [5, 10, 15, 20, 25, 30, 35, 40],
+        },
+        is_independent=True,
+        default_values={
+            'ema_fast': 10, 'ema_slow': 20, 'breakout_period': 10,
+            'adx_period': 14, 'adx_threshold': 20.0, 'vol_ma_period': 20
+        }
+    ),
+    ParameterGroup(
+        name="Risk",
+        params={
+            'trailing_stop_pct': [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0, 3.5, 4.0, 5.0],
+        },
+        is_independent=False,
+        default_values={'trailing_stop_pct': 1.5}
     ),
 ]
 
