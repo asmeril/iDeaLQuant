@@ -1,3 +1,22 @@
+## 2026-02-25 (Pro Performance Panel & Plot Index Alignment)
+
+### ✅ Yapılanlar
+- **Pro Performans Paneli:**
+  - `idealdata_exporter.py` içerisindeki varsayılan 1 kutulu performans tablosu, gelişmiş 3 kutulu Pro Sürüm ile değiştirildi. Yeni panel sanal getiri, gerçek Max DD, Payoff Ratio, WinRate, Expectancy, Recovery Factor, Calmar ve Sharpe oranlarını hesaplıyor.
+  - İçe aktarım sırasında kaybolan **Aylık Getiri** çizgisi tekrar panele eklendi.
+- **Çizgi (Plot) İndekslerinin Kaydırılması (Critical Fix):**
+  - Pro performans paneli Günlük, Gün Sonu ve Aylık getirileri çizmek için `Sistem.Cizgiler[0]`, `[1]` ve `[2]` indekslerini kullandığından, **S1, S2, S3 ve S4** stratejilerinin indikatör (TOMA, HHV, LLV, ARS vb.) çizimleri `[3]`, `[4]`, `[5]` indekslerine kaydırıldı. Böylece göstergelerin birbirini ezmesi (overwrite) engellendi.
+- **Test ve Export Düzeltmeleri:**
+  - `idealdata_exporter.py` içinde unutulmuş olan `export_strategy3` fonksiyonu eklendi.
+  - Dummy test `__main__` bloğunda eksik parametrelerden kaynaklanan `KeyError: 'exit_confirm_bars'` hatası `dict.get` ile varsayılan 3 atanarak çözüldü.
+  - Python tabanlı lokal test senaryosu onarılarak f-string'lerin C# koduyla olan syntax (süslü parantez) uyumsuzlukları giderildi.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 10 - Strateji 5 (Oliver Kell) Entegrasyonu
+- **Sıradaki Adım:** Strateji 5'in Python tarafına kodlanması ve Numba uyumu.
+
+---
+
 ## 2026-02-23 (Strateji 5: Oliver Kell & Chop Filter Discovery)
 
 ### ✅ Strateji 5 (Oliver Kell) Prototiplemesi

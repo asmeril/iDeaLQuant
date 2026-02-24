@@ -1128,7 +1128,7 @@ YORUM:
         # İlkini seç
         if valid_processes:
             self.current_process_id = valid_processes[0]['process_id']
-            self._load_comparison_data()
+            self._on_process_changed("")
     
     def _on_process_changed(self, text: str):
         """Süreç değiştiğinde sonuçları yükle ve bilgileri güncelle"""
@@ -1169,6 +1169,7 @@ YORUM:
             chk_layout.setAlignment(Qt.AlignCenter)
             chk = QCheckBox()
             chk.setProperty("opt_id", result['id'])
+            chk.stateChanged.connect(self._check_batch_button_state)
             chk_layout.addWidget(chk)
             chk_widget.setLayout(chk_layout)
             self.compare_table.setCellWidget(row_idx, 0, chk_widget)
@@ -1235,6 +1236,20 @@ YORUM:
                 chk = layout.itemAt(0).widget()
                 opt_id = chk.property("opt_id")
                 self._select_for_final(opt_id)
+
+    def _check_batch_button_state(self):
+        """Enable batch analyze button if any checkbox is checked"""
+        has_checked = False
+        for row in range(self.compare_table.rowCount()):
+            widget = self.compare_table.cellWidget(row, 0)
+            if widget:
+                layout = widget.layout()
+                if layout and layout.count() > 0:
+                    chk = layout.itemAt(0).widget()
+                    if chk.isChecked():
+                        has_checked = True
+                        break
+        self.batch_analyze_btn.setEnabled(has_checked)
 
     def _run_batch_analysis(self):
         """Seçili satırlar için toplu analiz başlat"""
@@ -1401,6 +1416,7 @@ YORUM:
             # Bilgi ver
             valid_trades_count = len(trades)
             self.tabs.setTabText(1, f"Monte Carlo ({valid_trades_count} İşlem)")
+            self.set_final_btn.setEnabled(True)
             
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Veri hesaplama hatası: {str(e)}")
@@ -1426,7 +1442,7 @@ YORUM:
             )
             
             # Tabloyu yenile
-            self._load_comparison_data()
+            self._on_process_changed("")
             
             # Signal gönder
             self.validation_complete.emit(self.current_process_id, opt_result['params'])

@@ -118,9 +118,8 @@ class IdealDataExporter:
 
     def _get_performance_panel_code(self) -> str:
         """Kullanıcının talep ettiği standart performans paneli kodu."""
-        return '''
-// ===============================================================================================
-// PERFORMANS PANELİ (STANDART)
+        return '''// ===============================================================================================
+// PERFORMANS PANELİ (3 KUTULU PRO SÜRÜM - Gelişmiş Metrikler Eklendi)
 // ===============================================================================================
 bool GetiriTarihcesiGoster = true;
 bool DetayPerformans = true;
@@ -134,45 +133,128 @@ var Grafikler = Sistem.GrafikVerileri;
 DateTime dateBaslangicTarih = (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture) > Grafikler[0].Date) ? (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture)) : Grafikler[0].Date;
 Sistem.GetiriHesapla(dateBaslangicTarih.ToString("dd.MM.yyyy"), GetiriKayma); 
 
-int ilksatirYy = 240;
-var gunluk_getiri = Sistem.GetiriKZGunSonu[Sistem.GetiriKZGunSonu.Count - 1] - Sistem.GetiriKZGun[Sistem.GetiriKZGun.Count - 1];
+int InitBarNo = 0;
+for (int i = 0; i < Grafikler.Count; i++)
+{{
+    if (Grafikler[i].Date >= dateBaslangicTarih) {{ InitBarNo = i; break; }}
+}}
+
+// ------------------------------------------------------------------------------------------
+// 1. ADIM: SANAL GETİRİ, GERÇEK MAX DD VE İLERİ DÜZEY METRİKLER İÇİN İŞLEM BAZLI HESAPLAMALAR
+// ------------------------------------------------------------------------------------------
+var SanalGetiri = Sistem.Liste(0);
+int poz = 0;
+float maliyet = 0;
+float kapananKZ = 0;
+float kayma = GetiriKayma;
+
+float ZirveBakiye = 0f;
+float GercekMaxDD = 0f;
+DateTime GercekMaxDDTarih = DateTime.MinValue;
+
+// 3. Panel İçin Gerekli Olan Değişkenler
+List<float> IslemGetirileri = new List<float>();
+float ToplamKar = 0f;
+float ToplamZarar = 0f;
+int KarliIslemSayisi = 0;
+int ZararliIslemSayisi = 0;
+
+for (int i = 1; i < Grafikler.Count; i++)
+{{
+    float anlikKapananIslemKari = 0;
+    bool islemKapandi = false;
+
+    if (Grafikler[i].Date >= dateBaslangicTarih)
+    {{
+        if (Sistem.Yon[i] == "A" && poz != 1)
+        {{
+            if (poz == -1) {{ anlikKapananIslemKari = (maliyet - C[i] - kayma); kapananKZ += anlikKapananIslemKari; islemKapandi = true; }}
+            poz = 1;
+            maliyet = C[i] + kayma;
+        }}
+        else if (Sistem.Yon[i] == "S" && poz != -1)
+        {{
+            if (poz == 1) {{ anlikKapananIslemKari = (C[i] - maliyet - kayma); kapananKZ += anlikKapananIslemKari; islemKapandi = true; }}
+            poz = -1;
+            maliyet = C[i] - kayma; 
+        }}
+        else if (Sistem.Yon[i] == "F" && poz != 0)
+        {{
+            if (poz == 1) {{ anlikKapananIslemKari = (C[i] - maliyet - kayma); islemKapandi = true; }}
+            else if (poz == -1) {{ anlikKapananIslemKari = (maliyet - C[i] - kayma); islemKapandi = true; }}
+            kapananKZ += anlikKapananIslemKari;
+            poz = 0;
+            maliyet = 0;
+        }}
+
+        // İleri Düzey Metrikler (Sharpe, Payoff vb.) İçin Kapalı İşlemlerin Kaydı
+        if (islemKapandi)
+        {{
+            IslemGetirileri.Add(anlikKapananIslemKari);
+            if (anlikKapananIslemKari > 0) {{ ToplamKar += anlikKapananIslemKari; KarliIslemSayisi++; }}
+            else if (anlikKapananIslemKari < 0) {{ ToplamZarar += Math.Abs(anlikKapananIslemKari); ZararliIslemSayisi++; }}
+        }}
+
+        float acikKZ = 0;
+        if (poz == 1) acikKZ = C[i] - maliyet;
+        else if (poz == -1) acikKZ = maliyet - C[i];
+
+        SanalGetiri[i] = kapananKZ + acikKZ;
+
+        // Gerçek Floating MaxDD Hesabı
+        if (SanalGetiri[i] > ZirveBakiye) ZirveBakiye = SanalGetiri[i];
+        float anlikDD = ZirveBakiye - SanalGetiri[i];
+        if (anlikDD > GercekMaxDD) {{ GercekMaxDD = anlikDD; GercekMaxDDTarih = Grafikler[i].Date; }}
+    }}
+}}
+
+// ------------------------------------------------------------------------------------------
+// 2. ADIM: "BUGÜN" CANLI GETİRİ HESABI
+// ------------------------------------------------------------------------------------------
+var DateBugun = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+var DateDunSonBarNo = 0;
+for (int i = Grafikler.Count - 1; i > 0; i--)
+{{
+    if (Grafikler[i].Date < DateBugun) {{ DateDunSonBarNo = i; break; }}
+}}
+
+var gunluk_getiri = SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateDunSonBarNo];
 var kzbugunx      = gunluk_getiri.ToString("0.0");
 string Labelsx    =  "Bugün" + Environment.NewLine ;
 string Resultsx   = kzbugunx + Environment.NewLine ;
 
 if ( gunluk_getiri > 0 ) renk = Color.Green; else if ( gunluk_getiri < 0 ) renk = Color.Red;
 
+int ilksatirYy = 240;
 Sistem.Dortgen(1, 10, ilksatirYy - 5, 90, 25, renk, Color.Black, Color.White);
 Sistem.GradientYaziEkle(Labelsx, 1, 15, ilksatirYy, Color.White, Color.White, "Tahoma", 8);
 Sistem.GradientYaziEkle(Resultsx, 1, 60, ilksatirYy, Color.Yellow, Color.DarkOrange, "Tahoma", 8);
 //-----------------------------------------------
 
-// Parametre 3 "X" ise (Panelde 4. Satır) Performans Çizgilerini Göster (Overwrite)
 if (Sistem.Parametreler[3] == "X")
-{
+{{
     int ilksatirY = 33;
     var Sure = ((DateTime.Now - dateBaslangicTarih).TotalDays / 30.4);
     var SureTxt = Sure.ToString("0.0");
-    var kzSure = Sistem.GetiriKZGunSonu[Sistem.GetiriKZGunSonu.Count - 1].ToString("0.0");
-    var kzbugun = (Sistem.GetiriKZGunSonu[Sistem.GetiriKZGunSonu.Count - 1] - Sistem.GetiriKZGun[Sistem.GetiriKZGun.Count - 1]).ToString("0.0");
-    var yuzde_kz =  ( Sistem.GetiriKZGunSonu[Sistem.GetiriKZGunSonu.Count - 1] * 100.0f ) / O[0];
+    
+    var kzSure = SanalGetiri[Grafikler.Count - 1].ToString("0.0");
+    var kzbugun = gunluk_getiri.ToString("0.0");
+    var yuzde_kz = (O[InitBarNo] != 0) ? (( SanalGetiri[Grafikler.Count - 1] * 100.0f ) / O[InitBarNo]) : 0;
     var kzSure_yuzde = "  %" + yuzde_kz.ToString("0.0");
 
-    var kzbuay = Sistem.GetiriBuAy.ToString("0.0");
-    var kz30 = Sistem.GetiriBirAy.ToString("0.0");
     string ToplamIslem = Sistem.GetiriToplamIslem.ToString("0");
     string OrtalamaIslem = (((double)Sistem.GetiriToplamIslem) / Sure).ToString("0");
     var KarliIslemOran = Sistem.GetiriKarIslemOran.ToString("0.00");
     var MutluGun = Sistem.GetiriMutluGun.ToString();
     var MutsuzGun = Sistem.GetiriMutsuzGun.ToString();
-    Sistem.GetiriMaxDDHesapla(GetiriTarih, DateTime.Now.ToString("dd.MM.yyyy"));
-    var MaxDD = Sistem.GetiriMaxDD.ToString("0.0");
-    var MaxDDTarihi = Sistem.GetiriMaxDDTarih.ToString("dd.MM.yyyy");
     var ProfitFactor = Sistem.ProfitFactor.ToString("0.00");
 
-    // Çizgileri Ezme (Overlay Modu)
+    var MaxDD = GercekMaxDD.ToString("0.0");
+    var MaxDDTarihi = (GercekMaxDDTarih != DateTime.MinValue) ? GercekMaxDDTarih.ToString("dd.MM.yyyy") : "-"; 
+
+    // EĞRİLER: (SanalGetiri yerine Sistem.GetiriKZGun yazdım ki o sevdiğin merdiven yapısı grafik üstünde kalsın)
     Sistem.Cizgiler[0].Deger = Sistem.GetiriKZGun; 
-    Sistem.Cizgiler[0].Aciklama = "Gün KZ"; 
+    Sistem.Cizgiler[0].Aciklama = "Gün KZ (Kapalı)"; 
     Sistem.Cizgiler[0].ActiveBool = true;
     
     Sistem.Cizgiler[1].Deger = Sistem.GetiriKZGunSonu;
@@ -180,114 +262,117 @@ if (Sistem.Parametreler[3] == "X")
     Sistem.Cizgiler[1].ActiveBool = true;
     
     Sistem.DolguEkle(0, 1, Color.Red, Color.Green);
-    
+
     Sistem.Cizgiler[2].Deger = Sistem.GetiriKZAy; 
     Sistem.Cizgiler[2].Aciklama =  "Aylık Getiri"; 
     Sistem.Cizgiler[2].ActiveBool = true;
 
+    // ------------------------------------------------------------------------------------------
+    // 3. ADIM: YENİ MATEMATİKSEL METRİKLER (PANEL 3 İÇİN)
+    // ------------------------------------------------------------------------------------------
+    float OrtalamaKar = (KarliIslemSayisi > 0) ? (ToplamKar / KarliIslemSayisi) : 0f;
+    float OrtalamaZarar = (ZararliIslemSayisi > 0) ? (ToplamZarar / ZararliIslemSayisi) : 0f;
+    float PayoffRatio = (OrtalamaZarar > 0) ? (OrtalamaKar / OrtalamaZarar) : 0f;
+    
+    float WinRate = (IslemGetirileri.Count > 0) ? ((float)KarliIslemSayisi / IslemGetirileri.Count) : 0f;
+    float Expectancy = (WinRate * OrtalamaKar) - ((1f - WinRate) * OrtalamaZarar);
+    
+    float RecoveryFactor = (GercekMaxDD > 0) ? (SanalGetiri[Grafikler.Count - 1] / GercekMaxDD) : 0f;
+    float YillikGetiri = (Sure > 0) ? (SanalGetiri[Grafikler.Count - 1] / (float)(Sure / 12f)) : 0f;
+    float CalmarRatio = (GercekMaxDD > 0) ? (YillikGetiri / GercekMaxDD) : 0f;
+
+    // İşlem Bazlı Sharpe Oranı (Ticari Varyans Hesaplaması)
+    float ToplamG = 0f; foreach(var r in IslemGetirileri) ToplamG += r;
+    float OrtGetiri = (IslemGetirileri.Count > 0) ? (ToplamG / IslemGetirileri.Count) : 0f;
+    float KarelerToplami = 0f; foreach(var r in IslemGetirileri) KarelerToplami += (float)Math.Pow(r - OrtGetiri, 2);
+    float StandartSapma = (IslemGetirileri.Count > 1) ? (float)Math.Sqrt(KarelerToplami / (IslemGetirileri.Count - 1)) : 0f;
+    float SharpeT = (StandartSapma > 0) ? ((OrtGetiri / StandartSapma) * (float)Math.Sqrt(IslemGetirileri.Count)) : 0f;
+
     if (GetiriTarihcesiGoster)
-    {
-        var Date5Ay = DateTime.Now.AddDays(-5);
-        var Date5AyBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= Date5Ay) { Date5AyBarNo = i; break; }
-        }
-        var kz5 = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[Date5AyBarNo]).ToString("0.0");
+    {{
+        int daysToSubtract = (int)DateTime.Now.DayOfWeek - (int)DayOfWeek.Monday;
+        if (daysToSubtract < 0) daysToSubtract += 7; 
+        
+        var DateHaftaBasi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(-daysToSubtract);
+        var DateHaftaBasiBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateHaftaBasi) {{ DateHaftaBasiBarNo = i; break; }}
+        var kzBuHafta = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateHaftaBasiBarNo]).ToString("0.0");
+
+        var DateBuAy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        var DateBuAyBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateBuAy) {{ DateBuAyBarNo = i; break; }}
+        var kzbuay = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateBuAyBarNo]).ToString("0.0");
+
+        var Date30 = DateTime.Now.AddDays(-30);
+        var Date30BarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date30) {{ Date30BarNo = i; break; }}
+        var kz30 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date30BarNo]).ToString("0.0");
 
         var Date60 = DateTime.Now.AddDays(-60);
         var Date60BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= Date60) { Date60BarNo = i; break; }
-        }
-        var kz60 = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[Date60BarNo]).ToString("0.0");
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date60) {{ Date60BarNo = i; break; }}
+        var kz60 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date60BarNo]).ToString("0.0");
 
         var Date90 = DateTime.Now.AddDays(-90);
         var Date90BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= Date90) { Date90BarNo = i; break; }
-        }
-        var kz90 = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[Date90BarNo]).ToString("0.0");
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date90) {{ Date90BarNo = i; break; }}
+        var kz90 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date90BarNo]).ToString("0.0");
 
         var Date180 = DateTime.Now.AddDays(-180);
         var Date180BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= Date180) { Date180BarNo = i; break; }
-        }
-        var kz180 = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[Date180BarNo]).ToString("0.0");
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date180) {{ Date180BarNo = i; break; }}
+        var kz180 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date180BarNo]).ToString("0.0");
 
-        // Yıl başı getirisi hesaplama
         var DateYilBasi = new DateTime(DateTime.Now.Year, 1, 1);
         var DateYilBasiBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= DateYilBasi) { DateYilBasiBarNo = i; break; }
-        }
-        var kzBuYil = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[DateYilBasiBarNo]).ToString("0.0");
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateYilBasi) {{ DateYilBasiBarNo = i; break; }}
+        var kzBuYil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateYilBasiBarNo]).ToString("0.0");
 
-        // Son 1 yıl getirisi hesaplama
         var Date1Yil = DateTime.Now.AddYears(-1);
         var Date1YilBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--)
-        {
-            if (Grafikler[i].Date <= Date1Yil) { Date1YilBarNo = i; break; }
-        }
-        var kz1Yil = (Sistem.GetiriKZ[Sistem.GetiriKZ.Count - 1] - Sistem.GetiriKZ[Date1YilBarNo]).ToString("0.0");
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date1Yil) {{ Date1YilBarNo = i; break; }}
+        var kz1Yil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date1YilBarNo]).ToString("0.0");
 
-
-        string Labels = SureTxt + " Ay" + Environment.NewLine +
-                         "Bugün" + Environment.NewLine +
-                         "Bu Hafta" + Environment.NewLine +
-                         "Bu Ay" + Environment.NewLine +
-                         "30 Gün" + Environment.NewLine +
-                         "60 Gün" + Environment.NewLine +
-                         "90 Gün" + Environment.NewLine +
-                         "180 Gün" + Environment.NewLine +
-                         "Bu Yıl" + Environment.NewLine +
-                         "Son 1 Yıl";
-
-        string Results = kzSure + kzSure_yuzde+  Environment.NewLine +
-                         kzbugun + Environment.NewLine +
-                         kz5 + Environment.NewLine +
-                         kzbuay + Environment.NewLine +
-                         kz30 + Environment.NewLine +
-                         kz60 + Environment.NewLine +
-                         kz90 + Environment.NewLine +
-                         kz180 + Environment.NewLine +
-                         kzBuYil + Environment.NewLine +
-                         kz1Yil;
+        // --- PANEL 1 ÇİZİMİ (SOL) ---
+        string Labels = SureTxt + " Ay" + Environment.NewLine + "Bugün" + Environment.NewLine + "Bu Hafta" + Environment.NewLine + "Bu Ay" + Environment.NewLine + "30 Gün" + Environment.NewLine + "60 Gün" + Environment.NewLine + "90 Gün" + Environment.NewLine + "180 Gün" + Environment.NewLine + "Bu Yıl" + Environment.NewLine + "Son 1 Yıl";
+        string Results = kzSure + kzSure_yuzde+  Environment.NewLine + kzbugun + Environment.NewLine + kzBuHafta + Environment.NewLine + kzbuay + Environment.NewLine + kz30 + Environment.NewLine + kz60 + Environment.NewLine + kz90 + Environment.NewLine + kz180 + Environment.NewLine + kzBuYil + Environment.NewLine + kz1Yil;
 
         Sistem.Dortgen(2, 10, ilksatirY - 8, 230, 180, Color.Black, Color.Black, Color.White);
         Sistem.GradientYaziEkle(Labels, 2, 20, ilksatirY, Color.White, Color.White, "Tahoma", 10);
         Sistem.GradientYaziEkle(Results, 2, 90, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
-    }
+    }}
 
     if (DetayPerformans)
-    {
-        string Labels2 = "İslem / Ortalama" + Environment.NewLine +
-                         "Karlı İşlem Oranı" + Environment.NewLine +
-                         "Profit Factor" + Environment.NewLine +
-                         "Mutlu Gün" + Environment.NewLine +
-                         "Mutsuz Gün" + Environment.NewLine +
-                         "MaxDD" + Environment.NewLine +
-                         "MaxDD Tarihi";
+    {{
+        // --- PANEL 2 ÇİZİMİ (ORTA) ---
+        string Labels2 = "İslem / Ortalama" + Environment.NewLine + "Karlı İşlem Oranı" + Environment.NewLine + "Profit Factor" + Environment.NewLine + "Mutlu Gün" + Environment.NewLine + "Mutsuz Gün" + Environment.NewLine + "MaxDD" + Environment.NewLine + "MaxDD Tarihi";
+        string Results2 = ToplamIslem + " / " + OrtalamaIslem + Environment.NewLine + "%" + KarliIslemOran + Environment.NewLine + ProfitFactor + Environment.NewLine + MutluGun + Environment.NewLine + MutsuzGun + Environment.NewLine + MaxDD + Environment.NewLine + MaxDDTarihi;
 
-        string Results2 = ToplamIslem + " / " + OrtalamaIslem + Environment.NewLine +
-                         "%" + KarliIslemOran + Environment.NewLine +
-                         ProfitFactor + Environment.NewLine +
-                         MutluGun + Environment.NewLine +
-                         MutsuzGun + Environment.NewLine +
-                         MaxDD + Environment.NewLine +
-                         MaxDDTarihi;
-
-        Sistem.Dortgen(2, 250, ilksatirY - 8, 220, 130, Color.Black, Color.Black, Color.White);
+        Sistem.Dortgen(2, 250, ilksatirY - 8, 215, 130, Color.Black, Color.Black, Color.White);
         Sistem.GradientYaziEkle(Labels2, 2, 260, ilksatirY, Color.White, Color.White, "Tahoma", 10);
-        Sistem.GradientYaziEkle(Results2, 2, 385, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
-    }
-}
+        Sistem.GradientYaziEkle(Results2, 2, 380, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
+
+        // --- PANEL 3 ÇİZİMİ (SAĞ) - İLERİ DÜZEY METRİKLER ---
+        string Labels3 = "Ort. Kâr / Zarar" + Environment.NewLine + 
+                         "Payoff Ratio (R/R)" + Environment.NewLine + 
+                         "Expectancy" + Environment.NewLine + 
+                         "Recovery Factor" + Environment.NewLine + 
+                         "Calmar Oranı" + Environment.NewLine + 
+                         "Sharpe Oranı";
+
+        string Results3 = OrtalamaKar.ToString("0.0") + " / " + OrtalamaZarar.ToString("0.0") + Environment.NewLine +
+                          PayoffRatio.ToString("0.00") + Environment.NewLine +
+                          Expectancy.ToString("0.0") + " Puan" + Environment.NewLine +
+                          RecoveryFactor.ToString("0.00") + Environment.NewLine +
+                          CalmarRatio.ToString("0.00") + Environment.NewLine +
+                          SharpeT.ToString("0.00");
+
+        // Yeni kutunun X ekseni ayarlandı (475'ten başlıyor)
+        Sistem.Dortgen(2, 475, ilksatirY - 8, 215, 115, Color.Black, Color.Black, Color.White);
+        Sistem.GradientYaziEkle(Labels3, 2, 485, ilksatirY, Color.White, Color.White, "Tahoma", 10);
+        Sistem.GradientYaziEkle(Results3, 2, 605, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
+    }}
+}}
 '''
 
     def _generate_strategy1_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
@@ -607,15 +692,15 @@ for (int i = warmupBars; i < Sistem.BarSayisi; i++)
 }}
 
 // --- CIZIMLER ---
-Sistem.Cizgiler[0].Deger = ARS;
-Sistem.Cizgiler[0].Aciklama = "ARS";
-Sistem.Cizgiler[0].ActiveBool = true;
-Sistem.Cizgiler[0].Renk = Color.Yellow;
-Sistem.Cizgiler[0].Kalinlik = 2;
+Sistem.Cizgiler[3].Deger = ARS;
+Sistem.Cizgiler[3].Aciklama = "ARS";
+Sistem.Cizgiler[3].ActiveBool = true;
+Sistem.Cizgiler[3].Renk = Color.Yellow;
+Sistem.Cizgiler[3].Kalinlik = 2;
 
-Sistem.Cizgiler[1].Deger = MACDV;
-Sistem.Cizgiler[1].Aciklama = "MACDV";
-Sistem.Cizgiler[1].ActiveBool = false;
+Sistem.Cizgiler[4].Deger = MACDV;
+Sistem.Cizgiler[4].Aciklama = "MACDV";
+Sistem.Cizgiler[4].ActiveBool = false;
 
 var son = Sistem.BarSayisi - 1;
 string info = "MACDV: " + Sistem.SayiYuvarla(MACDV[son], 2) + " Sig: " + Sistem.SayiYuvarla(MACDV_Sinyal[son], 2);
@@ -671,7 +756,7 @@ int ATR_Exit_Period = {p['atr_exit_p']};
 double ATR_SL_Mult = {p['atr_sl_mult']};
 double ATR_TP_Mult = {p['atr_tp_mult']};
 double ATR_Trail_Mult = {p['atr_trail_mult']};
-int Exit_Confirm_Bars = {p['exit_confirm_bars']};
+int Exit_Confirm_Bars = {p.get('exit_confirm_bars', 3)};
 double Exit_Confirm_Mult = {p['exit_confirm_mult']};
 
 // --- ARS PARAMETRELER ---
@@ -1265,9 +1350,9 @@ for (int i = warmupBars; i < Veriler.Count; i++)
     }}
 }}
 
-Sistem.Cizgiler[0].Deger = EMA;
-Sistem.Cizgiler[1].Deger = DSMA;
-Sistem.Cizgiler[2].Deger = MA;
+Sistem.Cizgiler[3].Deger = EMA;
+Sistem.Cizgiler[4].Deger = DSMA;
+Sistem.Cizgiler[5].Deger = MA;
 
 {self._get_performance_panel_code()}
 '''
@@ -1526,7 +1611,46 @@ Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
 }};
 
 // --- INDIKATORLER ---
-var TOMA_Line = Sistem.TOMA(TOMA_PERIOD, TOMA_OPT);
+var MA_TOMA = Sistem.MA(C, "Exp", TOMA_PERIOD);
+var TOMA_Line = Sistem.Liste(0);
+var TOMA_Trend = Sistem.Liste(0);
+
+TOMA_Line[0] = MA_TOMA[0];
+TOMA_Trend[0] = 1; 
+
+for (int j = 1; j < V.Count; j++)
+{{
+    double yuzdeCarpan = TOMA_OPT / 100.0;
+    float altBant = (float)(MA_TOMA[j] * (1 - yuzdeCarpan));
+    float ustBant = (float)(MA_TOMA[j] * (1 + yuzdeCarpan));
+
+    if (TOMA_Trend[j-1] == 1)
+    {{
+        TOMA_Line[j] = Math.Max(TOMA_Line[j-1], altBant);
+        if (MA_TOMA[j] < TOMA_Line[j])
+        {{
+            TOMA_Trend[j] = -1;
+            TOMA_Line[j] = ustBant;
+        }}
+        else
+        {{
+            TOMA_Trend[j] = 1;
+        }}
+    }}
+    else
+    {{
+        TOMA_Line[j] = Math.Min(TOMA_Line[j-1], ustBant);
+        if (MA_TOMA[j] > TOMA_Line[j])
+        {{
+            TOMA_Trend[j] = 1;
+            TOMA_Line[j] = altBant;
+        }}
+        else
+        {{
+            TOMA_Trend[j] = -1;
+        }}
+    }}
+}}
 
 var HH1 = Sistem.HHV(HHV1_PERIOD, "Yuksek");
 var LL1 = Sistem.LLV(LLV1_PERIOD, "Dusuk");
@@ -1666,22 +1790,43 @@ for (int i = warmupBars; i < V.Count; i++)
 }}
 
 // --- ÇİZİMLER ---
-Sistem.Cizgiler[0].Deger = TOMA_Line;
-Sistem.Cizgiler[0].Aciklama = "TOMA";
-Sistem.Cizgiler[0].Renk = Color.Blue;
-Sistem.Cizgiler[0].Kalinlik = 2;
+Sistem.Cizgiler[3].Deger = TOMA_Line;
+Sistem.Cizgiler[3].Aciklama = "TOMA";
+Sistem.Cizgiler[3].Renk = Color.Blue;
+Sistem.Cizgiler[3].Kalinlik = 2;
 
-Sistem.Cizgiler[1].Deger = HH1;
-Sistem.Cizgiler[1].Aciklama = "HH1";
-Sistem.Cizgiler[1].ActiveBool = false;
+Sistem.Cizgiler[4].Deger = HH1;
+Sistem.Cizgiler[4].Aciklama = "HH1";
+Sistem.Cizgiler[4].ActiveBool = false;
 
-Sistem.Cizgiler[2].Deger = LL1;
-Sistem.Cizgiler[2].Aciklama = "LL1";
-Sistem.Cizgiler[2].ActiveBool = false;
+Sistem.Cizgiler[5].Deger = LL1;
+Sistem.Cizgiler[5].Aciklama = "LL1";
+Sistem.Cizgiler[5].ActiveBool = false;
 
 {self._get_performance_panel_code()}
 '''
         return code
+
+    def export_strategy3(
+        self, 
+        params: Dict[str, Any], 
+        vade_tipi: str = "ENDEKS"
+    ) -> str:
+        """
+        Strateji 3 Kodunu Export Eder
+        """
+        filename = self._generate_filename(3, vade_tipi)
+        
+        code = self._generate_strategy3_code(params, vade_tipi)
+        
+        filepath = self.output_dir / f"{filename}.cs"
+        filepath.write_text(code, encoding='utf-8')
+        
+        # Parametreleri JSON olarak da kaydet
+        params_path = self.output_dir / f"{filename}_params.json"
+        params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
+        
+        return str(filepath)
 
     def export_strategy4(
         self, 
@@ -1735,34 +1880,19 @@ Sistem.Cizgiler[2].ActiveBool = false;
 
 # --- TEST ---
 if __name__ == "__main__":
-    # Örnek parametreler
-    params1 = {
-        'adx_period': 14,
-        'adx_threshold': 25,
-        'macdv_fast': 12,
-        'macdv_slow': 26,
-        'long_score_threshold': 3,
-    }
-    
+    params1 = {}
     params2 = {
-        'ars_ema': 3,
-        'ars_atr_p': 14,
-        'ars_atr_m': 0.5,
-        'momentum_p': 8,
-        'breakout_p1': 8,
-        'mfi_p': 14,
-        'atr_sl_mult': 2.0,
-        'atr_tp_mult': 3.0,
+        'exit_confirm_bars': 3
     }
+    params3 = {}
+    params4 = {}
     
     exporter = IdealDataExporter(
         symbol="VIP'VIP-X030",
         period="5"
     )
     
-    result = exporter.export_all(params1, params2, "ENDEKS", 1)
+    result = exporter.export_strategy2(params2, "ENDEKS")
     
     print("Export tamamlandı!")
-    print(f"Strateji 1: {result['strategy1']}")
-    print(f"Strateji 2: {result['strategy2']}")
-    print(f"Robot: {result['robot']}")
+    print(f"Strateji: {result}")

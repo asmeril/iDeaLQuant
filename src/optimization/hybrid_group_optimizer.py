@@ -722,13 +722,13 @@ class HybridGroupOptimizer:
                 return []
 
             for i, score in enumerate(raw):
-                if score['net_profit'] > 0: results.append({'group': group.name, **combos[i], **score})
+                if score['net_profit'] > 0: results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **combos[i], **score})
         else:
             _init_group_pool(self.strategy_index)
             for combo in combos:
                 if self._is_cancelled and self._is_cancelled(): break
                 score = _evaluate_params_static({**base_params, **combo, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage)
-                if score['net_profit'] > 0: results.append({'group': group.name, **combo, **score})
+                if score['net_profit'] > 0: results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **combo, **score})
         results.sort(key=lambda x: x['net_profit'], reverse=True)
         top = results[:10]
         print(f"Bulunan: {len(results)}, Top: {len(top)}")
