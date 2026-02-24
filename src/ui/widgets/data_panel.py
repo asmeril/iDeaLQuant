@@ -87,11 +87,13 @@ class DataPanel(QWidget):
         layout.addWidget(QLabel("Strateji:"))
         self.strategy_combo = QComboBox()
         self.strategy_combo.addItems([
-            "0: ScoreBased (Gatekeeper)", 
-            "1: ARS Trend v2", 
-            "2: Paradise (Trend+Breakout)", 
-            "3: TOMA + Mom"
+            "1: ScoreBased (Gatekeeper)", 
+            "2: ARS Trend v2", 
+            "3: Paradise (Trend+Breakout)", 
+            "4: TOMA + Momentum",
+            "5: Oliver Kell"
         ])
+        self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_data)
         layout.addWidget(self.strategy_combo)
         
         # Vade Tipi
@@ -115,6 +117,20 @@ class DataPanel(QWidget):
         layout.addWidget(self.create_process_btn)
         
         return group
+        
+    def _on_strategy_changed_data(self, index: int):
+        """Strateji değiştiğinde vade_combo'yu güncelle (S5 = 3 mod)"""
+        self.vade_combo.blockSignals(True)
+        prev = self.vade_combo.currentText()
+        self.vade_combo.clear()
+        if index == 4:  # S5 Oliver Kell
+            self.vade_combo.addItems(["VIOP_ENDEKS", "VIOP_SPOT", "SPOT"])
+        else:
+            self.vade_combo.addItems(["ENDEKS", "SPOT"])
+        idx = self.vade_combo.findText(prev)
+        if idx >= 0:
+            self.vade_combo.setCurrentIndex(idx)
+        self.vade_combo.blockSignals(False)
         
     def _on_create_process_clicked(self):
         """Kullanıcı butona bastığında süreci oluştur ve sinyal gönder"""
