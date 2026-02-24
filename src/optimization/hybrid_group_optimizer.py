@@ -23,6 +23,7 @@ from src.indicators.oscillators import TRIX
 from src.strategies.score_based import ScoreBasedStrategy
 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.paradise_strategy import ParadiseStrategy
+from src.optimization.strategy5_optimizer import fast_backtest_strategy5
 from src.strategies.paradise_strategy import ParadiseStrategy
 from src.optimization.fitness import quick_fitness, calculate_sharpe
 from src.strategies.holidays import vade_sonu_is_gunu
@@ -512,6 +513,20 @@ class IndicatorCache:
         # HHV fonksiyonu list bekler, volumes array'ini list'e cevir
         return self._get(key, lambda: np.array(HHV(self.volumes.tolist(), int(period))))
 
+    # === Volume SMA (S5 Oliver Kell icin) ===
+    def get_vol_ma(self, period: int) -> np.ndarray:
+        key = f'vol_ma_{period}'
+        def calc():
+            n = len(self.volumes)
+            vol_ma = np.zeros(n, dtype=np.float64)
+            for i in range(period - 1, n):
+                s = 0.0
+                for j in range(period):
+                    s += self.volumes[i - j]
+                vol_ma[i] = s / period
+            return vol_ma
+        return self._get(key, calc)
+
     # === Vade Tarihleri ===
     def get_vade_dates(self, vade_tipi: str) -> set:
         key = f'vade_dates_{vade_tipi}'
@@ -575,9 +590,55 @@ def _init_group_pool(strategy_index):
         df = load_data()
         g_cache = IndicatorCache(df)
 
+def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
+    """S5 Oliver Kell parametrelerini Numba kernel ile degerlendir."""
+    global g_cache
+    if g_cache is None:
+        return {'net_profit': 0.0, 'trades': 0, 'pf': 0.0, 'max_dd': 0.0, 'sharpe': 0.0, 'fitness': 0.0}
+    
+    ema_fast_p = int(params.get('ema_fast', 10))
+    ema_slow_p = int(params.get('ema_slow', 20))
+    breakout_p = int(params.get('breakout_period', 10))
+    adx_p = int(params.get('adx_period', 14))
+    adx_thresh = float(params.get('adx_threshold', 20.0))
+    vol_ma_p = int(params.get('vol_ma_period', 20))
+    trail_pct = float(params.get('trailing_stop_pct', 1.5))
+    
+    # Cached indicator arrays
+    ema_fast_arr = np.array(g_cache.get_ema(ema_fast_p), dtype=np.float64)
+    ema_slow_arr = np.array(g_cache.get_ema(ema_slow_p), dtype=np.float64)
+    adx_arr = np.array(g_cache.get_adx(adx_p), dtype=np.float64)
+    hhv_arr = np.array(g_cache.get_hhv(breakout_p), dtype=np.float64)
+    llv_arr = np.array(g_cache.get_llv(breakout_p), dtype=np.float64)
+    vol_ma_arr = np.array(g_cache.get_vol_ma(vol_ma_p), dtype=np.float64)
+    
+    # Trading mask
+    mask_arr = np.ones(len(g_cache.closes), dtype=np.bool_)
+    times_arr = np.zeros(len(g_cache.closes), dtype=np.int64)
+    if hasattr(g_cache, 'times') and g_cache.times is not None:
+        try:
+            times_arr = np.array([t.timestamp() for t in g_cache.times], dtype=np.int64)
+        except:
+            pass
+    
+    np_val, trades, pf, dd, sharpe, adays, tdays = fast_backtest_strategy5(
+        g_cache.closes, g_cache.highs, g_cache.lows, g_cache.volumes,
+        ema_fast_arr, ema_slow_arr,
+        adx_arr, hhv_arr, llv_arr, vol_ma_arr,
+        mask_arr, times_arr,
+        adx_thresh, trail_pct / 100.0
+    )
+    
+    fit = quick_fitness(np_val, pf, dd, trades, sharpe=sharpe, active_days=adays, total_days=tdays)
+    return {'net_profit': np_val, 'trades': trades, 'pf': pf, 'max_dd': dd, 'sharpe': sharpe, 'fitness': fit}
+
+
 def _eval_combo_wrapper(params_and_strategy_and_costs):
     params, strategy_index, commission, slippage = params_and_strategy_and_costs
-    return _evaluate_params_static(params, strategy_index, commission, slippage)
+    score = _evaluate_params_static(params, strategy_index, commission, slippage)
+    # imap_unordered için param değerlerini score'a ekle
+    score.update({k: v for k, v in params.items() if k not in score and k != 'vade_tipi'})
+    return score
 
 def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
     global g_cache
@@ -588,6 +649,9 @@ def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commiss
         strategy = ScoreBasedStrategy.from_config_dict(g_cache, params)
     elif strategy_index == 2:
         strategy = ParadiseStrategy.from_config_dict(g_cache, params)
+    elif strategy_index == 4:
+        # S5 Oliver Kell — Numba kernel ile backtest
+        return _evaluate_s5_params(params, commission, slippage)
     else:
         strategy = ARSTrendStrategyV2.from_config_dict(g_cache, params)
     
@@ -739,12 +803,31 @@ class HybridGroupOptimizer:
         base_params = self.get_default_params(exclude_group=group.name)
         if fixed_params: base_params.update(fixed_params)
         combos = self.generate_combinations(group.params)
+        total = len(combos)
         results = []
         if self.n_parallel > 1:
             tasks = [({**base_params, **c, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage) for c in combos]
             try:
-                self.pool = Pool(processes=self.n_parallel, initializer=_init_group_pool, initargs=(self.strategy_index,))
-                raw = self.pool.map(_eval_combo_wrapper, tasks)
+                self.pool = Pool(
+                    processes=self.n_parallel,
+                    initializer=_init_group_pool,
+                    initargs=(self.strategy_index,),
+                    maxtasksperchild=200  # RAM koruması: her 200 görevde worker yeniden başlar
+                )
+                # imap_unordered: canlı ilerleme gösterimi için
+                raw = []
+                best_np = 0.0
+                for idx, score in enumerate(self.pool.imap_unordered(_eval_combo_wrapper, tasks, chunksize=max(1, total // (self.n_parallel * 4)))):
+                    raw.append(score)
+                    if score['net_profit'] > best_np:
+                        best_np = score['net_profit']
+                    # Her 50 kombinasyonda ilerleme bildir
+                    if self.on_progress and (idx + 1) % 50 == 0:
+                        pct = int((idx + 1) / total * 100)
+                        self.on_progress(pct, f"[{group.name}] {idx+1}/{total} tarandı | En iyi: {best_np:.0f}")
+                    # İptal kontrolü
+                    if self._is_cancelled and self._is_cancelled():
+                        break
                 self.pool.close()
                 self.pool.join()
                 self.pool = None
@@ -755,8 +838,10 @@ class HybridGroupOptimizer:
                     self.pool = None
                 return []
 
-            for i, score in enumerate(raw):
-                if score['net_profit'] > 0: results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **combos[i], **score})
+            for score in raw:
+                if score['net_profit'] > 0:
+                    # combos ile sıra eşleşmesi artık yok (unordered), parametreler score içinde
+                    results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **score})
         else:
             _init_group_pool(self.strategy_index)
             for combo in combos:
