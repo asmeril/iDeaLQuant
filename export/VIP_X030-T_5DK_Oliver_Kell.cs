@@ -27,6 +27,13 @@ var C = Sistem.GrafikFiyatSec("Kapanis");
 var T = Sistem.GrafikFiyatSec("Tipik");
 var V = Sistem.GrafikVerileri;
 
+// Hacim Dizisi Oluştur
+var VolumeArray = Sistem.Liste(0);
+for (int i = 0; i < V.Count; i++)
+{
+    VolumeArray[i] = V[i].Vol; // iDeal Data'da Hacim/Lot verisi bar objesindedir
+}
+
 // === İNDİKATÖRLER ===
 var EMA_Fast = Sistem.EMA(C, EMA_Fast_P);
 var EMA_Slow = Sistem.EMA(C, EMA_Slow_P);
@@ -35,7 +42,7 @@ var HH = Sistem.HHV(H, Breakout_P);
 var LL = Sistem.LLV(L, Breakout_P);
 
 // Hacim Ortalaması (SMA)
-var VolMA = Sistem.SMA(Sistem.Lot, VolMA_P);
+var VolMA = Sistem.SMA(VolumeArray, VolMA_P);
 
 // === STRATEJI MANTIGI ===
 float iz_yuzde = TrailingStopPct / 100.0f;
@@ -58,7 +65,7 @@ for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))
     bool longTrend = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
     bool longBreak = C[i] > HH[i - 1]; // Close, bir önceki barın HH'sini kırıyor mu?
     bool longADX   = ADX_Val[i] >= ADX_Threshold && EMA_Fast[i] >= EMA_Fast[i - 1];
-    bool gucluHacim = hacimAktif ? (Sistem.Lot[i] > VolMA[i]) : true;
+    bool gucluHacim = hacimAktif ? (VolumeArray[i] > VolMA[i]) : true;
 
     // --- SHORT KOSULLARI ---
     bool shortTrend = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
