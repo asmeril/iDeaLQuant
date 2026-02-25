@@ -1110,7 +1110,8 @@ class HybridGroupOptimizer:
                         all_results = old_results + drone_results
                     else:
                         all_results = old_results
-                    
+                
+                if all_results:
                     all_results.sort(key=lambda x: x.get('fitness', x.get('net_profit', 0)), reverse=True)
                     from src.optimization.fitness import calculate_robust_fitness
                     calculate_robust_fitness(all_results)
@@ -1118,11 +1119,10 @@ class HybridGroupOptimizer:
                     self.group_results[group.name] = all_results[:15]
                     
                     # current_best guncelle
-                    if all_results:
-                        for key in group.params.keys():
-                            if key in all_results[0]:
-                                current_best[group.name][key] = all_results[0][key]
-                        round_end_fitness[group.name] = all_results[0].get('fitness', 0)
+                    for key in group.params.keys():
+                        if key in all_results[0]:
+                            current_best[group.name][key] = all_results[0][key]
+                    round_end_fitness[group.name] = all_results[0].get('fitness', 0)
                 
                 # Grup tamamlandi: checkpoint kaydet
                 ckpt.save(job_id, {
