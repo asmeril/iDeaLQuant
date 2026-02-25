@@ -128,13 +128,13 @@ class CheckpointManager:
     @staticmethod
     def make_job_id(strategy_index: int, method: str, process_id: str = None) -> str:
         """Standart job_id oluştur."""
-        s_map = {0: 's1', 1: 's2', 2: 's3', 3: 's4'}
+        s_map = {0: 's1', 1: 's2', 2: 's3', 3: 's4', 4: 's5'}
         m_map = {
             'Hibrit Grup': 'hybrid',
             'Genetik': 'genetic',
             'Bayesian': 'bayesian',
         }
-        s = s_map.get(strategy_index, f's{strategy_index}')
+        s = s_map.get(strategy_index, f's{strategy_index+1}')
         m = m_map.get(method, method.lower().replace(' ', '_'))
         p = (process_id or 'unknown').replace(' ', '_')[:40]
         return f"{s}_{m}_{p}"
