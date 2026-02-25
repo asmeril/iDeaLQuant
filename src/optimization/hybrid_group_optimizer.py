@@ -589,7 +589,7 @@ def _init_group_pool(strategy_index, df_received=None, vade_tipi="ENDEKS"):
         if df_received is not None:
             g_cache = IndicatorCache(df_received)
             from src.engine.data import OHLCV
-            g_mask = OHLCV(df_received).get_trading_mask(vade_tipi).values
+            g_mask = OHLCV(df_received).get_trading_mask(vade_tipi)
         else:
             from src.optimization.strategy5_optimizer import load_data_and_mask
             df, g_mask = load_data_and_mask(vade_tipi)
