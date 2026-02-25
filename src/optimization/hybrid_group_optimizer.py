@@ -625,7 +625,7 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
         adx_p = int(params.get('adx_period', 14))
         adx_thresh = float(params.get('adx_threshold', 20.0))
         vol_ma_p = int(params.get('vol_ma_period', 20))
-        trail_pct = float(params.get('trailing_stop_pct', 0))  # 0 = trailing stop devre dışı (yapısal fazda)
+        trail_pct = float(params.get('trailing_stop_pct', 1.5))  # Yapısal fazda sabit, Risk grubunda optimize edilir
         
         # Cached indicator arrays
         ema_fast_arr = np.ascontiguousarray(g_cache.get_ema(ema_fast_p), dtype=np.float64)

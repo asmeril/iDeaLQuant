@@ -1,0 +1,16 @@
+{
+  "timestamp": "2026-02-25 20:06:07",
+  "strategy_index": 4,
+  "method_combo_text": "Hibrit Grup",
+  "remaining_queue": [
+    "Hibrit Grup",
+    "Genetik",
+    "Bayesian"
+  ],
+  "queue_total": 3,
+  "process_id": "VIP_X030-T_5dk_20260225_200538",
+  "validation_enabled": true,
+  "split_pct": 70,
+  "commission": 0.0,
+  "slippage": 0.0
+}
