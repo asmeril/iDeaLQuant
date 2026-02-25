@@ -1856,6 +1856,15 @@ float ADX_Threshold = {adx_thresh}f;
 int VolMA_P = {vol_ma_p};
 float TrailingStopPct = {trail_pct}f;
 
+// === GRAFİK BİLGİSİ ===
+var Grafikler = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
+var H = Sistem.GrafikFiyatSec("Yuksek");
+var L = Sistem.GrafikFiyatSec("Dusuk");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+var T = Sistem.GrafikFiyatSec("Tipik");
+var V = Sistem.GrafikVerileri;
+
 // === İNDİKATÖRLER ===
 var EMA_Fast = Sistem.EMA(C, EMA_Fast_P);
 var EMA_Slow = Sistem.EMA(C, EMA_Slow_P);

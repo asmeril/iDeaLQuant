@@ -418,7 +418,7 @@ class BayesianObjective:
             closes = np.ascontiguousarray(cache.closes, dtype=np.float64)
             highs = np.ascontiguousarray(cache.highs, dtype=np.float64)
             lows = np.ascontiguousarray(cache.lows, dtype=np.float64)
-            vols = np.ascontiguousarray(cache.volumes, dtype=np.float64)
+            vols = np.ascontiguousarray(cache.volume, dtype=np.float64)
             
             # Mask
             mask_arr = np.ones(len(closes), dtype=np.bool_)

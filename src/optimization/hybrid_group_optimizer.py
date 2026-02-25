@@ -612,7 +612,7 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
             closes_f64 = np.ascontiguousarray(g_cache.closes, dtype=np.float64)
             highs_f64 = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
             lows_f64 = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
-            vols_f64 = np.ascontiguousarray(g_cache.volumes, dtype=np.float64)
+            vols_f64 = np.ascontiguousarray(g_cache.volume, dtype=np.float64)
             mask_arr = np.ones(n, dtype=np.bool_)
             times_arr = np.zeros(n, dtype=np.int64)
             if hasattr(g_cache, 'times') and g_cache.times:
