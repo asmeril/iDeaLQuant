@@ -48,6 +48,19 @@ class OHLCV:
         Initialize from DataFrame with columns: datetime, open, high, low, close, volume
         """
         self.df = df.copy()
+        
+        # Standardize common Turkish/capitalized columns to lowercase english
+        mapping = {
+            'DateTime': 'datetime', 'Tarih': 'datetime',
+            'Acilis': 'open', 'Open': 'open',
+            'Yuksek': 'high', 'High': 'high',
+            'Dusuk': 'low', 'Low': 'low',
+            'Kapanis': 'close', 'Close': 'close',
+            'Hacim': 'volume', 'Lot': 'volume', 'Volume': 'volume'
+        }
+        rename_dict = {c: mapping[c] for c in self.df.columns if c in mapping}
+        self.df = self.df.rename(columns=rename_dict)
+        
         self._ensure_columns()
         
         # Pre-compute lists for fast access (IdealData style)
