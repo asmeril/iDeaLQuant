@@ -1,24 +1,13 @@
-// ===============================================================================================
-// STRATEJI 5: Oliver Kell — Base 'n Break
-// 2020 US Investing Championship Şampiyonu
-// Mod: VIOP Endeks Vadeli — Çift Yön
-// Otomatik: IdealQuant Export | Tarih: 2026-02-25 23:06
-// ===============================================================================================
+// --- OLIVER KELL STRATEJİSİ (VİOP - ÇİFT YÖNLÜ) ---
+// VİOP Endeks ve Pay Vadeliler için tasarlanmıştır.
+// Kaynak: 2020 US Investing Championship (%941)
+// IdealQuant Export | Tarih: 2026-02-25
+//
+// Kurallar:
+// 1. Long: EMA üstü, HH Kırılımı, Hacim Artışı, ADX filtre.
+// 2. Short: EMA altı, LL Kırılımı, Hacim Artışı, ADX filtre.
+// 3. İz Süren Stop: %1.5
 
-// Vadeli Endeks (VIP-X030 vb.): Çift Yönlü + Vade Geçişi
-string YON = "CIFT";
-
-
-// === PARAMETRELER ===
-int EMA_Fast_P = 8;
-int EMA_Slow_P = 55;
-int Breakout_P = 17;
-int ADX_P = 18;
-float ADX_Threshold = 22.0f;
-int VolMA_P = 20;
-float TrailingStopPct = 1.5f;
-
-// === GRAFİK BİLGİSİ ===
 var V = Sistem.GrafikVerileri;
 var O = Sistem.GrafikFiyatOku(V, "Acilis");
 var C = Sistem.GrafikFiyatOku(V, "Kapanis");
@@ -26,134 +15,107 @@ var H = Sistem.GrafikFiyatOku(V, "Yuksek");
 var L = Sistem.GrafikFiyatOku(V, "Dusuk");
 var Vol = Sistem.GrafikFiyatOku(V, "Hacim");
 
-// === İNDİKATÖRLER ===
-var EMA_Fast = Sistem.MA(C, "Exp", EMA_Fast_P);
-var EMA_Slow = Sistem.MA(C, "Exp", EMA_Slow_P);
-var ADX_Val = Sistem.ADX(ADX_P);
-var HH10 = Sistem.HHV(Breakout_P, "Yuksek");
-var LL10 = Sistem.LLV(Breakout_P, "Dusuk");
+// --- GÖSTERGELER ---
+var EMA10 = Sistem.MA(C, "Exp", 8);
+var EMA20 = Sistem.MA(C, "Exp", 55);
+var VolMA = Sistem.MA(Vol, "Simple", 20);
+var ADX = Sistem.ADX(18);
+var HH10 = Sistem.HHV(17, "Yuksek");
+var LL10 = Sistem.LLV(17, "Dusuk");
 
-// Hacim Ortalaması (SMA)
-var VolMA = Sistem.MA(Vol, "Simple", VolMA_P);
+// --- EMA YÖNÜ TESTERE FİLTRESİ ---
+Sistem.Cizgiler[3].Deger = EMA10;
+Sistem.Cizgiler[3].Aciklama = "8 EMA";
+Sistem.Cizgiler[3].Renk = Sistem.Renk(255, 0, 0, 255); 
+Sistem.Cizgiler[3].ActiveBool = true;
 
-// === STRATEJI MANTIGI ===
-float IzSurenYuzde = TrailingStopPct / 100.0f;
-float UcUcMesafe = 0f;
-float StopSeviyesi = 0f;
-string Pozisyon = "F"; // "A"=Long, "S"=Short, "F"=Nakit
+Sistem.Cizgiler[4].Deger = EMA20;
+Sistem.Cizgiler[4].Aciklama = "55 EMA";
+Sistem.Cizgiler[4].Renk = Sistem.Renk(255, 255, 0, 0); 
+Sistem.Cizgiler[4].ActiveBool = true;
+
+// --- STRATEJİ DEĞİŞKENLERİ ---
+float IzSurenYuzde = 0.015f;
+float UcUcMesafe = 0;
+float StopSeviyesi = 0;
+string Pozisyon = "F";
 
 for (int i = 20; i < V.Count; i++)
 {
-    // --- LONG KOSULLARI ---
-    bool longTrend = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
-    bool longBreak = C[i] > HH10[i - 1]; 
-    bool trendGucuLong = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] > EMA_Fast[i - 1];
+    // LONG KOŞULLARI
+    bool longTrend = C[i] > EMA10[i] && C[i] > EMA20[i];
+    bool longBreak = C[i] > HH10[i-1]; 
+    bool trendGucuLong = ADX[i] > 22 && EMA10[i] > EMA10[i-1];
     
-    // --- SHORT KOSULLARI ---
-    bool shortTrend = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
-    bool shortBreak = C[i] < LL10[i - 1];
-    bool trendGucuShort = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] < EMA_Fast[i - 1];
+    // SHORT KOŞULLARI
+    bool shortTrend = C[i] < EMA10[i] && C[i] < EMA20[i];
+    bool shortBreak = C[i] < LL10[i-1];
+    bool trendGucuShort = ADX[i] > 22 && EMA10[i] < EMA10[i-1];
 
     bool gucluHacim = Vol[i] > VolMA[i];
-
-    // --- ÇIKIŞ KOSULLARI ---
-    bool emaCrossbackLongIcin = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
-    bool emaCrossbackShortIcin = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
+    
+    // ÇIKIŞ ŞARTLARI (EMA Crossback)
+    bool emaCrossbackLongIcin = C[i] < EMA10[i] && C[i] < EMA20[i];
+    bool emaCrossbackShortIcin = C[i] > EMA10[i] && C[i] > EMA20[i];
 
     if (Pozisyon == "F")
     {
-        // --- GIRIS ---
-        if (longTrend && longBreak && trendGucuLong && gucluHacim)
+        if (longTrend && longBreak && gucluHacim && trendGucuLong)
         {
-            if (YON == "CIFT" || YON == "SADECE_AL")
-            {
-                Sistem.Yon[i] = "A"; // AL
-                Pozisyon = "A";
-                UcUcMesafe = C[i];
-                StopSeviyesi = L[i];
-            }
+            Sistem.Yon[i] = "A";
+            Pozisyon = "A";
+            UcUcMesafe = C[i];
+            StopSeviyesi = L[i]; 
         }
-        else if (shortTrend && shortBreak && trendGucuShort && gucluHacim)
+        else if (shortTrend && shortBreak && gucluHacim && trendGucuShort)
         {
-            if (YON == "CIFT" || YON == "SADECE_SAT")
-            {
-                Sistem.Yon[i] = "S"; // SAT
-                Pozisyon = "S";
-                UcUcMesafe = C[i];
-                StopSeviyesi = H[i];
-            }
+            Sistem.Yon[i] = "S";
+            Pozisyon = "S";
+            UcUcMesafe = C[i];
+            StopSeviyesi = H[i];
         }
     }
-    else if (Pozisyon == "A") // LONGDAYSAK
+    else if (Pozisyon == "A")
     {
-        // Kârı kilitle (İz süren stop yukarı çekilir)
-        if (C[i] > UcUcMesafe)
-        {
+        if (C[i] > UcUcMesafe) {
             UcUcMesafe = C[i];
             float yeniStop = UcUcMesafe * (1.0f - IzSurenYuzde);
-            if (yeniStop > StopSeviyesi) StopSeviyesi = yeniStop;
+            if (yeniStop > StopSeviyesi) StopSeviyesi = yeniStop; 
         }
-        
-        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: C[i] <= StopSeviyesi referansına uyumlandık)
+
         if (emaCrossbackLongIcin || C[i] <= StopSeviyesi)
         {
-            if (shortTrend && shortBreak && trendGucuShort && gucluHacim && (YON == "CIFT" || YON == "SADECE_SAT"))
-            {
+            if (shortTrend && shortBreak && gucluHacim && trendGucuShort) {
                 Sistem.Yon[i] = "S";
                 Pozisyon = "S";
-                UcUcMesafe = C[i];
-                StopSeviyesi = H[i];
-            }
-            else
-            {
-                Sistem.Yon[i] = "F"; // FLAT
+                UcUcMesafe = C[i]; StopSeviyesi = H[i];
+            } else {
+                Sistem.Yon[i] = "F"; 
                 Pozisyon = "F";
             }
         }
     }
-    else if (Pozisyon == "S") // SHORTTAYSAK
+    else if (Pozisyon == "S")
     {
-        // Kârı kilitle (İz süren stop aşağı çekilir)
-        if (C[i] < UcUcMesafe)
-        {
+        if (C[i] < UcUcMesafe) {
             UcUcMesafe = C[i];
-            float yeniStop = UcUcMesafe * (1.0f + IzSurenYuzde);
-            if (yeniStop < StopSeviyesi || StopSeviyesi == 0) StopSeviyesi = yeniStop;
+            float yeniStop = UcUcMesafe * (1.0f + IzSurenYuzde); 
+            if (yeniStop < StopSeviyesi || StopSeviyesi == 0) StopSeviyesi = yeniStop; 
         }
-        
-        // Çıkış: EMA crossback veya İzleyen Stop
+
         if (emaCrossbackShortIcin || C[i] >= StopSeviyesi)
         {
-            if (longTrend && longBreak && trendGucuLong && gucluHacim && (YON == "CIFT" || YON == "SADECE_AL"))
-            {
+            if (longTrend && longBreak && gucluHacim && trendGucuLong) {
                 Sistem.Yon[i] = "A";
                 Pozisyon = "A";
-                UcUcMesafe = C[i];
-                StopSeviyesi = L[i];
-            }
-            else
-            {
-                Sistem.Yon[i] = "F"; // FLAT
+                UcUcMesafe = C[i]; StopSeviyesi = L[i];
+            } else {
+                Sistem.Yon[i] = "F"; 
                 Pozisyon = "F";
             }
         }
     }
 }
-
-// === ÇİZİMLER (Index 3+ — Pro Performance Panel ile çakışmaz) ===
-Sistem.Cizgiler[3].Deger = EMA_Fast;
-Sistem.Cizgiler[3].Aciklama = "EMA 8";
-Sistem.Cizgiler[3].Renk = Sistem.Renk(255, 0, 0, 255);
-Sistem.Cizgiler[3].ActiveBool = true;
-
-Sistem.Cizgiler[4].Deger = EMA_Slow;
-Sistem.Cizgiler[4].Aciklama = "EMA 55";
-Sistem.Cizgiler[4].Renk = Sistem.Renk(255, 255, 0, 0);
-Sistem.Cizgiler[4].ActiveBool = true;
-
-Sistem.Cizgiler[5].Deger = HH10;
-Sistem.Cizgiler[5].Aciklama = "HH 17";
-Sistem.Cizgiler[5].ActiveBool = true;
 
 // ===============================================================================================
 // PERFORMANS PANELİ (3 KUTULU PRO SÜRÜM - Gelişmiş Metrikler Eklendi)
@@ -287,7 +249,7 @@ if (Sistem.Parametreler[3] == "X")
     var MaxDD = GercekMaxDD.ToString("0.0");
     var MaxDDTarihi = (GercekMaxDDTarih != DateTime.MinValue) ? GercekMaxDDTarih.ToString("dd.MM.yyyy") : "-"; 
 
-    // EĞRİLER: (SanalGetiri yerine Sistem.GetiriKZGun yazdım ki o sevdiğin merdiven yapısı grafik üstünde kalsın)
+    // EĞRİLER
     Sistem.Cizgiler[0].Deger = Sistem.GetiriKZGun; 
     Sistem.Cizgiler[0].Aciklama = "Gün KZ (Kapalı)"; 
     Sistem.Cizgiler[0].ActiveBool = true;
@@ -402,10 +364,8 @@ if (Sistem.Parametreler[3] == "X")
                           CalmarRatio.ToString("0.00") + Environment.NewLine +
                           SharpeT.ToString("0.00");
 
-        // Yeni kutunun X ekseni ayarlandı (475'ten başlıyor)
         Sistem.Dortgen(2, 475, ilksatirY - 8, 215, 115, Color.Black, Color.Black, Color.White);
         Sistem.GradientYaziEkle(Labels3, 2, 485, ilksatirY, Color.White, Color.White, "Tahoma", 10);
         Sistem.GradientYaziEkle(Results3, 2, 605, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
     }
 }
-
