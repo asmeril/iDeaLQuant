@@ -3039,7 +3039,6 @@ class OptimizerPanel(QWidget):
     
     def _on_progress(self, percent: int, message: str, elapsed: str, eta: str):
         self.progress_bar.setValue(percent)
-        # Timer independently updates the label, but we can update the message part here
         self.current_message = message
         self.current_eta = eta
         self._update_status_label()

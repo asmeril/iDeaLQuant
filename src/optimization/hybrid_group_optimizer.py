@@ -834,20 +834,20 @@ class HybridGroupOptimizer:
                     processes=self.n_parallel,
                     initializer=_init_group_pool,
                     initargs=(self.strategy_index,),
-                    maxtasksperchild=200  # RAM koruması: her 200 görevde worker yeniden başlar
+                    maxtasksperchild=200
                 )
-                # imap_unordered: canlı ilerleme gösterimi için
                 raw = []
                 best_np = 0.0
-                for idx, score in enumerate(self.pool.imap_unordered(_eval_combo_wrapper, tasks, chunksize=max(1, total // (self.n_parallel * 4)))):
+                chunk = min(32, max(1, total // (self.n_parallel * 8)))
+                progress_interval = max(500, total // 200)  # ~200 guncelleme toplam (UI kasmasin)
+                for idx, score in enumerate(self.pool.imap_unordered(_eval_combo_wrapper, tasks, chunksize=chunk)):
                     raw.append(score)
                     if score['net_profit'] > best_np:
                         best_np = score['net_profit']
-                    # Her 50 kombinasyonda ilerleme bildir
-                    if self.on_progress and (idx + 1) % 50 == 0:
-                        pct = int((idx + 1) / total * 100)
-                        self.on_progress(pct, f"[{group.name}] {idx+1}/{total} tarandı | En iyi: {best_np:.0f}")
-                    # İptal kontrolü
+                    if (idx + 1) % progress_interval == 0:
+                        if self.on_progress:
+                            pct = int((idx + 1) / total * 100)
+                            self.on_progress(pct, f"[{group.name}] {idx+1}/{total} tarandı | En iyi: {best_np:.0f}")
                     if self._is_cancelled and self._is_cancelled():
                         break
                 self.pool.close()
@@ -855,7 +855,7 @@ class HybridGroupOptimizer:
                 self.pool = None
             except Exception as e:
                 import traceback
-                print(f"Hybrid Pool Execution Error: {e}")
+                print(f"Hybrid Pool Error: {e}")
                 traceback.print_exc()
                 if self.pool:
                     self.pool.terminate()
