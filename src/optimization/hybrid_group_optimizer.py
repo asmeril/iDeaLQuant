@@ -1063,30 +1063,47 @@ class HybridGroupOptimizer:
                 old_results = self.group_results.get(group.name, [])
                 round_start_fitness[group.name] = old_results[0].get('fitness', 0) if old_results else 0
                 
-                # Satellite-Drone calistir
-                satellite_params = self._generate_satellite_params(group)
-                satellite_group = ParameterGroup(
-                    name=group.name + "_SAT",
-                    params=satellite_params,
-                    is_independent=True,
-                    default_values=group.default_values
-                )
-                satellite_results = self.run_group_optimization(satellite_group, fixed_params)
-                
-                if satellite_results:
-                    # Cluster bul ve Drone calistir
-                    drone_params = self._generate_drone_params(group, satellite_results)
+                # R1: Tam Satellite + Drone  |  R2+: Sadece Drone (önceki en iyinin etrafında)
+                if round_num == 1 or not old_results:
+                    # Ilk round: genis Satellite taramasi
+                    satellite_params = self._generate_satellite_params(group)
+                    satellite_group = ParameterGroup(
+                        name=group.name + "_SAT",
+                        params=satellite_params,
+                        is_independent=True,
+                        default_values=group.default_values
+                    )
+                    satellite_results = self.run_group_optimization(satellite_group, fixed_params)
+                    
+                    if satellite_results:
+                        drone_params = self._generate_drone_params(group, satellite_results)
+                        if drone_params:
+                            drone_group = ParameterGroup(
+                                name=group.name + "_DRONE",
+                                params=drone_params,
+                                is_independent=True,
+                                default_values=group.default_values
+                            )
+                            drone_results = self.run_group_optimization(drone_group, fixed_params)
+                            all_results = satellite_results + drone_results
+                        else:
+                            all_results = satellite_results
+                    else:
+                        all_results = []
+                else:
+                    # R2+: Onceki en iyi sonuclarin etrafinda sadece Drone taramasi
+                    drone_params = self._generate_drone_params(group, old_results)
                     if drone_params:
                         drone_group = ParameterGroup(
-                            name=group.name + "_DRONE",
+                            name=group.name + f"_R{round_num}_REFINE",
                             params=drone_params,
                             is_independent=True,
                             default_values=group.default_values
                         )
                         drone_results = self.run_group_optimization(drone_group, fixed_params)
-                        all_results = satellite_results + drone_results
+                        all_results = old_results + drone_results
                     else:
-                        all_results = satellite_results
+                        all_results = old_results
                     
                     all_results.sort(key=lambda x: x.get('fitness', x.get('net_profit', 0)), reverse=True)
                     from src.optimization.fitness import calculate_robust_fitness
