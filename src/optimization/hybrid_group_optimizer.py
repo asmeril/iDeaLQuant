@@ -602,8 +602,9 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
         from src.optimization.strategy5_optimizer import fast_backtest_strategy5
         
         # Worker basina bir kez: sabit arrayleri hazirla ve cache'le
-        if '_s5_arrays' not in dir() or _s5_arrays is None:
-            n = len(g_cache.closes)
+        # Guncelleme: Eger array boyutu degismisse (ornek: yeni tarih filtresi) cache'i yenile
+        n = len(g_cache.closes)
+        if '_s5_arrays' not in dir() or _s5_arrays is None or len(_s5_arrays[0]) != n:
             closes_f64 = np.ascontiguousarray(g_cache.closes, dtype=np.float64)
             highs_f64 = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
             lows_f64 = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
