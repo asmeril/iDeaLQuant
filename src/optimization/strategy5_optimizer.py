@@ -269,7 +269,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                 pos = 1
                 entry_price = closes[i]
                 uc_uc_mesafe = closes[i]
-                stop_seviyesi = lows[i]
+                stop_seviyesi = lows[i] if trailing_stop_ratio > 0 else 0.0
                 trades += 1
                 if current_day != last_trade_day:
                     active_days += 1
@@ -278,7 +278,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                 pos = -1
                 entry_price = closes[i]
                 uc_uc_mesafe = closes[i]
-                stop_seviyesi = highs[i]
+                stop_seviyesi = highs[i] if trailing_stop_ratio > 0 else 999999.0
                 trades += 1
                 if current_day != last_trade_day:
                     active_days += 1
@@ -286,15 +286,20 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                     
         elif pos == 1:
             # LONG yönetimi
-            # Trailing stop güncelle
-            if closes[i] > uc_uc_mesafe:
-                uc_uc_mesafe = closes[i]
-                yeni_stop = uc_uc_mesafe * (1.0 - trailing_stop_ratio)
-                if yeni_stop > stop_seviyesi:
-                    stop_seviyesi = yeni_stop
+            # Trailing stop güncelle (sadece aktifse)
+            if trailing_stop_ratio > 0:
+                if closes[i] > uc_uc_mesafe:
+                    uc_uc_mesafe = closes[i]
+                    yeni_stop = uc_uc_mesafe * (1.0 - trailing_stop_ratio)
+                    if yeni_stop > stop_seviyesi:
+                        stop_seviyesi = yeni_stop
             
-            # Çıkış kontrolü (bar-içi stop: L[i] kullan)
-            if ema_crossback_long or lows[i] <= stop_seviyesi:
+            # Çıkış kontrolü
+            exit_long = ema_crossback_long
+            if trailing_stop_ratio > 0 and lows[i] <= stop_seviyesi:
+                exit_long = True
+            
+            if exit_long:
                 pnl = closes[i] - entry_price
                 if pnl > 0: gross_profit += pnl
                 else: gross_loss += abs(pnl)
@@ -308,7 +313,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                     pos = -1
                     entry_price = closes[i]
                     uc_uc_mesafe = closes[i]
-                    stop_seviyesi = highs[i]
+                    stop_seviyesi = highs[i] if trailing_stop_ratio > 0 else 999999.0
                     trades += 1
                     if current_day != last_trade_day:
                         active_days += 1
@@ -320,15 +325,20 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                     
         elif pos == -1:
             # SHORT yönetimi
-            # Trailing stop güncelle
-            if closes[i] < uc_uc_mesafe:
-                uc_uc_mesafe = closes[i]
-                yeni_stop = uc_uc_mesafe * (1.0 + trailing_stop_ratio)
-                if yeni_stop < stop_seviyesi or stop_seviyesi == 0:
-                    stop_seviyesi = yeni_stop
+            # Trailing stop güncelle (sadece aktifse)
+            if trailing_stop_ratio > 0:
+                if closes[i] < uc_uc_mesafe:
+                    uc_uc_mesafe = closes[i]
+                    yeni_stop = uc_uc_mesafe * (1.0 + trailing_stop_ratio)
+                    if yeni_stop < stop_seviyesi or stop_seviyesi == 0:
+                        stop_seviyesi = yeni_stop
             
-            # Çıkış kontrolü (bar-içi stop: H[i] kullan)
-            if ema_crossback_short or highs[i] >= stop_seviyesi:
+            # Çıkış kontrolü
+            exit_short = ema_crossback_short
+            if trailing_stop_ratio > 0 and highs[i] >= stop_seviyesi:
+                exit_short = True
+            
+            if exit_short:
                 pnl = entry_price - closes[i]
                 if pnl > 0: gross_profit += pnl
                 else: gross_loss += abs(pnl)
@@ -342,7 +352,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                     pos = 1
                     entry_price = closes[i]
                     uc_uc_mesafe = closes[i]
-                    stop_seviyesi = lows[i]
+                    stop_seviyesi = lows[i] if trailing_stop_ratio > 0 else 0.0
                     trades += 1
                     if current_day != last_trade_day:
                         active_days += 1
