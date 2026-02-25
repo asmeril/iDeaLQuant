@@ -19,136 +19,122 @@ int VolMA_P = 20;
 float TrailingStopPct = 1.5f;
 
 // === GRAFİK BİLGİSİ ===
-var Grafikler = Sistem.GrafikVerileri;
-var O = Sistem.GrafikFiyatSec("Acilis");
-var H = Sistem.GrafikFiyatSec("Yuksek");
-var L = Sistem.GrafikFiyatSec("Dusuk");
-var C = Sistem.GrafikFiyatSec("Kapanis");
-var T = Sistem.GrafikFiyatSec("Tipik");
 var V = Sistem.GrafikVerileri;
-
-// Hacim Dizisi Oluştur
-var VolumeArray = Sistem.Liste(0);
-for (int i = 0; i < V.Count; i++)
-{
-    VolumeArray[i] = V[i].Vol; // iDeal Data'da Hacim/Lot verisi bar objesindedir
-}
+var O = Sistem.GrafikFiyatOku(V, "Acilis");
+var C = Sistem.GrafikFiyatOku(V, "Kapanis");
+var H = Sistem.GrafikFiyatOku(V, "Yuksek");
+var L = Sistem.GrafikFiyatOku(V, "Dusuk");
+var Vol = Sistem.GrafikFiyatOku(V, "Hacim");
 
 // === İNDİKATÖRLER ===
-var EMA_Fast = Sistem.EMA(C, EMA_Fast_P);
-var EMA_Slow = Sistem.EMA(C, EMA_Slow_P);
-var ADX_Val = Sistem.ADX(H, L, C, ADX_P);
-var HH = Sistem.HHV(H, Breakout_P);
-var LL = Sistem.LLV(L, Breakout_P);
+var EMA_Fast = Sistem.MA(C, "Exp", EMA_Fast_P);
+var EMA_Slow = Sistem.MA(C, "Exp", EMA_Slow_P);
+var ADX_Val = Sistem.ADX(ADX_P);
+var HH10 = Sistem.HHV(Breakout_P, "Yuksek");
+var LL10 = Sistem.LLV(Breakout_P, "Dusuk");
 
 // Hacim Ortalaması (SMA)
-var VolMA = Sistem.SMA(VolumeArray, VolMA_P);
+var VolMA = Sistem.MA(Vol, "Simple", VolMA_P);
 
 // === STRATEJI MANTIGI ===
-float iz_yuzde = TrailingStopPct / 100.0f;
-float ucUcMesafe = 0f;
-float stopSeviyesi = 0f;
-int pozisyon = 0; // 0=F, 1=A, -1=S
+float IzSurenYuzde = TrailingStopPct / 100.0f;
+float UcUcMesafe = 0f;
+float StopSeviyesi = 0f;
+string Pozisyon = "F"; // "A"=Long, "S"=Short, "F"=Nakit
 
-for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))) + 2; i < Grafikler.Count; i++)
+for (int i = 20; i < V.Count; i++)
 {
-    if (Sistem.Yon[i] != "") continue; // Zaten sinyal var
-    
-    // Güvenlik kontrolü
-    if (i >= EMA_Fast.Count || i >= EMA_Slow.Count || i >= ADX_Val.Count || i >= HH.Count || i >= LL.Count || i >= VolMA.Count) continue;
-
     // --- LONG KOSULLARI ---
     bool longTrend = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
-    bool longBreak = C[i] > HH[i - 1]; // Close, bir önceki barın HH'sini kırıyor mu?
-    bool longADX   = ADX_Val[i] >= ADX_Threshold && EMA_Fast[i] >= EMA_Fast[i - 1];
-    bool gucluHacim = VolumeArray[i] > VolMA[i];
-
+    bool longBreak = C[i] > HH10[i - 1]; 
+    bool trendGucuLong = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] > EMA_Fast[i - 1];
+    
     // --- SHORT KOSULLARI ---
     bool shortTrend = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
-    bool shortBreak = C[i] < LL[i - 1];
-    bool shortADX   = ADX_Val[i] >= ADX_Threshold && EMA_Fast[i] <= EMA_Fast[i - 1];
+    bool shortBreak = C[i] < LL10[i - 1];
+    bool trendGucuShort = ADX_Val[i] > ADX_Threshold && EMA_Fast[i] < EMA_Fast[i - 1];
 
-    if (pozisyon == 0)
+    bool gucluHacim = Vol[i] > VolMA[i];
+
+    // --- ÇIKIŞ KOSULLARI ---
+    bool emaCrossbackLongIcin = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
+    bool emaCrossbackShortIcin = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
+
+    if (Pozisyon == "F")
     {
         // --- GIRIS ---
-        if (longTrend && longBreak && longADX && gucluHacim)
+        if (longTrend && longBreak && trendGucuLong && gucluHacim)
         {
             if (YON == "CIFT" || YON == "SADECE_AL")
             {
                 Sistem.Yon[i] = "A"; // AL
-                pozisyon = 1;
-                ucUcMesafe = C[i];
-                stopSeviyesi = L[i];
+                Pozisyon = "A";
+                UcUcMesafe = C[i];
+                StopSeviyesi = L[i];
             }
         }
-        else if (shortTrend && shortBreak && shortADX && gucluHacim)
+        else if (shortTrend && shortBreak && trendGucuShort && gucluHacim)
         {
             if (YON == "CIFT" || YON == "SADECE_SAT")
             {
                 Sistem.Yon[i] = "S"; // SAT
-                pozisyon = -1;
-                ucUcMesafe = C[i];
-                stopSeviyesi = H[i];
+                Pozisyon = "S";
+                UcUcMesafe = C[i];
+                StopSeviyesi = H[i];
             }
         }
     }
-    else if (pozisyon == 1)
+    else if (Pozisyon == "A") // LONGDAYSAK
     {
-        // Trailing stop güncelle
-        if (C[i] > ucUcMesafe)
+        // Kârı kilitle (İz süren stop yukarı çekilir)
+        if (C[i] > UcUcMesafe)
         {
-            ucUcMesafe = C[i];
-            float yeniStop = ucUcMesafe * (1.0f - iz_yuzde);
-            if (yeniStop > stopSeviyesi) stopSeviyesi = yeniStop;
+            UcUcMesafe = C[i];
+            float yeniStop = UcUcMesafe * (1.0f - IzSurenYuzde);
+            if (yeniStop > StopSeviyesi) StopSeviyesi = yeniStop;
         }
         
-        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: L[i] kontrol)
-        bool emaCrossback = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
-        if (emaCrossback || L[i] <= stopSeviyesi)
+        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: C[i] <= StopSeviyesi referansına uyumlandık)
+        if (emaCrossbackLongIcin || C[i] <= StopSeviyesi)
         {
-            if (shortTrend && shortBreak && shortADX && gucluHacim && (YON == "CIFT" || YON == "SADECE_SAT"))
+            if (shortTrend && shortBreak && trendGucuShort && gucluHacim && (YON == "CIFT" || YON == "SADECE_SAT"))
             {
                 Sistem.Yon[i] = "S";
-                pozisyon = -1;
-                ucUcMesafe = C[i];
-                stopSeviyesi = H[i];
+                Pozisyon = "S";
+                UcUcMesafe = C[i];
+                StopSeviyesi = H[i];
             }
             else
             {
                 Sistem.Yon[i] = "F"; // FLAT
-                pozisyon = 0;
-                ucUcMesafe = 0f;
-                stopSeviyesi = 0f;
+                Pozisyon = "F";
             }
         }
     }
-    else if (pozisyon == -1)
+    else if (Pozisyon == "S") // SHORTTAYSAK
     {
-        // Trailing stop güncelle
-        if (C[i] < ucUcMesafe)
+        // Kârı kilitle (İz süren stop aşağı çekilir)
+        if (C[i] < UcUcMesafe)
         {
-            ucUcMesafe = C[i];
-            float yeniStop = ucUcMesafe * (1.0f + iz_yuzde);
-            if (yeniStop < stopSeviyesi || stopSeviyesi == 0) stopSeviyesi = yeniStop;
+            UcUcMesafe = C[i];
+            float yeniStop = UcUcMesafe * (1.0f + IzSurenYuzde);
+            if (yeniStop < StopSeviyesi || StopSeviyesi == 0) StopSeviyesi = yeniStop;
         }
         
-        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: H[i] kontrol)
-        bool emaCrossback = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
-        if (emaCrossback || H[i] >= stopSeviyesi)
+        // Çıkış: EMA crossback veya İzleyen Stop
+        if (emaCrossbackShortIcin || C[i] >= StopSeviyesi)
         {
-            if (longTrend && longBreak && longADX && gucluHacim && (YON == "CIFT" || YON == "SADECE_AL"))
+            if (longTrend && longBreak && trendGucuLong && gucluHacim && (YON == "CIFT" || YON == "SADECE_AL"))
             {
                 Sistem.Yon[i] = "A";
-                pozisyon = 1;
-                ucUcMesafe = C[i];
-                stopSeviyesi = L[i];
+                Pozisyon = "A";
+                UcUcMesafe = C[i];
+                StopSeviyesi = L[i];
             }
             else
             {
                 Sistem.Yon[i] = "F"; // FLAT
-                pozisyon = 0;
-                ucUcMesafe = 0f;
-                stopSeviyesi = 0f;
+                Pozisyon = "F";
             }
         }
     }
@@ -157,13 +143,15 @@ for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))
 // === ÇİZİMLER (Index 3+ — Pro Performance Panel ile çakışmaz) ===
 Sistem.Cizgiler[3].Deger = EMA_Fast;
 Sistem.Cizgiler[3].Aciklama = "EMA 8";
+Sistem.Cizgiler[3].Renk = Sistem.Renk(255, 0, 0, 255);
 Sistem.Cizgiler[3].ActiveBool = true;
 
 Sistem.Cizgiler[4].Deger = EMA_Slow;
 Sistem.Cizgiler[4].Aciklama = "EMA 55";
+Sistem.Cizgiler[4].Renk = Sistem.Renk(255, 255, 0, 0);
 Sistem.Cizgiler[4].ActiveBool = true;
 
-Sistem.Cizgiler[5].Deger = HH;
+Sistem.Cizgiler[5].Deger = HH10;
 Sistem.Cizgiler[5].Aciklama = "HH 17";
 Sistem.Cizgiler[5].ActiveBool = true;
 
@@ -177,13 +165,13 @@ float GetiriKayma = 0.0f;
 
 //-----------------------------------------------
 var renk = Color.Black;
-DateTime dateBaslangicTarih = (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture) > Grafikler[0].Date) ? (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture)) : Grafikler[0].Date;
+DateTime dateBaslangicTarih = (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture) > V[0].Date) ? (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture)) : V[0].Date;
 Sistem.GetiriHesapla(dateBaslangicTarih.ToString("dd.MM.yyyy"), GetiriKayma); 
 
 int InitBarNo = 0;
-for (int i = 0; i < Grafikler.Count; i++)
+for (int i = 0; i < V.Count; i++)
 {{
-    if (Grafikler[i].Date >= dateBaslangicTarih) {{ InitBarNo = i; break; }}
+    if (V[i].Date >= dateBaslangicTarih) {{ InitBarNo = i; break; }}
 }}
 
 // ------------------------------------------------------------------------------------------
@@ -206,12 +194,12 @@ float ToplamZarar = 0f;
 int KarliIslemSayisi = 0;
 int ZararliIslemSayisi = 0;
 
-for (int i = 1; i < Grafikler.Count; i++)
+for (int i = 1; i < V.Count; i++)
 {{
     float anlikKapananIslemKari = 0;
     bool islemKapandi = false;
 
-    if (Grafikler[i].Date >= dateBaslangicTarih)
+    if (V[i].Date >= dateBaslangicTarih)
     {{
         if (Sistem.Yon[i] == "A" && poz != 1)
         {{
@@ -251,7 +239,7 @@ for (int i = 1; i < Grafikler.Count; i++)
         // Gerçek Floating MaxDD Hesabı
         if (SanalGetiri[i] > ZirveBakiye) ZirveBakiye = SanalGetiri[i];
         float anlikDD = ZirveBakiye - SanalGetiri[i];
-        if (anlikDD > GercekMaxDD) {{ GercekMaxDD = anlikDD; GercekMaxDDTarih = Grafikler[i].Date; }}
+        if (anlikDD > GercekMaxDD) {{ GercekMaxDD = anlikDD; GercekMaxDDTarih = V[i].Date; }}
     }}
 }}
 
@@ -260,12 +248,12 @@ for (int i = 1; i < Grafikler.Count; i++)
 // ------------------------------------------------------------------------------------------
 var DateBugun = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 var DateDunSonBarNo = 0;
-for (int i = Grafikler.Count - 1; i > 0; i--)
+for (int i = V.Count - 1; i > 0; i--)
 {{
-    if (Grafikler[i].Date < DateBugun) {{ DateDunSonBarNo = i; break; }}
+    if (V[i].Date < DateBugun) {{ DateDunSonBarNo = i; break; }}
 }}
 
-var gunluk_getiri = SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateDunSonBarNo];
+var gunluk_getiri = SanalGetiri[V.Count - 1] - SanalGetiri[DateDunSonBarNo];
 var kzbugunx      = gunluk_getiri.ToString("0.0");
 string Labelsx    =  "Bugün" + Environment.NewLine ;
 string Resultsx   = kzbugunx + Environment.NewLine ;
@@ -284,9 +272,9 @@ if (Sistem.Parametreler[3] == "X")
     var Sure = ((DateTime.Now - dateBaslangicTarih).TotalDays / 30.4);
     var SureTxt = Sure.ToString("0.0");
     
-    var kzSure = SanalGetiri[Grafikler.Count - 1].ToString("0.0");
+    var kzSure = SanalGetiri[V.Count - 1].ToString("0.0");
     var kzbugun = gunluk_getiri.ToString("0.0");
-    var yuzde_kz = (O[InitBarNo] != 0) ? (( SanalGetiri[Grafikler.Count - 1] * 100.0f ) / O[InitBarNo]) : 0;
+    var yuzde_kz = (O[InitBarNo] != 0) ? (( SanalGetiri[V.Count - 1] * 100.0f ) / O[InitBarNo]) : 0;
     var kzSure_yuzde = "  %" + yuzde_kz.ToString("0.0");
 
     string ToplamIslem = Sistem.GetiriToplamIslem.ToString("0");
@@ -324,8 +312,8 @@ if (Sistem.Parametreler[3] == "X")
     float WinRate = (IslemGetirileri.Count > 0) ? ((float)KarliIslemSayisi / IslemGetirileri.Count) : 0f;
     float Expectancy = (WinRate * OrtalamaKar) - ((1f - WinRate) * OrtalamaZarar);
     
-    float RecoveryFactor = (GercekMaxDD > 0) ? (SanalGetiri[Grafikler.Count - 1] / GercekMaxDD) : 0f;
-    float YillikGetiri = (Sure > 0) ? (SanalGetiri[Grafikler.Count - 1] / (float)(Sure / 12f)) : 0f;
+    float RecoveryFactor = (GercekMaxDD > 0) ? (SanalGetiri[V.Count - 1] / GercekMaxDD) : 0f;
+    float YillikGetiri = (Sure > 0) ? (SanalGetiri[V.Count - 1] / (float)(Sure / 12f)) : 0f;
     float CalmarRatio = (GercekMaxDD > 0) ? (YillikGetiri / GercekMaxDD) : 0f;
 
     // İşlem Bazlı Sharpe Oranı (Ticari Varyans Hesaplaması)
@@ -342,43 +330,43 @@ if (Sistem.Parametreler[3] == "X")
         
         var DateHaftaBasi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(-daysToSubtract);
         var DateHaftaBasiBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateHaftaBasi) {{ DateHaftaBasiBarNo = i; break; }}
-        var kzBuHafta = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateHaftaBasiBarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date < DateHaftaBasi) {{ DateHaftaBasiBarNo = i; break; }}
+        var kzBuHafta = (SanalGetiri[V.Count - 1] - SanalGetiri[DateHaftaBasiBarNo]).ToString("0.0");
 
         var DateBuAy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         var DateBuAyBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateBuAy) {{ DateBuAyBarNo = i; break; }}
-        var kzbuay = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateBuAyBarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date < DateBuAy) {{ DateBuAyBarNo = i; break; }}
+        var kzbuay = (SanalGetiri[V.Count - 1] - SanalGetiri[DateBuAyBarNo]).ToString("0.0");
 
         var Date30 = DateTime.Now.AddDays(-30);
         var Date30BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date30) {{ Date30BarNo = i; break; }}
-        var kz30 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date30BarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date <= Date30) {{ Date30BarNo = i; break; }}
+        var kz30 = (SanalGetiri[V.Count - 1] - SanalGetiri[Date30BarNo]).ToString("0.0");
 
         var Date60 = DateTime.Now.AddDays(-60);
         var Date60BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date60) {{ Date60BarNo = i; break; }}
-        var kz60 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date60BarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date <= Date60) {{ Date60BarNo = i; break; }}
+        var kz60 = (SanalGetiri[V.Count - 1] - SanalGetiri[Date60BarNo]).ToString("0.0");
 
         var Date90 = DateTime.Now.AddDays(-90);
         var Date90BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date90) {{ Date90BarNo = i; break; }}
-        var kz90 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date90BarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date <= Date90) {{ Date90BarNo = i; break; }}
+        var kz90 = (SanalGetiri[V.Count - 1] - SanalGetiri[Date90BarNo]).ToString("0.0");
 
         var Date180 = DateTime.Now.AddDays(-180);
         var Date180BarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date180) {{ Date180BarNo = i; break; }}
-        var kz180 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date180BarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date <= Date180) {{ Date180BarNo = i; break; }}
+        var kz180 = (SanalGetiri[V.Count - 1] - SanalGetiri[Date180BarNo]).ToString("0.0");
 
         var DateYilBasi = new DateTime(DateTime.Now.Year, 1, 1);
         var DateYilBasiBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateYilBasi) {{ DateYilBasiBarNo = i; break; }}
-        var kzBuYil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateYilBasiBarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date < DateYilBasi) {{ DateYilBasiBarNo = i; break; }}
+        var kzBuYil = (SanalGetiri[V.Count - 1] - SanalGetiri[DateYilBasiBarNo]).ToString("0.0");
 
         var Date1Yil = DateTime.Now.AddYears(-1);
         var Date1YilBarNo = 0;
-        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date1Yil) {{ Date1YilBarNo = i; break; }}
-        var kz1Yil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date1YilBarNo]).ToString("0.0");
+        for (int i = V.Count - 1; i > 0; i--) if (V[i].Date <= Date1Yil) {{ Date1YilBarNo = i; break; }}
+        var kz1Yil = (SanalGetiri[V.Count - 1] - SanalGetiri[Date1YilBarNo]).ToString("0.0");
 
         // --- PANEL 1 ÇİZİMİ (SOL) ---
         string Labels = SureTxt + " Ay" + Environment.NewLine + "Bugün" + Environment.NewLine + "Bu Hafta" + Environment.NewLine + "Bu Ay" + Environment.NewLine + "30 Gün" + Environment.NewLine + "60 Gün" + Environment.NewLine + "90 Gün" + Environment.NewLine + "180 Gün" + Environment.NewLine + "Bu Yıl" + Environment.NewLine + "Son 1 Yıl";
