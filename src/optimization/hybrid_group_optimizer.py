@@ -592,45 +592,64 @@ def _init_group_pool(strategy_index):
 
 def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
     """S5 Oliver Kell parametrelerini Numba kernel ile degerlendir."""
-    global g_cache
+    global g_cache, _s5_arrays
+    zero_result = {'net_profit': 0.0, 'trades': 0, 'pf': 0.0, 'max_dd': 0.0, 'sharpe': 0.0, 'fitness': 0.0}
+    
     if g_cache is None:
-        return {'net_profit': 0.0, 'trades': 0, 'pf': 0.0, 'max_dd': 0.0, 'sharpe': 0.0, 'fitness': 0.0}
+        return zero_result
     
-    ema_fast_p = int(params.get('ema_fast', 10))
-    ema_slow_p = int(params.get('ema_slow', 20))
-    breakout_p = int(params.get('breakout_period', 10))
-    adx_p = int(params.get('adx_period', 14))
-    adx_thresh = float(params.get('adx_threshold', 20.0))
-    vol_ma_p = int(params.get('vol_ma_period', 20))
-    trail_pct = float(params.get('trailing_stop_pct', 1.5))
-    
-    # Cached indicator arrays
-    ema_fast_arr = np.array(g_cache.get_ema(ema_fast_p), dtype=np.float64)
-    ema_slow_arr = np.array(g_cache.get_ema(ema_slow_p), dtype=np.float64)
-    adx_arr = np.array(g_cache.get_adx(adx_p), dtype=np.float64)
-    hhv_arr = np.array(g_cache.get_hhv(breakout_p), dtype=np.float64)
-    llv_arr = np.array(g_cache.get_llv(breakout_p), dtype=np.float64)
-    vol_ma_arr = np.array(g_cache.get_vol_ma(vol_ma_p), dtype=np.float64)
-    
-    # Trading mask
-    mask_arr = np.ones(len(g_cache.closes), dtype=np.bool_)
-    times_arr = np.zeros(len(g_cache.closes), dtype=np.int64)
-    if hasattr(g_cache, 'times') and g_cache.times is not None:
-        try:
-            times_arr = np.array([t.timestamp() for t in g_cache.times], dtype=np.int64)
-        except:
-            pass
-    
-    np_val, trades, pf, dd, sharpe, adays, tdays = fast_backtest_strategy5(
-        g_cache.closes, g_cache.highs, g_cache.lows, g_cache.volumes,
-        ema_fast_arr, ema_slow_arr,
-        adx_arr, hhv_arr, llv_arr, vol_ma_arr,
-        mask_arr, times_arr,
-        adx_thresh, trail_pct / 100.0
-    )
-    
-    fit = quick_fitness(np_val, pf, dd, trades, sharpe=sharpe, active_days=adays, total_days=tdays)
-    return {'net_profit': np_val, 'trades': trades, 'pf': pf, 'max_dd': dd, 'sharpe': sharpe, 'fitness': fit}
+    try:
+        # Worker basina bir kez: sabit arrayleri hazirla ve cache'le
+        if '_s5_arrays' not in dir() or _s5_arrays is None:
+            n = len(g_cache.closes)
+            closes_f64 = np.ascontiguousarray(g_cache.closes, dtype=np.float64)
+            highs_f64 = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
+            lows_f64 = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
+            vols_f64 = np.ascontiguousarray(g_cache.volumes, dtype=np.float64)
+            mask_arr = np.ones(n, dtype=np.bool_)
+            times_arr = np.zeros(n, dtype=np.int64)
+            if hasattr(g_cache, 'times') and g_cache.times:
+                try:
+                    times_arr = np.array([int(t.timestamp()) for t in g_cache.times], dtype=np.int64)
+                except:
+                    pass
+            _s5_arrays = (closes_f64, highs_f64, lows_f64, vols_f64, mask_arr, times_arr)
+        
+        closes_f64, highs_f64, lows_f64, vols_f64, mask_arr, times_arr = _s5_arrays
+        
+        ema_fast_p = int(params.get('ema_fast', 10))
+        ema_slow_p = int(params.get('ema_slow', 20))
+        breakout_p = int(params.get('breakout_period', 10))
+        adx_p = int(params.get('adx_period', 14))
+        adx_thresh = float(params.get('adx_threshold', 20.0))
+        vol_ma_p = int(params.get('vol_ma_period', 20))
+        trail_pct = float(params.get('trailing_stop_pct', 1.5))
+        
+        # Cached indicator arrays
+        ema_fast_arr = np.ascontiguousarray(g_cache.get_ema(ema_fast_p), dtype=np.float64)
+        ema_slow_arr = np.ascontiguousarray(g_cache.get_ema(ema_slow_p), dtype=np.float64)
+        adx_arr = np.ascontiguousarray(g_cache.get_adx(adx_p), dtype=np.float64)
+        hhv_arr = np.ascontiguousarray(g_cache.get_hhv(breakout_p), dtype=np.float64)
+        llv_arr = np.ascontiguousarray(g_cache.get_llv(breakout_p), dtype=np.float64)
+        vol_ma_arr = np.ascontiguousarray(g_cache.get_vol_ma(vol_ma_p), dtype=np.float64)
+        
+        np_val, trades, pf, dd, sharpe, adays, tdays = fast_backtest_strategy5(
+            closes_f64, highs_f64, lows_f64, vols_f64,
+            ema_fast_arr, ema_slow_arr,
+            adx_arr, hhv_arr, llv_arr, vol_ma_arr,
+            mask_arr, times_arr,
+            adx_thresh, trail_pct / 100.0
+        )
+        
+        fit = quick_fitness(np_val, pf, dd, trades, sharpe=sharpe, active_days=adays, total_days=tdays)
+        return {'net_profit': np_val, 'trades': trades, 'pf': pf, 'max_dd': dd, 'sharpe': sharpe, 'fitness': fit}
+    except Exception as e:
+        import traceback
+        print(f"[S5_EVAL ERROR] {e}")
+        traceback.print_exc()
+        return zero_result
+
+_s5_arrays = None  # Module-level cache for S5 arrays
 
 
 def _eval_combo_wrapper(params_and_strategy_and_costs):
