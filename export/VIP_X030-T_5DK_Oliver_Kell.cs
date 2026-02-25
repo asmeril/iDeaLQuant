@@ -50,10 +50,6 @@ float ucUcMesafe = 0f;
 float stopSeviyesi = 0f;
 int pozisyon = 0; // 0=F, 1=A, -1=S
 
-// Hacim varsa kullan, yoksa sürekli true (Sistem.Lot boşsa sinyali kesmesin)
-bool hacimAktif = true;
-if (VolMA[Math.Min(100, VolMA.Count - 1)] <= 0 && VolMA[VolMA.Count - 1] <= 0) hacimAktif = false;
-
 for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))) + 2; i < Grafikler.Count; i++)
 {
     if (Sistem.Yon[i] != "") continue; // Zaten sinyal var
@@ -65,7 +61,7 @@ for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))
     bool longTrend = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
     bool longBreak = C[i] > HH[i - 1]; // Close, bir önceki barın HH'sini kırıyor mu?
     bool longADX   = ADX_Val[i] >= ADX_Threshold && EMA_Fast[i] >= EMA_Fast[i - 1];
-    bool gucluHacim = hacimAktif ? (VolumeArray[i] > VolMA[i]) : true;
+    bool gucluHacim = VolumeArray[i] > VolMA[i];
 
     // --- SHORT KOSULLARI ---
     bool shortTrend = C[i] < EMA_Fast[i] && C[i] < EMA_Slow[i];
