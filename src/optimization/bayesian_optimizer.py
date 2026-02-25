@@ -419,9 +419,12 @@ class BayesianObjective:
             highs = np.ascontiguousarray(cache.highs, dtype=np.float64)
             lows = np.ascontiguousarray(cache.lows, dtype=np.float64)
             vols = np.ascontiguousarray(cache.volume, dtype=np.float64)
-            
             # Mask
-            mask_arr = np.ones(len(closes), dtype=np.bool_)
+            try:
+                from src.engine.data import OHLCV
+                mask_arr = OHLCV(self.cache.df).get_trading_mask(self.vade_tipi).astype(np.bool_)
+            except:
+                mask_arr = np.ones(len(closes), dtype=np.bool_)
             
             # Times
             times_arr = np.zeros(len(closes), dtype=np.int64)

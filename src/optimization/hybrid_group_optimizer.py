@@ -583,14 +583,16 @@ class IndicatorCache:
 # ==============================================================================
 # GLOBAL HELPERS
 # ==============================================================================
-def _init_group_pool(strategy_index, df_received=None):
-    global g_cache
+def _init_group_pool(strategy_index, df_received=None, vade_tipi="ENDEKS"):
+    global g_cache, g_mask
     if g_cache is None:
         if df_received is not None:
             g_cache = IndicatorCache(df_received)
+            from src.engine.data import OHLCV
+            g_mask = OHLCV(df_received).get_trading_mask(vade_tipi).values
         else:
             from src.optimization.strategy5_optimizer import load_data_and_mask
-            df, _ = load_data_and_mask()
+            df, g_mask = load_data_and_mask(vade_tipi)
             g_cache = IndicatorCache(df)
 
 def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
@@ -613,7 +615,7 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
             highs_f64 = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
             lows_f64 = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
             vols_f64 = np.ascontiguousarray(g_cache.volume, dtype=np.float64)
-            mask_arr = np.ones(n, dtype=np.bool_)
+            mask_arr = np.array(g_mask, dtype=np.bool_)
             times_arr = np.zeros(n, dtype=np.int64)
             if hasattr(g_cache, 'times') and g_cache.times:
                 try:
@@ -839,7 +841,7 @@ class HybridGroupOptimizer:
                 self.pool = Pool(
                     processes=self.n_parallel,
                     initializer=_init_group_pool,
-                    initargs=(self.strategy_index, self.data_df),
+                    initargs=(self.strategy_index, self.data_df, self.vade_tipi),
                     maxtasksperchild=200
                 )
                 raw = []
@@ -873,7 +875,7 @@ class HybridGroupOptimizer:
                     # combos ile sıra eşleşmesi artık yok (unordered), parametreler score içinde
                     results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **score})
         else:
-            _init_group_pool(self.strategy_index, self.data_df)
+            _init_group_pool(self.strategy_index, self.data_df, self.vade_tipi)
             for combo in combos:
                 if self._is_cancelled and self._is_cancelled(): break
                 score = _evaluate_params_static({**base_params, **combo, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage)

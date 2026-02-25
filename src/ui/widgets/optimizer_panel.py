@@ -2830,7 +2830,9 @@ class OptimizerPanel(QWidget):
             from src.optimization.checkpoint_manager import CheckpointManager
             ckpt = CheckpointManager()
             all_cp = ckpt.list_all()
-            for job_id, data in all_cp.items():
+            for cp_item in all_cp:
+                job_id = cp_item.get('job_id', 'unknown')
+                data = cp_item.get('data', {})
                 ts = data.get('timestamp', '?')
                 method = data.get('method', job_id)
                 phase = data.get('current_phase', data.get('phase', data.get('round', data.get('generation', data.get('trial', '?')))))

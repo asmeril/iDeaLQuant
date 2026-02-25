@@ -53,7 +53,7 @@ class CheckpointManager:
         Crash olsa bile eski checkpoint bozulmaz.
         """
         path = self._path(job_id)
-        tmp = path + ".tmp"
+        tmp = path + f".{os.getpid()}.tmp"
         try:
             payload = {
                 'job_id': job_id,

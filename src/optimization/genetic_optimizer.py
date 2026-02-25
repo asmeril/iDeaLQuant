@@ -659,10 +659,10 @@ class FitnessEvaluator:
             vol_ma_arr = cache.get_vol_ma(vol_ma_p)
             
             # Mask
-            if hasattr(self.df, 'get_trading_mask'):
-                mask_series = self.df.get_trading_mask(self.vade_tipi)
-                mask_arr = mask_series.values
-            else:
+            try:
+                from src.engine.data import OHLCV
+                mask_arr = OHLCV(self.df).get_trading_mask(self.vade_tipi).astype(bool)
+            except:
                 mask_arr = np.ones(len(self.closes), dtype=bool)
             
             # Run Fast Backtest
