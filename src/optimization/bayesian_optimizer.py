@@ -162,6 +162,8 @@ class BayesianObjective:
             result = self._evaluate_strategy3(params)
         elif self.strategy_index == 3:
             result = self._evaluate_strategy4(params)
+        elif self.strategy_index == 4:
+            result = self._evaluate_strategy5(params)
         else:
             raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         
@@ -382,6 +384,85 @@ class BayesianObjective:
             
         except Exception as e:
             # print(f"S4 Eval Error: {e}")
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
+    def _evaluate_strategy5(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 5 (Oliver Kell) icin fitness hesapla"""
+        try:
+            from src.optimization.strategy5_optimizer import fast_backtest_strategy5, IndicatorCache as S5IndicatorCache
+            import numpy as np
+            from src.optimization.fitness import quick_fitness
+            
+            # Cache Management
+            if 's5_cache' not in self.cache._cache:
+                self.cache._cache['s5_cache'] = S5IndicatorCache(self.cache.df)
+            cache = self.cache._cache['s5_cache']
+            
+            # Extract Params
+            ema_fast_p = int(params.get('ema_fast', 10))
+            ema_slow_p = int(params.get('ema_slow', 20))
+            breakout_p = int(params.get('breakout_period', 10))
+            adx_p = int(params.get('adx_period', 14))
+            adx_thresh = float(params.get('adx_threshold', 20.0))
+            vol_ma_p = int(params.get('vol_ma_period', 20))
+            trail_pct = float(params.get('trailing_stop_pct', 0))  # 0 = devre disi
+            
+            # Get Indicator Arrays (using cache)
+            ema_fast_arr = np.ascontiguousarray(cache.get_ema(ema_fast_p), dtype=np.float64)
+            ema_slow_arr = np.ascontiguousarray(cache.get_ema(ema_slow_p), dtype=np.float64)
+            adx_arr = np.ascontiguousarray(cache.get_adx(adx_p), dtype=np.float64)
+            hhv_arr = np.ascontiguousarray(cache.get_hhv(breakout_p), dtype=np.float64)
+            llv_arr = np.ascontiguousarray(cache.get_llv(breakout_p), dtype=np.float64)
+            vol_ma_arr = np.ascontiguousarray(cache.get_vol_ma(vol_ma_p), dtype=np.float64)
+            
+            closes = np.ascontiguousarray(cache.closes, dtype=np.float64)
+            highs = np.ascontiguousarray(cache.highs, dtype=np.float64)
+            lows = np.ascontiguousarray(cache.lows, dtype=np.float64)
+            vols = np.ascontiguousarray(cache.volumes, dtype=np.float64)
+            
+            # Mask
+            mask_arr = np.ones(len(closes), dtype=np.bool_)
+            
+            # Times
+            times_arr = np.zeros(len(closes), dtype=np.int64)
+            if hasattr(cache, 'times') and cache.times:
+                try:
+                    times_arr = np.array([int(t.timestamp()) for t in cache.times], dtype=np.int64)
+                except:
+                    pass
+            
+            # Run Fast Backtest
+            np_val, trades, pf, max_dd, sharpe, active_days, total_days = fast_backtest_strategy5(
+                closes, highs, lows, vols,
+                ema_fast_arr, ema_slow_arr,
+                adx_arr, hhv_arr, llv_arr, vol_ma_arr,
+                mask_arr, times_arr,
+                adx_thresh, trail_pct / 100.0
+            )
+            
+            if trades == 0 or np_val <= -999:
+                return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
+            
+            # Fitness Calc
+            fitness = quick_fitness(
+                np_val, pf, max_dd, trades, sharpe=sharpe,
+                active_days=active_days, total_days=total_days,
+                commission=0.0, slippage=0.0
+            )
+            
+            return {
+                'net_profit': np_val,
+                'trades': trades,
+                'pf': pf,
+                'max_dd': max_dd,
+                'sharpe': sharpe,
+                'fitness': fitness
+            }
+            
+        except Exception as e:
+            import traceback
+            print(f"S5 Bayesian Eval Error: {e}")
+            traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
     
     def _run_backtest(self, params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
