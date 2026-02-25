@@ -50,6 +50,7 @@ class OHLCV:
         self.df = df.copy()
         
         # Standardize common Turkish/capitalized columns to lowercase english
+        # Ignore renaming if the target english column already exists (prevents duplicate columns)
         mapping = {
             'DateTime': 'datetime', 'Tarih': 'datetime',
             'Acilis': 'open', 'Open': 'open',
@@ -58,7 +59,13 @@ class OHLCV:
             'Kapanis': 'close', 'Close': 'close',
             'Hacim': 'volume', 'Lot': 'volume', 'Volume': 'volume'
         }
-        rename_dict = {c: mapping[c] for c in self.df.columns if c in mapping}
+        rename_dict = {}
+        for c in self.df.columns:
+            if c in mapping:
+                target = mapping[c]
+                if target not in self.df.columns and target not in rename_dict.values():
+                    rename_dict[c] = target
+                    
         self.df = self.df.rename(columns=rename_dict)
         
         self._ensure_columns()
