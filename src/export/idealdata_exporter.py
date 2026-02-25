@@ -271,7 +271,7 @@ if (Sistem.Parametreler[3] == "X")
     // 3. ADIM: YENİ MATEMATİKSEL METRİKLER (PANEL 3 İÇİN)
     // ------------------------------------------------------------------------------------------
     float OrtalamaKar = (KarliIslemSayisi > 0) ? (ToplamKar / KarliIslemSayisi) : 0f;
-    float OrtalamaZarar = (ZarliIslemSayisi > 0) ? (ToplamZarar / ZararliIslemSayisi) : 0f;
+    float OrtalamaZarar = (ZararliIslemSayisi > 0) ? (ToplamZarar / ZararliIslemSayisi) : 0f;
     float PayoffRatio = (OrtalamaZarar > 0) ? (OrtalamaKar / OrtalamaZarar) : 0f;
     
     float WinRate = (IslemGetirileri.Count > 0) ? ((float)KarliIslemSayisi / IslemGetirileri.Count) : 0f;
