@@ -387,16 +387,36 @@ class IndicatorCache:
     """
     def __init__(self, df):
         self.df = df
-        open_col, high_col, low_col, close_col, vol_col = 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Lot'
+        
+        # Sütunları güvenli şekilde al (önce standart, yoksa Türkçe)
+        open_col = 'open' if 'open' in df.columns else 'Acilis'
+        high_col = 'high' if 'high' in df.columns else 'Yuksek'
+        low_col = 'low' if 'low' in df.columns else 'Dusuk'
+        close_col = 'close' if 'close' in df.columns else 'Kapanis'
+        vol_col = 'volume' if 'volume' in df.columns else ('Lot' if 'Lot' in df.columns else 'Hacim')
+        
         self.opens = df[open_col].values.flatten()
         self.closes = df[close_col].values.flatten()
         self.highs = df[high_col].values.flatten()
         self.lows = df[low_col].values.flatten()
-        self.typical = df['Tipik'].values.flatten()
+        
+        # Typical price
+        if 'Tipik' in df.columns:
+            self.typical = df['Tipik'].values.flatten()
+        else:
+            self.typical = ((self.highs + self.lows + self.closes) / 3.0)
+            
         self.lots = df[vol_col].values.flatten()
         self.volumes = df[vol_col].values.flatten()
         self.n = len(self.closes)
-        self.times = df['DateTime'].tolist()
+        
+        # Datetime
+        dt_col = 'datetime' if 'datetime' in df.columns else 'DateTime'
+        if dt_col in df.columns:
+            self.times = df[dt_col].tolist()
+        else:
+            self.times = [None] * self.n
+            
         self.dates = self.times
         self._cache = {}
     
@@ -614,7 +634,7 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
             closes_f64 = np.ascontiguousarray(g_cache.closes, dtype=np.float64)
             highs_f64 = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
             lows_f64 = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
-            vols_f64 = np.ascontiguousarray(g_cache.volume, dtype=np.float64)
+            vols_f64 = np.ascontiguousarray(g_cache.volumes, dtype=np.float64)
             mask_arr = np.array(g_mask, dtype=np.bool_)
             times_arr = np.zeros(n, dtype=np.int64)
             if hasattr(g_cache, 'times') and g_cache.times:
