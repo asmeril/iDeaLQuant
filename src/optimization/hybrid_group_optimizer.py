@@ -583,11 +583,15 @@ class IndicatorCache:
 # ==============================================================================
 # GLOBAL HELPERS
 # ==============================================================================
-def _init_group_pool(strategy_index):
+def _init_group_pool(strategy_index, df_received=None):
     global g_cache
     if g_cache is None:
-        df = load_data()
-        g_cache = IndicatorCache(df)
+        if df_received is not None:
+            g_cache = IndicatorCache(df_received)
+        else:
+            from src.optimization.strategy5_optimizer import load_data_and_mask
+            df, _ = load_data_and_mask()
+            g_cache = IndicatorCache(df)
 
 def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
     """S5 Oliver Kell parametrelerini Numba kernel ile degerlendir."""
@@ -784,7 +788,7 @@ def backtest_with_trades(closes, signals, exits_long, exits_short, commission: f
 class HybridGroupOptimizer:
     def __init__(self, groups: List[ParameterGroup], process_id: str = None, strategy_index: int = 0, 
                  is_cancelled_callback=None, on_progress_callback=None, n_parallel: int = 4, 
-                 commission: float = 0.0, slippage: float = 0.0, vade_tipi: str = "ENDEKS"):
+                 commission: float = 0.0, slippage: float = 0.0, vade_tipi: str = "ENDEKS", data_df=None):
         self.groups = groups
         self.independent_groups = [g for g in groups if g.is_independent]
         self.cascaded_groups = [g for g in groups if not g.is_independent]
@@ -792,6 +796,7 @@ class HybridGroupOptimizer:
         self.on_progress = on_progress_callback
         self.commission, self.slippage = commission, slippage
         self.vade_tipi = vade_tipi
+        self.data_df = data_df
         self.group_results, self.combined_results, self.final_results = {}, [], []
         self.pool = None  # Process pool for termination support
 
@@ -834,7 +839,7 @@ class HybridGroupOptimizer:
                 self.pool = Pool(
                     processes=self.n_parallel,
                     initializer=_init_group_pool,
-                    initargs=(self.strategy_index,),
+                    initargs=(self.strategy_index, self.data_df),
                     maxtasksperchild=200
                 )
                 raw = []
@@ -868,7 +873,7 @@ class HybridGroupOptimizer:
                     # combos ile sıra eşleşmesi artık yok (unordered), parametreler score içinde
                     results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **score})
         else:
-            _init_group_pool(self.strategy_index)
+            _init_group_pool(self.strategy_index, self.data_df)
             for combo in combos:
                 if self._is_cancelled and self._is_cancelled(): break
                 score = _evaluate_params_static({**base_params, **combo, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage)

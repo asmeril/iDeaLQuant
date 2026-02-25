@@ -1217,7 +1217,8 @@ class OptimizationWorker(QThread):
             n_parallel=self.n_parallel,
             commission=self.commission,
             slippage=self.slippage,
-            vade_tipi=vade_tipi
+            vade_tipi=vade_tipi,
+            data_df=self.data
         )
         self.current_optimizer = optimizer
         
