@@ -23,7 +23,6 @@ from src.indicators.oscillators import TRIX
 from src.strategies.score_based import ScoreBasedStrategy
 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.paradise_strategy import ParadiseStrategy
-from src.optimization.strategy5_optimizer import fast_backtest_strategy5
 from src.strategies.paradise_strategy import ParadiseStrategy
 from src.optimization.fitness import quick_fitness, calculate_sharpe
 from src.strategies.holidays import vade_sonu_is_gunu
@@ -599,6 +598,9 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
         return zero_result
     
     try:
+        # Lazy import: top-level'da import edilirse Windows Pool workers crash eder
+        from src.optimization.strategy5_optimizer import fast_backtest_strategy5
+        
         # Worker basina bir kez: sabit arrayleri hazirla ve cache'le
         if '_s5_arrays' not in dir() or _s5_arrays is None:
             n = len(g_cache.closes)
@@ -818,11 +820,12 @@ class HybridGroupOptimizer:
         return [dict(zip(keys, v)) for v in product(*values)]
 
     def run_group_optimization(self, group: ParameterGroup, fixed_params: Dict[str, Any] = None) -> List[Dict]:
-        print(f"\n=== Grup: {group.name} ===")
+        print(f"\n=== Grup: {group.name} (strategy_index={self.strategy_index}) ===")
         base_params = self.get_default_params(exclude_group=group.name)
         if fixed_params: base_params.update(fixed_params)
         combos = self.generate_combinations(group.params)
         total = len(combos)
+        print(f"  Toplam kombinasyon: {total}, n_parallel={self.n_parallel}")
         results = []
         if self.n_parallel > 1:
             tasks = [({**base_params, **c, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage) for c in combos]
@@ -851,7 +854,9 @@ class HybridGroupOptimizer:
                 self.pool.join()
                 self.pool = None
             except Exception as e:
+                import traceback
                 print(f"Hybrid Pool Execution Error: {e}")
+                traceback.print_exc()
                 if self.pool:
                     self.pool.terminate()
                     self.pool = None
