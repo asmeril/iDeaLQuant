@@ -232,30 +232,32 @@ def quick_fitness(
     return fitness
 
 
-def calculate_robust_fitness(results: list, param_keys: list = None) -> list:
+def calculate_robust_fitness(results: list, param_keys: list = None, n_clusters: int = 0) -> list:
     """
-    Sonuç listesindeki her sonuç için komşu yoğunluğuna dayalı robust_fitness hesapla.
+    Sonuç listesindeki her sonuç için komşu yoğunluğuna dayalı robust_fitness hesapla 
+    ve kârlı parametre kümelerini (clustering) tespit et.
     
     Mantık:
-    1. Her sonuç çifti arasında parametrik mesafe hesapla (normalize)
-    2. Her sonuç için yakın komşu sayısını ve ortalama fitness'ını bul
-    3. robust_fitness = raw_fitness × (0.5 + 0.5 × density_score)
-    
-    İzole uç nokta → density ≈ 0 → %50 ceza
-    Kalabalık bölge merkezi → density ≈ 1 → tam puan
-    
-    Args:
-        results: [{param1: val, param2: val, ..., fitness: score}, ...]
-        param_keys: Hangi parametrelerin mesafe hesabına gireceği (None=otomatik)
-    
-    Returns:
-        Aynı liste, her dict'e 'robust_fitness' ve 'density_score' eklenmiş
+    1. Parametrik mesafe ile komşu yoğunluğu (density) hesapla.
+    2. K-Means ile sonuçları parametre uzayında gruplandır (ada tespiti).
+    3. Her setin hangi 'Cluster' (Ada) içinde olduğunu ve o adanın genel performansını ekle.
     """
     if not results or len(results) < 3:
         for r in results:
-            r['robust_fitness'] = r.get('fitness', 0)
-            r['density_score'] = 1.0
+            if 'robust_fitness' not in r: r['robust_fitness'] = r.get('fitness', 0)
+            if 'density_score' not in r: r['density_score'] = 1.0
+            if 'cluster' not in r: r['cluster'] = 0
         return results
+
+    # Sklearn bağımlılığı (Uygulama sunucusunda kurulu olmalı)
+    try:
+        from sklearn.cluster import KMeans
+        from sklearn.preprocessing import StandardScaler
+        import pandas as pd
+    except ImportError:
+        # Sklearn yoksa eski usul devam et
+        return _calculate_density_only(results, param_keys)
+
     
     # Metrik olmayan anahtarları listele
     _metric_keys = {
@@ -278,18 +280,7 @@ def calculate_robust_fitness(results: list, param_keys: list = None) -> list:
             r['density_score'] = 1.0
         return results
     
-    # 1. Parametreleri normalize et (min-max scaling)
-    param_ranges = {}
-    for key in param_keys:
-        vals = [r.get(key, 0) for r in results if key in r]
-        if vals:
-            vmin, vmax = min(vals), max(vals)
-            param_ranges[key] = (vmin, vmax - vmin) if vmax > vmin else (vmin, 1.0)
-    
-    # 2. Her sonuç çifti arasında mesafe hesapla
-    n = len(results)
-    
-    def normalized_distance(r1, r2):
+    def normalized_distance(r1, r2, param_keys, param_ranges):
         """İki sonuç arasındaki normalize parametrik mesafe (0-1)"""
         dist_sq = 0
         count = 0
@@ -301,44 +292,130 @@ def calculate_robust_fitness(results: list, param_keys: list = None) -> list:
                 dist_sq += (d1 - d2) ** 2
                 count += 1
         return (dist_sq / max(count, 1)) ** 0.5
-    
-    # 3. Her sonuç için density score hesapla
-    # Mesafe eşiği: parametre uzayının %15'i içindeki komşular
-    distance_threshold = 0.15
-    max_fitness = max(r.get('fitness', 0) for r in results)
-    if max_fitness <= 0:
-        max_fitness = 1.0
-    
-    for i, result in enumerate(results):
-        raw_fitness = result.get('fitness', 0)
         
-        # Yakın komşuları bul
+    # 1. Parametreleri normalize et
+    param_ranges = {}
+    for key in param_keys:
+        vals = [r.get(key, 0) for r in results if key in r]
+        if vals:
+            vmin, vmax = min(vals), max(vals)
+            param_ranges[key] = (vmin, vmax - vmin) if vmax > vmin else (vmin, 1.0)
+            
+    # 2. Results to DataFrame for clustering
+    n = len(results)
+    df = pd.DataFrame(results)
+    
+    # Clustering için sadece parametre sütunlarını kullan
+    X = df[param_keys].copy()
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Küme sayısını belirle (Sonuç sayısının karekökü veya max 8)
+    if n_clusters <= 0:
+        n_clusters = min(8, max(2, int(len(results)**0.5)))
+        
+    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
+    df['cluster'] = kmeans.fit_predict(X_scaled)
+    
+    # Her kümenin ortalama kârlılığını (fitness) hesapla
+    cluster_stats = df.groupby('cluster')['fitness'].agg(['mean', 'count']).to_dict('index')
+    max_cluster_mean = max([s['mean'] for s in cluster_stats.values()]) if cluster_stats else 1.0
+
+    distance_threshold = 0.15
+    max_raw_fitness = df['fitness'].max() if df['fitness'].max() > 0 else 1.0
+
+    for i, row in df.iterrows():
+        # Density hesabı
         neighbor_count = 0
         neighbor_fitness_sum = 0
+        r1 = results[i]
         
         for j, other in enumerate(results):
-            if i == j:
-                continue
-            dist = normalized_distance(result, other)
+            if i == j: continue
+            dist = normalized_distance(r1, other, param_keys, param_ranges)
             if dist <= distance_threshold:
                 neighbor_count += 1
                 neighbor_fitness_sum += other.get('fitness', 0)
+
         
-        # Density score hesapla
         if neighbor_count > 0:
             neighbor_avg = neighbor_fitness_sum / neighbor_count
-            # Komşu yoğunluğu (kaç komşu var) × komşu kalitesi (ortalamaları ne kadar iyi)
-            count_ratio = min(1.0, neighbor_count / max(5, n * 0.1))  # En az %10 komşu
+            count_ratio = min(1.0, neighbor_count / max(5, n * 0.1))
+            quality_ratio = neighbor_avg / max_raw_fitness
+            density_score = (count_ratio * 0.5 + quality_ratio * 0.5)
+        else:
+            density_score = 0.0
+            
+        # Cluster çarpanı: Ait olduğu adanın genel kalitesi
+        c_id = row['cluster']
+        c_mean = cluster_stats[c_id]['mean']
+        cluster_quality = c_mean / max_cluster_mean if max_cluster_mean > 0 else 1.0
+        
+        # Robust Fitness FINAL: Raw × Density × Cluster_Quality
+        results[i]['density_score'] = round(density_score, 3)
+        results[i]['cluster'] = int(c_id)
+        results[i]['cluster_avg_fitness'] = round(c_mean, 2)
+        
+        # Sadece kârlı ve yoğun adadakilere tam puan, izolelere ceza
+        results[i]['robust_fitness'] = r1.get('fitness', 0) * (0.4 + 0.3 * density_score + 0.3 * cluster_quality)
+
+    return results
+
+def _calculate_density_only(results: list, param_keys: list) -> list:
+    """Fallback: sklearn yoksa sadece yoğunluk hesapla (clustering yapmadan)"""
+    if not results or not param_keys:
+        return results
+        
+    # Parametreleri normalize et
+    param_ranges = {}
+    for key in param_keys:
+        vals = [r.get(key, 0) for r in results if key in r]
+        if vals:
+            vmin, vmax = min(vals), max(vals)
+            param_ranges[key] = (vmin, vmax - vmin) if vmax > vmin else (vmin, 1.0)
+            
+    def get_dist(r1, r2):
+        dist_sq = 0
+        count = 0
+        for key in param_keys:
+            if key in r1 and key in r2 and key in param_ranges:
+                vmin, vrange = param_ranges[key]
+                d1 = (r1[key] - vmin) / vrange
+                d2 = (r2[key] - vmin) / vrange
+                dist_sq += (d1 - d2) ** 2
+                count += 1
+        return (dist_sq / max(count, 1)) ** 0.5
+
+    n = len(results)
+    distance_threshold = 0.15
+    max_fitness = max([r.get('fitness', 0) for r in results]) if results else 1.0
+    if max_fitness <= 0: max_fitness = 1.0
+
+    for i, r1 in enumerate(results):
+        neighbor_count = 0
+        neighbor_fitness_sum = 0
+        for j, other in enumerate(results):
+            if i == j: continue
+            if get_dist(r1, other) <= distance_threshold:
+                neighbor_count += 1
+                neighbor_fitness_sum += other.get('fitness', 0)
+        
+        if neighbor_count > 0:
+            neighbor_avg = neighbor_fitness_sum / neighbor_count
+            count_ratio = min(1.0, neighbor_count / max(5, n * 0.1))
             quality_ratio = neighbor_avg / max_fitness
             density_score = (count_ratio * 0.5 + quality_ratio * 0.5)
         else:
             density_score = 0.0
-        
-        # Robust fitness: raw × (0.5 + 0.5 × density)
-        result['density_score'] = round(density_score, 3)
-        result['robust_fitness'] = raw_fitness * (0.5 + 0.5 * density_score)
-    
+            
+        r1['density_score'] = round(density_score, 3)
+        r1['robust_fitness'] = r1.get('fitness', 0) * (0.5 + 0.5 * density_score)
+        r1['cluster'] = 0  # No clustering in fallback
+        r1['cluster_avg_fitness'] = r1.get('fitness', 0)
+
     return results
+
+
 
 def calculate_sharpe(returns: np.array, risk_free=0.0, trades_per_year=252.0) -> float:
     """

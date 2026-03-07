@@ -1,0 +1,135 @@
+{
+  "symbol": "VIP_TUPRS_5dk_20260302_225917",
+  "period": "5 dk",
+  "strategy_index": 0,
+  "strategy_name": "Strateji 1 - Gatekeeper",
+  "created": "2026-03-02 23:02:07",
+  "params": {
+    "ars_period": {
+      "min": 3,
+      "max": 13,
+      "step": 1,
+      "active": true
+    },
+    "ars_k": {
+      "min": 0.005,
+      "max": 0.1,
+      "step": 0.01,
+      "active": true
+    },
+    "adx_period": {
+      "min": 8,
+      "max": 30,
+      "step": 2,
+      "active": true
+    },
+    "adx_threshold": {
+      "min": 10.0,
+      "max": 50.0,
+      "step": 4.0,
+      "active": true
+    },
+    "macdv_short": {
+      "min": 8,
+      "max": 20,
+      "step": 2,
+      "active": true
+    },
+    "macdv_long": {
+      "min": 20,
+      "max": 40,
+      "step": 5,
+      "active": true
+    },
+    "macdv_signal": {
+      "min": 5,
+      "max": 15,
+      "step": 2,
+      "active": true
+    },
+    "macdv_threshold": {
+      "min": 0.001,
+      "max": 50.0,
+      "step": 10.0,
+      "active": true
+    },
+    "netlot_period": {
+      "min": 3,
+      "max": 15,
+      "step": 2,
+      "active": true
+    },
+    "netlot_threshold": {
+      "min": 10.0,
+      "max": 50.0,
+      "step": 4.0,
+      "active": true
+    },
+    "bb_period": {
+      "min": 10,
+      "max": 300,
+      "step": 5,
+      "active": true
+    },
+    "bb_std": {
+      "min": 1.5,
+      "max": 3.0,
+      "step": 0.25,
+      "active": true
+    },
+    "bb_width_multiplier": {
+      "min": 0.5,
+      "max": 1.5,
+      "step": 0.1,
+      "active": true
+    },
+    "bb_avg_period": {
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "active": true
+    },
+    "ars_mesafe_threshold": {
+      "min": 0.1,
+      "max": 0.5,
+      "step": 0.05,
+      "active": true
+    },
+    "yatay_ars_bars": {
+      "min": 3,
+      "max": 21,
+      "step": 2,
+      "active": true
+    },
+    "yatay_adx_threshold": {
+      "min": 10.0,
+      "max": 40.0,
+      "step": 5.0,
+      "active": true
+    },
+    "filter_score_threshold": {
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "active": true
+    },
+    "min_score": {
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "active": true
+    },
+    "exit_score": {
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "active": true
+    },
+    "contrary_score_max": {
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "active": true
+    }
+  }
+}

@@ -18,6 +18,7 @@ from .widgets.strategy_panel import StrategyPanel
 from .widgets.optimizer_panel import OptimizerPanel
 from .widgets.validation_panel import ValidationPanel
 from .widgets.export_panel import ExportPanel
+from .widgets.robust_analysis_panel import RobustnessPanel
 
 
 class MainWindow(QMainWindow):
@@ -87,6 +88,7 @@ class MainWindow(QMainWindow):
         self.optimizer_panel = OptimizerPanel()
         self.validation_panel = ValidationPanel()
         self.export_panel = ExportPanel()
+        self.robust_panel = RobustnessPanel()
         
         # Tab'ları ekle
         self.tab_widget.addTab(self.data_panel, "Veri")
@@ -94,6 +96,7 @@ class MainWindow(QMainWindow):
         self.tab_widget.addTab(self.optimizer_panel, "Optimizer")
         self.tab_widget.addTab(self.validation_panel, "Validasyon")
         self.tab_widget.addTab(self.export_panel, "Export")
+        self.tab_widget.addTab(self.robust_panel, "Robustness")
         
         main_layout.addWidget(self.tab_widget)
         

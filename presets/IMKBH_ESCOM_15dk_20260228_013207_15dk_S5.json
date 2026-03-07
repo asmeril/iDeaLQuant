@@ -1,0 +1,51 @@
+{
+  "symbol": "IMKBH_ESCOM_15dk_20260228_013207",
+  "period": "15 dk",
+  "strategy_index": 4,
+  "strategy_name": "Strateji 5 - Oliver Kell",
+  "created": "2026-02-28 01:33:26",
+  "params": {
+    "ema_fast": {
+      "min": 3,
+      "max": 13,
+      "step": 1,
+      "active": true
+    },
+    "ema_slow": {
+      "min": 8,
+      "max": 34,
+      "step": 1,
+      "active": true
+    },
+    "breakout_period": {
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "active": true
+    },
+    "adx_period": {
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "active": true
+    },
+    "adx_threshold": {
+      "min": 10.0,
+      "max": 35.0,
+      "step": 1.0,
+      "active": true
+    },
+    "vol_ma_period": {
+      "min": 2,
+      "max": 40,
+      "step": 1,
+      "active": true
+    },
+    "trailing_stop_pct": {
+      "min": 0.5,
+      "max": 5.0,
+      "step": 0.25,
+      "active": true
+    }
+  }
+}

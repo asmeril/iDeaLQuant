@@ -857,8 +857,8 @@ var HHV = Sistem.HHV(BREAKOUT_Period, "Yuksek");
 var LLV = Sistem.LLV(BREAKOUT_Period, "Dusuk");
 
 var MFI = Sistem.MoneyFlowIndex({p['mfi_p']});
-var MFI_HHV = Sistem.HHV(MFI, {p['mfi_hhv_p']});
-var MFI_LLV = Sistem.LLV(MFI, {p['mfi_llv_p']});
+var MFI_HHV = Sistem.HHV({p['mfi_hhv_p']}, MFI);
+var MFI_LLV = Sistem.LLV({p['mfi_llv_p']}, MFI);
 
 var Vol_HHV = Sistem.HHV({p['volume_hhv_p']}, "Lot");
 
@@ -1026,7 +1026,7 @@ for (int i = warmupBars; i < V.Count; i++)
         if (TrendYonu[i] == 1 && YON_MODU != "SADECE_SAT")
         {{
             bool yeniZirve = H[i] >= HHV[i-1] && HHV[i] > HHV[i-1];
-            bool pozitifMomentum = Momentum[i] > MOMENTUM_THRESHOLD;
+            bool pozitifMomentum = Momentum[i] > MOMENTUM_THRESHOLD; // momentum > 100 (assuming threshold is 100)
             bool mfiOnay = MFI[i] >= MFI_HHV[i-1];
             bool volumeOnay = Lot[i] >= Vol_HHV[i-1] * (float)VOLUME_MULT;
             if (yeniZirve && pozitifMomentum && mfiOnay && volumeOnay) Sinyal = "A";
@@ -1034,7 +1034,7 @@ for (int i = warmupBars; i < V.Count; i++)
         else if (TrendYonu[i] == -1 && YON_MODU != "SADECE_AL")
         {{
             bool yeniDip = L[i] <= LLV[i-1] && LLV[i] < LLV[i-1];
-            bool negatifMomentum = Momentum[i] < (MOMENTUM_BASE - MOMENTUM_THRESHOLD);
+            bool negatifMomentum = Momentum[i] < MOMENTUM_THRESHOLD; // Fixed from (MOMENTUM_BASE - MOMENTUM_THRESHOLD) to match python mom < 100
             bool mfiOnay = MFI[i] <= MFI_LLV[i-1];
             bool volumeOnay = Lot[i] >= Vol_HHV[i-1] * (float)VOLUME_MULT;
             if (yeniDip && negatifMomentum && mfiOnay && volumeOnay) Sinyal = "S";

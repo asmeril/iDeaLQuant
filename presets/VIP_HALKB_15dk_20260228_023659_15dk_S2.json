@@ -1,0 +1,129 @@
+{
+  "symbol": "VIP_HALKB_15dk_20260228_023659",
+  "period": "15 dk",
+  "strategy_index": 1,
+  "strategy_name": "Strateji 2 - ARS Trend v2",
+  "created": "2026-02-28 02:39:23",
+  "params": {
+    "ars_ema_period": {
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "active": true
+    },
+    "ars_atr_period": {
+      "min": 2,
+      "max": 20,
+      "step": 1,
+      "active": true
+    },
+    "ars_atr_mult": {
+      "min": 0.3,
+      "max": 1.5,
+      "step": 0.1,
+      "active": true
+    },
+    "ars_min_band": {
+      "min": 0.001,
+      "max": 0.005,
+      "step": 0.001,
+      "active": true
+    },
+    "ars_max_band": {
+      "min": 0.01,
+      "max": 0.025,
+      "step": 0.005,
+      "active": true
+    },
+    "momentum_period": {
+      "min": 3,
+      "max": 14,
+      "step": 1,
+      "active": true
+    },
+    "momentum_threshold": {
+      "min": 50.0,
+      "max": 200.0,
+      "step": 25.0,
+      "active": true
+    },
+    "breakout_period": {
+      "min": 2,
+      "max": 20,
+      "step": 2,
+      "active": true
+    },
+    "mfi_period": {
+      "min": 3,
+      "max": 14,
+      "step": 1,
+      "active": true
+    },
+    "mfi_hhv_period": {
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "active": true
+    },
+    "mfi_llv_period": {
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "active": true
+    },
+    "volume_hhv_period": {
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "active": true
+    },
+    "atr_exit_period": {
+      "min": 1,
+      "max": 7,
+      "step": 1,
+      "active": true
+    },
+    "atr_sl_mult": {
+      "min": 0.5,
+      "max": 4.0,
+      "step": 0.5,
+      "active": true
+    },
+    "atr_tp_mult": {
+      "min": 3.0,
+      "max": 8.0,
+      "step": 1.0,
+      "active": true
+    },
+    "atr_trail_mult": {
+      "min": 1.0,
+      "max": 4.0,
+      "step": 0.5,
+      "active": true
+    },
+    "exit_confirm_bars": {
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "active": true
+    },
+    "exit_confirm_mult": {
+      "min": 0.5,
+      "max": 2.0,
+      "step": 0.25,
+      "active": true
+    },
+    "volume_mult": {
+      "min": 0.5,
+      "max": 3.0,
+      "step": 0.25,
+      "active": true
+    },
+    "volume_llv_period": {
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "active": true
+    }
+  }
+}

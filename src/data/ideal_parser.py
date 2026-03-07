@@ -312,6 +312,133 @@ def load_ideal_data(chart_data_path: str, market: str, symbol: str, period: str)
     return read_ideal_data(str(file_path))
 
 
+def write_ideal_data(df: pd.DataFrame, file_path: str) -> int:
+    """
+    DataFrame'i IdealData binary formatına yazar.
+    
+    Args:
+        df: DateTime, Open, High, Low, Close, Volume, Amount kolonları olan DataFrame
+        file_path: Hedef dosya yolu
+        
+    Returns:
+        Yazılan kayıt sayısı
+    """
+    path = Path(file_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    
+    count = 0
+    with open(path, 'wb') as f:
+        for _, row in df.iterrows():
+            dt = pd.Timestamp(row['DateTime'])
+            # Dakika farkı: BASE_DATE'den itibaren
+            delta = dt - pd.Timestamp(BASE_DATE)
+            time_minutes = int(delta.total_seconds() / 60)
+            
+            o = float(row['Open'])
+            h = float(row['High'])
+            l = float(row['Low'])
+            c = float(row['Close'])
+            vol = float(row['Volume'])
+            amt = float(row.get('Amount', 0.0))
+            flags = 0
+            
+            f.write(struct.pack('<i6fi', time_minutes, o, h, l, c, vol, amt, flags))
+            count += 1
+    
+    return count
+
+
+def generate_period_data(chart_data_path: str, market: str, symbol: str,
+                         target_period: str, source_period: str = '1') -> dict:
+    """
+    1 dakikalık (veya başka kaynak) veriden hedef periyot verisini oluşturur ve diske yazar.
+    
+    Args:
+        chart_data_path: ChartData klasör yolu (örn: D:\\iDeal\\ChartData)
+        market: Pazar (VIP, IMKBH vb.)
+        symbol: Sembol (X030, GARAN vb.)
+        target_period: Hedef periyot ('5', '15', '60', '240')
+        source_period: Kaynak periyot (varsayılan '1')
+        
+    Returns:
+        dict: {'success': bool, 'message': str, 'bars': int, 'file_path': str}
+    """
+    if target_period not in PERIOD_MAP:
+        return {'success': False, 'message': f'Geçersiz hedef periyot: {target_period}', 'bars': 0, 'file_path': ''}
+    
+    if source_period not in PERIOD_MAP:
+        return {'success': False, 'message': f'Geçersiz kaynak periyot: {source_period}', 'bars': 0, 'file_path': ''}
+    
+    target_minutes = int(target_period) if target_period.isdigit() else 0
+    source_minutes = int(source_period) if source_period.isdigit() else 0
+    
+    if target_minutes <= source_minutes:
+        return {'success': False, 'message': f'Hedef periyot ({target_period}) kaynak periyottan ({source_period}) büyük olmalı', 'bars': 0, 'file_path': ''}
+    
+    # Kaynak veriyi yükle
+    source_df = load_ideal_data(chart_data_path, market, symbol, source_period)
+    if source_df is None or len(source_df) == 0:
+        return {'success': False, 'message': f'{symbol} için {source_period} dk kaynak verisi bulunamadı', 'bars': 0, 'file_path': ''}
+    
+    # Resample et
+    resampled_df = resample_bars(source_df, target_minutes)
+    if resampled_df is None or len(resampled_df) == 0:
+        return {'success': False, 'message': 'Resample başarısız oldu', 'bars': 0, 'file_path': ''}
+    
+    # Hedef dosya yolunu belirle
+    mapping = PERIOD_MAP[target_period]
+    target_folder = Path(chart_data_path) / market / mapping['folder']
+    
+    # Kaynak dosyadan dosya adı pattern'ini al
+    source_file = get_file_path(chart_data_path, market, symbol, source_period)
+    if source_file:
+        # Kaynak dosyanın adını kullanarak hedef dosya adını oluştur
+        source_stem = source_file.stem  # örn: VIP'VIP-X030
+        target_filename = f"{source_stem}{mapping['ext']}"
+    else:
+        # Fallback: standart format
+        target_filename = f"{market}'{market}-{symbol}{mapping['ext']}"
+    
+    target_path = target_folder / target_filename
+    
+    # Diske yaz
+    bar_count = write_ideal_data(resampled_df, str(target_path))
+    
+    return {
+        'success': True,
+        'message': f'{symbol} {target_period} dk verisi oluşturuldu: {bar_count:,} bar',
+        'bars': bar_count,
+        'file_path': str(target_path)
+    }
+
+
+def generate_period_data_batch(chart_data_path: str, market: str, 
+                                target_period: str, source_period: str = '1',
+                                symbols: List[str] = None) -> List[dict]:
+    """
+    Birden fazla sembol için toplu periyot verisi oluşturur.
+    
+    Args:
+        chart_data_path: ChartData klasör yolu
+        market: Pazar
+        target_period: Hedef periyot
+        source_period: Kaynak periyot
+        symbols: Sembol listesi (None ise tüm semboller)
+        
+    Returns:
+        Her sembol için sonuç listesi
+    """
+    if symbols is None:
+        symbols = list_symbols(chart_data_path, market, source_period)
+    
+    results = []
+    for sym in symbols:
+        result = generate_period_data(chart_data_path, market, sym, target_period, source_period)
+        results.append({'symbol': sym, **result})
+    
+    return results
+
+
 if __name__ == "__main__":
     # Test
     chart_data = r"D:\iDeal\ChartData"

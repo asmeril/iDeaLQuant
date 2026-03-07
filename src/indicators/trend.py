@@ -4,7 +4,7 @@ ADX components, Aroon, Parabolic SAR, Ichimoku
 """
 
 from typing import List, Tuple, NamedTuple
-from .core import EMA, RMA, ATR, HHV, LLV
+from .core import EMA, RMA, ATR, HHV, LLV, MA
 
 
 def DirectionalIndicatorPlus(highs: List[float], lows: List[float], 
@@ -451,3 +451,67 @@ def TOMA(closes: List[float], period: int = 3, percent: float = 2.0) -> Tuple[Li
                 toma[i] = new_toma
                 
     return toma, trend
+
+
+def OTT(data: List[float], period: int = 2, percent: float = 1.4, ma_method: str = "variable") -> Tuple[List[float], List[float]]:
+    """
+    Optimized Trend Tracker (OTT) by Kıvanç Özbilgiç.
+    IdealData: Sistem.OTT(Veri, period, percent, method) / Sistem.TTI(...)
+
+    Returns:
+        (OTT Line, MA Line)
+    
+    Calibration notes:
+      - OTT is initialized to MA[first_nonzero] * (1 - fark) to match iDeal's
+        starting trajectory (iDeal appears to start from the lower band).
+      - Direction mismatch vs iDeal calibration: ~19% on first occurrences but
+        converges quickly as both paths settle into same trend regime.
+    """
+    n = len(data)
+    ott = [0.0] * n
+    
+    # Generate the base moving average
+    ma_line = MA(data, ma_method, period)
+    
+    if n == 0:
+        return ott, ma_line
+        
+    fark = percent * 0.01
+    
+    # Find first non-zero MA value (VMA starts at 0 for warm-up bars)
+    first_nonzero = 0
+    for k in range(n):
+        if ma_line[k] != 0.0:
+            first_nonzero = k
+            break
+
+    # Initialize at lower band (as iDeal does when data starts in uptrend)
+    ott[first_nonzero] = ma_line[first_nonzero] * (1 - fark)
+    
+    for i in range(first_nonzero + 1, n):
+        prev_ott = ott[i-1]
+        curr_ma = ma_line[i]
+        
+        lower_band = curr_ma * (1 - fark)
+        upper_band = curr_ma * (1 + fark)
+        
+        if curr_ma > prev_ott:
+            ott[i] = max(prev_ott, lower_band)
+        elif curr_ma < prev_ott:
+            ott[i] = min(prev_ott, upper_band)
+        else:
+            ott[i] = prev_ott
+            
+    return ott, ma_line
+
+
+def TTI(data: List[float], period: int = 50, percent: float = 7.0, ma_method: str = "variable") -> List[float]:
+    """
+    Trend Tracker Index (TTI) used in IdealData (Sistem.TTI).
+    It is effectively the OTT line from the OTT calculation.
+    
+    Returns:
+        Single List containing the TTI (OTT) line.
+    """
+    ott_line, _ = OTT(data, period, percent, ma_method)
+    return ott_line

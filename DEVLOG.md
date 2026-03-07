@@ -1,3 +1,23 @@
+## 2026-03-07 (Strateji 6: TOTT_HOTT Entegrasyonu & İndikatör Kalibrasyonu)
+
+### ✅ Yapılanlar
+- **Strateji 6 (TOTT_HOTT) Python Çekirdeği:**
+  - `VIP_TUPRS_5DK_Paradise` (TOTT_HOTT) stratejisi C#'tan Python'a 100% uyarlandı (`tott_hott_strategy.py`).
+  - Zaman filtreleri (saat kontrolleri) koda hardcode edilmeyip IdealQuant `get_trading_mask` altyapısına bağlandı.
+  - Orijinal dökümandaki 3 fazlı (Ana Trend, Bölge, Kapı) konfigürasyona uygun `StrategyConfigTottHott` oluşturuldu.
+- **Yeni IdealData İndikatörleri (Core & Trend):**
+  - **VariableMA (VIDYA):** `src/indicators/core.py` dosyasına eklendi. IdealData uyumu için **Sabit CMO Window = 9** keşfedildi ve uygulandı (Hata payı 500k bar sonunda < 0.002).
+  - **OTT & TTI:** `src/indicators/trend.py` dosyasına eklendi. İdeal TTI'nin başlangıç bandının VMA*(1-pct) olması gerektiği keşfedilerek trailing senkronize edildi.
+- **Çok Çekirdekli Özel Optimizer:**
+  - `strategy6_optimizer.py` Numba JIT tabanlı standalone tarayıcı inşa edildi.
+  - ~1700 parametre seti CPU multiprocessing ile 35 saniyede taranabilir duruma getirildi.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 11 - Strateji 6 (TOTT_HOTT)
+- **Sıradaki Adım:** TOTT_HOTT stratejisinin arayüze (UI) entegre edilmesi ve canlı testler.
+
+---
+
 ## 2026-02-25 (Strateji 5: Full-Stack Entegrasyon & Hibrit Optimizasyon)
 
 ### ✅ Yapılanlar

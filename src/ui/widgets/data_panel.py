@@ -250,6 +250,12 @@ class DataPanel(QWidget):
         db_btn.clicked.connect(self.show_db_manager)
         btn_row.addWidget(db_btn)
         
+        # Veri Hazırla butonu (1dk'dan seçili periyot verisini oluşturur)
+        self.generate_btn = QPushButton("⚙️ Veri Hazırla (1dk → Periyot)")
+        self.generate_btn.setToolTip("1 dakikalık veriden seçili periyodun verisini oluşturur ve diske yazar")
+        self.generate_btn.clicked.connect(self._generate_period_data)
+        btn_row.addWidget(self.generate_btn)
+        
         btn_row.addStretch()
         load_btn = QPushButton("IdealData'dan Yükle")
         load_btn.setObjectName("primaryButton")
@@ -389,6 +395,12 @@ class DataPanel(QWidget):
             
             symbols = list_symbols(chart_data, market, period)
             
+            # Eğer seçili periyotta sembol bulunamazsa 1dk sembollerini göster
+            fallback_used = False
+            if not symbols and period != '1':
+                symbols = list_symbols(chart_data, market, '1')
+                fallback_used = True
+            
             self.symbol_combo.clear()
             self.symbol_combo.addItems(symbols)
             
@@ -398,8 +410,67 @@ class DataPanel(QWidget):
             elif 'X030' in symbols:
                 self.symbol_combo.setCurrentText('X030')
             
+            # Veri Hazırla butonunu güncelle
+            if hasattr(self, 'generate_btn'):
+                if period == '1' or period == 'G' or period == 'H':
+                    self.generate_btn.setEnabled(False)
+                    self.generate_btn.setToolTip("1dk, Günlük ve Haftalık periyotlar için veri hazırlama gerekmez")
+                else:
+                    self.generate_btn.setEnabled(True)
+                    if fallback_used:
+                        self.generate_btn.setText(f"⚙️ Veri Hazırla (1dk → {period} dk)")
+                        self.generate_btn.setToolTip(f"{period} dk verisi bulunamadı. Bu butona basarak 1dk veriden oluşturabilirsiniz.")
+                    else:
+                        self.generate_btn.setText(f"⚙️ Veri Yeniden Oluştur (1dk → {period} dk)")
+                        self.generate_btn.setToolTip(f"{period} dk verisi mevcut. Yeniden oluşturmak için tıklayın.")
+            
         except Exception as e:
             print(f"Sembol yükleme hatası: {e}")
+    
+    def _generate_period_data(self):
+        """1dk veriden seçili periyodun verisini oluştur ve diske yaz"""
+        try:
+            from src.data.ideal_parser import generate_period_data, generate_period_data_batch
+            
+            chart_data = self.ideal_path_edit.text()
+            market = self.market_combo.currentText()
+            symbol = self.symbol_combo.currentText()
+            period = self.period_combo.currentText()
+            
+            if not symbol:
+                QMessageBox.warning(self, "Uyarı", "Lütfen bir sembol seçin.")
+                return
+            
+            if period == '1':
+                QMessageBox.information(self, "Bilgi", "1 dakikalık veri zaten mevcuttur, oluşturmaya gerek yoktur.")
+                return
+            
+            # Onay al
+            reply = QMessageBox.question(
+                self, "Veri Oluştur",
+                f"{symbol} sembolü için {period} dk verisini 1dk veriden oluşturmak istiyor musunuz?\n\n"
+                f"Bu işlem mevcut {period} dk dosyasını yeniden oluşturacaktır.",
+                QMessageBox.Yes | QMessageBox.No
+            )
+            
+            if reply != QMessageBox.Yes:
+                return
+            
+            # Oluştur
+            result = generate_period_data(chart_data, market, symbol, period, '1')
+            
+            if result['success']:
+                QMessageBox.information(
+                    self, "Başarılı",
+                    f"{result['message']}\n\nDosya: {result['file_path']}"
+                )
+                # Sembolleri yenile (yeni oluşturulan dosya görünsün)
+                self._refresh_symbols()
+            else:
+                QMessageBox.warning(self, "Hata", result['message'])
+                
+        except Exception as e:
+            QMessageBox.critical(self, "Hata", f"Veri oluşturulurken hata: {str(e)}")
     
     def _load_ideal_data(self):
         """IdealData'dan veri yükle"""

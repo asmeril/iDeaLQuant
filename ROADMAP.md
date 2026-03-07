@@ -21,7 +21,8 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 7 | ✅ | Veritabanı Entegrasyonu | - |
 | Faz 8 | 🔄 | Agent Dokümantasyonu | 🔴 Sürekli |
 | Faz 9 | 🔄 | Canlı Test & S5 Araştırma | 🟡 Düşük |
-| Faz 10| 🔄 | **Strateji 5 (Oliver Kell)** | 🟢 Aktif |
+| Faz 10| ✅ | Strateji 5 (Oliver Kell) | - |
+| Faz 11| 🔄 | **Strateji 6 (TOTT_HOTT)** | 🟢 Aktif |
 
 ---
 
@@ -181,6 +182,26 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 
 > [!WARNING]
 > **TODO:** S1-S4 stratejilerini de 3-mod vade tipi yapısına (VIOP_ENDEKS / VIOP_SPOT / SPOT) geçirmek gerekiyor. Şu an sadece S5'te aktif.
+
+---
+
+## 🟢 FAZ 11: Strateji 6 (TOTT_HOTT) [YENİ]
+
+> [!NOTE]
+> VIP_TUPRS_5DK_Paradise mantığına dayanan TOTT_HOTT sistemi. 
+
+### 11.1 İndikatör & Çekirdek Altyapı ✅
+- [x] Variable MA (VIDYA) + Sabit CMO Window=9 kalibrasyonu
+- [x] OTT ve TTI (Trend Tracker Index) entegrasyonu + Kalibrasyon
+- [x] Python sınıfı `tott_hott_strategy.py`
+
+### 11.2 Optimizasyon Motoru ✅
+- [x] Numba + Multiprocessing destekli standalone optimizer
+- [x] Dökümandaki 3 fazlı (Main, Zone, Gate) konfigürasyonlara uyum
+
+### 11.3 UI ve Genel Entegrasyon (Bekliyor)
+- [ ] ExportPanel ve StrategyPanel arayüz desteği
+- [ ] Validasyon (WFA/MC) paneline bağlanması
 
 ---
 

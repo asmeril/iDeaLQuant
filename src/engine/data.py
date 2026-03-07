@@ -261,7 +261,7 @@ class OHLCV:
             # 2. Check Expiry
             # ENDEKS: Even months only. SPOT: Every month.
             m = d.month
-            if vade_tipi == "ENDEKS" and m % 2 != 0:
+            if "ENDEKS" in vade_tipi.upper() and m % 2 != 0:
                 pass # Not an expiry month
             else:
                  # Calculate expiry for this month and check if d matches

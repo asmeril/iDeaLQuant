@@ -156,12 +156,24 @@ def s5_eval(params):
     if any(v is None for v in [ema_fast_arr, ema_slow_arr, adx_arr, hhv_arr, llv_arr, vol_ma_arr]):
         return None
     
+    try:
+        yon_str = params.get('yon_modu', 'CIFT')
+        if yon_str == 'SADECE_AL':
+            yon_int = 1
+        elif yon_str == 'SADECE_SAT':
+            yon_int = 2
+        else:
+            yon_int = 0
+    except Exception:
+        yon_int = 0
+        
     res = fast_backtest_strategy5(
         g['closes'], g['highs'], g['lows'], g['volume'],
         ema_fast_arr, ema_slow_arr,
         adx_arr, hhv_arr, llv_arr, vol_ma_arr,
         g['mask'], g['times_arr'],
-        adx_thresh, trail_pct / 100.0
+        adx_thresh, trail_pct / 100.0,
+        yon_int
     )
     
     np_val, tr, pf, dd, sh, adays, tdays = res
@@ -188,7 +200,8 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                              adx_arr, hhv_arr, llv_arr, vol_ma_arr,
                              mask_arr, times_arr,
                              # Params
-                             adx_threshold, trailing_stop_ratio):
+                             adx_threshold, trailing_stop_ratio,
+                             yon_modu: int = 0):  # 0=CIFT, 1=SADECE_AL, 2=SADECE_SAT
     """
     Numba JIT optimized backtest for Oliver Kell strategy.
     Returns: (net_profit, trades, pf, max_dd, sharpe, active_days, total_days)
@@ -265,7 +278,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
         # --- POZİSYON YÖNETİMİ ---
         if pos == 0:
             # GİRİŞ
-            if long_trend and long_break and guclu_hacim and trend_gucu_long:
+            if yon_modu != 2 and long_trend and long_break and guclu_hacim and trend_gucu_long:  # SADECE_SAT degilse LONG gir
                 pos = 1
                 entry_price = closes[i]
                 uc_uc_mesafe = closes[i]
@@ -274,7 +287,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                 if current_day != last_trade_day:
                     active_days += 1
                     last_trade_day = current_day
-            elif short_trend and short_break and guclu_hacim and trend_gucu_short:
+            elif yon_modu != 1 and short_trend and short_break and guclu_hacim and trend_gucu_short: # SADECE_AL degilse SHORT gir
                 pos = -1
                 entry_price = closes[i]
                 uc_uc_mesafe = closes[i]
@@ -309,7 +322,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                 n_closed += 1
                 
                 # Reverse check: çıkış anında karşı yönde giriş var mı?
-                if short_trend and short_break and guclu_hacim and trend_gucu_short:
+                if yon_modu != 1 and short_trend and short_break and guclu_hacim and trend_gucu_short: # SADECE_AL degilse DÖN
                     pos = -1
                     entry_price = closes[i]
                     uc_uc_mesafe = closes[i]
@@ -348,7 +361,7 @@ def fast_backtest_strategy5(closes, highs, lows, volume,
                 n_closed += 1
                 
                 # Reverse check
-                if long_trend and long_break and guclu_hacim and trend_gucu_long:
+                if yon_modu != 2 and long_trend and long_break and guclu_hacim and trend_gucu_long: # SADECE_SAT degilse DÖN
                     pos = 1
                     entry_price = closes[i]
                     uc_uc_mesafe = closes[i]
@@ -414,12 +427,14 @@ def solve_chunk(args):
                 for vp in vol_ma_ps:
                     vol_ma = g_cache.get_vol_ma(vp)
                     for tp in trail_pcts:
+                        # Defaults to CIFT for legacy standalone test runner
                         np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy5(
                             g_cache.closes, g_cache.highs, g_cache.lows, g_cache.volume,
                             ema_fast_arr, ema_slow_arr,
                             adx, hhv, llv, vol_ma,
                             g_mask, g_cache.times_arr,
-                            adx_t, tp / 100.0
+                            adx_t, tp / 100.0,
+                            0 # CIFT by default
                         )
                         
                         if np_val > 0:

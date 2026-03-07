@@ -1,0 +1,22 @@
+{
+  "job_id": "s4_hybrid_VIP_X030-T_5dk_20260225_210151",
+  "timestamp": "2026-02-25 21:13:11",
+  "epoch": 1772043191.3664215,
+  "phase": "iterative",
+  "round": 1,
+  "group_idx": 0,
+  "current_best": {
+    "Yapisal": {
+      "ema_fast": 10,
+      "ema_slow": 20,
+      "breakout_period": 10,
+      "adx_period": 14,
+      "adx_threshold": 20.0,
+      "vol_ma_period": 20
+    },
+    "Risk": {
+      "trailing_stop_pct": 1.5
+    }
+  },
+  "group_results": {}
+}

@@ -559,7 +559,7 @@ class IndicatorCache:
             months = dates.to_period('M').unique()
             
             for m in months:
-                if vade_tipi == "ENDEKS" and m.month % 2 != 0:
+                if "ENDEKS" in vade_tipi.upper() and m.month % 2 != 0:
                     continue
                 month_date = m.to_timestamp().date()
                 vade_gunu = vade_sonu_is_gunu(month_date, vade_tipi)
@@ -584,7 +584,7 @@ class IndicatorCache:
             
             for i in change_indices:
                 m = months[i]
-                if vade_tipi == "ENDEKS" and m % 2 != 0:
+                if "ENDEKS" in vade_tipi.upper() and m % 2 != 0:
                     # Tek ay ise GECIS yap (Cunku vade sonu CIFT aydadir, 
                     # tek ay basinda eski kontrat biter yeni kontrat baslar mi? 
                     # Hayir, ENDEKS kontratlari CIFT aylarda biter.
@@ -662,12 +662,21 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
         llv_arr = np.ascontiguousarray(g_cache.get_llv(breakout_p), dtype=np.float64)
         vol_ma_arr = np.ascontiguousarray(g_cache.get_vol_ma(vol_ma_p), dtype=np.float64)
         
+        yon_str = params.get('yon_modu', 'CIFT')
+        if yon_str == 'SADECE_AL':
+            yon_int = 1
+        elif yon_str == 'SADECE_SAT':
+            yon_int = 2
+        else:
+            yon_int = 0
+            
         np_val, trades, pf, dd, sharpe, adays, tdays = fast_backtest_strategy5(
             closes_f64, highs_f64, lows_f64, vols_f64,
             ema_fast_arr, ema_slow_arr,
             adx_arr, hhv_arr, llv_arr, vol_ma_arr,
             mask_arr, times_arr,
-            adx_thresh, trail_pct / 100.0
+            adx_thresh, trail_pct / 100.0,
+            yon_int
         )
         
         fit = quick_fitness(np_val, pf, dd, trades, sharpe=sharpe, active_days=adays, total_days=tdays)
