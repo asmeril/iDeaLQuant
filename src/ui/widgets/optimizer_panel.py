@@ -237,6 +237,35 @@ STRATEGY5_PARAM_GROUPS = {
     }
 }
 
+# Strateji 6 Parametre Gruplari (TOTT_HOTT — 9 parametre, 3 grup)
+STRATEGY6_PARAM_GROUPS = {
+    'Trend': {
+        'label': 'Trend (OTT Parametreleri)',
+        'params': {
+            'ott_period': {'label': 'OTT Periyot', 'type': 'int', 'default': 30, 'min': 20, 'max': 50, 'step': 5},
+            'ott_pct_big': {'label': 'OTT Büyük %', 'type': 'float', 'default': 7.0, 'min': 6.0, 'max': 9.0, 'step': 0.5},
+            'ott_pct_small': {'label': 'OTT Küçük %', 'type': 'float', 'default': 3.5, 'min': 2.8, 'max': 4.0, 'step': 0.2},
+        }
+    },
+    'Bolge': {
+        'label': 'Bölge (Stochastic + OTT Mult)',
+        'params': {
+            'ott_mult': {'label': 'OTT Mult', 'type': 'float', 'default': 0.0008, 'min': 0.0005, 'max': 0.0011, 'step': 0.0003},
+            'sott_pct': {'label': 'SOTT %', 'type': 'float', 'default': 0.3, 'min': 0.2, 'max': 0.4, 'step': 0.1},
+            'stoch_k': {'label': 'Stoch K', 'type': 'int', 'default': 500, 'min': 300, 'max': 700, 'step': 100},
+            'stoch_smooth': {'label': 'Stoch Smooth', 'type': 'int', 'default': 200, 'min': 100, 'max': 300, 'step': 50},
+        }
+    },
+    'Kapi': {
+        'label': 'Kapı (HHV/LLV Gate)',
+        'params': {
+            'gate_period': {'label': 'Gate Periyot', 'type': 'int', 'default': 20, 'min': 10, 'max': 34, 'step': 4},
+            'gate_pct': {'label': 'Gate %', 'type': 'float', 'default': 0.5, 'min': 0.4, 'max': 0.6, 'step': 0.1},
+        },
+        'is_cascaded': True
+    }
+}
+
 # ==============================================================================
 # TIMEFRAME-ADAPTIVE PARAMETER SCALING
 # ==============================================================================
@@ -258,6 +287,8 @@ SCALABLE_PARAMS = {
     'toma_period', 'trix_lb1', 'trix_lb2', # Mom limits are dimensionless thresholds
     # Strateji 5 (Oliver Kell)
     'ema_fast', 'ema_slow', 'breakout_period', 'adx_period', 'vol_ma_period',
+    # Strateji 6 (TOTT_HOTT)
+    'ott_period', 'gate_period',
 }
 
 REFERENCE_PERIOD = 5  # dk - Stratejilerin orijinal tasarim periyodu
@@ -348,7 +379,7 @@ class ParameterGroupWidget(QGroupBox):
             else:
                 min_spin = QDoubleSpinBox()
                 min_spin.setRange(0.0, 10000.0)
-                min_spin.setDecimals(3)
+                min_spin.setDecimals(5)
                 min_spin.setValue(param_config['min'])
             table.setCellWidget(row, 1, min_spin)
             
@@ -360,7 +391,7 @@ class ParameterGroupWidget(QGroupBox):
             else:
                 max_spin = QDoubleSpinBox()
                 max_spin.setRange(0.0, 10000.0)
-                max_spin.setDecimals(3)
+                max_spin.setDecimals(5)
                 max_spin.setValue(param_config['max'])
             table.setCellWidget(row, 2, max_spin)
             
@@ -372,7 +403,7 @@ class ParameterGroupWidget(QGroupBox):
             else:
                 step_spin = QDoubleSpinBox()
                 step_spin.setRange(0.001, 100.0)
-                step_spin.setDecimals(3)
+                step_spin.setDecimals(5)
                 step_spin.setValue(param_config['step'])
             table.setCellWidget(row, 3, step_spin)
             
@@ -1160,15 +1191,15 @@ class OptimizationWorker(QThread):
     def _run_hybrid(self):
         """Hibrit Grup optimizasyonu"""
         from src.optimization.hybrid_group_optimizer import (
-            HybridGroupOptimizer, IndicatorCache, STRATEGY1_GROUPS, STRATEGY2_GROUPS, STRATEGY3_GROUPS, STRATEGY5_GROUPS, ParameterGroup
+            HybridGroupOptimizer, IndicatorCache, STRATEGY1_GROUPS, STRATEGY2_GROUPS, STRATEGY3_GROUPS, STRATEGY5_GROUPS, STRATEGY6_GROUPS, ParameterGroup
         )
         
         self._emit_progress(5, "Cache olusturuluyor...")
         cache = IndicatorCache(self.data)
         
         # Strateji seçiminden orijinal grupları al
-        original_groups = {0: STRATEGY1_GROUPS, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 4: STRATEGY5_GROUPS}.get(self.strategy_index, STRATEGY1_GROUPS)
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 4: "Strateji 5 (Oliver Kell)"}.get(self.strategy_index, "Strateji 1")
+        original_groups = {0: STRATEGY1_GROUPS, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 4: STRATEGY5_GROUPS, 5: STRATEGY6_GROUPS}.get(self.strategy_index, STRATEGY1_GROUPS)
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)"}.get(self.strategy_index, "Strateji 1")
         
         # UI'dan gelen range'leri gruplara uyarla (Dynamic Sync)
         synced_groups = []
@@ -1277,7 +1308,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Genetik', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1409,7 +1440,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Bayesian', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1557,6 +1588,12 @@ class OptimizationWorker(QThread):
             elif self.strategy_index == 3:
                 # S4: Use fast_backtest_strategy4 directly
                 return self._validate_s4_result(params)
+            elif self.strategy_index == 4:
+                from src.strategies.oliver_kell_strategy import OliverKellStrategy
+                strategy = OliverKellStrategy.from_config_dict(test_cache, params)
+            elif self.strategy_index == 5:
+                from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+                strategy = TOTT_HOTTStrategy.from_config_dict(test_cache, params)
             else:
                 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
                 strategy = ARSTrendStrategyV2.from_config_dict(test_cache, params)
@@ -1764,7 +1801,7 @@ class OptimizerPanel(QWidget):
         # Strateji seçimi (Sadece gösterim, süreçten gelecek)
         top_row.addWidget(QLabel("Strateji:"))
         self.strategy_combo = QComboBox()
-        self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum", "Strateji 5 - Oliver Kell"])
+        self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum", "Strateji 5 - Oliver Kell", "Strateji 6 - TOTT HOTT"])
         self.strategy_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         top_row.addWidget(self.strategy_combo)
@@ -2121,6 +2158,32 @@ class OptimizerPanel(QWidget):
         elif strategy_idx == 2: group_defs = STRATEGY3_PARAM_GROUPS
         elif strategy_idx == 3: group_defs = STRATEGY4_PARAM_GROUPS
         elif strategy_idx == 4: group_defs = STRATEGY5_PARAM_GROUPS
+        elif strategy_idx == 5:
+            from src.optimization.hybrid_group_optimizer import STRATEGY6_GROUPS
+            # STRATEGY6_GROUPS -> PARAM_GROUPS formatina cevir (list of ParameterGroup -> dict)
+            group_defs = {}
+            for pg in STRATEGY6_GROUPS:
+                params_dict = {}
+                for p_name, p_values in pg.params.items():
+                    # Min/max/step from values list
+                    vals = sorted(p_values)
+                    p_min = vals[0]
+                    p_max = vals[-1]
+                    p_step = vals[1] - vals[0] if len(vals) > 1 else 1
+                    is_float = isinstance(p_min, float)
+                    params_dict[p_name] = {
+                        'label': p_name,
+                        'type': 'float' if is_float else 'int',
+                        'default': pg.default_values.get(p_name, p_min),
+                        'min': p_min,
+                        'max': p_max,
+                        'step': p_step
+                    }
+                group_defs[pg.name] = {
+                    'label': pg.name,
+                    'params': params_dict,
+                    'is_cascaded': not pg.is_independent
+                }
         else: group_defs = STRATEGY2_PARAM_GROUPS
         
         row = 0
@@ -2252,6 +2315,8 @@ class OptimizerPanel(QWidget):
                 print(f"  - {k}: {len(v.get('params', {}))} params")
         elif index == 4:
             base_groups = STRATEGY5_PARAM_GROUPS
+        elif index == 5:
+            base_groups = STRATEGY6_PARAM_GROUPS
         else:
             base_groups = STRATEGY2_PARAM_GROUPS
         period_dk = self._get_current_period_dk()
@@ -2387,6 +2452,17 @@ class OptimizerPanel(QWidget):
             # Config objesine Vade Tipi ve Yön Modunu aktar
             self.config['vade_tipi'] = proc.get('vade_tipi', 'ENDEKS')
             self.config['yon_modu'] = proc.get('yon_modu', 'CIFT')
+            
+            # Veriyolu (Eğer arayüzden direkt süreç seçiliyorsa ve data yüklenmediyse yükle)
+            csv_path = proc.get('data_file', '')
+            if csv_path and os.path.exists(csv_path):
+                from src.engine.data import OHLCV
+                try:
+                    ohlcv_obj = OHLCV.from_ideal_export(csv_path)
+                    self.data = ohlcv_obj.df
+                    print(f"[{process_id}] Otomatik Veri Yuklendi: {len(self.data)} satır")
+                except Exception as e:
+                    print(f"[{process_id}] Veri yüklenemedi: {e}")
             
             # Bilgi etiketini güncelle
             self.process_info_label.setText(f"Vade: {self.config['vade_tipi']} | Yön: {self.config['yon_modu']}")

@@ -106,6 +106,7 @@ class ExportPanel(QWidget):
             "Strateji 3 - Paradise",
             "Strateji 4 - TOMA + Momentum",
             "Strateji 5 - Oliver Kell",
+            "Strateji 6 - TOTT HOTT",
             "Birleşik Robot"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_export)
@@ -232,7 +233,7 @@ class ExportPanel(QWidget):
         params_text = f"✓ Süreç: {self.current_process_id}\n\n"
         
         for strategy_idx, params in self.final_params.items():
-            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
+            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
             params_text += f"━━━ {strategy_name} ━━━\n"
             
             # İlk 5 parametre
@@ -303,6 +304,12 @@ class ExportPanel(QWidget):
                     QMessageBox.warning(self, "Uyarı", "Strateji 5 (Oliver Kell) için final parametre bulunamadı.")
                     return
                 code = exporter._generate_strategy5_code(s5_params, vade_tipi)
+            elif strategy_idx == 5:
+                s6_params = self.final_params.get(5, {})
+                if not s6_params:
+                    QMessageBox.warning(self, "Uyarı", "Strateji 6 (TOTT HOTT) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy6_code(s6_params, vade_tipi)
             else:
                 if not s1_params or not s2_params:
                     QMessageBox.warning(self, "Uyarı", "Birleşik robot için S1 ve S2 final parametreleri gerekli.")
@@ -335,7 +342,7 @@ class ExportPanel(QWidget):
             s2_params = self.final_params.get(1, {})
             
             # Dosya adı
-            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "Combined"]
+            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "TOTT_HOTT", "Combined"]
             filename = f"{symbol}_{period}DK_{strategy_names[strategy_idx]}.cs"
             filepath = output_dir / filename
             
@@ -371,6 +378,12 @@ class ExportPanel(QWidget):
                     QMessageBox.warning(self, "Uyarı", "Strateji 5 (Oliver Kell) için final parametre bulunamadı.")
                     return
                 code = exporter._generate_strategy5_code(s5_params, vade_tipi)
+            elif strategy_idx == 5:
+                s6_params = self.final_params.get(5, {})
+                if not s6_params:
+                    QMessageBox.warning(self, "Uyarı", "Strateji 6 (TOTT HOTT) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy6_code(s6_params, vade_tipi)
             else:
                 if not s1_params or not s2_params:
                     QMessageBox.warning(self, "Uyarı", "Birleşik robot için S1 ve S2 final parametreleri gerekli.")

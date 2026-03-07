@@ -23,6 +23,7 @@ import random
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from src.indicators.core import EMA, ATR, Momentum, HHV, LLV, ARS_Dynamic, MoneyFlowIndex
+from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 
 # ==============================================================================
 # GENETIC ALGORITHM CONFIG
@@ -169,6 +170,20 @@ STRATEGY5_PARAMS = {
     'trailing_stop_pct': (0.5, 5.0, 0.25, False),
 }
 
+# Strateji 6 (TOTT_HOTT) Parametre Uzayı (7 parametre)
+STRATEGY6_PARAMS = {
+    # Trend
+    'ott_period': (20, 50, 5, True),
+    'ott_pct_big': (6.0, 9.0, 0.5, False),
+    'ott_pct_small': (2.8, 4.0, 0.2, False),
+    # Bolge
+    'ott_mult': (0.0005, 0.0011, 0.0003, False),
+    'sott_pct': (0.2, 0.4, 0.1, False),
+    # Kapi
+    'gate_period': (10, 34, 6, True),
+    'gate_pct': (0.4, 0.6, 0.1, False),
+}
+
 # Import S4 Optimizer components
 # Try/Except block to avoid circular import issues during initialization if imported at top
 try:
@@ -194,14 +209,14 @@ class ParameterSpace:
             base_params = STRATEGY2_PARAMS
         elif strategy_index == 2:
             base_params = STRATEGY3_PARAMS
-        elif strategy_index == 2:
-            base_params = STRATEGY3_PARAMS
         elif strategy_index == 3:
             base_params = STRATEGY4_PARAMS
         elif strategy_index == 4:
             base_params = STRATEGY5_PARAMS
+        elif strategy_index == 5:
+            base_params = STRATEGY6_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5 desteklenir.")
             
         self.params = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -357,6 +372,8 @@ class FitnessEvaluator:
                 return self._evaluate_strategy4(params)
             elif self.strategy_index == 4:
                 return self._evaluate_strategy5(params)
+            elif self.strategy_index == 5:
+                return self._evaluate_strategy6(params)
             else:
                 raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         except Exception as e:
@@ -695,6 +712,60 @@ class FitnessEvaluator:
             }
             
         except Exception as e:
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
+    def _evaluate_strategy6(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 6 (TOTT_HOTT) icin fitness hesapla"""
+        try:
+            from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+            from src.optimization.hybrid_group_optimizer import fast_backtest
+            from src.optimization.fitness import quick_fitness
+
+            class SimpleCache:
+                def __init__(self, evaluator):
+                    self.opens = evaluator.opens
+                    self.highs = evaluator.highs
+                    self.lows = evaluator.lows
+                    self.closes = evaluator.closes
+                    self.typical = evaluator.typical
+                    self.lots = evaluator.volumes
+                    self.volumes = evaluator.volumes
+                    self.dates = evaluator.dates
+                    self.times = evaluator.dates
+                    self.n = evaluator.n
+                    self.df = evaluator.df
+
+            cache = SimpleCache(self)
+            strategy = TOTT_HOTTStrategy.from_config_dict(cache, params)
+            signals, exits_long, exits_short = strategy.generate_all_signals()
+
+            trading_days = 252.0
+            if self.dates and len(self.dates) > 1:
+                try:
+                    trading_days = (self.dates[-1] - self.dates[0]).days
+                except: pass
+
+            np_val, trades, pf, dd, sharpe = fast_backtest(
+                self.closes, signals, exits_long, exits_short,
+                self.commission, self.slippage, trading_days=trading_days
+            )
+
+            fitness = quick_fitness(
+                np_val, pf, dd, trades, sharpe=sharpe,
+                commission=0.0, slippage=0.0
+            )
+
+            return {
+                'net_profit': np_val,
+                'trades': trades,
+                'pf': pf,
+                'max_dd': dd,
+                'sharpe': sharpe,
+                'fitness': fitness
+            }
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
 
 

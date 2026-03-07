@@ -23,7 +23,7 @@ from src.indicators.oscillators import TRIX
 from src.strategies.score_based import ScoreBasedStrategy
 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.paradise_strategy import ParadiseStrategy
-from src.strategies.paradise_strategy import ParadiseStrategy
+from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 from src.optimization.fitness import quick_fitness, calculate_sharpe
 from src.strategies.holidays import vade_sonu_is_gunu
 
@@ -52,6 +52,8 @@ PARAM_TYPE_CONFIG = {
     'momentum_band': (90.0, 110.0, 1.0, 0.5),          # Momentum bant (mom_alt, mom_ust)
     'multiplier_wide': (1.0, 10.0, 1.0, 0.25),         # Geniş çarpanlar (TP mult gibi)
     'period_short_wide': (5, 20, 2, 1),                 # Kısa-orta arası periyotlar
+    'ott_percent': (0.2, 9.0, 1.0, 0.5),                # OTT yüzdeleri
+    'ott_mult': (0.0005, 0.0020, 0.0003, 0.0001),       # Bölge çarpanı
 }
 
 # Hangi parametrenin hangi tipte olduğunu belirler
@@ -82,6 +84,11 @@ PARAM_TYPES = {
     'breakout_period': 'period_short_wide', 'adx_period': 'period_medium',
     'adx_threshold': 'threshold_float', 'vol_ma_period': 'period_medium',
     'trailing_stop_pct': 'multiplier',
+    # Strateji 6 (TOTT_HOTT)
+    'ott_period': 'period_medium', 'ott_pct_big': 'ott_percent',
+    'ott_pct_small': 'ott_percent', 'ott_mult': 'ott_mult',
+    'sott_pct': 'ott_percent', 'gate_period': 'period_medium',
+    'gate_pct': 'ott_percent',
 }
 
 def get_step(param_name: str, stage: str = 'satellite', user_step: float = None) -> float:
@@ -359,6 +366,38 @@ STRATEGY5_GROUPS = [
         },
         is_independent=False,
         default_values={'trailing_stop_pct': 1.5}
+    ),
+]
+
+# Strateji 6 (TOTT_HOTT) Grup Tanimlari
+STRATEGY6_GROUPS = [
+    ParameterGroup(
+        name="Trend",
+        params={
+            'ott_period': [20, 25, 30, 35, 40, 50],
+            'ott_pct_big': [6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0],
+            'ott_pct_small': [2.8, 3.0, 3.2, 3.4, 3.6, 3.8, 4.0],
+        },
+        is_independent=True,
+        default_values={'ott_period': 30, 'ott_pct_big': 7.0, 'ott_pct_small': 3.5}
+    ),
+    ParameterGroup(
+        name="Bolge",
+        params={
+            'ott_mult': [0.0005, 0.0008, 0.0011],
+            'sott_pct': [0.2, 0.3, 0.4],
+        },
+        is_independent=True,
+        default_values={'ott_mult': 0.0008, 'sott_pct': 0.3}
+    ),
+    ParameterGroup(
+        name="Kapi",
+        params={
+            'gate_period': [10, 16, 22, 28, 34],
+            'gate_pct': [0.4, 0.5, 0.6],
+        },
+        is_independent=False,
+        default_values={'gate_period': 20, 'gate_pct': 0.5}
     ),
 ]
 
@@ -709,6 +748,9 @@ def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commiss
     elif strategy_index == 4:
         # S5 Oliver Kell — Numba kernel ile backtest
         return _evaluate_s5_params(params, commission, slippage)
+    elif strategy_index == 5:
+        # S6 TOTT_HOTT
+        strategy = TOTT_HOTTStrategy.from_config_dict(g_cache, params)
     else:
         strategy = ARSTrendStrategyV2.from_config_dict(g_cache, params)
     
@@ -876,12 +918,12 @@ class HybridGroupOptimizer:
                 raw = []
                 best_np = 0.0
                 chunk = min(32, max(1, total // (self.n_parallel * 8)))
-                progress_interval = max(500, total // 200)  # ~200 guncelleme toplam (UI kasmasin)
+                progress_interval = max(20, total // 200)  # ~200 guncelleme toplam, min 20
                 for idx, score in enumerate(self.pool.imap_unordered(_eval_combo_wrapper, tasks, chunksize=chunk)):
                     raw.append(score)
                     if score['net_profit'] > best_np:
                         best_np = score['net_profit']
-                    if (idx + 1) % progress_interval == 0:
+                    if (idx + 1) == total or (idx + 1) % progress_interval == 0:
                         if self.on_progress:
                             pct = int((idx + 1) / total * 100)
                             self.on_progress(pct, f"[{group.name}] {idx+1}/{total} tarandı | En iyi: {best_np:.0f}")
@@ -905,10 +947,18 @@ class HybridGroupOptimizer:
                     results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **score})
         else:
             _init_group_pool(self.strategy_index, self.data_df, self.vade_tipi)
-            for combo in combos:
+            progress_interval = max(20, total // 200)
+            best_np = 0.0
+            for idx, combo in enumerate(combos):
                 if self._is_cancelled and self._is_cancelled(): break
                 score = _evaluate_params_static({**base_params, **combo, 'vade_tipi': self.vade_tipi}, self.strategy_index, self.commission, self.slippage)
+                if score['net_profit'] > best_np: best_np = score['net_profit']
                 if score['net_profit'] > 0: results.append({'group': group.name, 'vade_tipi': self.vade_tipi, **combo, **score})
+                
+                if (idx + 1) == total or (idx + 1) % progress_interval == 0:
+                    if self.on_progress:
+                        pct = int((idx + 1) / total * 100)
+                        self.on_progress(pct, f"[{group.name}] {idx+1}/{total} tarandı | En iyi: {best_np:.0f}")
         results.sort(key=lambda x: x['net_profit'], reverse=True)
         top = results[:10]
         print(f"Bulunan: {len(results)}, Top: {len(top)}")

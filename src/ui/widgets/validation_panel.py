@@ -26,6 +26,7 @@ from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
 from src.strategies.paradise_strategy import ParadiseStrategy
 from src.strategies.toma_strategy import TomaStrategy
 from src.strategies.oliver_kell_s5 import OliverKellStrategy
+from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 import pandas as pd
 
 
@@ -126,6 +127,8 @@ class WFAWorker(QThread):
                 strategy = TomaStrategy.from_config_dict(self.cache, self.params)
             elif self.strategy_idx == 4:
                 strategy = OliverKellStrategy.from_config_dict(self.cache, self.params)
+            elif self.strategy_idx == 5:
+                strategy = TOTT_HOTTStrategy.from_config_dict(self.cache, self.params)
             else:
                 strategy = ARSTrendStrategyV2.from_config_dict(self.cache, self.params)
                 
@@ -333,6 +336,8 @@ class BatchAnalysisWorker(QThread):
         if idx == 0: s = ScoreBasedStrategy.from_config_dict(self.cache, params)
         elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
+        elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
+        elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         
         sig, ex_l, ex_s = s.generate_all_signals()
@@ -371,6 +376,8 @@ class BatchAnalysisWorker(QThread):
              valid_keys = {'toma_period', 'toma_opt', 'mom_period', 'mom_limit_high', 'mom_limit_low', 'trix_period', 'trix_lb1', 'trix_lb2', 'hhv1_period', 'llv1_period', 'hhv2_period', 'llv2_period', 'hhv3_period', 'llv3_period', 'kar_al', 'iz_stop'}
         elif idx == 4:
              valid_keys = set(STRATEGY5_PARAMS.keys())
+        elif idx == 5:
+             valid_keys = {'ott_period', 'ott_pct_big', 'ott_pct_small', 'ott_mult', 'sott_pct', 'gate_period', 'gate_pct'}
         else:
             valid_keys = set(STRATEGY2_PARAMS.keys())
         keys = [k for k in params.keys() if k in valid_keys and isinstance(params[k], (int, float))]
@@ -396,6 +403,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
         elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
+        elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         sig, ex_l, ex_s = s.generate_all_signals()
         return backtest_with_summary(self.cache.closes, sig, ex_l, ex_s, 
@@ -409,6 +417,8 @@ class BatchAnalysisWorker(QThread):
         if idx == 0: s = ScoreBasedStrategy.from_config_dict(self.cache, params)
         elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
+        elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
+        elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         
         # Basit backtest - işlem listesi (pnl'ler) döndüren versiyon lazım
@@ -1075,6 +1085,12 @@ YORUM:
                 s = ParadiseStrategy.from_config_dict(cache, p)
             elif opt_result['strategy_index'] == 3:
                 s = TomaStrategy.from_config_dict(cache, p)
+            elif opt_result['strategy_index'] == 4:
+                from src.strategies.oliver_kell_s5 import OliverKellStrategy
+                s = OliverKellStrategy.from_config_dict(cache, p)
+            elif opt_result['strategy_index'] == 5:
+                from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+                s = TOTT_HOTTStrategy.from_config_dict(cache, p)
             else:
                 s = ARSTrendStrategyV2.from_config_dict(cache, p)
             sig, ex_l, ex_s = s.generate_all_signals()
@@ -1181,7 +1197,7 @@ YORUM:
             self.compare_table.setCellWidget(row_idx, 0, chk_widget)
             
             # 1. Strateji
-            strategy_name = {0: "S1", 1: "S2", 2: "S3", 3: "S4"}.get(result['strategy_index'], "S?")
+            strategy_name = {0: "S1", 1: "S2", 2: "S3", 3: "S4", 4: "S5", 5: "S6"}.get(result['strategy_index'], "S?")
             self.compare_table.setItem(row_idx, 1, QTableWidgetItem(strategy_name))
             
             # 2. Metod
@@ -1406,6 +1422,12 @@ YORUM:
                 strategy = ParadiseStrategy.from_config_dict(cache, params)
             elif strategy_index == 3:
                 strategy = TomaStrategy.from_config_dict(cache, params)
+            elif strategy_index == 4:
+                from src.strategies.oliver_kell_s5 import OliverKellStrategy
+                strategy = OliverKellStrategy.from_config_dict(cache, params)
+            elif strategy_index == 5:
+                from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+                strategy = TOTT_HOTTStrategy.from_config_dict(cache, params)
             else:
                 strategy = ARSTrendStrategyV2.from_config_dict(cache, params)
                 

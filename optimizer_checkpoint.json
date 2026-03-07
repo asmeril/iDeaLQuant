@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-03-08 02:07:28",
+  "strategy_index": 5,
+  "method_combo_text": "Genetik",
+  "remaining_queue": [
+    "Bayesian"
+  ],
+  "queue_total": 3,
+  "process_id": "VIP_X030-T_1dk_20260308_013511",
+  "validation_enabled": true,
+  "split_pct": 70,
+  "commission": 0.0,
+  "slippage": 0.0
+}

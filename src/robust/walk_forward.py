@@ -23,7 +23,6 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..
 sys.path.insert(0, PROJECT_ROOT)
 
 from src.optimization.genetic_optimizer import GeneticOptimizer, GeneticConfig, FitnessEvaluator
-from src.optimization.strategy2_optimizer import load_data, IndicatorCache, fast_backtest_strategy2
 
 @dataclass
 class WalkForwardConfig:
@@ -189,13 +188,16 @@ class WalkForwardAnalysis:
 if __name__ == "__main__":
     # Test çalıştırması
     try:
-        df = load_data()
+        from src.engine.data import OHLCV
+        ohlcv = OHLCV.from_ideal_export(r"data\VIPX030T_1Dk_BarData.csv")
+        df = ohlcv.df
         config = WalkForwardConfig(
             train_window_months=6,
             test_window_months=1,
             step_months=1
         )
-        wf = WalkForwardAnalysis(df, config)
+        # strategy_index: 0=S1, 1=S2, 2=S3, 3=S4, 4=S5, 5=S6
+        wf = WalkForwardAnalysis(df, config, strategy_index=1)
         wf.run()
     except KeyboardInterrupt:
         print("İptal.")

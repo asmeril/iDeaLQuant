@@ -101,6 +101,16 @@ class StrategyPanel(QWidget):
         'trailing_stop_pct': 1.5,
     }
     
+    STRATEGY6_DEFAULTS = {
+        'ott_period': 30,
+        'ott_pct_big': 7.5,
+        'ott_pct_small': 3.4,
+        'ott_mult': 0.0008,
+        'sott_pct': 0.3,
+        'gate_period': 22,
+        'gate_pct': 0.5,
+    }
+    
     def __init__(self):
         super().__init__()
         self.df = None
@@ -183,7 +193,8 @@ class StrategyPanel(QWidget):
             "Strateji 2 - ARS Trend Takip v2",
             "Strateji 3 - Paradise",
             "Strateji 4 - TOMA + Momentum",
-            "Strateji 5 - Oliver Kell"
+            "Strateji 5 - Oliver Kell",
+            "Strateji 6 - TOTT HOTT"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         layout.addWidget(self.strategy_combo, 1)
@@ -219,6 +230,8 @@ class StrategyPanel(QWidget):
             self._create_strategy4_params()
         elif index == 4:
             self._create_strategy5_params()
+        elif index == 5:
+            self._create_strategy6_params()
     
     def _create_strategy1_params(self):
         """Strateji 1 parametrelerini oluştur"""
@@ -427,6 +440,34 @@ class StrategyPanel(QWidget):
         
         self.params_layout.addStretch()
     
+    def _create_strategy6_params(self):
+        """Strateji 6 (TOTT_HOTT) parametrelerini olustur"""
+        defaults = self.STRATEGY6_DEFAULTS
+        
+        # Trend (OTT)
+        trend_group = QGroupBox("OTT Trend")
+        trend_layout = QFormLayout(trend_group)
+        self._add_spin('ott_period', "OTT Periyot:", 10, 100, defaults['ott_period'], trend_layout)
+        self._add_double_spin('ott_pct_big', "OTT % Buyuk:", 3.0, 15.0, defaults['ott_pct_big'], trend_layout)
+        self._add_double_spin('ott_pct_small', "OTT % Kucuk:", 0.5, 6.0, defaults['ott_pct_small'], trend_layout)
+        self.params_layout.addWidget(trend_group)
+        
+        # Bolge
+        bolge_group = QGroupBox("Bolge Filtreleri")
+        bolge_layout = QFormLayout(bolge_group)
+        self._add_double_spin('ott_mult', "OTT Bant Carpan:", 0.0001, 0.005, defaults['ott_mult'], bolge_layout, 4)
+        self._add_double_spin('sott_pct', "SOTT %:", 0.1, 1.0, defaults['sott_pct'], bolge_layout)
+        self.params_layout.addWidget(bolge_group)
+        
+        # Kapi
+        gate_group = QGroupBox("Kapi Filtreleri")
+        gate_layout = QFormLayout(gate_group)
+        self._add_spin('gate_period', "Gate Periyot:", 5, 50, defaults['gate_period'], gate_layout)
+        self._add_double_spin('gate_pct', "Gate %:", 0.1, 2.0, defaults['gate_pct'], gate_layout)
+        self.params_layout.addWidget(gate_group)
+        
+        self.params_layout.addStretch()
+    
     def _add_spin(self, name: str, label: str, min_val: int, max_val: int, default: int, layout: QFormLayout):
         """Integer SpinBox ekle"""
         spin = QSpinBox()
@@ -458,8 +499,10 @@ class StrategyPanel(QWidget):
             defaults = self.STRATEGY4_DEFAULTS
         elif index == 4:
             defaults = self.STRATEGY5_DEFAULTS
+        elif index == 5:
+            defaults = self.STRATEGY6_DEFAULTS
         else:
-            defaults = self.STRATEGY4_DEFAULTS
+            defaults = self.STRATEGY1_DEFAULTS
         
         for name, widget in self.param_widgets.items():
             if name in defaults:
@@ -519,8 +562,10 @@ class StrategyPanel(QWidget):
             strategy_name = "strateji4"
         elif idx == 4:
             strategy_name = "oliver_kell"
+        elif idx == 5:
+            strategy_name = "tott_hott"
         else:
-            strategy_name = "strateji4"
+            strategy_name = "unknown"
         default_name = f"{strategy_name}_preset.json"
         
         filepath, _ = QFileDialog.getSaveFileName(
@@ -605,6 +650,13 @@ class StrategyPanel(QWidget):
             elif strategy_idx == 5:
                 from src.strategies.oliver_kell_s5 import OliverKellStrategy
                 strategy = OliverKellStrategy.from_config_dict(
+                    {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
+                    config,
+                    dates
+                )
+            elif strategy_idx == 6:
+                from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+                strategy = TOTT_HOTTStrategy.from_config_dict(
                     {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
                     config,
                     dates

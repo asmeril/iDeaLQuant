@@ -307,15 +307,26 @@ def calculate_robust_fitness(results: list, param_keys: list = None, n_clusters:
     
     # Clustering için sadece parametre sütunlarını kullan
     X = df[param_keys].copy()
+    
+    # NaN koruması: scaler sıfır varyans sütunlarında NaN döndürebilir (sklearn eski sürümleri) veya X içinde None/NaN olabilir
+    X = X.fillna(0.0)
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
+    X_scaled = np.nan_to_num(X_scaled, 0.0)
     
     # Küme sayısını belirle (Sonuç sayısının karekökü veya max 8)
     if n_clusters <= 0:
         n_clusters = min(8, max(2, int(len(results)**0.5)))
-        
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
-    df['cluster'] = kmeans.fit_predict(X_scaled)
+    
+    # Korumasız kümeler: Örnek sayısı (n) çok azsa KMeans çöker. n_clusters her zaman n'den küçük veya eşit olmalı
+    n_clusters = max(1, min(n_clusters, len(df)))
+    
+    if n_clusters == 1:
+        # Tek örnek kalmışsa veya çok azsa cluster aramaya gerek yok
+        df['cluster'] = 0
+    else:
+        kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
+        df['cluster'] = kmeans.fit_predict(X_scaled)
     
     # Her kümenin ortalama kârlılığını (fitness) hesapla
     cluster_stats = df.groupby('cluster')['fitness'].agg(['mean', 'count']).to_dict('index')

@@ -91,7 +91,8 @@ class DataPanel(QWidget):
             "2: ARS Trend v2", 
             "3: Paradise (Trend+Breakout)", 
             "4: TOMA + Momentum",
-            "5: Oliver Kell"
+            "5: Oliver Kell",
+            "6: TOTT HOTT"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_data)
         layout.addWidget(self.strategy_combo)

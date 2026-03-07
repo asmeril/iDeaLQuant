@@ -85,7 +85,7 @@ def load_data() -> pd.DataFrame:
 # ==============================================================================
 
 # Genetik optimizer'dan parametre tanımlarını import et
-from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS, STRATEGY5_PARAMS
+from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS, STRATEGY5_PARAMS, STRATEGY6_PARAMS
 
 
 class BayesianObjective:
@@ -112,8 +112,10 @@ class BayesianObjective:
             base_params = STRATEGY4_PARAMS
         elif strategy_index == 4:
             base_params = STRATEGY5_PARAMS
+        elif strategy_index == 5:
+            base_params = STRATEGY6_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5 desteklenir.")
             
         self.param_defs = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -164,6 +166,8 @@ class BayesianObjective:
             result = self._evaluate_strategy4(params)
         elif self.strategy_index == 4:
             result = self._evaluate_strategy5(params)
+        elif self.strategy_index == 5:
+            result = self._evaluate_strategy6(params)
         else:
             raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         
@@ -465,6 +469,44 @@ class BayesianObjective:
         except Exception as e:
             import traceback
             print(f"S5 Bayesian Eval Error: {e}")
+            traceback.print_exc()
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
+    def _evaluate_strategy6(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 6 (TOTT_HOTT) icin fitness hesapla"""
+        try:
+            from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+            from src.optimization.hybrid_group_optimizer import fast_backtest
+
+            strategy = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
+            signals, exits_long, exits_short = strategy.generate_all_signals()
+
+            trading_days = 252.0
+            if self.cache.dates and len(self.cache.dates) > 1:
+                try:
+                    trading_days = (self.cache.dates[-1] - self.cache.dates[0]).days
+                except: pass
+
+            np_val, trades, pf, dd, sharpe = fast_backtest(
+                self.cache.closes, signals, exits_long, exits_short,
+                self.commission, self.slippage, trading_days=trading_days
+            )
+
+            fit = quick_fitness(
+                np_val, pf, dd, trades, sharpe=sharpe,
+                commission=0.0, slippage=0.0
+            )
+
+            return {
+                'net_profit': np_val,
+                'trades': trades,
+                'pf': pf,
+                'max_dd': dd,
+                'sharpe': sharpe,
+                'fitness': fit
+            }
+        except Exception as e:
+            import traceback
             traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
     

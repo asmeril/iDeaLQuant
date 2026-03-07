@@ -1982,6 +1982,319 @@ Sistem.Cizgiler[5].ActiveBool = true;
 '''
         return code
 
+    # ==========================================================================
+    # STRATEGY 6: TOTT_HOTT
+    # ==========================================================================
+
+    def _generate_strategy6_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
+        """Strateji 6 (TOTT_HOTT) IdealData kodu oluşturur."""
+        ott_period = int(params.get('ott_period', 30))
+        ott_pct_big = float(params.get('ott_pct_big', 7.0))
+        ott_pct_small = float(params.get('ott_pct_small', 3.5))
+        ott_mult = float(params.get('ott_mult', 0.0008))
+        sott_pct = float(params.get('sott_pct', 0.3))
+        gate_period = int(params.get('gate_period', 20))
+        gate_pct = float(params.get('gate_pct', 0.5))
+        stoch_k = int(params.get('stoch_k', 500))
+        stoch_smooth = int(params.get('stoch_smooth', 200))
+
+        # Yön Modu
+        is_spot = (vade_tipi == "SPOT")
+        if is_spot:
+            yon_code = '// SPOT Hisse: Sadece AL / FLAT\nstring YON_MODU = "SADECE_AL";'
+            mode_label = "SPOT Hisse — Tek Yön (AL/FLAT)"
+        else:
+            yon_code = '// Vadeli: Çift Yönlü\nstring YON_MODU = "CIFT";'
+            mode_label = f"VIOP — Çift Yön ({vade_tipi})"
+        
+        half_gate = max(1, gate_period // 2)
+
+        code = f'''// ===============================================================================================
+// STRATEJI 6: TOTT_HOTT — OTT Tabanlı Trend + Stochastic Bölge + HHV/LLV Kapı
+// Mod: {mode_label}
+// Otomatik: IdealQuant Export | Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+// ===============================================================================================
+{yon_code}
+
+// === PARAMETRELER ===
+int OTT_Period = {ott_period};
+float OTT_Pct_Big = {ott_pct_big}f;
+float OTT_Pct_Small = {ott_pct_small}f;
+float OTT_Mult = {ott_mult}f;
+float SOTT_Pct = {sott_pct}f;
+int Gate_Period = {gate_period};
+float Gate_Pct = {gate_pct}f;
+int Stoch_K = {stoch_k};
+int Stoch_Smooth = {stoch_smooth};
+
+// === GRAFİK BİLGİSİ ===
+var Veriler = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
+var H = Sistem.GrafikFiyatSec("Yuksek");
+var L = Sistem.GrafikFiyatSec("Dusuk");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+
+string VadeTipi = "{vade_tipi}";
+
+// ===============================================================================================
+// DİNAMİK BAYRAM TARİHLERİ (2024-2030)
+// ===============================================================================================
+int yil = DateTime.Now.Year;
+DateTime Ramazan, Kurban;
+
+switch(yil)
+{{
+    case 2024: Ramazan = new DateTime(2024, 4, 10); Kurban = new DateTime(2024, 6, 16); break;
+    case 2025: Ramazan = new DateTime(2025, 3, 30); Kurban = new DateTime(2025, 6, 6); break;
+    case 2026: Ramazan = new DateTime(2026, 3, 20); Kurban = new DateTime(2026, 5, 27); break;
+    case 2027: Ramazan = new DateTime(2027, 3, 9); Kurban = new DateTime(2027, 5, 16); break;
+    case 2028: Ramazan = new DateTime(2028, 2, 26); Kurban = new DateTime(2028, 5, 5); break;
+    case 2029: Ramazan = new DateTime(2029, 2, 14); Kurban = new DateTime(2029, 4, 24); break;
+    case 2030: Ramazan = new DateTime(2030, 2, 3); Kurban = new DateTime(2030, 4, 13); break;
+    default: Ramazan = new DateTime(yil, 3, 15); Kurban = new DateTime(yil, 5, 20); break;
+}}
+
+DateTime R2024 = new DateTime(2024, 4, 10); DateTime K2024 = new DateTime(2024, 6, 16);
+DateTime R2025 = new DateTime(2025, 3, 30); DateTime K2025 = new DateTime(2025, 6, 6);
+DateTime R2026 = new DateTime(2026, 3, 20); DateTime K2026 = new DateTime(2026, 5, 27);
+DateTime R2027 = new DateTime(2027, 3, 9); DateTime K2027 = new DateTime(2027, 5, 16);
+
+string[] resmiTatiller = new string[] {{ "01.01","04.23","05.01","05.19","07.15","08.30","10.29" }};
+
+// ===============================================================================================
+// VADE SONU İŞ GÜNÜ HESAPLAMA
+// ===============================================================================================
+Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
+{{
+    var aySonu = new DateTime(dt.Year, dt.Month, DateTime.DaysInMonth(dt.Year, dt.Month));
+    var d = aySonu;
+    
+    for (int k = 0; k < 15; k++)
+    {{
+        if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+        {{ d = d.AddDays(-1); continue; }}
+        
+        string mmdd = d.ToString("MM.dd");
+        bool tatil = false;
+        for (int t = 0; t < resmiTatiller.Length; t++)
+            if (resmiTatiller[t] == mmdd) {{ tatil = true; break; }}
+        if (tatil) {{ d = d.AddDays(-1); continue; }}
+        
+        if ((d >= R2024 && d <= R2024.AddDays(3)) || (d >= K2024 && d <= K2024.AddDays(4)) ||
+            (d >= R2025 && d <= R2025.AddDays(3)) || (d >= K2025 && d <= K2025.AddDays(4)) ||
+            (d >= R2026 && d <= R2026.AddDays(3)) || (d >= K2026 && d <= K2026.AddDays(4)) ||
+            (d >= R2027 && d <= R2027.AddDays(3)) || (d >= K2027 && d <= K2027.AddDays(4)))
+        {{ d = d.AddDays(-1); continue; }}
+        
+        break;
+    }}
+    return d.Date;
+}};
+
+// ===============================================================================================
+// İNDİKATÖR HESAPLAMALARI
+// ===============================================================================================
+// 1. Variable MA (MOV)
+var MOV = Sistem.MA(C, "Variable", OTT_Period);
+
+// 2. OTT — Büyük (Ana trend filtre)
+var OTT_Big = Sistem.OTT(C, OTT_Period, OTT_Pct_Big, "Variable");
+
+// 3. OTT — Küçük (Fallback + band check)
+var OTT_Small = Sistem.OTT(C, OTT_Period, OTT_Pct_Small, "Variable");
+
+// 4. Stochastic + VMA Smooth + Offset → SOTT
+var StochRaw = Sistem.StochasticOsilator(Stoch_K, 1, 1);  
+var StochSmooth = Sistem.MA(StochRaw, "Variable", Stoch_Smooth);
+var STOSK_X = Sistem.Liste(0);
+for (int i = 0; i < Veriler.Count; i++)
+    STOSK_X[i] = StochSmooth[i] + 1000.0f;
+var SOTT = Sistem.OTT(STOSK_X, 2, SOTT_Pct, "Variable");
+
+// 5. HHV/LLV Kapı — Half period
+var HHV_Full = Sistem.HHV(Gate_Period, "Yuksek");
+var LLV_Full = Sistem.LLV(Gate_Period, "Dusuk");
+var HHV_Half = Sistem.HHV({half_gate}, "Yuksek");
+var LLV_Half = Sistem.LLV({half_gate}, "Dusuk");
+var HOTT = Sistem.OTT(HHV_Half, 2, Gate_Pct, "Variable");
+var LOTT = Sistem.OTT(LLV_Half, 2, Gate_Pct, "Variable");
+
+// ===============================================================================================
+// SİNYAL ÜRETME
+// ===============================================================================================
+for (int i = 1; i < Veriler.Count; i++) Sistem.Yon[i] = "";
+var SonYon = "";
+
+int vadeCooldownBar = Stoch_K + Stoch_Smooth + 50;
+int warmupBars = Math.Max(50, vadeCooldownBar);
+int warmupBaslangicBar = -999;
+bool warmupAktif = false;
+bool arefeFlat = false;
+
+float mult_up = 1.0f + OTT_Mult;
+float mult_dn = 1.0f - OTT_Mult;
+
+for (int i = warmupBars; i < Veriler.Count; i++)
+{{
+    string Sinyal = "";
+    var dt = Veriler[i].Date;
+    var t = dt.TimeOfDay;
+    
+    bool gunSeansi = t >= new TimeSpan(9,30,0) && t < new TimeSpan(18,15,0);
+    bool aksamSeansi = t >= new TimeSpan(19,0,0) && t < new TimeSpan(23,0,0);
+    if (!(gunSeansi || aksamSeansi)) continue;
+    
+    bool vadeAyi = (VadeTipi == "SPOT") || (dt.Month % 2 == 0);
+    bool vadeSonuGun = vadeAyi && (dt.Date == VadeSonuIsGunu(dt));
+    
+    bool arefe = dt.Date == R2024.AddDays(-1).Date || dt.Date == K2024.AddDays(-1).Date ||
+                 dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
+                 dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
+                 dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
+    
+    // Vade/Arefe Flat
+    if (arefe && vadeSonuGun && t > new TimeSpan(11,30,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+    }}
+    else if (arefe && !vadeSonuGun && t > new TimeSpan(11,30,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        arefeFlat = true;
+    }}
+    else if (vadeSonuGun && t > new TimeSpan(17,40,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+    }}
+    
+    if (Sinyal == "F") {{
+        if (SonYon != Sinyal) {{ Sistem.Yon[i] = Sinyal; SonYon = Sinyal; }}
+        continue;
+    }}
+    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0))) continue;
+    
+    // Warmup
+    if (warmupAktif && warmupBaslangicBar == -999) {{
+        bool yeniSeans = false;
+        if (aksamSeansi && i>0 && Veriler[i-1].Date.TimeOfDay < new TimeSpan(19,0,0)) yeniSeans = true;
+        if (gunSeansi && i>0 && dt.Date != Veriler[i-1].Date.Date) yeniSeans = true;
+        if (yeniSeans) warmupBaslangicBar = i;
+    }}
+    if (warmupAktif && warmupBaslangicBar > 0) {{
+        if ((i - warmupBaslangicBar) < vadeCooldownBar) continue;
+        else warmupAktif = false;
+    }}
+    if (arefeFlat && i>0 && dt.Date != Veriler[i-1].Date.Date) arefeFlat = false;
+
+    // === TOTT_HOTT SİNYAL MANTIĞI ===
+    float mov_i = MOV[i];
+    float ott_big_i = OTT_Big[i];
+    float ott_small_i = OTT_Small[i];
+    float sx_i = STOSK_X[i];
+    float sott_i = SOTT[i];
+    float hhv_prev = HHV_Full[i - 1];
+    float llv_prev = LLV_Full[i - 1];
+    
+    // Kapı koşulları
+    bool hott_gate = (H[i] > HOTT[i]) && (H[i] > hhv_prev);
+    bool lott_gate = (L[i] < LOTT[i]) && (L[i] < llv_prev);
+    
+    // Bölge (SOTT)
+    bool sott_long = sx_i > sott_i;
+    bool sott_short = sx_i < sott_i;
+    
+    // AL Koşulları
+    bool al = false;
+    if (mov_i > ott_big_i)
+    {{
+        // Ana trend yukarı
+        al = (mov_i > ott_small_i * mult_up) && sott_long && hott_gate;
+    }}
+    else
+    {{
+        // Fallback
+        al = (mov_i > ott_small_i) && (mov_i > ott_small_i * mult_up) && sott_long && hott_gate;
+    }}
+    
+    // SAT Koşulları
+    bool sat = false;
+    {"" if is_spot else '''if (mov_i > ott_big_i)
+    {{
+        sat = (mov_i < ott_small_i * mult_dn) && sott_short && lott_gate;
+    }}
+    else
+    {{
+        sat = (mov_i < ott_small_i) && sott_short && lott_gate;
+    }}'''}
+    
+    if (al && SonYon != "A")
+    {{
+        Sinyal = "A";
+    }}
+    {"" if is_spot else '''else if (sat && SonYon != "S")
+    {{
+        Sinyal = "S";
+    }}'''}
+    else if (SonYon == "A" && !al)
+    {{
+        Sinyal = "F";
+    }}
+    {"" if is_spot else '''else if (SonYon == "S" && !sat)
+    {{
+        Sinyal = "F";
+    }}'''}
+    
+    // Pozisyon güncelle
+    if (Sinyal != "" && SonYon != Sinyal)
+    {{
+        Sistem.Yon[i] = Sinyal;
+        SonYon = Sinyal;
+    }}
+}}
+
+// === ÇİZİMLER ===
+Sistem.Cizgiler[3].Deger = MOV;
+Sistem.Cizgiler[3].Aciklama = "MOV(Variable, {ott_period})";
+Sistem.Cizgiler[3].ActiveBool = true;
+Sistem.Cizgiler[3].Renk = Color.Cyan;
+
+Sistem.Cizgiler[4].Deger = OTT_Big;
+Sistem.Cizgiler[4].Aciklama = "OTT Big ({ott_pct_big}%)";
+Sistem.Cizgiler[4].ActiveBool = true;
+Sistem.Cizgiler[4].Renk = Color.Red;
+
+Sistem.Cizgiler[5].Deger = OTT_Small;
+Sistem.Cizgiler[5].Aciklama = "OTT Small ({ott_pct_small}%)";
+Sistem.Cizgiler[5].ActiveBool = true;
+Sistem.Cizgiler[5].Renk = Color.Yellow;
+
+{self._get_performance_panel_code()}
+'''
+        return code
+
+    def export_strategy6(
+        self, 
+        params: Dict[str, Any], 
+        vade_tipi: str = "ENDEKS"
+    ) -> str:
+        """
+        Strateji 6 (TOTT_HOTT) Kodunu Export Eder
+        """
+        filename = self._generate_filename(6, vade_tipi)
+        
+        code = self._generate_strategy6_code(params, vade_tipi)
+        
+        filepath = self.output_dir / f"{filename}.cs"
+        filepath.write_text(code, encoding='utf-8')
+        
+        # Parametreleri JSON olarak da kaydet
+        params_path = self.output_dir / f"{filename}_params.json"
+        params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
+        
+        return str(filepath)
+
     def export_strategy5(
         self, 
         params: Dict[str, Any], 

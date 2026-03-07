@@ -1,8 +1,27 @@
+## 2026-03-08 (Strateji 6: Optimizasyon Hataları & Veri Yükleme Fix)
+
+### ✅ Yapılanlar
+- **Strateji 6 Optimizasyon Hata Düzeltmeleri:**
+  - **KMeans NaN Koruması:** `fitness.py` içerisinde düşük kârlı sonuç kümelerinde (n_samples < n_clusters) ve sıfır varyanslı parametrelerde oluşan çökme giderildi. Kümeleme öncesi koruma kalkanı eklendi.
+  - **Genetik Entegrasyon:** `genetic_optimizer.py` içerisine S6 (TOTT_HOTT) importları ve parametre yönlendirmeleri eklendi.
+  - **İlerleme Çubuğu (Progress UI):** S6 gibi küçük kombinasyonlu gruplarda ilerleme bilgisinin UI'a yansımaması sorunu `progress_interval` dinamikleştirilerek çözüldü.
+- **Veri Yükleme & Kalıcılık (Data Ingestion Fix):**
+  - Hibrit worker'ların hardcode bir CSV yoluna (`VIP_X030T_1dk_.csv`) düşmesine neden olan bağlantı kopukluğu giderildi.
+  - `OptimizerPanel.set_process` içerisine, süreç seçildiğinde eğer hafızadaki veri boşsa DB'deki `data_file` yolundan otomatik yükleme yapma mantığı eklendi.
+- **UI Hassasiyet İyileştirmesi:**
+  - `ott_mult` gibi 0.0005 hassasiyet gerektiren değerler için SpinBox ondalık basamak sayısı 3'ten 5'e çıkarıldı.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 11 - Strateji 6 ✅ Optimizasyon ve Veri Akışı Stabil.
+- **Sıradaki Adım:** Canlı veri üzerinde S6 optimizasyon verimlilik testi.
+
+---
+
 ## 2026-03-07 (Strateji 6: TOTT_HOTT Entegrasyonu & İndikatör Kalibrasyonu)
 
 ### ✅ Yapılanlar
 - **Strateji 6 (TOTT_HOTT) Python Çekirdeği:**
-  - `VIP_TUPRS_5DK_Paradise` (TOTT_HOTT) stratejisi C#'tan Python'a 100% uyarlandı (`tott_hott_strategy.py`).
+  - TOTT_HOTT stratejisi C#'tan Python'a 100% uyarlandı (`tott_hott_strategy.py`).
   - Zaman filtreleri (saat kontrolleri) koda hardcode edilmeyip IdealQuant `get_trading_mask` altyapısına bağlandı.
   - Orijinal dökümandaki 3 fazlı (Ana Trend, Bölge, Kapı) konfigürasyona uygun `StrategyConfigTottHott` oluşturuldu.
 - **Yeni IdealData İndikatörleri (Core & Trend):**
