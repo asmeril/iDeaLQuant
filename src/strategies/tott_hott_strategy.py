@@ -162,22 +162,40 @@ class TOTT_HOTTStrategy:
 
         return (signal, None) if return_flat_reason else signal
 
-    def generate_all_signals(self) -> tuple:
+    def generate_all_signals(self, mask: Optional[np.ndarray] = None, yon_modu: str = "CIFT") -> tuple:
         signals = np.zeros(self.n, dtype=int)
         exits_long = np.zeros(self.n, dtype=bool)
         exits_short = np.zeros(self.n, dtype=bool)
         position = "FLAT"
 
         for i in range(self.warmup_bars, self.n):
+            # Vade sonu maskesi kontrolü: Eğer mask False ise pozisyonu kapat
+            if mask is not None and not mask[i]:
+                if position == "LONG":
+                    exits_long[i] = True
+                elif position == "SHORT":
+                    exits_short[i] = True
+                position = "FLAT"
+                continue
+
             sig = self.get_signal(i, position)
+            
+            # Yön Modu Filtreleri
+            if yon_modu == "SADECE_AL" and sig == Signal.SHORT:
+                sig = Signal.NONE
+            elif yon_modu == "SADECE_SAT" and sig == Signal.LONG:
+                sig = Signal.NONE
+
             if sig == Signal.LONG:
-                signals[i] = 1
-                if position == "SHORT": exits_short[i] = True
-                position = "LONG"
+                if position != "LONG":
+                    signals[i] = 1
+                    if position == "SHORT": exits_short[i] = True
+                    position = "LONG"
             elif sig == Signal.SHORT:
-                signals[i] = -1
-                if position == "LONG": exits_long[i] = True
-                position = "SHORT"
+                if position != "SHORT":
+                    signals[i] = -1
+                    if position == "LONG": exits_long[i] = True
+                    position = "SHORT"
             elif sig == Signal.FLAT:
                 if position == "LONG": exits_long[i] = True
                 elif position == "SHORT": exits_short[i] = True

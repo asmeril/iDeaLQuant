@@ -294,126 +294,125 @@ def calculate_robust_fitness(results: list, param_keys: list = None, n_clusters:
         return (dist_sq / max(count, 1)) ** 0.5
         
     # 1. Parametreleri normalize et
-    param_ranges = {}
-    for key in param_keys:
-        vals = [r.get(key, 0) for r in results if key in r]
-        if vals:
-            vmin, vmax = min(vals), max(vals)
-            param_ranges[key] = (vmin, vmax - vmin) if vmax > vmin else (vmin, 1.0)
-            
-    # 2. Results to DataFrame for clustering
+    # 1. Parametreleri normalize et (param_ranges artık vektörize hesaplama için gerekli değil)
+    # Eski normalized_distance fonksiyonu yerine NearestNeighbors/NumPy kullanılıyor.
+        
+    # 2. Results to DataFrame for clustering & fast lookup
     n = len(results)
     df = pd.DataFrame(results)
+    X = df[param_keys].fillna(0.0).values
     
-    # Clustering için sadece parametre sütunlarını kullan
-    X = df[param_keys].copy()
+    # Min-Max Scaling for density distance calculation (matches original logic)
+    X_min = X.min(axis=0)
+    X_max = X.max(axis=0)
+    X_range = np.where(X_max > X_min, X_max - X_min, 1.0)
+    X_minmax = (X - X_min) / X_range
     
-    # NaN koruması: scaler sıfır varyans sütunlarında NaN döndürebilir (sklearn eski sürümleri) veya X içinde None/NaN olabilir
-    X = X.fillna(0.0)
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
+    # 3. Clustering (KMeans)
+    X_scaled = StandardScaler().fit_transform(X)
     X_scaled = np.nan_to_num(X_scaled, 0.0)
     
-    # Küme sayısını belirle (Sonuç sayısının karekökü veya max 8)
     if n_clusters <= 0:
         n_clusters = min(8, max(2, int(len(results)**0.5)))
-    
-    # Korumasız kümeler: Örnek sayısı (n) çok azsa KMeans çöker. n_clusters her zaman n'den küçük veya eşit olmalı
-    n_clusters = max(1, min(n_clusters, len(df)))
+    n_clusters = max(1, min(n_clusters, n))
     
     if n_clusters == 1:
-        # Tek örnek kalmışsa veya çok azsa cluster aramaya gerek yok
-        df['cluster'] = 0
+        clusters = np.zeros(n, dtype=int)
     else:
         kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init='auto')
-        df['cluster'] = kmeans.fit_predict(X_scaled)
+        clusters = kmeans.fit_predict(X_scaled)
     
-    # Her kümenin ortalama kârlılığını (fitness) hesapla
+    df['cluster'] = clusters
     cluster_stats = df.groupby('cluster')['fitness'].agg(['mean', 'count']).to_dict('index')
     max_cluster_mean = max([s['mean'] for s in cluster_stats.values()]) if cluster_stats else 1.0
+    
+    # 4. Density Calculation (Optimized with RadiusNeighbors)
+    # distance_threshold is normalized (0-1). 
+    # normalized_distance had division by sqrt(count) inside.
+    # dist = sqrt(sum((d1-d2)^2) / count) <= threshold
+    # sum((d1-d2)^2) <= count * threshold^2
+    # Standard Euclidean distance on X_minmax: 
+    # sklearn_dist = sqrt(sum((d1-d2)^2)) <= threshold * sqrt(count)
+    
+    distance_threshold = 0.15 # Re-declare or ensure it's in scope
+    dist_threshold_adj = distance_threshold * np.sqrt(len(param_keys))
+    
+    from sklearn.neighbors import NearestNeighbors
+    nn = NearestNeighbors(radius=dist_threshold_adj)
+    nn.fit(X_minmax)
+    adj_matrix = nn.radius_neighbors_graph(X_minmax) # Sparse matrix
+    
+    fitness_vals = df['fitness'].values
+    neighbor_counts = adj_matrix.getnnz(axis=1) - 1 # exclude self
+    neighbor_fitness_sums = adj_matrix.dot(fitness_vals) - fitness_vals # exclude self fitness
+    max_raw_fitness = fitness_vals.max() if fitness_vals.max() > 0 else 1.0
 
-    distance_threshold = 0.15
-    max_raw_fitness = df['fitness'].max() if df['fitness'].max() > 0 else 1.0
-
-    for i, row in df.iterrows():
-        # Density hesabı
-        neighbor_count = 0
-        neighbor_fitness_sum = 0
-        r1 = results[i]
+    for i in range(n):
+        count = max(0, neighbor_counts[i])
+        f_sum = max(0, neighbor_fitness_sums[i])
         
-        for j, other in enumerate(results):
-            if i == j: continue
-            dist = normalized_distance(r1, other, param_keys, param_ranges)
-            if dist <= distance_threshold:
-                neighbor_count += 1
-                neighbor_fitness_sum += other.get('fitness', 0)
-
-        
-        if neighbor_count > 0:
-            neighbor_avg = neighbor_fitness_sum / neighbor_count
-            count_ratio = min(1.0, neighbor_count / max(5, n * 0.1))
+        if count > 0:
+            neighbor_avg = f_sum / count
+            count_ratio = min(1.0, count / max(5, n * 0.1))
             quality_ratio = neighbor_avg / max_raw_fitness
             density_score = (count_ratio * 0.5 + quality_ratio * 0.5)
         else:
             density_score = 0.0
             
-        # Cluster çarpanı: Ait olduğu adanın genel kalitesi
-        c_id = row['cluster']
+        c_id = clusters[i]
         c_mean = cluster_stats[c_id]['mean']
         cluster_quality = c_mean / max_cluster_mean if max_cluster_mean > 0 else 1.0
         
-        # Robust Fitness FINAL: Raw × Density × Cluster_Quality
         results[i]['density_score'] = round(density_score, 3)
         results[i]['cluster'] = int(c_id)
         results[i]['cluster_avg_fitness'] = round(c_mean, 2)
-        
-        # Sadece kârlı ve yoğun adadakilere tam puan, izolelere ceza
-        results[i]['robust_fitness'] = r1.get('fitness', 0) * (0.4 + 0.3 * density_score + 0.3 * cluster_quality)
+        results[i]['robust_fitness'] = results[i].get('fitness', 0) * (0.4 + 0.3 * density_score + 0.3 * cluster_quality)
 
     return results
 
 def _calculate_density_only(results: list, param_keys: list) -> list:
-    """Fallback: sklearn yoksa sadece yoğunluk hesapla (clustering yapmadan)"""
+    """Fallback: sklearn yoksa sadece yoğunluk hesapla (NumPy ile optimize)"""
     if not results or not param_keys:
         return results
         
-    # Parametreleri normalize et
-    param_ranges = {}
-    for key in param_keys:
-        vals = [r.get(key, 0) for r in results if key in r]
-        if vals:
-            vmin, vmax = min(vals), max(vals)
-            param_ranges[key] = (vmin, vmax - vmin) if vmax > vmin else (vmin, 1.0)
-            
-    def get_dist(r1, r2):
-        dist_sq = 0
-        count = 0
-        for key in param_keys:
-            if key in r1 and key in r2 and key in param_ranges:
-                vmin, vrange = param_ranges[key]
-                d1 = (r1[key] - vmin) / vrange
-                d2 = (r2[key] - vmin) / vrange
-                dist_sq += (d1 - d2) ** 2
-                count += 1
-        return (dist_sq / max(count, 1)) ** 0.5
-
+    import numpy as np
+    X = np.array([[r.get(k, 0) for k in param_keys] for r in results], dtype=np.float64)
+    X_min = X.min(axis=0)
+    X_max = X.max(axis=0)
+    X_range = np.where(X_max > X_min, X_max - X_min, 1.0)
+    X_norm = (X - X_min) / X_range
+    
     n = len(results)
     distance_threshold = 0.15
     max_fitness = max([r.get('fitness', 0) for r in results]) if results else 1.0
     if max_fitness <= 0: max_fitness = 1.0
+    
+    # Calculate distance matrix (Memory intensive if n is very large, but much faster)
+    if n < 8000:
+        # Vectorized cdist logic: sqrt(sum((x-y)^2) / count)
+        dists = np.sqrt(np.sum((X_norm[:, np.newaxis, :] - X_norm[np.newaxis, :, :])**2, axis=2) / len(param_keys))
+        neighbors_mask = dists <= distance_threshold
+        neighbor_counts = neighbors_mask.sum(axis=1) - 1
+        fitness_vals = np.array([r.get('fitness', 0) for r in results])
+        neighbor_fitness_sums = (neighbors_mask * fitness_vals).sum(axis=1) - fitness_vals
+    else:
+        # Loop-based fallback for very large n to save memory, still faster than pure python
+        neighbor_counts = np.zeros(n)
+        neighbor_fitness_sums = np.zeros(n)
+        fitness_vals = np.array([r.get('fitness', 0) for r in results])
+        for i in range(n):
+            dists = np.sqrt(np.mean((X_norm - X_norm[i])**2, axis=1))
+            mask = dists <= distance_threshold
+            neighbor_counts[i] = mask.sum() - 1
+            neighbor_fitness_sums[i] = (mask * fitness_vals).sum() - fitness_vals[i]
 
     for i, r1 in enumerate(results):
-        neighbor_count = 0
-        neighbor_fitness_sum = 0
-        for j, other in enumerate(results):
-            if i == j: continue
-            if get_dist(r1, other) <= distance_threshold:
-                neighbor_count += 1
-                neighbor_fitness_sum += other.get('fitness', 0)
+        count = max(0, neighbor_counts[i])
+        f_sum = max(0, neighbor_fitness_sums[i])
         
-        if neighbor_count > 0:
-            neighbor_avg = neighbor_fitness_sum / neighbor_count
-            count_ratio = min(1.0, neighbor_count / max(5, n * 0.1))
+        if count > 0:
+            neighbor_avg = f_sum / count
+            count_ratio = min(1.0, count / max(5, n * 0.1))
             quality_ratio = neighbor_avg / max_fitness
             density_score = (count_ratio * 0.5 + quality_ratio * 0.5)
         else:
@@ -421,7 +420,7 @@ def _calculate_density_only(results: list, param_keys: list) -> list:
             
         r1['density_score'] = round(density_score, 3)
         r1['robust_fitness'] = r1.get('fitness', 0) * (0.5 + 0.5 * density_score)
-        r1['cluster'] = 0  # No clustering in fallback
+        r1['cluster'] = 0
         r1['cluster_avg_fitness'] = r1.get('fitness', 0)
 
     return results

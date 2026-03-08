@@ -30,22 +30,9 @@ def load_data():
     try:
         if current_process().name == 'MainProcess':
             print("Veri yukleniyor...")
-            
-        df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
-        df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
-        cols = ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']
-        for c in cols: df[c] = pd.to_numeric(df[c], errors='coerce')
-        
-        df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
-        df.dropna(inplace=True)
-        
-        if current_process().name == 'MainProcess':
-            print(f"Veri Hazir: {len(df)} Bar")
-            
-        return df
-    except Exception as e:
-        print(f"Hata: {e}")
-        return None
+def load_data_and_mask(vade_tipi="ENDEKS"):
+    # Hardcoded path kaldırıldı
+    return None, None
 
 # --- INDICATOR CACHE ---
 class IndicatorCache:

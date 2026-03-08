@@ -1014,22 +1014,8 @@ class GeneticOptimizer:
 # MAIN
 # ==============================================================================
 def load_data() -> pd.DataFrame:
-    """Veri yükle"""
-    csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"
-    print("Veri yukleniyor...")
-    
-    df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
-    df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
-    
-    cols = ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']
-    for c in cols:
-        df[c] = pd.to_numeric(df[c], errors='coerce')
-    
-    df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
-    df.dropna(inplace=True)
-    
-    print(f"Veri Hazir: {len(df)} Bar")
-    return df
+    # Hardcoded path kaldırıldı
+    return None
 
 
 def run_genetic_optimization():

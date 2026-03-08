@@ -5,6 +5,11 @@
   - **KMeans NaN Koruması:** `fitness.py` içerisinde düşük kârlı sonuç kümelerinde (n_samples < n_clusters) ve sıfır varyanslı parametrelerde oluşan çökme giderildi. Kümeleme öncesi koruma kalkanı eklendi.
   - **Genetik Entegrasyon:** `genetic_optimizer.py` içerisine S6 (TOTT_HOTT) importları ve parametre yönlendirmeleri eklendi.
   - **İlerleme Çubuğu (Progress UI):** S6 gibi küçük kombinasyonlu gruplarda ilerleme bilgisinin UI'a yansımaması sorunu `progress_interval` dinamikleştirilerek çözüldü.
+- **Strateji 6 C# Export Sinyal & Uyum Düzeltmeleri:**
+  - **Stochastic Senkronizasyonu:** C# `StochasticOsilator` (Yavaş) kullanımı, Python'daki gibi `StochasticFast` ile değiştirildi.
+  - **Kapı (HHV/LLV) Parametrizasyonu:** Sabit `5` değeri, Python'daki dinamik `Gate_Period / 2` (Yani `HHV_Half`) ile değiştirilerek Breakout kilitlenmeleri çözüldü.
+  - **Isınma (Warmup) Optimizasyonu:** StochK + Smooth (700 bar) olan aşırı bekleme süresi 100 bara sabitlenerek ilk seans işlemlerinin kaçırılması engellendi.
+  - **Hata Ayıklama (Debug):** İdeal grafik ekranı için `Sistem.Cizgiler` içerisine `HOTT` ve `HHV_Half` kapıları görsel olarak eklendi.
 - **Veri Yükleme & Kalıcılık (Data Ingestion Fix):**
   - Hibrit worker'ların hardcode bir CSV yoluna (`VIP_X030T_1dk_.csv`) düşmesine neden olan bağlantı kopukluğu giderildi.
   - `OptimizerPanel.set_process` içerisine, süreç seçildiğinde eğer hafızadaki veri boşsa DB'deki `data_file` yolundan otomatik yükleme yapma mantığı eklendi.

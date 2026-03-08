@@ -173,6 +173,10 @@ class DataPanel(QWidget):
             per_str = parts[1] if len(parts) > 1 else '1dk'
             data_file_path = str(Path(csv_path).resolve())
             
+        # Tarih filtresi bilgilerini kaydet
+        date_start_str = self.start_date.date().toPython().isoformat()
+        date_end_str = self.end_date.date().toPython().isoformat()
+        
         # Veritabanında süreci oluştur
         process_id = db.create_process(
             symbol=full_symbol,
@@ -181,7 +185,9 @@ class DataPanel(QWidget):
             data_rows=len(self.df),
             strategy_index=strategy_index,
             vade_tipi=vade_tipi,
-            yon_modu=yon_modu
+            yon_modu=yon_modu,
+            date_start=date_start_str,
+            date_end=date_end_str
         )
         self.current_process_id = process_id
         
@@ -571,7 +577,7 @@ class DataPanel(QWidget):
         except Exception as e:
             QMessageBox.critical(self, "Hata", f"Veri yüklenirken hata: {str(e)}")
     
-    def _apply_filter(self):
+    def _apply_filter(self, silent: bool = False):
         """Filtreleri uygula - Hem önizleme hem de gerçek veriyi güncelle"""
         # Ham veri yoksa çık
         if not hasattr(self, 'df_raw') or self.df_raw is None:
@@ -601,14 +607,15 @@ class DataPanel(QWidget):
         # Optimizasyon ve Validasyon panellerine sinyal gönder
         self.data_loaded.emit(self.df)
         
-        # Kullanıcıya bilgi ver
-        from PySide6.QtWidgets import QMessageBox
-        QMessageBox.information(
-            self, 
-            "Filtre Uygulandı", 
-            f"Filtrelenmiş veri: {len(self.df):,} bar\n"
-            f"Tarih aralığı: {start} - {end}"
-        )
+        # Kullanıcıya bilgi ver (auto-load sırasında popup gösterme)
+        if not silent:
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.information(
+                self, 
+                "Filtre Uygulandı", 
+                f"Filtrelenmiş veri: {len(self.df):,} bar\n"
+                f"Tarih aralığı: {start} - {end}"
+            )
 
     
     def _update_preview(self, df=None):
@@ -673,6 +680,24 @@ class DataPanel(QWidget):
                 
             print(f"[AUTO-LOAD] Last session found: {last_process['symbol']} ({last_process['process_id']})")
             
+            # Kaydedilmiş tarih filtrelerini geri yükle
+            date_start = last_process.get('date_start', '')
+            date_end = last_process.get('date_end', '')
+            if date_start:
+                try:
+                    from datetime import date as dt_date
+                    parts = date_start.split('-')
+                    self.start_date.setDate(QDate(int(parts[0]), int(parts[1]), int(parts[2])))
+                except Exception:
+                    pass
+            if date_end:
+                try:
+                    from datetime import date as dt_date
+                    parts = date_end.split('-')
+                    self.end_date.setDate(QDate(int(parts[0]), int(parts[1]), int(parts[2])))
+                except Exception:
+                    pass
+            
             # Veri tipini belirle
             is_csv = str(data_file).lower().endswith('.csv')
             
@@ -685,19 +710,15 @@ class DataPanel(QWidget):
                 # IdealData Yükle
                 self.source_tabs.setCurrentIndex(0)
                 
-                # Sembol ve Periyot ayristir
-                # Symbol format: VIP_X030 or similar
-                # Period format: 1dk or 1
-                
                 full_symbol = last_process['symbol']
-                period_str = last_process['period'].replace('dk', '') # '1dk' -> '1'
+                period_str = last_process['period'].replace('dk', '')
                 
                 if '_' in full_symbol:
                     parts = full_symbol.split('_', 1)
                     market = parts[0]
                     symbol = parts[1]
                 else:
-                    market = "VIP" # Fallback
+                    market = "VIP"
                     symbol = full_symbol
                 
                 # UI Set
@@ -716,6 +737,10 @@ class DataPanel(QWidget):
 
                 # Yükle
                 self._load_ideal_data()
+            
+            # Tarih filtresi kaydedilmişse otomatik uygula
+            if (date_start or date_end) and self.df is not None:
+                self._apply_filter(silent=True)
                 
         except Exception as e:
             print(f"[AUTO-LOAD] Failed: {e}")

@@ -70,14 +70,8 @@ class IndicatorCache:
 
 def load_data() -> pd.DataFrame:
     """Veri yükle"""
-    csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"
-    df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
-    df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
-    for c in ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']:
-        df[c] = pd.to_numeric(df[c], errors='coerce')
-    df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
-    df.dropna(inplace=True)
-    return df
+    # Hardcoded path kaldırıldı
+    return None, None
 
 
 # ==============================================================================
@@ -477,9 +471,15 @@ class BayesianObjective:
         try:
             from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
             from src.optimization.hybrid_group_optimizer import fast_backtest
+            from src.engine.data import OHLCV
 
             strategy = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
-            signals, exits_long, exits_short = strategy.generate_all_signals()
+            
+            # Maske ve Yön Modu
+            mask_arr = OHLCV(self.cache.df).get_trading_mask(self.vade_tipi)
+            yon_modu = params.get('yon_modu', 'CIFT')
+            
+            signals, exits_long, exits_short = strategy.generate_all_signals(mask=mask_arr, yon_modu=yon_modu)
 
             trading_days = 252.0
             if self.cache.dates and len(self.cache.dates) > 1:

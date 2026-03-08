@@ -1,0 +1,63 @@
+{
+  "symbol": "VIP_X030-T_1dk_20260308_025704",
+  "period": "1 dk",
+  "strategy_index": 5,
+  "strategy_name": "Strateji 6 - TOTT HOTT",
+  "created": "2026-03-08 02:59:57",
+  "params": {
+    "ott_period": {
+      "min": 10,
+      "max": 120,
+      "step": 10,
+      "active": true
+    },
+    "ott_pct_big": {
+      "min": 6.0,
+      "max": 9.0,
+      "step": 0.5,
+      "active": true
+    },
+    "ott_pct_small": {
+      "min": 2.8,
+      "max": 4.0,
+      "step": 0.2,
+      "active": true
+    },
+    "ott_mult": {
+      "min": 0.0005,
+      "max": 0.0011,
+      "step": 0.001,
+      "active": true
+    },
+    "sott_pct": {
+      "min": 0.2,
+      "max": 0.4,
+      "step": 0.05,
+      "active": true
+    },
+    "stoch_k": {
+      "min": 10,
+      "max": 700,
+      "step": 10,
+      "active": true
+    },
+    "stoch_smooth": {
+      "min": 10,
+      "max": 300,
+      "step": 10,
+      "active": true
+    },
+    "gate_period": {
+      "min": 10,
+      "max": 60,
+      "step": 10,
+      "active": true
+    },
+    "gate_pct": {
+      "min": 0.2,
+      "max": 0.6,
+      "step": 0.05,
+      "active": true
+    }
+  }
+}

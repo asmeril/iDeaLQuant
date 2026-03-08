@@ -407,16 +407,8 @@ STRATEGY6_GROUPS = [
 g_cache = None
 
 def load_data() -> pd.DataFrame:
-    csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"
-    df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
-    df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
-    for c in ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']:
-        df[c] = pd.to_numeric(df[c], errors='coerce')
-    df.dropna(inplace=True)
-    df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
-    df['DateTime'] = pd.to_datetime(df['Tarih'] + ' ' + df['Saat'], format='%d.%m.%Y %H:%M:%S', errors='coerce')
-    df = df.dropna(subset=['DateTime']).reset_index(drop=True)
-    return df
+    # Hardcoded path kaldırıldı.
+    return None
 
 class IndicatorCache:
     """
@@ -650,9 +642,9 @@ def _init_group_pool(strategy_index, df_received=None, vade_tipi="ENDEKS"):
             from src.engine.data import OHLCV
             g_mask = OHLCV(df_received).get_trading_mask(vade_tipi)
         else:
-            from src.optimization.strategy5_optimizer import load_data_and_mask
-            df, g_mask = load_data_and_mask(vade_tipi)
-            g_cache = IndicatorCache(df)
+            # GUI disi kullanimda buraya veri paslanmali.
+            # Hata firlatmak sessiz basarisizliktan daha iyidir.
+            print("[CRITICAL] Worker initializer received NO data!")
 
 def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
     """S5 Oliver Kell parametrelerini Numba kernel ile degerlendir."""
@@ -751,10 +743,13 @@ def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commiss
     elif strategy_index == 5:
         # S6 TOTT_HOTT
         strategy = TOTT_HOTTStrategy.from_config_dict(g_cache, params)
+        signals, exits_long, exits_short = strategy.generate_all_signals(
+            mask=getattr(g_cache, 'mask', None),
+            yon_modu=params.get('yon_modu', 'CIFT')
+        )
     else:
         strategy = ARSTrendStrategyV2.from_config_dict(g_cache, params)
-    
-    signals, exits_long, exits_short = strategy.generate_all_signals()
+        signals, exits_long, exits_short = strategy.generate_all_signals()
     
     # Trading days calculation
     trading_days = 252.0

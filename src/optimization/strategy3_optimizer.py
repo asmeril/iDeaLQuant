@@ -109,17 +109,8 @@ class IndicatorCache:
 
 # --- DATA LOADING ---
 def load_data_and_mask(vade_tipi="ENDEKS"):
-    csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv"
-    try:
-        data = OHLCV.from_csv(csv_path, separator=';')
-        if current_process().name == 'MainProcess':
-            print(f"Veri Yuklendi: {len(data)} Bar")
-            
-        mask = data.get_trading_mask(vade_tipi)
-        return data.df, mask
-    except Exception as e:
-        print(f"Hata: {e}")
-        return None, None
+    # Hardcoded path kaldırıldı
+    return None, None
 
 def worker_init(vade_tipi="ENDEKS"):
     global g_cache, g_mask

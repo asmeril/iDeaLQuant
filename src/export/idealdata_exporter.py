@@ -2104,7 +2104,7 @@ var OTT_Big = Sistem.OTT(C, OTT_Period, OTT_Pct_Big, "Variable");
 var OTT_Small = Sistem.OTT(C, OTT_Period, OTT_Pct_Small, "Variable");
 
 // 4. Stochastic + VMA Smooth + Offset → SOTT
-var StochRaw = Sistem.StochasticOsilator(Stoch_K, 1, 1);  
+var StochRaw = Sistem.StochasticFast(Stoch_K, 1);  
 var StochSmooth = Sistem.MA(StochRaw, "Variable", Stoch_Smooth);
 var STOSK_X = Sistem.Liste(0);
 for (int i = 0; i < Veriler.Count; i++)
@@ -2126,7 +2126,7 @@ for (int i = 1; i < Veriler.Count; i++) Sistem.Yon[i] = "";
 var SonYon = "";
 
 int vadeCooldownBar = Stoch_K + Stoch_Smooth + 50;
-int warmupBars = Math.Max(50, vadeCooldownBar);
+int warmupBars = Math.Max(100, vadeCooldownBar);
 int warmupBaslangicBar = -999;
 bool warmupAktif = false;
 bool arefeFlat = false;
@@ -2183,7 +2183,7 @@ for (int i = warmupBars; i < Veriler.Count; i++)
         if (yeniSeans) warmupBaslangicBar = i;
     }}
     if (warmupAktif && warmupBaslangicBar > 0) {{
-        if ((i - warmupBaslangicBar) < vadeCooldownBar) continue;
+        if ((i - warmupBaslangicBar) < 150) continue; // Sabit kısa cooldown, STOSK süresi strateji başı geçerli
         else warmupAktif = false;
     }}
     if (arefeFlat && i>0 && dt.Date != Veriler[i-1].Date.Date) arefeFlat = false;
@@ -2229,11 +2229,11 @@ for (int i = warmupBars; i < Veriler.Count; i++)
         sat = (mov_i < ott_small_i) && sott_short && lott_gate;
     }}'''}
     
-    if (al && SonYon != "A")
+    if (al && SonYon != "A" && YON_MODU != "SADECE_SAT")
     {{
         Sinyal = "A";
     }}
-    {"" if is_spot else '''else if (sat && SonYon != "S")
+    {"" if is_spot else '''else if (sat && SonYon != "S" && YON_MODU != "SADECE_AL")
     {{
         Sinyal = "S";
     }}'''}
@@ -2246,6 +2246,10 @@ for (int i = warmupBars; i < Veriler.Count; i++)
         Sinyal = "F";
     }}'''}
     
+    // Yön Modu Kontrolü (Ekstra Güvenlik)
+    if (YON_MODU == "SADECE_AL" && Sinyal == "S") Sinyal = "F";
+    if (YON_MODU == "SADECE_SAT" && Sinyal == "A") Sinyal = "F";
+
     // Pozisyon güncelle
     if (Sinyal != "" && SonYon != Sinyal)
     {{
@@ -2269,6 +2273,29 @@ Sistem.Cizgiler[5].Deger = OTT_Small;
 Sistem.Cizgiler[5].Aciklama = "OTT Small ({ott_pct_small}%)";
 Sistem.Cizgiler[5].ActiveBool = true;
 Sistem.Cizgiler[5].Renk = Color.Yellow;
+
+// --- EKRANDA GÖRÜNTÜLEMEK (DEBUG ETMEK) İÇİN EKLENEN HOTT/SOTT ÇİZGİLERİ ---
+Sistem.Cizgiler[6].Deger = HOTT;
+Sistem.Cizgiler[6].Aciklama = "HOTT Kapısı";
+Sistem.Cizgiler[6].ActiveBool = true;
+Sistem.Cizgiler[6].Renk = Color.Orange;
+
+Sistem.Cizgiler[7].Deger = HHV_Half;
+Sistem.Cizgiler[7].Aciklama = "HHV Kapısı Tavanı";
+Sistem.Cizgiler[7].ActiveBool = true;
+Sistem.Cizgiler[7].Renk = Color.Green;
+
+// Sistem.Cizgiler[8].Deger = STOSK_X; // Değerler 1000'lerde olduğu için fiyat grafiğini bozabilir, panele çizilmeli.
+// Sistem.Cizgiler[8].Aciklama = "STOSK_X (1000+)";
+// Sistem.Cizgiler[8].Panel = 2;
+// Sistem.Cizgiler[8].ActiveBool = true;
+// Sistem.Cizgiler[8].Renk = Color.White;
+// 
+// Sistem.Cizgiler[9].Deger = SOTT;
+// Sistem.Cizgiler[9].Aciklama = "SOTT (1000+)";
+// Sistem.Cizgiler[9].Panel = 2;
+// Sistem.Cizgiler[9].ActiveBool = true;
+// Sistem.Cizgiler[9].Renk = Color.Magenta;
 
 {self._get_performance_panel_code()}
 '''

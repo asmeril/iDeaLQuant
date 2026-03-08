@@ -204,6 +204,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 - [x] Validasyon (WFA/MC) paneline bağlanması
 - [x] **BUG FIX:** KMeans NaN ve Genetik Entegrasyon sorunları çözüldü.
 - [x] **BUG FIX:** Otomatik veri yükleme (data_file persistence) sağlandı.
+- [x] **BUG FIX:** C# Export dosyasındaki sinyal uyumsuzluğu (StochasticFast / HHV(5) / Warmup Fix) Onarıldı.
 
 ---
 

@@ -2453,16 +2453,9 @@ class OptimizerPanel(QWidget):
             self.config['vade_tipi'] = proc.get('vade_tipi', 'ENDEKS')
             self.config['yon_modu'] = proc.get('yon_modu', 'CIFT')
             
-            # Veriyolu (Eğer arayüzden direkt süreç seçiliyorsa ve data yüklenmediyse yükle)
-            csv_path = proc.get('data_file', '')
-            if csv_path and os.path.exists(csv_path):
-                from src.engine.data import OHLCV
-                try:
-                    ohlcv_obj = OHLCV.from_ideal_export(csv_path)
-                    self.data = ohlcv_obj.df
-                    print(f"[{process_id}] Otomatik Veri Yuklendi: {len(self.data)} satır")
-                except Exception as e:
-                    print(f"[{process_id}] Veri yüklenemedi: {e}")
+            # NOT: Veri yüklemesi burada YAPILMAZ.
+            # Veri, DataPanel'den data_loaded sinyali ile set_data() üzerinden gelir.
+            # Bu sayede tarih filtresi korunmuş olur.
             
             # Bilgi etiketini güncelle
             self.process_info_label.setText(f"Vade: {self.config['vade_tipi']} | Yön: {self.config['yon_modu']}")

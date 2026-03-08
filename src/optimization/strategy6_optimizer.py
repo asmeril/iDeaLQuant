@@ -207,7 +207,12 @@ def _fast_s6(
 # =========================================================================
 
 def _load_data(vade_tipi="ENDEKS"):
-    csv_path = r"D:\Projects\IdealQuant\data\VIPX030T_1Dk_BarData.csv"
+    # Hardcoded path kaldırıldı. GUI üzerinden veri aktarımı esastır.
+    # Standalone test için gerekirse buraya geçerli bir yol yazılabilir.
+    csv_path = r"data\BAR_DATA.csv" 
+    if not os.path.exists(csv_path):
+        return None, None
+        
     try:
         data = OHLCV.from_ideal_export(csv_path)
         if current_process().name == 'MainProcess':

@@ -1,0 +1,11 @@
+{
+  "ott_period": 20,
+  "ott_pct_big": 6.5,
+  "ott_pct_small": 3.2,
+  "ott_mult": 0.0005,
+  "sott_pct": 0.4,
+  "gate_period": 10,
+  "gate_pct": 0.4,
+  "stoch_k": 500,
+  "stoch_smooth": 200
+}

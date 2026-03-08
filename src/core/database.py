@@ -161,6 +161,12 @@ class Database:
                 
             if 'yon_modu' not in columns:
                 cursor.execute("ALTER TABLE processes ADD COLUMN yon_modu TEXT DEFAULT 'CIFT'")
+            
+            if 'date_start' not in columns:
+                cursor.execute("ALTER TABLE processes ADD COLUMN date_start TEXT DEFAULT ''")
+                
+            if 'date_end' not in columns:
+                cursor.execute("ALTER TABLE processes ADD COLUMN date_end TEXT DEFAULT ''")
                 
             # optimization_results tablosuna sharpe ekle
             cursor.execute("PRAGMA table_info(optimization_results)")
@@ -186,7 +192,8 @@ class Database:
     
     def create_process(self, symbol: str, period: str, data_file: str, 
                        data_rows: int = 0, strategy_index: int = 0, 
-                       vade_tipi: str = "ENDEKS", yon_modu: str = "CIFT") -> str:
+                       vade_tipi: str = "ENDEKS", yon_modu: str = "CIFT",
+                       date_start: str = "", date_end: str = "") -> str:
         """Yeni süreç oluştur, process_id döndür"""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         process_id = f"{symbol}_{period}_{timestamp}"
@@ -195,9 +202,9 @@ class Database:
         cursor = conn.cursor()
         
         cursor.execute("""
-            INSERT INTO processes (process_id, symbol, period, data_file, data_rows, status, commission, slippage, strategy_index, vade_tipi, yon_modu)
-            VALUES (?, ?, ?, ?, ?, 'pending', 0, 0, ?, ?, ?)
-        """, (process_id, symbol, period, data_file, data_rows, strategy_index, vade_tipi, yon_modu))
+            INSERT INTO processes (process_id, symbol, period, data_file, data_rows, status, commission, slippage, strategy_index, vade_tipi, yon_modu, date_start, date_end)
+            VALUES (?, ?, ?, ?, ?, 'pending', 0, 0, ?, ?, ?, ?, ?)
+        """, (process_id, symbol, period, data_file, data_rows, strategy_index, vade_tipi, yon_modu, date_start, date_end))
         
         conn.commit()
         conn.close()

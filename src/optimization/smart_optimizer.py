@@ -30,22 +30,31 @@ def load_data():
     try:
         if current_process().name == 'MainProcess':
             print("Veri yukleniyor...")
+    # csv_path = "d:/Projects/IdealQuant/data/VIP_X030T_1dk_.csv" # Hardcoded path removed
+    # The actual data loading logic should be updated to not use a hardcoded path.
+    # For now, returning None as per the provided snippet's intent to remove hardcoded path.
+    # This function will likely need to be refactored to accept a path or use a global config.
+    print("Warning: load_data() called, but hardcoded path removed. Returning None.")
+    return None
+    # try:
+    #     if current_process().name == 'MainProcess':
+    #         print("Veri yukleniyor...")
             
-        df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
-        df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
-        cols = ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']
-        for c in cols: df[c] = pd.to_numeric(df[c], errors='coerce')
+    #     df = pd.read_csv(csv_path, sep=';', decimal=',', encoding='cp1254', header=None, low_memory=False)
+    #     df.columns = ['Tarih', 'Saat', 'Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Ortalama', 'Hacim', 'Lot']
+    #     cols = ['Acilis', 'Yuksek', 'Dusuk', 'Kapanis', 'Hacim', 'Lot']
+    #     for c in cols: df[c] = pd.to_numeric(df[c], errors='coerce')
         
-        df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
-        df.dropna(inplace=True)
+    #     df['Tipik'] = (df['Yuksek'] + df['Dusuk'] + df['Kapanis']) / 3
+    #     df.dropna(inplace=True)
         
-        if current_process().name == 'MainProcess':
-            print(f"Veri Hazir: {len(df)} Bar")
+    #     if current_process().name == 'MainProcess':
+    #         print(f"Veri Hazir: {len(df)} Bar")
             
-        return df
-    except Exception as e:
-        print(f"Hata: {e}")
-        return None
+    #     return df
+    # except Exception as e:
+    #     print(f"Hata: {e}")
+    #     return None
 
 # --- INDICATOR CACHE ---
 class IndicatorCache:
