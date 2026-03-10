@@ -4,7 +4,7 @@
 // Sembol: VIP_X030-T
 // Periyot: 5 dakika
 // Vade Tipi: ENDEKS
-// Oluşturma: 2026-02-26 02:28
+// Oluşturma: 2026-03-10 23:47
 // ===============================================================================================
 
 // --- VADE TİPİ & YÖN MODU ---
@@ -12,22 +12,22 @@ string VadeTipi = "ENDEKS";
 string YON_MODU = "CIFT";
 
 // --- PARAMETRELER ---
-var MOM_PERIOD = 100;
-var MOM_UPPER = 100.5f;
-var MOM_LOWER = 97.6f;
-var TRIX_PERIOD = 10;
-var TRIX_LB1 = 10;
-var TRIX_LB2 = 10;
-var HHV1_PERIOD = 43;
-var LLV1_PERIOD = 5;
-var HHV2_PERIOD = 10;
-var LLV2_PERIOD = 16;
-var HHV3_PERIOD = 15;
-var LLV3_PERIOD = 45;
-var TOMA_PERIOD = 2;
-var TOMA_OPT = 2.0f;
-var KAR_AL_YUZDE = 6.8f;
-var IZLEYEN_STOP_YUZDE = 3.95f;
+var MOM_PERIOD = 1390;
+var MOM_UPPER = 107.0f;
+var MOM_LOWER = 90.0f;
+var TRIX_PERIOD = 30;
+var TRIX_LB1 = 90;
+var TRIX_LB2 = 120;
+var HHV1_PERIOD = 15;
+var LLV1_PERIOD = 3;
+var HHV2_PERIOD = 3;
+var LLV2_PERIOD = 3;
+var HHV3_PERIOD = 3;
+var LLV3_PERIOD = 6;
+var TOMA_PERIOD = 1;
+var TOMA_OPT = 0.6f;
+var KAR_AL_YUZDE = 8.5f;
+var IZLEYEN_STOP_YUZDE = 1.75f;
 
 // ===============================================================================================
 // DİNAMİK BAYRAM TARİHLERİ (2024-2030)

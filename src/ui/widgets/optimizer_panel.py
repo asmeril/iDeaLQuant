@@ -1152,8 +1152,29 @@ class OptimizationWorker(QThread):
         # OOS Validation for S4
         if self.do_oos and self.test_data is not None and top_results:
             self._emit_progress(98, "S4 Test verisinde validasyon yapiliyor...")
+            
+            # S4 icin excluded listesini genislet (Validasyon oncesi parametre temizligi icin)
+            s4_excluded = {'net_profit', 'trades', 'pf', 'max_dd', 'sharpe', 'fitness', 'stability',
+                           'Score', 'NP', 'PF', 'DD', 'Tr', 'Sharpe',
+                           'test_net', 'test_trades', 'test_pf', 'test_dd', 'test_sharpe',
+                           'active_days', 'total_days', 'test_active_days', 'test_total_days', 'robust_fitness', 'oos_penalized_fitness'}
+            
             for r in top_results[:50]:  # Top 50 icin validasyon
-                oos_res = self._validate_s4_result(r)
+                # Optimizer'dan gelen anahtarlari validasyonun bekledigi formata cevir (LB1 vs lb1 vb.)
+                # Strategy4Optimizer 'LB1', 'KA', 'ML' gibi buyuk harf kullaniyor
+                params = {k.lower(): v for k, v in r.items() if k not in s4_excluded}
+                
+                # Ozel mapping'ler (lb1 -> trix_lb1 vb. eger gerekiyorsa alt tarafta cozuluyor ama burada netlestirelim)
+                if 'lb1' in params and 'trix_lb1' not in params: params['trix_lb1'] = params.pop('lb1')
+                if 'lb2' in params and 'trix_lb2' not in params: params['trix_lb2'] = params.pop('lb2')
+                if 'ka' in params and 'kar_al' not in params: params['kar_al'] = params.pop('ka')
+                if 'is' in params and 'iz_stop' not in params: params['iz_stop'] = params.pop('is')
+                if 'ml' in params and 'mom_limit_low' not in params: params['mom_limit_low'] = params.pop('ml')
+                if 'mh' in params and 'mom_limit_high' not in params: params['mom_limit_high'] = params.pop('mh')
+                if 't_per' in params and 'toma_period' not in params: params['toma_period'] = params.pop('t_per')
+                if 't_opt' in params and 'toma_opt' not in params: params['toma_opt'] = params.pop('t_opt')
+                
+                oos_res = self._validate_s4_result(params)
                 r.update(oos_res)
             
             # === OOS-AWARE RE-RANKING via Advanced Fitness ===
@@ -2427,6 +2448,20 @@ class OptimizerPanel(QWidget):
         """DataPanel'den gelen süreç ID'sini ayarla ve UI'yi kilitle"""
         print(f"[DEBUG] OptimizerPanel.set_process called with {process_id}")
         self.current_process_id = process_id
+        
+        # [FIX] Yeni süreç: önceki döngüden kalan hibrit sonuçlarını sıfırla
+        self.hybrid_results = []
+        
+        # [FIX] Worker çalışmıyorsa butonları her zaman aktif duruma getir
+        # (Önceki run'dan disabled durumda kalabiliyordu)
+        if not self.worker or not self.worker.isRunning():
+            self.start_btn.setEnabled(True)
+            self.run_all_btn.setEnabled(True)
+            self.stop_btn.setEnabled(False)
+            self.resume_btn.setVisible(False)
+            self.global_progress_bar.setVisible(False)
+            self.live_monitor_frame.setVisible(False)
+        
         self._refresh_processes()
         
         # Combo'da ilgili süreci seç
@@ -3050,6 +3085,17 @@ class OptimizerPanel(QWidget):
         if self.data is None:
             QMessageBox.warning(self, "Uyari", "Lutfen once veri yukleyin.")
             return
+        
+        # [FIX] Yeni run başlamadan önce eski per-method checkpoint'leri temizle
+        # Aksi halde eski checkpoint nedeniyle resume_btn görünür kalabilir
+        try:
+            from src.optimization.checkpoint_manager import CheckpointManager
+            CheckpointManager().delete_all()
+        except Exception as e:
+            print(f"[CHECKPOINT] Temizleme hatasi: {e}")
+        
+        # [FIX] hybrid_results sıfırla (önceki run'dan kalan cascade verisi)
+        self.hybrid_results = []
             
         # Kuyruğu doldur
         self.optimization_queue = ["Hibrit Grup", "Genetik", "Bayesian"]
@@ -3332,10 +3378,10 @@ class OptimizerPanel(QWidget):
             table.setItem(row_idx, 5, QTableWidgetItem(f"{result.get('pf', 0):.2f}"))
             
             # Max DD
-            table.setItem(row_idx, 6, QTableWidgetItem(f"{result.get('max_dd', 0):,.0f}"))
+            table.setItem(row_idx, 6, QTableWidgetItem(f"{result.get('max_dd', result.get('DD', 0)):,.0f}"))
             
             # Sharpe
-            table.setItem(row_idx, 7, QTableWidgetItem(f"{result.get('sharpe', 0):.2f}"))
+            table.setItem(row_idx, 7, QTableWidgetItem(f"{result.get('sharpe', result.get('Sharpe', 0)):.2f}"))
             
             # Fitness skoru (Renkli)
             fitness = result.get('fitness', 0)

@@ -100,45 +100,42 @@ class MonteCarloWorker(QThread):
 
 
 class WFAWorker(QThread):
-    """Walk-Forward Analysis thread'i (Multi-Window)"""
+    """Walk-Forward Analysis thread'i (Multi-Window, Look-ahead bias düzeltirilmiş)"""
     progress = Signal(int)
     result = Signal(dict)
     error = Signal(str)
     
     def __init__(self, cache, strategy_idx, params, costs, split_ratio=0.7, n_windows=5):
         super().__init__()
-        self.cache = cache
+        self.cache = cache  # Toplam veri cache (pencere bölme için)
         self.strategy_idx = strategy_idx
         self.params = params
         self.costs = costs
         self.split_ratio = split_ratio
         self.n_windows = max(2, n_windows)
         
+    def _make_strategy(self, cache):
+        """Strateji örneği üret (verilen cache ile)"""
+        if self.strategy_idx == 0:
+            return ScoreBasedStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 2:
+            return ParadiseStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 3:
+            return TomaStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 4:
+            return OliverKellStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 5:
+            return TOTT_HOTTStrategy.from_config_dict(cache, self.params)
+        else:
+            return ARSTrendStrategyV2.from_config_dict(cache, self.params)
+        
     def run(self):
         try:
             n = len(self.cache.closes)
             
-            # Strateji oluştur ve tüm sinyalleri bir kez hesapla
-            if self.strategy_idx == 0:
-                strategy = ScoreBasedStrategy.from_config_dict(self.cache, self.params)
-            elif self.strategy_idx == 2:
-                strategy = ParadiseStrategy.from_config_dict(self.cache, self.params)
-            elif self.strategy_idx == 3:
-                strategy = TomaStrategy.from_config_dict(self.cache, self.params)
-            elif self.strategy_idx == 4:
-                strategy = OliverKellStrategy.from_config_dict(self.cache, self.params)
-            elif self.strategy_idx == 5:
-                strategy = TOTT_HOTTStrategy.from_config_dict(self.cache, self.params)
-            else:
-                strategy = ARSTrendStrategyV2.from_config_dict(self.cache, self.params)
-                
-            signals, ex_long, ex_short = strategy.generate_all_signals()
-            
-            # Multi-Window WFA
-            # Veriyi n_windows pencereye böl, her pencerede IS/OOS ayrımı yap
+            # Pencere boyutunu hesapla
             window_size = n // self.n_windows
             if window_size < 100:
-                # Veri çok kısa — single split'e geri dön
                 self.n_windows = 1
                 window_size = n
             
@@ -147,6 +144,15 @@ class WFAWorker(QThread):
             total_oos_pnl = 0
             total_is_trades = 0
             total_oos_trades = 0
+            # [FIX] Toplamsal PF için gross değerleri biriktir
+            total_is_gross_profit = 0.0
+            total_is_gross_loss = 0.0
+            total_oos_gross_profit = 0.0
+            total_oos_gross_loss = 0.0
+            
+            # Orijinal veri DataFrame'ini al (cache'den geri dönüştrme)
+            # IndicatorCache'in data_df attribute'u varsa al, yoksa closes + basit DataFrame
+            original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
             
             for w in range(self.n_windows):
                 w_start = w * window_size
@@ -155,25 +161,48 @@ class WFAWorker(QThread):
                 
                 split_idx = w_start + int(w_len * self.split_ratio)
                 
-                # IS Backtest (pencere içi eğitim bölümü)
-                is_closes = self.cache.closes[w_start:split_idx]
-                is_pnl, is_trades, is_pf, is_dd = backtest_with_summary(
-                    is_closes, 
-                    signals[w_start:split_idx], 
-                    ex_long[w_start:split_idx], 
-                    ex_short[w_start:split_idx],
-                    self.costs['commission'], self.costs['slippage']
-                )
+                # === [FIX] LOOK-AHEAD BIAS: Her pencere kendi izole cache'i ile sinyal üretir ===
+                # IS (eğitim) penceresi: yalnızca [w_start:split_idx] bar'larla çalışan cache
+                if original_df is not None:
+                    # DataFrame slice — indikatorler sadece bu aralıktan hesaplanır
+                    is_df_slice = original_df.iloc[w_start:split_idx].reset_index(drop=True)
+                    oos_df_slice = original_df.iloc[split_idx:w_end].reset_index(drop=True)
+                    is_cache = IndicatorCache(is_df_slice)
+                    oos_cache = IndicatorCache(oos_df_slice)
+                else:
+                    # Fallback: eski davranış (sliced signals)
+                    is_cache = None
+                    oos_cache = None
                 
-                # OOS Backtest (pencere içi test bölümü)
-                oos_closes = self.cache.closes[split_idx:w_end]
-                oos_pnl, oos_trades, oos_pf, oos_dd = backtest_with_summary(
-                    oos_closes, 
-                    signals[split_idx:w_end], 
-                    ex_long[split_idx:w_end], 
-                    ex_short[split_idx:w_end],
-                    self.costs['commission'], self.costs['slippage']
-                )
+                if is_cache is not None:
+                    # İzole sinyal hesabı — look-ahead yok
+                    is_strategy = self._make_strategy(is_cache)
+                    is_sigs, is_ex_l, is_ex_s = is_strategy.generate_all_signals()
+                    is_pnl, is_trades, is_pf, _, is_gp, is_gl = backtest_with_summary(
+                        is_cache.closes, is_sigs, is_ex_l, is_ex_s,
+                        self.costs['commission'], self.costs['slippage']
+                    )
+                    
+                    oos_strategy = self._make_strategy(oos_cache)
+                    oos_sigs, oos_ex_l, oos_ex_s = oos_strategy.generate_all_signals()
+                    oos_pnl, oos_trades, oos_pf, _, oos_gp, oos_gl = backtest_with_summary(
+                        oos_cache.closes, oos_sigs, oos_ex_l, oos_ex_s,
+                        self.costs['commission'], self.costs['slippage']
+                    )
+                else:
+                    # Fallback: eski yöntem (tüm veriden sinyaller)
+                    full_strategy = self._make_strategy(self.cache)
+                    signals, ex_long, ex_short = full_strategy.generate_all_signals()
+                    is_pnl, is_trades, is_pf, _, is_gp, is_gl = backtest_with_summary(
+                        self.cache.closes[w_start:split_idx],
+                        signals[w_start:split_idx], ex_long[w_start:split_idx], ex_short[w_start:split_idx],
+                        self.costs['commission'], self.costs['slippage']
+                    )
+                    oos_pnl, oos_trades, oos_pf, _, oos_gp, oos_gl = backtest_with_summary(
+                        self.cache.closes[split_idx:w_end],
+                        signals[split_idx:w_end], ex_long[split_idx:w_end], ex_short[split_idx:w_end],
+                        self.costs['commission'], self.costs['slippage']
+                    )
                 
                 # Pencere efficiency
                 is_bars = split_idx - w_start
@@ -193,34 +222,38 @@ class WFAWorker(QThread):
                 total_oos_pnl += oos_pnl
                 total_is_trades += is_trades
                 total_oos_trades += oos_trades
+                # [FIX] Gross değerleri biriktir (toplamsal PF için)
+                total_is_gross_profit += is_gp
+                total_is_gross_loss += is_gl
+                total_oos_gross_profit += oos_gp
+                total_oos_gross_loss += oos_gl
                 
                 self.progress.emit(int((w + 1) / self.n_windows * 100))
             
-            # Toplam efficiency (tüm pencerelerin ortalaması)
-            avg_efficiency = sum(wr['efficiency'] for wr in window_results) / len(window_results) if window_results else 0
+            # [FIX] Toplam PF: toplam gross_profit / toplam gross_loss
+            # Optimizer ile aynı mantık (pencere bazında ortalama değil)
+            total_is_pf = (total_is_gross_profit / total_is_gross_loss) if total_is_gross_loss > 0 else 9.9
+            total_oos_pf = (total_oos_gross_profit / total_oos_gross_loss) if total_oos_gross_loss > 0 else 9.9
             
-            # Toplam IS/OOS PF
-            total_is_pf = 0
-            total_oos_pf = 0
-            if window_results:
-                pf_vals_is = [wr['is_pf'] for wr in window_results if wr['is_pf'] > 0]
-                pf_vals_oos = [wr['oos_pf'] for wr in window_results if wr['oos_pf'] > 0]
-                total_is_pf = sum(pf_vals_is) / len(pf_vals_is) if pf_vals_is else 0
-                total_oos_pf = sum(pf_vals_oos) / len(pf_vals_oos) if pf_vals_oos else 0
+            # Toplam efficiency
+            avg_efficiency = sum(wr['efficiency'] for wr in window_results) / len(window_results) if window_results else 0
             
             self.result.emit({
                 'is_pnl': total_is_pnl, 'is_trades': total_is_trades, 'is_pf': round(total_is_pf, 2),
                 'oos_pnl': total_oos_pnl, 'oos_trades': total_oos_trades, 'oos_pf': round(total_oos_pf, 2),
                 'efficiency': avg_efficiency,
                 'n_windows': self.n_windows,
-                'window_results': window_results
+                'window_results': window_results,
+                'look_ahead_fixed': original_df is not None  # Hangi modda çalıştığını raporla
             })
             
         except Exception as e:
-            self.error.emit(str(e))
+            import traceback
+            self.error.emit(f"{e}\n{traceback.format_exc()}")
+
 
 def backtest_with_summary(closes, signals, ex_long, ex_short, comm, slip):
-    """Basit özet backtest helper"""
+    """Basit özet backtest helper - (net, trades, pf, dd, gross_profit, gross_loss) döndür"""
     pos, entry_price, gross_profit, gross_loss, trades = 0, 0.0, 0.0, 0.0, 0
     cost = comm + slip
     for i in range(len(closes)):
@@ -240,7 +273,7 @@ def backtest_with_summary(closes, signals, ex_long, ex_short, comm, slip):
             
     net = gross_profit - gross_loss
     pf = (gross_profit / gross_loss) if gross_loss > 0 else 9.9
-    return net, trades, pf, 0.0
+    return net, trades, pf, 0.0, gross_profit, gross_loss
 
 
 class BatchAnalysisWorker(QThread):
@@ -327,26 +360,45 @@ class BatchAnalysisWorker(QThread):
             
         self.finished_all.emit()
         
+    def _make_strategy(self, cache, idx, params):
+        """Strateji örneği üret (verilen cache ile)"""
+        if idx == 0: return ScoreBasedStrategy.from_config_dict(cache, params)
+        elif idx == 2: return ParadiseStrategy.from_config_dict(cache, params)
+        elif idx == 3: return TomaStrategy.from_config_dict(cache, params)
+        elif idx == 4: return OliverKellStrategy.from_config_dict(cache, params)
+        elif idx == 5: return TOTT_HOTTStrategy.from_config_dict(cache, params)
+        else: return ARSTrendStrategyV2.from_config_dict(cache, params)
+
     def _calc_wfa(self, idx, params):
         if not self.cache: return 0
         n = len(self.cache.closes)
         split = int(n * 0.7)
         
-        # Strateji
-        if idx == 0: s = ScoreBasedStrategy.from_config_dict(self.cache, params)
-        elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
-        elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
-        elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
-        elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
-        else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
-        
-        sig, ex_l, ex_s = s.generate_all_signals()
-        
-        # IS vs OOS
-        is_pnl = backtest_with_summary(self.cache.closes[:split], sig[:split], ex_l[:split], ex_s[:split], 
-                                      self.process_costs['commission'], self.process_costs['slippage'])[0]
-        oos_pnl = backtest_with_summary(self.cache.closes[split:], sig[split:], ex_l[split:], ex_s[split:],
-                                       self.process_costs['commission'], self.process_costs['slippage'])[0]
+        # [FIX] Look-ahead bias: IS ve OOS için izole cache kullan
+        original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
+        if original_df is not None:
+            is_df = original_df.iloc[:split].reset_index(drop=True)
+            oos_df = original_df.iloc[split:].reset_index(drop=True)
+            is_cache = IndicatorCache(is_df)
+            oos_cache = IndicatorCache(oos_df)
+            
+            is_s = self._make_strategy(is_cache, idx, params)
+            is_sig, is_ex_l, is_ex_s = is_s.generate_all_signals()
+            is_pnl = backtest_with_summary(is_cache.closes, is_sig, is_ex_l, is_ex_s,
+                                          self.process_costs['commission'], self.process_costs['slippage'])[0]
+            
+            oos_s = self._make_strategy(oos_cache, idx, params)
+            oos_sig, oos_ex_l, oos_ex_s = oos_s.generate_all_signals()
+            oos_pnl = backtest_with_summary(oos_cache.closes, oos_sig, oos_ex_l, oos_ex_s,
+                                           self.process_costs['commission'], self.process_costs['slippage'])[0]
+        else:
+            # Fallback: eski yöntem (look-ahead mevcut ama veri kaynaği yok)
+            s = self._make_strategy(self.cache, idx, params)
+            sig, ex_l, ex_s = s.generate_all_signals()
+            is_pnl = backtest_with_summary(self.cache.closes[:split], sig[:split], ex_l[:split], ex_s[:split],
+                                          self.process_costs['commission'], self.process_costs['slippage'])[0]
+            oos_pnl = backtest_with_summary(self.cache.closes[split:], sig[split:], ex_l[split:], ex_s[split:],
+                                           self.process_costs['commission'], self.process_costs['slippage'])[0]
                                        
         if is_pnl <= 0: return 0
         
