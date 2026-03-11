@@ -152,7 +152,9 @@ class WFAWorker(QThread):
             
             # Orijinal veri DataFrame'ini al (cache'den geri dönüştrme)
             # IndicatorCache'in data_df attribute'u varsa al, yoksa closes + basit DataFrame
-            original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
+            original_df = getattr(self.cache, 'df', None)
+            if original_df is None:
+                original_df = getattr(self.cache, 'data', None)
             
             for w in range(self.n_windows):
                 w_start = w * window_size
@@ -375,7 +377,9 @@ class BatchAnalysisWorker(QThread):
         split = int(n * 0.7)
         
         # [FIX] Look-ahead bias: IS ve OOS için izole cache kullan
-        original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
+        original_df = getattr(self.cache, 'df', None)
+        if original_df is None:
+            original_df = getattr(self.cache, 'data', None)
         if original_df is not None:
             is_df = original_df.iloc[:split].reset_index(drop=True)
             oos_df = original_df.iloc[split:].reset_index(drop=True)

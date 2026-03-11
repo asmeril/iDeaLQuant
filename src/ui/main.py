@@ -16,7 +16,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
 
-from .main_window import MainWindow
+from src.ui.main_window import MainWindow
 
 
 def _cleanup_workers():

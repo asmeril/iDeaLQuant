@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
         title.setObjectName("titleLabel")
         layout.addWidget(title)
         
-        subtitle = QLabel("Algorithmic Trading Optimizer v1.0")
+        subtitle = QLabel("Algorithmic Trading Optimizer v4.1")
         subtitle.setObjectName("subtitleLabel")
         layout.addWidget(subtitle)
         
@@ -174,7 +174,7 @@ class MainWindow(QMainWindow):
         self.status_bar.addWidget(self.status_label, 1)
         
         # Versiyon
-        version_label = QLabel("v1.0.0")
+        version_label = QLabel("v4.1.0")
         self.status_bar.addPermanentWidget(version_label)
     
     def _connect_panels(self):
