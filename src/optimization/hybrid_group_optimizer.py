@@ -735,8 +735,10 @@ def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commiss
         
     if strategy_index == 0:
         strategy = ScoreBasedStrategy.from_config_dict(g_cache, params)
+        signals, exits_long, exits_short = strategy.generate_all_signals()
     elif strategy_index == 2:
         strategy = ParadiseStrategy.from_config_dict(g_cache, params)
+        signals, exits_long, exits_short = strategy.generate_all_signals()
     elif strategy_index == 4:
         # S5 Oliver Kell — Numba kernel ile backtest
         return _evaluate_s5_params(params, commission, slippage)
