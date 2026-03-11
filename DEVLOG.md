@@ -1,3 +1,15 @@
+## 2026-03-11 (Validation Panel Fixes & Rebuild)
+
+### ✅ Yapılanlar
+- **Validation Panel Crash Fix:** `validation_panel.py` içerisinde "The truth value of a DataFrame is ambiguous" hatasına neden olan logical OR (`or`) kullanımı düzeltildi. DataFrame nesneleri `getattr` ile çağrılırken artık açık bir şekilde `is None` kullanılarak kontrol ediliyor.
+- **v4.1 Derlemesi (Build):** Yapılan hotfix sonrası `build_idealquant.py` kullanılarak `IdealQuant_v4.1.exe` başarıyla yeniden derlendi.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 3 (Robust Parametre Seçimi) & Faz 6 (Desktop UI Testi) süreçlerindeki hata giderildi.
+- **Sıradaki Adım:** Gerçek veri üzerinde baştan sona tam bir Robust Analizi çalıştırmak.
+
+---
+
 ## 2026-03-08 (Strateji 6: Optimizasyon Hataları & Veri Yükleme Fix)
 
 ### ✅ Yapılanlar
