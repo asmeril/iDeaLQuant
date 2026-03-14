@@ -1,0 +1,321 @@
+// ============================================================
+//  DEEP SCALP v1.2  –  VIOP  (Yon: A / S / F)
+//  Vadeli islemler icin simetrik Long + Short yapisi
+//  Tarih: 2026-03-14
+//
+//  SPOT surumu performansi (referans):
+//    GARAN 5dk  |  PF:1.32  Sharpe:1.37  R/R:2.41
+//    %33.97 kazanma  |  +25.6% net (9.8 ay)  |  MaxDD:8.9
+//
+//  ÖNEMLİ NOTLAR:
+//  - "Lot" iDeal built-in keyword → degisken adi olarak
+//    KULLANILAMAZ. Bu kodda "LotData" kullanilmistir.
+//  - SuperTrend parametresi: (Factor, HHVPeriyot, ATRPeriyot)
+//  - HHV/LLV cagri sirasi: Sistem.HHV(period, liste)
+//  - Sistem.SayiYuvarla → object döner → (float) cast gerekir
+// ============================================================
+//
+//  KATMAN YAPISI
+//  -----------
+//  1. ARS Rejim Filtresi     : Fiyat / EMA bant kontrolu
+//  2. SuperTrend + EMA cift  : Trend yonu dogrulamasi
+//  3. TOMA + HHV/LLV Tetik   : Giris zamanlama sinyali
+//  4. MFI + Hacim Onayi      : Momentum ve likidite filtresi
+//  5. ATR Trailing Stop      : Dinamik risk yonetimi (long+short)
+//  6. Zaman / Hold Filtresi  : minHold, maxHold, cooldown
+//
+//  PARAMETRELER (5dk preset)
+//  -------------------------
+//  arsK              = 1.23   (ARS bant carpani)
+//  arsEmaPer         = 3      (ARS EMA periyodu)
+//  stFactor          = 3.0f   (SuperTrend factor)
+//  stHHVPer          = 10     (SuperTrend HHV periyodu)
+//  stATRPer          = 14     (SuperTrend ATR periyodu)
+//  emaFastPer        = 9      (Hizli EMA)
+//  emaSlowPer        = 21     (Yavas EMA)
+//  tomaPer1          = 1      (TOMA periyot 1)
+//  tomaPer2          = 2.1f   (TOMA periyot 2)
+//  hhvPer            = 12     (HHV/LLV kirma periyodu)
+//  llvPer            = 12     (LLV kirma periyodu - short)
+//  mfiPer            = 14     (MFI periyodu)
+//  mfiHhvPer         = 5      (MFI HHV periyodu - long)
+//  mfiLlvPer         = 5      (MFI LLV periyodu - short)
+//  mfiLong           = 55.0f  (MFI esik - long)
+//  mfiShort          = 45.0f  (MFI esik - short)
+//  volRatio          = 0.80f  (Hacim carpan filtresi)
+//  atrPer            = 14     (ATR periyodu)
+//  atrStopMultLong   = 1.5f   (ATR stop carpani - long)
+//  atrStopMultShort  = 1.5f   (ATR stop carpani - short)
+//  karAlYuzdeLong    = 2.0f   (Kar al yuzdesi - long)
+//  karAlYuzdeShort   = 2.0f   (Kar al yuzdesi - short)
+//  minHoldBars       = 2      (Minimum tutma bar)
+//  maxHoldBars       = 20     (Maksimum tutma bar)
+//  cooldownBars      = 2      (Islem sonrasi bekleme)
+//
+// ============================================================
+
+// ---- PARAMETRELER ----
+float arsK             = 1.23f;
+int   arsEmaPer        = 3;
+
+float stFactor         = 3.0f;
+int   stHHVPer         = 10;
+int   stATRPer         = 14;
+
+int   emaFastPer       = 9;
+int   emaSlowPer       = 21;
+
+int   tomaPer1         = 1;
+float tomaPer2         = 2.1f;
+int   hhvPer           = 12;
+int   llvPer           = 12;
+
+int   mfiPer           = 14;
+int   mfiHhvPer        = 5;
+int   mfiLlvPer        = 5;
+float mfiLong          = 55.0f;
+float mfiShort         = 45.0f;
+
+float volRatio         = 0.80f;
+
+int   atrPer           = 14;
+float atrStopMultLong  = 1.5f;
+float atrStopMultShort = 1.5f;
+float karAlYuzdeLong   = 2.0f;
+float karAlYuzdeShort  = 2.0f;
+
+int   minHoldBars      = 2;
+int   maxHoldBars      = 20;
+int   cooldownBars     = 2;
+
+// ---- VERİ HAZIRLAMA ----
+var Close   = Sistem.GrafikFiyatSec("Kapanis");
+var High    = Sistem.GrafikFiyatSec("Yuksek");
+var Low     = Sistem.GrafikFiyatSec("Dusuk");
+var Volume  = Sistem.GrafikFiyatSec("Hacim");
+var LotData = Sistem.Lot();        // DİKKAT: "Lot" degil "LotData" !
+
+// EMA'lar
+var EmaFast = Sistem.MA(Close, "Exp", emaFastPer);
+var EmaSlow = Sistem.MA(Close, "Exp", emaSlowPer);
+var ArsEma  = Sistem.MA(Close, "Exp", arsEmaPer);
+
+// SuperTrend
+var ST = Sistem.SuperTrend(stFactor, stHHVPer, stATRPer);
+
+// TOMA
+var TOMA = Sistem.TOMA(tomaPer1, tomaPer2);
+
+// MFI
+var MFI = Sistem.MoneyFlowIndex(mfiPer);
+
+// ATR
+var ATR = Sistem.AverageTrueRange(atrPer);
+
+// ---- DURUM DEĞİŞKENLERİ ----
+bool  inLong      = false;
+bool  inShort     = false;
+float entryPrice  = 0f;
+float extremeVal  = 0f;   // long → max, short → min
+float stopLevel   = 0f;
+int   barsInPos   = 0;
+int   cooldownCt  = 0;
+
+// ---- ANA DÖNGÜ ----
+for (int i = Sistem.BaslangicIndexi; i < Sistem.BitisIndexi; i++)
+{
+    // --- COOLDOWN ---
+    if (cooldownCt > 0) cooldownCt--;
+
+    // =========================================================
+    //  KATMAN 1: ARS REJİM
+    // =========================================================
+    float arsEmaVal   = ArsEma[i];
+    float arsBand     = (float)Sistem.SayiYuvarla(arsEmaVal * arsK, 0.01f);
+    bool  rejimLong   = (Close[i] > arsEmaVal) && (Close[i] < arsEmaVal + arsBand);
+    bool  rejimShort  = (Close[i] < arsEmaVal) && (Close[i] > arsEmaVal - arsBand);
+
+    // =========================================================
+    //  KATMAN 2: SUPERTREND + EMA TREND
+    // =========================================================
+    bool stLong    = (ST[i] < Close[i]);
+    bool stShort   = (ST[i] > Close[i]);
+    bool emaLong   = (EmaFast[i] > EmaSlow[i]);
+    bool emaShort  = (EmaFast[i] < EmaSlow[i]);
+    bool trendLong = stLong && emaLong;
+    bool trendShort= stShort && emaShort;
+
+    // =========================================================
+    //  KATMAN 3: TOMA KROS
+    // =========================================================
+    bool tomaKrosUp   = (TOMA[i] > 0)  && (TOMA[i - 1] <= 0);
+    bool tomaKrosDown = (TOMA[i] < 0)  && (TOMA[i - 1] >= 0);
+
+    // HHV Breakout (long) — son hhvPer barin High'ini kir
+    float prevHHV = 0f;
+    for (int k = 1; k <= hhvPer; k++)
+    {
+        if (i - k >= 0 && High[i - k] > prevHHV)
+            prevHHV = High[i - k];
+    }
+    bool hhvBreak = (Close[i] > prevHHV);
+
+    // LLV Breakdown (short) — son llvPer barin Low'unun altina in
+    float prevLLV = float.MaxValue;
+    for (int k = 1; k <= llvPer; k++)
+    {
+        if (i - k >= 0 && Low[i - k] < prevLLV)
+            prevLLV = Low[i - k];
+    }
+    bool llvBreak = (Close[i] < prevLLV);
+
+    bool tetikLong  = tomaKrosUp   || hhvBreak;
+    bool tetikShort = tomaKrosDown || llvBreak;
+
+    // =========================================================
+    //  KATMAN 4: MFI + HACİM ONAYI
+    // =========================================================
+    // MFI HHV (long momentum)
+    float prevMFI_max = 0f;
+    for (int k = 1; k <= mfiHhvPer; k++)
+    {
+        if (i - k >= 0 && MFI[i - k] > prevMFI_max)
+            prevMFI_max = MFI[i - k];
+    }
+    bool mfiLongOk = (MFI[i] > mfiLong) && (MFI[i] > prevMFI_max);
+
+    // MFI LLV (short momentum)
+    float prevMFI_min = float.MaxValue;
+    for (int k = 1; k <= mfiLlvPer; k++)
+    {
+        if (i - k >= 0 && MFI[i - k] < prevMFI_min)
+            prevMFI_min = MFI[i - k];
+    }
+    bool mfiShortOk = (MFI[i] < mfiShort) && (MFI[i] < prevMFI_min);
+
+    // Hacim filtresi
+    float volAvg = 0f;
+    for (int k = 1; k <= 20; k++)
+    {
+        if (i - k >= 0) volAvg += Volume[i - k];
+    }
+    volAvg /= 20f;
+    bool volOk = (Volume[i] >= volAvg * volRatio);
+
+    bool onayLong  = mfiLongOk  && volOk;
+    bool onayShort = mfiShortOk && volOk;
+
+    bool cooldownOk = (cooldownCt == 0);
+
+    // =========================================================
+    //  GİRİŞ MANTIĞI
+    // =========================================================
+    bool girisLong  = (!inLong) && (!inShort) && rejimLong  && trendLong  && tetikLong  && onayLong  && cooldownOk;
+    bool girisShort = (!inLong) && (!inShort) && rejimShort && trendShort && tetikShort && onayShort && cooldownOk;
+
+    if (girisLong)
+    {
+        Sistem.Yon[i] = "A";
+        inLong      = true;
+        entryPrice  = Close[i];
+        extremeVal  = Close[i];
+        stopLevel   = entryPrice - ATR[i] * atrStopMultLong;
+        barsInPos   = 0;
+    }
+    else if (girisShort)
+    {
+        Sistem.Yon[i] = "S";
+        inShort     = true;
+        entryPrice  = Close[i];
+        extremeVal  = Close[i];
+        stopLevel   = entryPrice + ATR[i] * atrStopMultShort;
+        barsInPos   = 0;
+    }
+
+    // =========================================================
+    //  LONG POZİSYON YÖNETİMİ
+    // =========================================================
+    if (inLong)
+    {
+        barsInPos++;
+
+        // Trailing stop güncelle
+        if (Close[i] > extremeVal)
+        {
+            extremeVal = Close[i];
+            stopLevel  = extremeVal - ATR[i] * atrStopMultLong;
+        }
+
+        float karAlFiyat  = entryPrice * (1.0f + karAlYuzdeLong / 100.0f);
+
+        bool stopHit      = (Close[i] <= stopLevel);
+        bool karAlHit     = (Close[i] >= karAlFiyat);
+        bool rejimKirildi = (!rejimLong);
+        bool trendKirildi = (!trendLong);
+        bool minHoldOk    = (barsInPos >= minHoldBars);
+        bool maxHoldHit   = (barsInPos >= maxHoldBars);
+
+        bool cikisOk = (stopHit || karAlHit)
+                    || (rejimKirildi)
+                    || (trendKirildi && minHoldOk)
+                    || maxHoldHit;
+
+        if (cikisOk)
+        {
+            Sistem.Yon[i] = "F";
+            inLong      = false;
+            cooldownCt  = cooldownBars;
+            barsInPos   = 0;
+            entryPrice  = 0f;
+            extremeVal  = 0f;
+            stopLevel   = 0f;
+        }
+    }
+
+    // =========================================================
+    //  SHORT POZİSYON YÖNETİMİ
+    // =========================================================
+    if (inShort)
+    {
+        barsInPos++;
+
+        // Trailing stop güncelle (short için fiyat düştükçe stop aşağı iner)
+        if (Close[i] < extremeVal)
+        {
+            extremeVal = Close[i];
+            stopLevel  = extremeVal + ATR[i] * atrStopMultShort;
+        }
+
+        float karAlFiyat  = entryPrice * (1.0f - karAlYuzdeShort / 100.0f);
+
+        bool stopHit      = (Close[i] >= stopLevel);
+        bool karAlHit     = (Close[i] <= karAlFiyat);
+        bool rejimKirildi = (!rejimShort);
+        bool trendKirildi = (!trendShort);
+        bool minHoldOk    = (barsInPos >= minHoldBars);
+        bool maxHoldHit   = (barsInPos >= maxHoldBars);
+
+        bool cikisOk = (stopHit || karAlHit)
+                    || (rejimKirildi)
+                    || (trendKirildi && minHoldOk)
+                    || maxHoldHit;
+
+        if (cikisOk)
+        {
+            Sistem.Yon[i] = "F";
+            inShort     = false;
+            cooldownCt  = cooldownBars;
+            barsInPos   = 0;
+            entryPrice  = 0f;
+            extremeVal  = 0f;
+            stopLevel   = 0f;
+        }
+    }
+}
+
+// ============================================================
+//  NOT: Long ve Short ayni barda girmez (else if yapisi).
+//       Short cikarken de Sistem.Yon[i] = "F" kullanilir;
+//       iDeal "F" ile hem long hem short pozisyonu kapatir.
+//       SPOT surumu icin Strateji_DeepScalp_SPOT_v1.2.txt
+// ============================================================

@@ -1,0 +1,154 @@
+================================================================
+  DEEP SCALP v1.2  –  OPTİMİZASYON REHBERİ
+  Tarih: 2026-03-14
+================================================================
+
+REFERANS PERFORMANS (SPOT, GARAN 5dk, 9.8 ay):
+  PF     : 1.32
+  Sharpe : 1.37
+  R/R    : 2.41
+  Kazanma: %33.97
+  Net    : +25.6%
+  İşlem  : 209
+  MaxDD  : 8.9
+
+================================================================
+  STRATEJİ: AŞAMALI (4 ADIM) OPTİMİZASYON
+================================================================
+
+  Neden aşamalı?
+  - Tüm 12 parametreyi aynı anda optimize etmek
+    50.000+ kombinasyona ulaşır → aşırı öğrenme riski
+  - Önce en kritik 5 parametreyi optimize et (~600 kombinasyon)
+  - Ardından her adımda küme genişlet
+  - Son adımda cross-validation ile aşırı öğrenmeyi kontrol et
+
+================================================================
+  ADIM 1  –  TEMEL RİSK PARAMETRELERİ  (~600 kombinasyon)
+================================================================
+
+  Parametre          Aralık          Adım    Açıklama
+  ─────────────────────────────────────────────────────────────
+  arsK               0.8 – 2.0       0.2     Rejim bant carpani
+  atrStopMultLong    1.0 – 2.5       0.25    Long stop mesafesi
+  karAlYuzdeLong     1.0 – 4.0       0.5     Long kar al hedefi
+  hhvPer             8  – 20         2       Tetik periyodu
+  volRatio           0.60 – 1.00     0.10    Hacim filtre eşiği
+
+  Hedef metrikler:
+    ✓ PF >= 1.20
+    ✓ MaxDD < 15
+    ✓ İşlem sayısı > 100 (istatistiksel anlamlılık)
+
+================================================================
+  ADIM 2  –  TREND KALIBRASYONU  (+4 parametre, ~500 kombin.)
+================================================================
+
+  Parametre          Aralık          Adım    Açıklama
+  ─────────────────────────────────────────────────────────────
+  stFactor           2.0 – 4.0       0.5     SuperTrend hassasiyeti
+  emaFastPer         5  – 13         2       Hızlı EMA
+  emaSlowPer         15 – 30         3       Yavaş EMA
+  mfiHhvPer          3  – 9          2       MFI momentum penceresi
+
+  Not: emaFastPer < emaSlowPer koşulunu kontrol et.
+  Adım 1 en iyi parametreleri sabit tut.
+
+================================================================
+  ADIM 3  –  GİRİŞ VE TOMA  (+3 parametre, ~200 kombin.)
+================================================================
+
+  Parametre          Aralık          Adım    Açıklama
+  ─────────────────────────────────────────────────────────────
+  tomaPer2           1.5 – 3.0       0.2     TOMA hassasiyet %
+  mfiLong            45 – 65         5       MFI long eşiği (Spot)
+  mfiShort           35 – 55         5       MFI short eşiği (VIOP)
+
+================================================================
+  ADIM 4  –  ZAMAN FİLTRELERİ  (+3 parametre, küçük)
+================================================================
+
+  Parametre          Aralık          Adım    Açıklama
+  ─────────────────────────────────────────────────────────────
+  minHoldBars        1  – 4          1       Min tutma bar
+  maxHoldBars        10 – 30         5       Max tutma bar
+  cooldownBars       1  – 4          1       Cooldown bar
+
+================================================================
+  TÜM PARAMETRELER – ÖZET TABLOSU
+================================================================
+
+  #   Parametre          Öncelik   Önerilen Başlangıç
+  ─────────────────────────────────────────────────────────────
+  1   arsK               🔴 P1     1.23
+  2   atrStopMultLong    🔴 P1     1.50
+  3   atrStopMultShort   🔴 P1     1.50  (VIOP)
+  4   karAlYuzdeLong     🔴 P1     2.00
+  5   karAlYuzdeShort    🔴 P1     2.00  (VIOP)
+  6   hhvPer             🟡 P2     12
+  7   llvPer             🟡 P2     12    (VIOP)
+  8   volRatio           🟡 P2     0.80
+  9   stFactor           🟡 P2     3.00
+  10  emaFastPer         🟢 P3     9
+  11  emaSlowPer         🟢 P3     21
+  12  tomaPer2           🟢 P3     2.10
+  13  mfiHhvPer          🟢 P3     5
+  14  mfiLlvPer          🟢 P3     5     (VIOP)
+  15  mfiLong            🟢 P3     55.0
+  16  mfiShort           🟢 P3     45.0  (VIOP)
+  17  minHoldBars        ⚪ P4     2
+  18  maxHoldBars        ⚪ P4     20
+  19  cooldownBars       ⚪ P4     2
+
+================================================================
+  KALİBRASYON NOTLARI
+================================================================
+
+  1. PERIYOT BAZLI PRESET FARKI
+     ─────────────────────────
+     Periyot   arsK   stFactor  atrStopMult  karAl  hhvPer
+     1dk       1.10   2.5       1.20         1.5    8
+     5dk       1.23   3.0       1.50         2.0    12   ← test edildi
+     15dk      1.40   3.5       1.80         2.5    16
+     30dk      1.55   4.0       2.00         3.0    18
+     60dk      1.70   4.0       2.20         3.5    20
+
+  2. SEMBOL UYARISI
+     ─────────────
+     - GARAN dışında test edilecekse arsK ve volRatio
+       sembol bazlı yeniden kalibre edilmeli.
+     - VIOP (XU30F, BIST30) için stFactor 2.5–3.5 arasında dene.
+
+  3. AŞIRI ÖĞRENME KONTROLLERİ
+     ──────────────────────────
+     a) Walk-forward test (in-sample %70 / out-sample %30)
+     b) İşlem sayısı < 80 ise parametreler çok kısıtlayıcı.
+     c) PF in-sample >> PF out-sample ise aşırı öğrenme var.
+     d) En az 3 farklı sembolde benzer PF olmasını bekle.
+
+  4. VIOP SHORT FİLTRE AYARI
+     ─────────────────────────
+     Short sinyali az geliyorsa şu sırayla gevşet:
+       a) mfiShortOk koşulunu opsiyonel yap (sadece volOk yeterli)
+       b) llvPer'i küçült (12 → 8)
+       c) mfiShort eşiğini yükselt (45 → 50)
+
+  5. İDEALQUANT ENTEGRASYON İPUCU
+     ──────────────────────────────
+     - Strateji dosyasını iDeaLQuant'a yüklerken parametre
+       başlangıç, bitiş ve adım değerlerini yukarıdaki tabloya
+       göre gir.
+     - Önce Adım 1 parametrelerini optimize et, ardından
+       en iyi 3 sonucu Adım 2 ile genişlet.
+
+================================================================
+  İLGİLİ DOSYALAR
+================================================================
+
+  Strateji_DeepScalp_SPOT_v1.2.txt   → Spot kodu (A/F)
+  Strateji_DeepScalp_VIOP_v1.2.txt   → VIOP kodu (A/S/F)
+  Strateji_ARS_Trend_v2.txt          → ARS rejim referansı
+  Strateji_Endeks_Vadeli_v1.txt       → TOMA + ATR stop referansı
+  CxSistem.txt                        → Tüm iDeal API imzaları
+
+================================================================
