@@ -107,6 +107,7 @@ class ExportPanel(QWidget):
             "Strateji 4 - TOMA + Momentum",
             "Strateji 5 - Oliver Kell",
             "Strateji 6 - TOTT HOTT",
+            "Strateji 7 - DeepScalp v1.2",
             "Birleşik Robot"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_export)
@@ -233,7 +234,7 @@ class ExportPanel(QWidget):
         params_text = f"✓ Süreç: {self.current_process_id}\n\n"
         
         for strategy_idx, params in self.final_params.items():
-            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
+            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
             params_text += f"━━━ {strategy_name} ━━━\n"
             
             # İlk 5 parametre
@@ -321,6 +322,12 @@ class ExportPanel(QWidget):
                     QMessageBox.warning(self, "Uyarı", "Strateji 6 (TOTT HOTT) için final parametre bulunamadı.")
                     return
                 code = exporter._generate_strategy6_code(s6_params, vade_tipi)
+            elif strategy_idx == 6:
+                s7_params = self.final_params.get(6, {})
+                if not s7_params:
+                    QMessageBox.warning(self, "Uyarı", "Strateji 7 (DeepScalp) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy7_code(s7_params, vade_tipi)
             else:
                 if not s1_params or not s2_params:
                     QMessageBox.warning(self, "Uyarı", "Birleşik robot için S1 ve S2 final parametreleri gerekli.")

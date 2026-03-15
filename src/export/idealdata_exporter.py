@@ -2321,6 +2321,349 @@ Sistem.Cizgiler[7].Renk = Color.Green;
         params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
         
         return str(filepath)
+    
+    def _generate_strategy7_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
+        """Strateji 7 (DeepScalp) IdealData kodu oluşturur."""
+        
+        ars_k = float(params.get('ars_k', 0.005))
+        atr_stop_mult_l = float(params.get('atr_stop_mult_long', 2.0))
+        atr_stop_mult_s = float(params.get('atr_stop_mult_short', 2.0))
+        kar_al_yuzde_l = float(params.get('kar_al_yuzde_long', 1.0))
+        kar_al_yuzde_s = float(params.get('kar_al_yuzde_short', 1.0))
+        
+        hhv_p = int(params.get('hhv_period', 5))
+        llv_p = int(params.get('llv_period', 5))
+        vol_ratio = float(params.get('vol_ratio', 1.5))
+        st_factor = float(params.get('st_factor', 0.5))
+        ema_fast_p = int(params.get('ema_fast_period', 9))
+        ema_slow_p = int(params.get('ema_slow_period', 21))
+        
+        mfi_hhv_p = int(params.get('mfi_hhv_period', 14))
+        mfi_llv_p = int(params.get('mfi_llv_period', 14))
+        toma_p2 = int(params.get('toma_period2', 20))
+        
+        mfi_l = float(params.get('mfi_long', 60.0))
+        mfi_s = float(params.get('mfi_short', 40.0))
+        
+        min_hold = int(params.get('min_hold_bars', 1))
+        max_hold = int(params.get('max_hold_bars', 20))
+        cooldown = int(params.get('cooldown_bars', 2))
+        
+        is_spot = (vade_tipi == "SPOT")
+        if is_spot:
+            yon_code = '// SPOT Hisse: Sadece AL / FLAT\nstring YON_MODU = "SADECE_AL";'
+            mode_label = "SPOT Hisse — Tek Yön (AL/FLAT)"
+        else:
+            yon_code = '// Vadeli: Çift Yönlü\nstring YON_MODU = "CIFT";'
+            mode_label = f"VIOP — Çift Yön ({vade_tipi})"
+
+        code = f'''// ===============================================================================================
+// STRATEJI 7: DeepScalp v1.2 — Gelişmiş Scalping Algoritması
+// Mod: {mode_label}
+// Otomatik: IdealQuant Export | Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+// ===============================================================================================
+{yon_code}
+
+// === PARAMETRELER ===
+float ARS_K = {ars_k}f;
+float ATR_Stop_Mult_Long = {atr_stop_mult_l}f;
+float ATR_Stop_Mult_Short = {atr_stop_mult_s}f;
+float Kar_Al_Yuzde_Long = {kar_al_yuzde_l}f;
+float Kar_Al_Yuzde_Short = {kar_al_yuzde_s}f;
+int HHV_Period = {hhv_p};
+int LLV_Period = {llv_p};
+float Vol_Ratio = {vol_ratio}f;
+float ST_Factor = {st_factor}f;
+int EMA_Fast_Period = {ema_fast_p};
+int EMA_Slow_Period = {ema_slow_p};
+int MFI_HHV_Period = {mfi_hhv_p};
+int MFI_LLV_Period = {mfi_llv_p};
+int Toma_Period2 = {toma_p2};
+float MFI_Long = {mfi_l}f;
+float MFI_Short = {mfi_s}f;
+int Min_Hold_Bars = {min_hold};
+int Max_Hold_Bars = {max_hold};
+int Cooldown_Bars = {cooldown};
+
+// === GRAFİK BİLGİSİ ===
+var Veriler = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
+var H = Sistem.GrafikFiyatSec("Yuksek");
+var L = Sistem.GrafikFiyatSec("Dusuk");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+var T = Sistem.GrafikFiyatSec("Tipik");
+var Vol = Sistem.GrafikFiyatSec("Lot");
+
+string VadeTipi = "{vade_tipi}";
+
+// ===============================================================================================
+// DİNAMİK BAYRAM TARİHLERİ (2024-2030)
+// ===============================================================================================
+int yil = DateTime.Now.Year;
+DateTime Ramazan, Kurban;
+
+switch(yil)
+{{
+    case 2024: Ramazan = new DateTime(2024, 4, 10); Kurban = new DateTime(2024, 6, 16); break;
+    case 2025: Ramazan = new DateTime(2025, 3, 30); Kurban = new DateTime(2025, 6, 6); break;
+    case 2026: Ramazan = new DateTime(2026, 3, 20); Kurban = new DateTime(2026, 5, 27); break;
+    case 2027: Ramazan = new DateTime(2027, 3, 9); Kurban = new DateTime(2027, 5, 16); break;
+    case 2028: Ramazan = new DateTime(2028, 2, 26); Kurban = new DateTime(2028, 5, 5); break;
+    case 2029: Ramazan = new DateTime(2029, 2, 14); Kurban = new DateTime(2029, 4, 24); break;
+    case 2030: Ramazan = new DateTime(2030, 2, 3); Kurban = new DateTime(2030, 4, 13); break;
+    default: Ramazan = new DateTime(yil, 3, 15); Kurban = new DateTime(yil, 5, 20); break;
+}}
+
+DateTime R2024 = new DateTime(2024, 4, 10); DateTime K2024 = new DateTime(2024, 6, 16);
+DateTime R2025 = new DateTime(2025, 3, 30); DateTime K2025 = new DateTime(2025, 6, 6);
+DateTime R2026 = new DateTime(2026, 3, 20); DateTime K2026 = new DateTime(2026, 5, 27);
+DateTime R2027 = new DateTime(2027, 3, 9); DateTime K2027 = new DateTime(2027, 5, 16);
+
+string[] resmiTatiller = new string[] {{ "01.01","04.23","05.01","05.19","07.15","08.30","10.29" }};
+
+// ===============================================================================================
+// VADE SONU İŞ GÜNÜ HESAPLAMA
+// ===============================================================================================
+Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
+{{
+    var aySonu = new DateTime(dt.Year, dt.Month, DateTime.DaysInMonth(dt.Year, dt.Month));
+    var d = aySonu;
+    
+    for (int k = 0; k < 15; k++)
+    {{
+        if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+        {{ d = d.AddDays(-1); continue; }}
+        
+        string mmdd = d.ToString("MM.dd");
+        bool tatil = false;
+        for (int t = 0; t < resmiTatiller.Length; t++)
+            if (resmiTatiller[t] == mmdd) {{ tatil = true; break; }}
+        if (tatil) {{ d = d.AddDays(-1); continue; }}
+        
+        if ((d >= R2024 && d <= R2024.AddDays(3)) || (d >= K2024 && d <= K2024.AddDays(4)) ||
+            (d >= R2025 && d <= R2025.AddDays(3)) || (d >= K2025 && d <= K2025.AddDays(4)) ||
+            (d >= R2026 && d <= R2026.AddDays(3)) || (d >= K2026 && d <= K2026.AddDays(4)) ||
+            (d >= R2027 && d <= R2027.AddDays(3)) || (d >= K2027 && d <= K2027.AddDays(4)))
+        {{ d = d.AddDays(-1); continue; }}
+        
+        break;
+    }}
+    return d.Date;
+}};
+
+// ===============================================================================================
+// İNDİKATÖR HESAPLAMALARI
+// ===============================================================================================
+var ATR = Sistem.AverageTrueRange(6);
+var VolMA = Sistem.MA(Vol, "Simple", 20);
+
+// ARS Step
+var ARS_EMA = Sistem.MA(C, "Exp", 3);
+var ARS = Sistem.Liste(0);
+for (int i = 1; i < Veriler.Count; i++)
+{{
+    float altBand = ARS_EMA[i] * (1 - ARS_K);
+    float ustBand = ARS_EMA[i] * (1 + ARS_K);
+    if (altBand > ARS[i - 1]) ARS[i] = altBand;
+    else if (ustBand < ARS[i - 1]) ARS[i] = ustBand;
+    else ARS[i] = ARS[i - 1];
+}}
+
+// TOMA
+var EMA20 = Sistem.MA(C, "Exp", Toma_Period2);
+var TOMA = Sistem.Liste(0);
+var TOMATrend = Sistem.Liste(0);
+TOMA[0] = EMA20[0];
+for (int i = 1; i < Veriler.Count; i++)
+{{
+    float optYuzde = ST_Factor;
+    float lBand = EMA20[i] * (1 - optYuzde / 100f);
+    float uBand = EMA20[i] * (1 + optYuzde / 100f);
+    if (TOMATrend[i-1] == 1) {{
+        TOMA[i] = Math.Max(TOMA[i-1], lBand);
+        if (EMA20[i] < TOMA[i]) {{ TOMATrend[i] = -1; TOMA[i] = uBand; }}
+        else TOMATrend[i] = 1;
+    }} else {{
+        TOMA[i] = Math.Min(TOMA[i-1], uBand);
+        if (EMA20[i] > TOMA[i]) {{ TOMATrend[i] = 1; TOMA[i] = lBand; }}
+        else TOMATrend[i] = -1;
+    }}
+}}
+
+// Other Filters
+var EMA_Fast = Sistem.MA(C, "Exp", EMA_Fast_Period);
+var EMA_Slow = Sistem.MA(C, "Exp", EMA_Slow_Period);
+var MFI = Sistem.MoneyFlowIndex(14);
+var MFI_HHV = Sistem.HHV(MFI_HHV_Period, MFI);
+var MFI_LLV = Sistem.LLV(MFI_LLV_Period, MFI);
+var F_HHV = Sistem.HHV(HHV_Period, "Yuksek");
+var F_LLV = Sistem.LLV(LLV_Period, "Dusuk");
+
+// ===============================================================================================
+// SİNYAL ÜRETME
+// ===============================================================================================
+for (int i = 1; i < Veriler.Count; i++) Sistem.Yon[i] = "";
+var SonYon = "";
+
+int warmupBars = Math.Max(100, Toma_Period2 + 50);
+int warmupBaslangicBar = -999;
+bool warmupAktif = false;
+bool arefeFlat = false;
+
+float entryPrice = 0f;
+int entryBar = 0;
+float extremePrice = 0f;
+
+for (int i = warmupBars; i < Veriler.Count; i++)
+{{
+    string Sinyal = "";
+    var dt = Veriler[i].Date;
+    var t = dt.TimeOfDay;
+    
+    bool gunSeansi = t >= new TimeSpan(9,30,0) && t < new TimeSpan(18,15,0);
+    bool aksamSeansi = t >= new TimeSpan(19,0,0) && t < new TimeSpan(23,0,0);
+    if (!(gunSeansi || aksamSeansi)) continue;
+    
+    bool vadeAyi = (VadeTipi == "SPOT") || (dt.Month % 2 == 0);
+    bool vadeSonuGun = vadeAyi && (dt.Date == VadeSonuIsGunu(dt));
+    
+    bool arefe = dt.Date == R2024.AddDays(-1).Date || dt.Date == K2024.AddDays(-1).Date ||
+                 dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
+                 dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
+                 dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
+    
+    // Vade/Arefe Flat
+    if (arefe && vadeSonuGun && t > new TimeSpan(11,30,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+    }}
+    else if (arefe && !vadeSonuGun && t > new TimeSpan(11,30,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        arefeFlat = true;
+    }}
+    else if (vadeSonuGun && t > new TimeSpan(17,40,0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+    }}
+    
+    if (Sinyal == "F") {{
+        if (SonYon != Sinyal) {{ Sistem.Yon[i] = Sinyal; SonYon = Sinyal; entryBar = 0; }}
+        continue;
+    }}
+    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0))) continue;
+    
+    // Warmup
+    if (warmupAktif && warmupBaslangicBar == -999) {{
+        bool yeniSeans = false;
+        if (aksamSeansi && i>0 && Veriler[i-1].Date.TimeOfDay < new TimeSpan(19,0,0)) yeniSeans = true;
+        if (gunSeansi && i>0 && dt.Date != Veriler[i-1].Date.Date) yeniSeans = true;
+        if (yeniSeans) warmupBaslangicBar = i;
+    }}
+    if (warmupAktif && warmupBaslangicBar > 0) {{
+        if ((i - warmupBaslangicBar) < 60) continue; 
+        else warmupAktif = false;
+    }}
+    if (arefeFlat && i>0 && dt.Date != Veriler[i-1].Date.Date) arefeFlat = false;
+
+    // === DeepScalp SİNYAL MANTIĞI ===
+    int barsHeld = (SonYon != "" && entryBar > 0) ? (i - entryBar) : 0;
+    
+    // ÇIKIŞ
+    if (SonYon == "A")
+    {{
+        if (H[i] > extremePrice) extremePrice = H[i];
+        if (barsHeld >= Min_Hold_Bars)
+        {{
+            float stopLevel = entryPrice - (float)(ATR[i] * ATR_Stop_Mult_Long);
+            float tpLevel = entryPrice * (1 + Kar_Al_Yuzde_Long/100f);
+            if (C[i] < stopLevel || C[i] > tpLevel || barsHeld >= Max_Hold_Bars || C[i] < ARS[i])
+                Sinyal = "F";
+        }}
+    }}
+    else if (SonYon == "S")
+    {{
+        if (L[i] < extremePrice) extremePrice = L[i];
+        if (barsHeld >= Min_Hold_Bars)
+        {{
+            float stopLevel = entryPrice + (float)(ATR[i] * ATR_Stop_Mult_Short);
+            float tpLevel = entryPrice * (1 - Kar_Al_Yuzde_Short/100f);
+            if (C[i] > stopLevel || C[i] < tpLevel || barsHeld >= Max_Hold_Bars || C[i] > ARS[i])
+                Sinyal = "F";
+        }}
+    }}
+    
+    // GİRİŞ
+    if (Sinyal == "" && SonYon == "" && (i - entryBar >= Cooldown_Bars || entryBar == 0))
+    {{
+        bool volOk = Vol[i] > VolMA[i] * Vol_Ratio;
+        
+        bool longCond = (C[i] > ARS[i]) && (C[i] > EMA_Fast[i]) && 
+                        (EMA_Fast[i] > EMA_Slow[i]) && (MFI[i] > MFI_Long) && 
+                        (H[i] > F_HHV[i-1]) && volOk && (C[i] > TOMA[i]);
+                        
+        bool shortCond = (C[i] < ARS[i]) && (C[i] < EMA_Fast[i]) && 
+                         (EMA_Fast[i] < EMA_Slow[i]) && (MFI[i] < MFI_Short) && 
+                         (L[i] < F_LLV[i-1]) && volOk && (C[i] < TOMA[i]);
+
+        if (longCond && YON_MODU != "SADECE_SAT") Sinyal = "A";
+        else if (shortCond && YON_MODU != "SADECE_AL") Sinyal = "S";
+    }}
+    
+    // Yön Modu Kontrolü (Ekstra Güvenlik)
+    if (YON_MODU == "SADECE_AL" && Sinyal == "S") Sinyal = "F";
+    if (YON_MODU == "SADECE_SAT" && Sinyal == "A") Sinyal = "F";
+
+    // Pozisyon güncelle
+    if (Sinyal != "" && SonYon != Sinyal)
+    {{
+        Sistem.Yon[i] = Sinyal;
+        SonYon = Sinyal;
+        if (Sinyal == "A" || Sinyal == "S") {{
+            entryPrice = C[i];
+            entryBar = i;
+            extremePrice = C[i];
+        }}
+    }}
+}}
+
+// === ÇİZİMLER ===
+Sistem.Cizgiler[0].Deger = ARS;
+Sistem.Cizgiler[0].Aciklama = "ARS(" + ARS_K + ")";
+Sistem.Cizgiler[0].ActiveBool = true;
+Sistem.Cizgiler[0].Renk = Color.Gold;
+
+Sistem.Cizgiler[1].Deger = TOMA;
+Sistem.Cizgiler[1].Aciklama = "TOMA(" + Toma_Period2 + ")";
+Sistem.Cizgiler[1].ActiveBool = true;
+Sistem.Cizgiler[1].Renk = Color.Green;
+
+{self._get_performance_panel_code()}
+'''
+        return code
+
+    def export_strategy7(
+        self, 
+        params: Dict[str, Any], 
+        vade_tipi: str = "ENDEKS"
+    ) -> str:
+        """
+        Strateji 7 (DeepScalp) Kodunu Export Eder
+        """
+        filename = self._generate_filename(7, vade_tipi)
+        
+        code = self._generate_strategy7_code(params, vade_tipi)
+        
+        filepath = self.output_dir / f"{filename}.cs"
+        filepath.write_text(code, encoding='utf-8')
+        
+        # Parametreleri JSON olarak da kaydet
+        params_path = self.output_dir / f"{filename}_params.json"
+        params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
+        
+        return str(filepath)
 
     def export_strategy5(
         self, 
@@ -2391,6 +2734,9 @@ Sistem.Cizgiler[7].Renk = Color.Green;
         params2: Dict[str, Any],
         params3: Dict[str, Any],
         params4: Dict[str, Any],
+        params5: Dict[str, Any] = None,
+        params6: Dict[str, Any] = None,
+        params7: Dict[str, Any] = None,
         vade_tipi: str = "ENDEKS",
         lot_size: int = 1
     ) -> Dict[str, str]:
@@ -2398,12 +2744,17 @@ Sistem.Cizgiler[7].Renk = Color.Green;
         Tüm dosyaları tek seferde export eder.
         
         Returns:
-            Dict with 'strategy1', 'strategy2', 'strategy3', 'strategy4', 'robot' paths
+            Dict with 'strategy1', 'strategy2', 'strategy3', 'strategy4', 'strategy5', 'strategy6', 'strategy7', 'robot' paths
         """
         s1_path = self.export_strategy1(params1, vade_tipi)
         s2_path = self.export_strategy2(params2, vade_tipi)
         s3_path = self.export_strategy3(params3, vade_tipi)
         s4_path = self.export_strategy4(params4, vade_tipi)
+        
+        s5_path = self.export_strategy5(params5, vade_tipi) if params5 else None
+        s6_path = self.export_strategy6(params6, vade_tipi) if params6 else None
+        s7_path = self.export_strategy7(params7, vade_tipi) if params7 else None
+        
         robot_path = self.export_combined_robot(lot_size)
         
         return {
@@ -2411,6 +2762,9 @@ Sistem.Cizgiler[7].Renk = Color.Green;
             'strategy2': s2_path,
             'strategy3': s3_path,
             'strategy4': s4_path,
+            'strategy5': s5_path,
+            'strategy6': s6_path,
+            'strategy7': s7_path,
             'robot': robot_path
         }
 

@@ -208,6 +208,24 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 
 ---
 
+## 🔄 FAZ 12: Strateji 7 (DeepScalp v1.2) [AKTİF]
+
+### 12.1 Python Altyapısı ✅
+- [x] `deepscalp_strategy.py` — 6 katmanlı strateji (ARS, SuperTrend, TOMA, MFI, ATR, Zaman)
+- [x] `strategy7_optimizer.py` — Numba JIT + IndicatorCache
+- [x] Genetik & Bayesian optimizer entegrasyonu
+- [x] UI panelleri (Optimizer, Strategy, Export) entegrasyonu
+- [x] C# Exporter şablonu (`_generate_strategy7_code`)
+
+### 12.2 S4 Optimizasyon Refactoring 🔄
+- [ ] **Faz 4 Ayrıştırma:** `kar_al` + `iz_stop` çıkış parametrelerini Faz 3'ten ayırıp bağımsız Faz 4 yap
+  - `strategy4_optimizer.py`: `s4_p4_eval` fonksiyonu eklenmeli
+  - `optimizer_panel.py`: Faz 3 gen'inden risk_ranges çıkarılmalı, yeni Faz 4 Pool bloğu + checkpoint
+- [ ] **SuperTrend Kalibrasyonu:** `get_supertrend` Python impl. + IdealData doğrulaması
+- [ ] **C# Export:** S7 SuperTrend kodu C# exporter'a eklenmeli
+
+
+
 ## ⏸️ FAZ 8: Uygulama Arayüzü [SON ADIM]
 
 > [!IMPORTANT]

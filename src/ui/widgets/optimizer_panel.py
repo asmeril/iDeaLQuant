@@ -267,6 +267,49 @@ STRATEGY6_PARAM_GROUPS = {
     }
 }
 
+# Strateji 7 Parametre Gruplari (DeepScalp v1.2 — 12 parametre, 4 grup)
+STRATEGY7_PARAM_GROUPS = {
+    'Layer1_RiskRegime': {
+        'label': 'Layer 1: Risk & Regime',
+        'params': {
+            'ars_k': {'label': 'ARS Bant Carpan', 'type': 'float', 'default': 1.23, 'min': 0.8, 'max': 2.0, 'step': 0.2},
+            'atr_stop_mult_long': {'label': 'ATR SL Long', 'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
+            'atr_stop_mult_short': {'label': 'ATR SL Short', 'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
+            'kar_al_yuzde_long': {'label': 'Kar Al % Long', 'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
+            'kar_al_yuzde_short': {'label': 'Kar Al % Short', 'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
+            'hhv_period': {'label': 'Tekil Kirici HHV', 'type': 'int', 'default': 12, 'min': 8, 'max': 20, 'step': 2},
+            'llv_period': {'label': 'Tekil Kirici LLV', 'type': 'int', 'default': 12, 'min': 8, 'max': 20, 'step': 2},
+            'vol_ratio': {'label': 'Hacim Orani', 'type': 'float', 'default': 0.8, 'min': 0.60, 'max': 1.00, 'step': 0.10},
+        }
+    },
+    'Layer2_Trend': {
+        'label': 'Layer 2: Trend & MFI Limit',
+        'params': {
+            'st_factor': {'label': 'SuperTrend Factor', 'type': 'float', 'default': 3.0, 'min': 2.0, 'max': 4.0, 'step': 0.5},
+            'ema_fast_period': {'label': 'EMA Hizli', 'type': 'int', 'default': 9, 'min': 5, 'max': 13, 'step': 2},
+            'ema_slow_period': {'label': 'EMA Yavas', 'type': 'int', 'default': 21, 'min': 15, 'max': 30, 'step': 3},
+            'mfi_hhv_period': {'label': 'MFI HHV', 'type': 'int', 'default': 5, 'min': 3, 'max': 9, 'step': 2},
+            'mfi_llv_period': {'label': 'MFI LLV', 'type': 'int', 'default': 5, 'min': 3, 'max': 9, 'step': 2},
+        }
+    },
+    'Layer3_Timing': {
+        'label': 'Layer 3: Zamanlama & Tetikleme',
+        'params': {
+            'toma_period2': {'label': 'TOMA Yuzde', 'type': 'float', 'default': 2.1, 'min': 1.5, 'max': 3.0, 'step': 0.2},
+            'mfi_long': {'label': 'MFI Long Limit', 'type': 'float', 'default': 55.0, 'min': 45.0, 'max': 65.0, 'step': 5.0},
+            'mfi_short': {'label': 'MFI Short Limit', 'type': 'float', 'default': 45.0, 'min': 35.0, 'max': 55.0, 'step': 5.0},
+        }
+    },
+    'Layer5_TimeFilters': {
+        'label': 'Layer 4: Min/Max/Cooldown Sınırları',
+        'params': {
+            'min_hold_bars': {'label': 'Min Hold Bar', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
+            'max_hold_bars': {'label': 'Max Hold Bar', 'type': 'int', 'default': 20, 'min': 10, 'max': 30, 'step': 5},
+            'cooldown_bars': {'label': 'Cooldown Bar', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
+        }
+    }
+}
+
 # ==============================================================================
 # TIMEFRAME-ADAPTIVE PARAMETER SCALING
 # ==============================================================================
@@ -290,6 +333,8 @@ SCALABLE_PARAMS = {
     'ema_fast', 'ema_slow', 'breakout_period', 'adx_period', 'vol_ma_period',
     # Strateji 6 (TOTT_HOTT)
     'ott_period', 'gate_period',
+    # Strateji 7 (DeepScalp)
+    'hhv_period', 'llv_period', 'ema_fast_period', 'ema_slow_period', 'mfi_hhv_period', 'mfi_llv_period',
 }
 
 REFERENCE_PERIOD = 5  # dk - Stratejilerin orijinal tasarim periyodu
@@ -582,6 +627,8 @@ class OptimizationWorker(QThread):
                 self._run_genetic()
             elif self.method == "Bayesian":
                 self._run_bayesian()
+            elif self.strategy_index == 6 and self.method == "Hibrit Grup":
+                self.error.emit(f"Strateji 7 (DeepScalp) icin Numba Tabanli Grid Search desteklenmiyor, lutfen Genetik / Bayesian seciniz.")
             else:
                 self.error.emit(f"Bilinmeyen yöntem: {self.method}")
                 

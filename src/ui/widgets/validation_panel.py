@@ -27,6 +27,7 @@ from src.strategies.paradise_strategy import ParadiseStrategy
 from src.strategies.toma_strategy import TomaStrategy
 from src.strategies.oliver_kell_s5 import OliverKellStrategy
 from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
+from src.strategies.deepscalp_strategy import DeepScalpStrategy
 import pandas as pd
 
 
@@ -126,6 +127,8 @@ class WFAWorker(QThread):
             return OliverKellStrategy.from_config_dict(cache, self.params)
         elif self.strategy_idx == 5:
             return TOTT_HOTTStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 6:
+            return DeepScalpStrategy.from_config_dict(cache, self.params)
         else:
             return ARSTrendStrategyV2.from_config_dict(cache, self.params)
         
@@ -369,6 +372,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 3: return TomaStrategy.from_config_dict(cache, params)
         elif idx == 4: return OliverKellStrategy.from_config_dict(cache, params)
         elif idx == 5: return TOTT_HOTTStrategy.from_config_dict(cache, params)
+        elif idx == 6: return DeepScalpStrategy.from_config_dict(cache, params)
         else: return ARSTrendStrategyV2.from_config_dict(cache, params)
 
     def _calc_wfa(self, idx, params):
@@ -434,6 +438,13 @@ class BatchAnalysisWorker(QThread):
              valid_keys = set(STRATEGY5_PARAMS.keys())
         elif idx == 5:
              valid_keys = {'ott_period', 'ott_pct_big', 'ott_pct_small', 'ott_mult', 'sott_pct', 'gate_period', 'gate_pct'}
+        elif idx == 6:
+             valid_keys = {
+                'ars_k', 'atr_stop_mult_long', 'atr_stop_mult_short', 'kar_al_yuzde_long',
+                'kar_al_yuzde_short', 'hhv_period', 'llv_period', 'vol_ratio', 'st_factor',
+                'ema_fast_period', 'ema_slow_period', 'mfi_hhv_period', 'mfi_llv_period',
+                'toma_period2', 'mfi_long', 'mfi_short', 'min_hold_bars', 'max_hold_bars', 'cooldown_bars'
+             }
         else:
             valid_keys = set(STRATEGY2_PARAMS.keys())
         keys = [k for k in params.keys() if k in valid_keys and isinstance(params[k], (int, float))]
@@ -460,6 +471,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
         elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
         elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
+        elif idx == 6: s = DeepScalpStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         sig, ex_l, ex_s = s.generate_all_signals()
         return backtest_with_summary(self.cache.closes, sig, ex_l, ex_s, 
@@ -475,6 +487,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)
         elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
         elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
+        elif idx == 6: s = DeepScalpStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         
         # Basit backtest - işlem listesi (pnl'ler) döndüren versiyon lazım

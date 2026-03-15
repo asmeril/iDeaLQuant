@@ -1,34 +1,37 @@
 // ===============================================================================================
-// STRATEJI 4: TOMA + MOMENTUM + TRIX SİSTEMİ
+// STRATEJİ 2: ARS TREND TAKİP SİSTEMİ v4.1
 // ===============================================================================================
-// Sembol: VIP_X030-T
-// Periyot: 1 dakika
+// Sembol: VIP'VIP-X030
+// Periyot: 5 dakika
 // Vade Tipi: ENDEKS
-// Oluşturma: 2026-03-15 11:05
+// Oluşturma: 2026-03-15 04:21
 // ===============================================================================================
 
 // --- VADE TİPİ & YÖN MODU ---
 string VadeTipi = "ENDEKS";
 string YON_MODU = "CIFT";
 
-// --- PARAMETRELER ---
-var MOM_PERIOD = 500;
-var MOM_UPPER = 100.75f;
-var MOM_LOWER = 98.25f;
-var TRIX_PERIOD = 25;
-var TRIX_PERIOD2 = 45;
-var TRIX_LB1 = 75;
-var TRIX_LB2 = 45;
-var HHV1_PERIOD = 20;
-var LLV1_PERIOD = 20;
-var HHV2_PERIOD = 10;
-var LLV2_PERIOD = 20;
-var HHV3_PERIOD = 10;
-var LLV3_PERIOD = 240;
-var TOMA_PERIOD = 1;
-var TOMA_OPT = 0.5f;
-var KAR_AL_YUZDE = 9.5f;
-var IZLEYEN_STOP_YUZDE = 2.25f;
+// --- ATR EXIT PARAMETRELER ---
+int ATR_Exit_Period = 14;
+double ATR_SL_Mult = 2.0;
+double ATR_TP_Mult = 5.0;
+double ATR_Trail_Mult = 2.0;
+int Exit_Confirm_Bars = 3;
+double Exit_Confirm_Mult = 1.0;
+
+// --- ARS PARAMETRELER ---
+int ARS_EMA_Period = 3;
+int ARS_ATR_Period = 10;
+double ARS_ATR_Mult = 0.5;
+double ARS_Min_Band = 0.002;
+double ARS_Max_Band = 0.015;
+
+// --- GİRİŞ SİNYALİ PARAMETRELER ---
+int MOMENTUM_Period = 5;
+double MOMENTUM_THRESHOLD = 100.0;
+double MOMENTUM_BASE = 200.0;
+int BREAKOUT_Period = 10;
+double VOLUME_MULT = 0.8;
 
 // ===============================================================================================
 // DİNAMİK BAYRAM TARİHLERİ (2024-2030)
@@ -55,11 +58,69 @@ DateTime R2027 = new DateTime(2027, 3, 9); DateTime K2027 = new DateTime(2027, 5
 
 string[] resmiTatiller = new string[] { "01.01","04.23","05.01","05.19","07.15","08.30","10.29" };
 
+// ===============================================================================================
+// VERİ HAZIRLIĞI
+// ===============================================================================================
 var V = Sistem.GrafikVerileri;
 var O = Sistem.GrafikFiyatSec("Acilis");
-var C = Sistem.GrafikFiyatSec("Kapanis");
 var H = Sistem.GrafikFiyatSec("Yuksek");
 var L = Sistem.GrafikFiyatSec("Dusuk");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+var T = Sistem.GrafikFiyatSec("Tipik");
+var Lot = Sistem.GrafikFiyatSec("Lot");
+
+// ===============================================================================================
+// ARS HESAPLAMA
+// ===============================================================================================
+var ATR = Sistem.AverageTrueRange(ARS_ATR_Period);
+var ARS_EMA = Sistem.MA(T, "Exp", ARS_EMA_Period);
+var ARS = Sistem.Liste(0);
+
+for (int i = 1; i < Sistem.BarSayisi; i++)
+{
+    float dinamikK;
+    if (ARS_ATR_Mult > 0) {
+        dinamikK = (ATR[i] / ARS_EMA[i]) * (float)ARS_ATR_Mult;
+        dinamikK = Math.Max((float)ARS_Min_Band, Math.Min((float)ARS_Max_Band, dinamikK));
+    } else {
+        dinamikK = (float)ARS_Min_Band;
+    }
+    
+    float altBand = ARS_EMA[i] * (1 - dinamikK);
+    float ustBand = ARS_EMA[i] * (1 + dinamikK);
+    
+    if (altBand > ARS[i - 1])
+        ARS[i] = altBand;
+    else if (ustBand < ARS[i - 1])
+        ARS[i] = ustBand;
+    else
+        ARS[i] = ARS[i - 1];
+    
+    float roundStep = ARS_ATR_Mult > 0 ? Math.Max(0.01f, ATR[i] * 0.1f) : 0.025f;
+    ARS[i] = Sistem.SayiYuvarla(ARS[i], roundStep);
+}
+
+// TREND BELİRLEME
+var TrendYonu = Sistem.Liste(0);
+for (int i = 1; i < Sistem.BarSayisi; i++)
+{
+    if (C[i] > ARS[i]) TrendYonu[i] = 1;
+    else if (C[i] < ARS[i]) TrendYonu[i] = -1;
+    else TrendYonu[i] = TrendYonu[i-1];
+}
+
+var ATR_Exit = Sistem.AverageTrueRange(ATR_Exit_Period);
+
+// GİRİŞ SİNYAL İNDİKATÖRLERİ
+var Momentum = Sistem.Momentum(MOMENTUM_Period);
+var HHV = Sistem.HHV(BREAKOUT_Period, "Yuksek");
+var LLV = Sistem.LLV(BREAKOUT_Period, "Dusuk");
+
+var MFI = Sistem.MoneyFlowIndex(14);
+var MFI_HHV = Sistem.HHV(14, MFI);
+var MFI_LLV = Sistem.LLV(14, MFI);
+
+var Vol_HHV = Sistem.HHV(14, "Lot");
 
 // ===============================================================================================
 // VADE SONU İŞ GÜNÜ HESAPLAMA
@@ -91,73 +152,22 @@ Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
     return d.Date;
 };
 
-// --- INDIKATORLER ---
-var MA_TOMA = Sistem.MA(C, "Exp", TOMA_PERIOD);
-var TOMA_Line = Sistem.Liste(0);
-var TOMA_Trend = Sistem.Liste(0);
-
-TOMA_Line[0] = MA_TOMA[0];
-TOMA_Trend[0] = 1; 
-
-for (int j = 1; j < V.Count; j++)
-{
-    double yuzdeCarpan = TOMA_OPT / 100.0;
-    float altBant = (float)(MA_TOMA[j] * (1 - yuzdeCarpan));
-    float ustBant = (float)(MA_TOMA[j] * (1 + yuzdeCarpan));
-
-    if (TOMA_Trend[j-1] == 1)
-    {
-        TOMA_Line[j] = Math.Max(TOMA_Line[j-1], altBant);
-        if (MA_TOMA[j] < TOMA_Line[j])
-        {
-            TOMA_Trend[j] = -1;
-            TOMA_Line[j] = ustBant;
-        }
-        else
-        {
-            TOMA_Trend[j] = 1;
-        }
-    }
-    else
-    {
-        TOMA_Line[j] = Math.Min(TOMA_Line[j-1], ustBant);
-        if (MA_TOMA[j] > TOMA_Line[j])
-        {
-            TOMA_Trend[j] = 1;
-            TOMA_Line[j] = altBant;
-        }
-        else
-        {
-            TOMA_Trend[j] = -1;
-        }
-    }
-}
-
-var HH1 = Sistem.HHV(HHV1_PERIOD, "Yuksek");
-var LL1 = Sistem.LLV(LLV1_PERIOD, "Dusuk");
-
-var HH2 = Sistem.HHV(HHV2_PERIOD, "Yuksek");
-var LL2 = Sistem.LLV(LLV2_PERIOD, "Dusuk");
-
-var HH3 = Sistem.HHV(HHV3_PERIOD, "Yuksek");
-var LL3 = Sistem.LLV(LLV3_PERIOD, "Dusuk");
-
-var MOM1 = Sistem.Momentum(MOM_PERIOD);
-var TRIX1 = Sistem.TRIX(TRIX_PERIOD);
-var TRIX2 = Sistem.TRIX(TRIX_PERIOD2);
-
-// --- LOOP & SINYAL ---
-var SonYon = "";
-var Sinyal = "";
-double EntryPrice = 0.0;
-double ExtremePrice = 0.0;
-var Pos = 0;
-
+// ===============================================================================================
+// SİNYAL ÜRETİM DÖNGÜSÜ
+// ===============================================================================================
 for (int i = 1; i < V.Count; i++) Sistem.Yon[i] = "";
 
-int warm1 = Math.Max(MOM_PERIOD, TRIX_PERIOD + Math.Max(TRIX_LB1, TRIX_LB2));
-int warm2 = Math.Max(HHV1_PERIOD, Math.Max(HHV2_PERIOD, Math.Max(LLV2_PERIOD, Math.Max(HHV3_PERIOD, LLV3_PERIOD))));
-int warmupBars = Math.Max(200, Math.Max(warm1, warm2)) + 10;
+var Sinyal = "";
+var SonYon = "";
+
+float entryPrice = 0;
+int entryBar = 0;
+float extremePrice = 0;
+int belowArsCount = 0;
+int aboveArsCount = 0;
+
+int vadeCooldownBar = Math.Max(ARS_EMA_Period, Math.Max(BREAKOUT_Period, Math.Max(ARS_ATR_Period, MOMENTUM_Period))) + 10;
+int warmupBars = vadeCooldownBar;
 int warmupBaslangicBar = -999;
 bool warmupAktif = false;
 bool arefeFlat = false;
@@ -168,11 +178,10 @@ for (int i = warmupBars; i < V.Count; i++)
     var dt = V[i].Date;
     var t = dt.TimeOfDay;
     
-    // --- VADE/TATİL KONTROLLERİ ---
     bool gunSeansi = t >= new TimeSpan(9,30,0) && t < new TimeSpan(18,15,0);
     bool aksamSeansi = t >= new TimeSpan(19,0,0) && t < new TimeSpan(23,0,0);
     if (!(gunSeansi || aksamSeansi)) continue;
-
+    
     bool vadeAyi = (VadeTipi == "SPOT") || (dt.Month % 2 == 0);
     bool vadeSonuGun = vadeAyi && (dt.Date == VadeSonuIsGunu(dt));
     
@@ -180,11 +189,13 @@ for (int i = warmupBars; i < V.Count; i++)
                  dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
                  dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
                  dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
-                  
+    
     if (arefe && vadeSonuGun && t > new TimeSpan(11,30,0))
     {
         if (SonYon != "F") Sinyal = "F";
-        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+        warmupAktif = true;
+        warmupBaslangicBar = -999;
+        arefeFlat = false;
     }
     else if (arefe && !vadeSonuGun && t > new TimeSpan(11,30,0))
     {
@@ -194,96 +205,145 @@ for (int i = warmupBars; i < V.Count; i++)
     else if (vadeSonuGun && t > new TimeSpan(17,40,0))
     {
         if (SonYon != "F") Sinyal = "F";
-        warmupAktif = true; warmupBaslangicBar = -999; arefeFlat = false;
+        warmupAktif = true;
+        warmupBaslangicBar = -999;
+        arefeFlat = false;
     }
     
-    if (Sinyal == "F") {
-        if (SonYon != Sinyal) { Sistem.Yon[i] = Sinyal; SonYon = Sinyal; Pos = 0; }
+    if (Sinyal == "F")
+    {
+        if (SonYon != Sinyal) { Sistem.Yon[i] = Sinyal; SonYon = Sinyal; }
         continue;
     }
+    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0)))
+        continue;
     
-    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0))) continue;
-
-    if (warmupAktif && warmupBaslangicBar == -999) {
-        bool yeniSeans = false;
-        if (aksamSeansi && i>0 && V[i-1].Date.TimeOfDay < new TimeSpan(19,0,0)) yeniSeans = true;
-        if (gunSeansi && i>0 && dt.Date != V[i-1].Date.Date) yeniSeans = true;
-        if (yeniSeans) warmupBaslangicBar = i;
+    if (warmupAktif && warmupBaslangicBar == -999)
+    {
+        bool yeniSeansBaslangici = false;
+        if (aksamSeansi && i > 0 && V[i-1].Date.TimeOfDay < new TimeSpan(19,0,0))
+            yeniSeansBaslangici = true;
+        if (gunSeansi && t >= new TimeSpan(9,30,0) && t < new TimeSpan(9,35,0))
+            if (i > 0 && dt.Date != V[i-1].Date.Date)
+                yeniSeansBaslangici = true;
+        if (yeniSeansBaslangici)
+            warmupBaslangicBar = i;
     }
-    if (warmupAktif && warmupBaslangicBar > 0) {
-        if ((i - warmupBaslangicBar) < 100) continue; // Min 100 bar cooldown
+    
+    if (warmupAktif && warmupBaslangicBar > 0)
+    {
+        if ((i - warmupBaslangicBar) < vadeCooldownBar) continue;
         else warmupAktif = false;
     }
-    if (arefeFlat && i>0 && dt.Date != V[i-1].Date.Date) arefeFlat = false;
-
-
-    // --- STRATEJİ MANTIĞI ---
     
-    // Kural 1: MOM > ÜST SINIR
-    if (MOM1[i] > MOM_UPPER)
+    if (arefeFlat && i > 0 && dt.Date != V[i-1].Date.Date)
+        arefeFlat = false;
+    
+    // === ÇIKIŞ MANTIĞI (ATR-Based + Double Confirmation) ===
+    if (SonYon == "A")
     {
-        if (HH2[i] > HH2[i-1] && TRIX1[i] < TRIX1[i-TRIX_LB1] && TRIX1[i] > TRIX1[i-1] && YON_MODU != "SADECE_SAT") Sinyal = "A"; 
-        if (LL2[i] < LL2[i-1] && TRIX1[i] > TRIX1[i-TRIX_LB1] && TRIX1[i] < TRIX1[i-1] && YON_MODU != "SADECE_AL") Sinyal = "S"; 
+        if (H[i] > extremePrice) extremePrice = H[i];
+        float atr = ATR_Exit[i];
+        
+        // Double Confirmation: N bar ARS altında + mesafe yeterli
+        if (C[i] < ARS[i]) belowArsCount++; else belowArsCount = 0;
+        float distanceThreshold = (float)(atr * ARS_ATR_Mult * Exit_Confirm_Mult);
+        if (belowArsCount >= Exit_Confirm_Bars && (ARS[i] - C[i]) > distanceThreshold)
+            Sinyal = "F";
+        
+        // Take Profit
+        float tpLevel = entryPrice + (float)(atr * ATR_TP_Mult);
+        if (C[i] >= tpLevel) Sinyal = "F";
+        
+        // Stop Loss / Trailing
+        float initialStop = entryPrice - (float)(atr * ATR_SL_Mult);
+        float trailStop = extremePrice - (float)(atr * ATR_Trail_Mult);
+        float stopLevel = Math.Max(initialStop, trailStop);
+        if (C[i] < stopLevel) Sinyal = "F";
+    }
+    else if (SonYon == "S")
+    {
+        if (L[i] < extremePrice) extremePrice = L[i];
+        float atr = ATR_Exit[i];
+        
+        if (C[i] > ARS[i]) aboveArsCount++; else aboveArsCount = 0;
+        float distanceThreshold = (float)(atr * ARS_ATR_Mult * Exit_Confirm_Mult);
+        if (aboveArsCount >= Exit_Confirm_Bars && (C[i] - ARS[i]) > distanceThreshold)
+            Sinyal = "F";
+        
+        float tpLevel = entryPrice - (float)(atr * ATR_TP_Mult);
+        if (C[i] <= tpLevel) Sinyal = "F";
+        
+        float initialStop = entryPrice + (float)(atr * ATR_SL_Mult);
+        float trailStop = extremePrice + (float)(atr * ATR_Trail_Mult);
+        float stopLevel = Math.Min(initialStop, trailStop);
+        if (C[i] > stopLevel) Sinyal = "F";
     }
     
-    // Kural 2: MOM < ALT SINIR
-    if (MOM1[i] < MOM_LOWER)
+    // === GİRİŞ MANTIĞI ===
+    if (Sinyal == "" && SonYon != "A" && SonYon != "S")
     {
-        if (HH3[i] > HH3[i-1] && TRIX2[i] < TRIX2[i-TRIX_LB2] && TRIX2[i] > TRIX2[i-1] && YON_MODU != "SADECE_SAT") Sinyal = "A"; 
-        if (LL3[i] < LL3[i-1] && TRIX2[i] > TRIX2[i-TRIX_LB2] && TRIX2[i] < TRIX2[i-1] && YON_MODU != "SADECE_AL") Sinyal = "S"; 
+        if (TrendYonu[i] == 1 && YON_MODU != "SADECE_SAT")
+        {
+            bool yeniZirve = H[i] >= HHV[i-1] && HHV[i] > HHV[i-1];
+            bool pozitifMomentum = Momentum[i] > MOMENTUM_THRESHOLD; // momentum > 100 (assuming threshold is 100)
+            bool mfiOnay = MFI[i] >= MFI_HHV[i-1];
+            bool volumeOnay = Lot[i] >= Vol_HHV[i-1] * (float)VOLUME_MULT;
+            if (yeniZirve && pozitifMomentum && mfiOnay && volumeOnay) Sinyal = "A";
+        }
+        else if (TrendYonu[i] == -1 && YON_MODU != "SADECE_AL")
+        {
+            bool yeniDip = L[i] <= LLV[i-1] && LLV[i] < LLV[i-1];
+            bool negatifMomentum = Momentum[i] < MOMENTUM_THRESHOLD; // Fixed from (MOMENTUM_BASE - MOMENTUM_THRESHOLD) to match python mom < 100
+            bool mfiOnay = MFI[i] <= MFI_LLV[i-1];
+            bool volumeOnay = Lot[i] >= Vol_HHV[i-1] * (float)VOLUME_MULT;
+            if (yeniDip && negatifMomentum && mfiOnay && volumeOnay) Sinyal = "S";
+        }
     }
     
-    // Kural 3: TOMA + HHV/LLV (Ana Trend - Öncelikli, önceki sinyalleri ezer)
-    if (HH1[i] > HH1[i-1] && C[i] > TOMA_Line[i] && YON_MODU != "SADECE_SAT") Sinyal = "A";
-    if (LL1[i] < LL1[i-1] && C[i] < TOMA_Line[i] && YON_MODU != "SADECE_AL") Sinyal = "S";
-
-    // --- POZİSYON GÜNCELLEME (Giriş / Reverse) ---
     if (Sinyal != "" && SonYon != Sinyal)
     {
+        if (Sinyal == "A")
+        {
+            entryPrice = C[i];
+            entryBar = i;
+            extremePrice = H[i];
+            belowArsCount = 0;
+        }
+        else if (Sinyal == "S")
+        {
+            entryPrice = C[i];
+            entryBar = i;
+            extremePrice = L[i];
+            aboveArsCount = 0;
+        }
+        else if (Sinyal == "F")
+        {
+            entryPrice = 0;
+            extremePrice = 0;
+            belowArsCount = 0;
+            aboveArsCount = 0;
+        }
+        
         SonYon = Sinyal;
         Sistem.Yon[i] = SonYon;
-        EntryPrice = C[i];
-        ExtremePrice = C[i];
-        if (Sinyal == "A") Pos = 1;
-        else if (Sinyal == "S") Pos = -1;
-        else Pos = 0;
-    }
-
-    // --- EXIT LOGIC (Kar Al / İzleyen Stop) ---
-    if (Pos == 1) {
-        if (ExtremePrice < C[i]) ExtremePrice = C[i];
-        if (KAR_AL_YUZDE > 0 && C[i] >= EntryPrice * (1 + KAR_AL_YUZDE/100.0)) {
-            Sistem.Yon[i] = "F"; Pos = 0;
-        }
-        if (IZLEYEN_STOP_YUZDE > 0 && C[i] <= ExtremePrice * (1 - IZLEYEN_STOP_YUZDE/100.0)) {
-            Sistem.Yon[i] = "F"; Pos = 0;
-        }
-    }
-    else if (Pos == -1) {
-        if (ExtremePrice == 0 || ExtremePrice > C[i]) ExtremePrice = C[i];
-        if (KAR_AL_YUZDE > 0 && C[i] <= EntryPrice * (1 - KAR_AL_YUZDE/100.0)) {
-            Sistem.Yon[i] = "F"; Pos = 0;
-        }
-        if (IZLEYEN_STOP_YUZDE > 0 && C[i] >= ExtremePrice * (1 + IZLEYEN_STOP_YUZDE/100.0)) {
-            Sistem.Yon[i] = "F"; Pos = 0;
-        }
     }
 }
 
-// --- ÇİZİMLER ---
-Sistem.Cizgiler[3].Deger = TOMA_Line;
-Sistem.Cizgiler[3].Aciklama = "TOMA";
-Sistem.Cizgiler[3].Renk = Color.Blue;
-Sistem.Cizgiler[3].Kalinlik = 2;
+// --- GÖSTERGELERİ ÇİZ ---
+Sistem.Cizgiler[0].Deger = ARS;
+Sistem.Cizgiler[0].Aciklama = "ARS";
+Sistem.Cizgiler[0].ActiveBool = true;
+Sistem.Cizgiler[0].Renk = Color.Yellow;
+Sistem.Cizgiler[0].Kalinlik = 2;
 
-Sistem.Cizgiler[4].Deger = HH1;
-Sistem.Cizgiler[4].Aciklama = "HH1";
-Sistem.Cizgiler[4].ActiveBool = false;
+Sistem.Cizgiler[1].Deger = HHV;
+Sistem.Cizgiler[1].Aciklama = "HHV";
 
-Sistem.Cizgiler[5].Deger = LL1;
-Sistem.Cizgiler[5].Aciklama = "LL1";
-Sistem.Cizgiler[5].ActiveBool = false;
+Sistem.Cizgiler[2].Deger = LLV;
+Sistem.Cizgiler[2].Aciklama = "LLV";
 
+// ===============================================================================================
 // ===============================================================================================
 // PERFORMANS PANELİ (3 KUTULU PRO SÜRÜM - Gelişmiş Metrikler Eklendi)
 // ===============================================================================================

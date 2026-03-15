@@ -187,6 +187,36 @@ STRATEGY6_PARAMS = {
     'gate_pct': (0.4, 0.6, 0.1, False),
 }
 
+# Strateji 7 (DeepScalp v1.2) Parametre Uzayi (12 ana parametre)
+STRATEGY7_PARAMS = {
+    # Layer 1: Risk & Regime
+    'ars_k': (0.8, 2.0, 0.2, False),
+    'atr_stop_mult_long': (1.0, 2.5, 0.25, False),
+    'atr_stop_mult_short': (1.0, 2.5, 0.25, False),
+    'kar_al_yuzde_long': (1.0, 4.0, 0.5, False),
+    'kar_al_yuzde_short': (1.0, 4.0, 0.5, False),
+    'hhv_period': (8, 20, 2, True),
+    'llv_period': (8, 20, 2, True),
+    'vol_ratio': (0.60, 1.00, 0.10, False),
+    
+    # Layer 2: Trend
+    'st_factor': (2.0, 4.0, 0.5, False),
+    'ema_fast_period': (5, 13, 2, True),
+    'ema_slow_period': (15, 30, 3, True),
+    'mfi_hhv_period': (3, 9, 2, True),
+    'mfi_llv_period': (3, 9, 2, True),
+    
+    # Layer 3 & 4: Timing
+    'toma_period2': (1.5, 3.0, 0.2, False),
+    'mfi_long': (45.0, 65.0, 5.0, False),
+    'mfi_short': (35.0, 55.0, 5.0, False),
+    
+    # Layer 5: Time filters
+    'min_hold_bars': (1, 4, 1, True),
+    'max_hold_bars': (10, 30, 5, True),
+    'cooldown_bars': (1, 4, 1, True),
+}
+
 # Import S4 Optimizer components
 # Try/Except block to avoid circular import issues during initialization if imported at top
 try:
@@ -218,8 +248,10 @@ class ParameterSpace:
             base_params = STRATEGY5_PARAMS
         elif strategy_index == 5:
             base_params = STRATEGY6_PARAMS
+        elif strategy_index == 6:
+            base_params = STRATEGY7_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5/6 desteklenir.")
             
         self.params = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -377,6 +409,8 @@ class FitnessEvaluator:
                 return self._evaluate_strategy5(params)
             elif self.strategy_index == 5:
                 return self._evaluate_strategy6(params)
+            elif self.strategy_index == 6:
+                return self._evaluate_strategy7(params)
             else:
                 raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         except Exception as e:

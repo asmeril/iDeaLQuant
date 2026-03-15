@@ -112,6 +112,32 @@ class StrategyPanel(QWidget):
         'gate_pct': 0.5,
     }
     
+    STRATEGY7_DEFAULTS = {
+        # Layer 1
+        'ars_k': 1.23,
+        'atr_stop_mult_long': 1.5,
+        'atr_stop_mult_short': 1.5,
+        'kar_al_yuzde_long': 2.0,
+        'kar_al_yuzde_short': 2.0,
+        'hhv_period': 12,
+        'llv_period': 12,
+        'vol_ratio': 0.8,
+        # Layer 2
+        'st_factor': 3.0,
+        'ema_fast_period': 9,
+        'ema_slow_period': 21,
+        'mfi_hhv_period': 5,
+        'mfi_llv_period': 5,
+        # Layer 3
+        'toma_period2': 2.1,
+        'mfi_long': 55.0,
+        'mfi_short': 45.0,
+        # Layer 4-5
+        'min_hold_bars': 2,
+        'max_hold_bars': 20,
+        'cooldown_bars': 2,
+    }
+    
     def __init__(self):
         super().__init__()
         self.df = None
@@ -195,7 +221,8 @@ class StrategyPanel(QWidget):
             "Strateji 3 - Paradise",
             "Strateji 4 - TOMA + Momentum",
             "Strateji 5 - Oliver Kell",
-            "Strateji 6 - TOTT HOTT"
+            "Strateji 6 - TOTT HOTT",
+            "Strateji 7 - DeepScalp v1.2"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         layout.addWidget(self.strategy_combo, 1)
@@ -233,6 +260,8 @@ class StrategyPanel(QWidget):
             self._create_strategy5_params()
         elif index == 5:
             self._create_strategy6_params()
+        elif index == 6:
+            self._create_strategy7_params()
     
     def _create_strategy1_params(self):
         """Strateji 1 parametrelerini oluştur"""
@@ -469,6 +498,51 @@ class StrategyPanel(QWidget):
         self.params_layout.addWidget(gate_group)
         
         self.params_layout.addStretch()
+        
+    def _create_strategy7_params(self):
+        """Strateji 7 (DeepScalp) parametrelerini olustur"""
+        defaults = self.STRATEGY7_DEFAULTS
+        
+        # Layer 1
+        l1_group = QGroupBox("Layer 1: Risk & Regime")
+        l1_layout = QFormLayout(l1_group)
+        self._add_double_spin('ars_k', "ARS Bant Carpan:", 0.5, 3.0, defaults['ars_k'], l1_layout)
+        self._add_double_spin('atr_stop_mult_long', "ATR SL Long:", 0.5, 5.0, defaults['atr_stop_mult_long'], l1_layout)
+        self._add_double_spin('atr_stop_mult_short', "ATR SL Short:", 0.5, 5.0, defaults['atr_stop_mult_short'], l1_layout)
+        self._add_double_spin('kar_al_yuzde_long', "Kar Al % Long:", 0.5, 10.0, defaults['kar_al_yuzde_long'], l1_layout)
+        self._add_double_spin('kar_al_yuzde_short', "Kar Al % Short:", 0.5, 10.0, defaults['kar_al_yuzde_short'], l1_layout)
+        self._add_spin('hhv_period', "Tekil Kirici HHV:", 5, 50, defaults['hhv_period'], l1_layout)
+        self._add_spin('llv_period', "Tekil Kirici LLV:", 5, 50, defaults['llv_period'], l1_layout)
+        self._add_double_spin('vol_ratio', "Hacim Orani:", 0.1, 2.0, defaults['vol_ratio'], l1_layout)
+        self.params_layout.addWidget(l1_group)
+        
+        # Layer 2
+        l2_group = QGroupBox("Layer 2: Trend & MFI Limit")
+        l2_layout = QFormLayout(l2_group)
+        self._add_double_spin('st_factor', "SuperTrend Factor:", 0.5, 10.0, defaults['st_factor'], l2_layout)
+        self._add_spin('ema_fast_period', "EMA Hizli:", 3, 50, defaults['ema_fast_period'], l2_layout)
+        self._add_spin('ema_slow_period', "EMA Yavas:", 5, 100, defaults['ema_slow_period'], l2_layout)
+        self._add_spin('mfi_hhv_period', "MFI HHV:", 3, 30, defaults['mfi_hhv_period'], l2_layout)
+        self._add_spin('mfi_llv_period', "MFI LLV:", 3, 30, defaults['mfi_llv_period'], l2_layout)
+        self.params_layout.addWidget(l2_group)
+        
+        # Layer 3
+        l3_group = QGroupBox("Layer 3: Zamanlama & Tetikleme")
+        l3_layout = QFormLayout(l3_group)
+        self._add_double_spin('toma_period2', "TOMA Yuzde:", 0.1, 10.0, defaults['toma_period2'], l3_layout)
+        self._add_double_spin('mfi_long', "MFI Long Limit:", 10.0, 90.0, defaults['mfi_long'], l3_layout)
+        self._add_double_spin('mfi_short', "MFI Short Limit:", 10.0, 90.0, defaults['mfi_short'], l3_layout)
+        self.params_layout.addWidget(l3_group)
+        
+        # Layer 4
+        l4_group = QGroupBox("Layer 4: Zaman Filtreleri")
+        l4_layout = QFormLayout(l4_group)
+        self._add_spin('min_hold_bars', "Min Hold Bar:", 1, 10, defaults['min_hold_bars'], l4_layout)
+        self._add_spin('max_hold_bars', "Max Hold Bar:", 5, 100, defaults['max_hold_bars'], l4_layout)
+        self._add_spin('cooldown_bars', "Cooldown Bar:", 1, 10, defaults['cooldown_bars'], l4_layout)
+        self.params_layout.addWidget(l4_group)
+        
+        self.params_layout.addStretch()
     
     def _add_spin(self, name: str, label: str, min_val: int, max_val: int, default: int, layout: QFormLayout):
         """Integer SpinBox ekle"""
@@ -503,6 +577,8 @@ class StrategyPanel(QWidget):
             defaults = self.STRATEGY5_DEFAULTS
         elif index == 5:
             defaults = self.STRATEGY6_DEFAULTS
+        elif index == 6:
+            defaults = self.STRATEGY7_DEFAULTS
         else:
             defaults = self.STRATEGY1_DEFAULTS
         
@@ -566,6 +642,8 @@ class StrategyPanel(QWidget):
             strategy_name = "oliver_kell"
         elif idx == 5:
             strategy_name = "tott_hott"
+        elif idx == 6:
+            strategy_name = "deepscalp"
         else:
             strategy_name = "unknown"
         default_name = f"{strategy_name}_preset.json"
@@ -659,6 +737,13 @@ class StrategyPanel(QWidget):
             elif strategy_idx == 6:
                 from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
                 strategy = TOTT_HOTTStrategy.from_config_dict(
+                    {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
+                    config,
+                    dates
+                )
+            elif strategy_idx == 7:
+                from src.strategies.deepscalp_strategy import DeepScalpStrategy
+                strategy = DeepScalpStrategy.from_config_dict(
                     {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
                     config,
                     dates
