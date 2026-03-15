@@ -429,7 +429,7 @@ class BatchAnalysisWorker(QThread):
             valid_keys = set(STRATEGY3_PARAMS.keys())
         elif idx == 3:
              # S4 params (hardcoded for now or import from somewhere)
-             valid_keys = {'toma_period', 'toma_opt', 'mom_period', 'mom_limit_high', 'mom_limit_low', 'trix_period', 'trix_lb1', 'trix_lb2', 'hhv1_period', 'llv1_period', 'hhv2_period', 'llv2_period', 'hhv3_period', 'llv3_period', 'kar_al', 'iz_stop'}
+             valid_keys = {'toma_period', 'toma_opt', 'mom_period', 'mom_limit_high', 'mom_limit_low', 'trix_period', 'trix_period2', 'trix_lb1', 'trix_lb2', 'hhv1_period', 'llv1_period', 'hhv2_period', 'llv2_period', 'hhv3_period', 'llv3_period', 'kar_al', 'iz_stop'}
         elif idx == 4:
              valid_keys = set(STRATEGY5_PARAMS.keys())
         elif idx == 5:

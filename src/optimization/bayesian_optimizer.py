@@ -310,6 +310,7 @@ class BayesianObjective:
             
             mom_period = int(params.get('mom_period', 1900))
             trix_period = int(params.get('trix_period', 120))
+            trix_period2 = int(params.get('trix_period2', 100))
             
             mh = float(params.get('mom_limit_high', 101.5))
             trix_lb1 = int(params.get('trix_lb1', 145))
@@ -330,7 +331,8 @@ class BayesianObjective:
             llv1 = cache.get_llv(llv1_p)
             
             mom_arr = cache.get_mom(mom_period)
-            trix_arr = cache.get_trix(trix_period)
+            trix1_arr = cache.get_trix(trix_period)
+            trix2_arr = cache.get_trix(trix_period2)
             
             hhv2 = cache.get_hhv(hhv2_p)
             llv2 = cache.get_llv(llv2_p)
@@ -352,11 +354,12 @@ class BayesianObjective:
                 hhv1, llv1, 
                 hhv2, llv2, 
                 hhv3, llv3, 
-                mom_arr, trix_arr, 
+                mom_arr, trix1_arr, trix2_arr,
                 mask_arr, cache.times_arr,
                 ml, mh, 
                 trix_lb1, trix_lb2, 
-                ka / 100.0, iz / 100.0
+                ka / 100.0, iz / 100.0,
+                3  # phase_mode=3: all layers
             )
             
             np_val, trades, pf, max_dd, sharpe, active_days, total_days = result

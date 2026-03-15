@@ -171,38 +171,39 @@ STRATEGY3_PARAM_GROUPS = {
 # Strateji 4 Parametre Grupları (TOMA ve Katmanlari)
 STRATEGY4_PARAM_GROUPS = {
     'Layer3_TOMA': {
-        'label': 'Layer 3: TOMA (Trend)',
+        'label': 'Layer 3: TOMA (Izleyen Stop)',
         'params': {
-            'toma_period': {'label': 'TOMA Periyot', 'type': 'int', 'default': 97, 'min': 10, 'max': 200, 'step': 5},
-            'toma_opt': {'label': 'TOMA Opt %', 'type': 'float', 'default': 1.5, 'min': 0.1, 'max': 5.0, 'step': 0.1},
-            'hhv1_period': {'label': 'TOMA Filtre HHV', 'type': 'int', 'default': 20, 'min': 10, 'max': 50, 'step': 5},
-            'llv1_period': {'label': 'TOMA Filtre LLV', 'type': 'int', 'default': 20, 'min': 10, 'max': 50, 'step': 5},
+            'toma_period': {'label': 'TOMA Periyot', 'type': 'int', 'default': 2, 'min': 1, 'max': 3, 'step': 1},
+            'toma_opt': {'label': 'TOMA Opt %', 'type': 'float', 'default': 2.1, 'min': 0.1, 'max': 3.0, 'step': 0.1},
+            'hhv1_period': {'label': 'TOMA Filtre HHV', 'type': 'int', 'default': 20, 'min': 10, 'max': 240, 'step': 10},
+            'llv1_period': {'label': 'TOMA Filtre LLV', 'type': 'int', 'default': 20, 'min': 10, 'max': 240, 'step': 10},
         }
     },
     'Global_Settings': {
         'label': 'Global Indikator Ayarlari',
         'params': {
-             'mom_period': {'label': 'Momentum Periyot', 'type': 'int', 'default': 1900, 'min': 100, 'max': 3000, 'step': 100},
-             'trix_period': {'label': 'TRIX Periyot', 'type': 'int', 'default': 120, 'min': 10, 'max': 200, 'step': 10},
+             'mom_period': {'label': 'Momentum Periyot', 'type': 'int', 'default': 500, 'min': 200, 'max': 1200, 'step': 50},
+             'trix_period': {'label': 'TRIX Periyot', 'type': 'int', 'default': 50, 'min': 20, 'max': 120, 'step': 5},
+             'trix_period2': {'label': 'TRIX2 Periyot (Low)', 'type': 'int', 'default': 40, 'min': 20, 'max': 120, 'step': 5},
         },
         'is_cascaded': False 
     },
     'Layer1_MomHigh': {
         'label': 'Layer 1: Mom High (>101.5)',
         'params': {
-            'mom_limit_high': {'label': 'Mom High >', 'type': 'float', 'default': 101.5, 'min': 95.0, 'max': 110.0, 'step': 0.5},
-            'trix_lb1': {'label': 'TRIX LB (High)', 'type': 'int', 'default': 145, 'min': 50, 'max': 200, 'step': 5},
-            'hhv2_period': {'label': 'L1 HHV Periyot', 'type': 'int', 'default': 150, 'min': 50, 'max': 300, 'step': 10},
-            'llv2_period': {'label': 'L1 LLV Periyot', 'type': 'int', 'default': 190, 'min': 50, 'max': 300, 'step': 10},
+            'mom_limit_high': {'label': 'Mom High >', 'type': 'float', 'default': 101.5, 'min': 100.25, 'max': 110.0, 'step': 0.25},
+            'trix_lb1': {'label': 'TRIX LB (High)', 'type': 'int', 'default': 50, 'min': 20, 'max': 150, 'step': 5},
+            'hhv2_period': {'label': 'L1 HHV Periyot', 'type': 'int', 'default': 40, 'min': 10, 'max': 240, 'step': 10},
+            'llv2_period': {'label': 'L1 LLV Periyot', 'type': 'int', 'default': 40, 'min': 10, 'max': 240, 'step': 10},
         }
     },
     'Layer2_MomLow': {
         'label': 'Layer 2: Mom Low (<99.0)',
         'params': {
-            'mom_limit_low': {'label': 'Mom Low <', 'type': 'float', 'default': 99.0, 'min': 90.0, 'max': 105.0, 'step': 0.5},
-            'trix_lb2': {'label': 'TRIX LB (Low)', 'type': 'int', 'default': 160, 'min': 50, 'max': 200, 'step': 5},
-            'hhv3_period': {'label': 'L2 HHV Periyot', 'type': 'int', 'default': 150, 'min': 50, 'max': 300, 'step': 10},
-            'llv3_period': {'label': 'L2 LLV Periyot', 'type': 'int', 'default': 190, 'min': 50, 'max': 300, 'step': 10},
+            'mom_limit_low': {'label': 'Mom Low <', 'type': 'float', 'default': 98.5, 'min': 90.0, 'max': 99.75, 'step': 0.25},
+            'trix_lb2': {'label': 'TRIX LB (Low)', 'type': 'int', 'default': 60, 'min': 20, 'max': 150, 'step': 5},
+            'hhv3_period': {'label': 'L2 HHV Periyot', 'type': 'int', 'default': 40, 'min': 10, 'max': 240, 'step': 10},
+            'llv3_period': {'label': 'L2 LLV Periyot', 'type': 'int', 'default': 40, 'min': 10, 'max': 240, 'step': 10},
         }
     },
     'Risk': {
@@ -282,9 +283,9 @@ SCALABLE_PARAMS = {
     'atr_exit_period', 'volume_llv_period',
     # Strateji 3 (Paradise)
     'ema_period', 'dsma_period', 'ma_period', 'hh_period', 'vol_hhv_period',
-    'mom_period', 'atr_period',
-    # Strateji 4 (TOMA)
-    'toma_period', 'trix_lb1', 'trix_lb2', # Mom limits are dimensionless thresholds
+    'atr_period', # mom_period removed to fix S4 scaling
+    # Strateji 4 (TOMA) - Intraday icin sabitlendi, olceklenmesin
+    # 'toma_period', 'trix_lb1', 'trix_lb2', 'mom_period', etc. removed from here
     # Strateji 5 (Oliver Kell)
     'ema_fast', 'ema_slow', 'breakout_period', 'adx_period', 'vol_ma_period',
     # Strateji 6 (TOTT_HOTT)
@@ -694,6 +695,7 @@ class OptimizationWorker(QThread):
         # Phase 2 Params (Globals + L1)
         mom_periods = grid.get('mom_period', [1900])
         trix_periods = grid.get('trix_period', [120])
+        trix_periods2 = grid.get('trix_period2', [100])  # TRIX2 for Phase 3
         mom_high_ranges = [(mh, lb) for mh in grid.get('mom_limit_high', [101.5]) for lb in grid.get('trix_lb1', [145])]
         hhv2_ranges = grid.get('hhv2_period', [150])
         llv2_ranges = grid.get('llv2_period', [190])
@@ -754,10 +756,11 @@ class OptimizationWorker(QThread):
                         res = fast_backtest_strategy4(
                             closes, toma_trend, toma_val,
                             hhv1, llv1, dummy_hhv2, dummy_llv2, dummy_hhv3, dummy_llv3,
-                            dummy_mom, dummy_trix, mask_arr, cache.times_arr,
+                            dummy_mom, dummy_trix, dummy_trix, mask_arr, cache.times_arr,
                             p_mom_low_dummy, p_mom_high_dummy,
                             100, 100, # Dummy Trix LBs
-                            0.0, 0.0 # No Risk
+                            0.0, 0.0, # No Risk
+                            1  # phase_mode=1: TOMA only
                         )
                         
                         score = res[0] * res[2] if res[2] > 0 else 0 # NP * PF
@@ -809,7 +812,7 @@ class OptimizationWorker(QThread):
                 'mask': mask_arr,
                 'times_arr': cache.times_arr,
                 'mom': {mp: cache.get_mom(mp) for mp in mom_periods},
-                'trix': {tp: cache.get_trix(tp) for tp in trix_periods},
+                'trix': {tp: cache.get_trix(tp) for tp in set(list(trix_periods) + list(trix_periods2))},
                 'hhv': {hp: cache.get_hhv(hp) for hp in set(list(hhv2_ranges) + list(hhv3_ranges))},
                 'llv': {lp: cache.get_llv(lp) for lp in set(list(llv2_ranges) + list(llv3_ranges))},
             }
@@ -986,6 +989,8 @@ class OptimizationWorker(QThread):
                 # HHV/LLV dict for Phase 3 variable arrays
                 'hhv': {hp: cache.get_hhv(hp) for hp in hhv3_ranges},
                 'llv': {lp: cache.get_llv(lp) for lp in llv3_ranges},
+                # TRIX dict for variable TRIX2 periods in Phase 3
+                'trix': {tp: cache.get_trix(tp) for tp in trix_periods2},
             }
             _cp("P3 shared_data basariyla olusturuldu.")
             
@@ -1009,10 +1014,11 @@ class OptimizationWorker(QThread):
             for h3p in hhv3_ranges:
                 for l3p in llv3_ranges:
                     for ml, lb2 in mom_low_ranges:
-                        for ka, iz in risk_ranges:
-                            yield (h3p, l3p, ml, lb2, ka, iz, p3_meta)
+                        for trix_p2 in trix_periods2:
+                            for ka, iz in risk_ranges:
+                                yield (h3p, l3p, ml, lb2, trix_p2, ka, iz, p3_meta)
         
-        total_p3 = len(hhv3_ranges) * len(llv3_ranges) * len(mom_low_ranges) * len(risk_ranges)
+        total_p3 = len(hhv3_ranges) * len(llv3_ranges) * len(mom_low_ranges) * len(trix_periods2) * len(risk_ranges)
         self._emit_progress(66, f"Faz 3: {total_p3:,} kombinasyon...".replace(',', '.'))
         _cp(f"P3 total kombinasyon hesaplandi: {total_p3:,}".replace(',', '.'))
         
@@ -1669,7 +1675,8 @@ class OptimizationWorker(QThread):
             
             # Indicators
             mom_arr = test_cache.get_mom(int(params.get('mom_period', 1900)))
-            trix_arr = test_cache.get_trix(int(params.get('trix_period', 120)))
+            trix1_arr = test_cache.get_trix(int(params.get('trix_period', 120)))
+            trix2_arr = test_cache.get_trix(int(params.get('trix_period2', 100)))
             
             # Mask (all true for test)
             mask_arr = np.ones(len(closes), dtype=bool)
@@ -1684,8 +1691,9 @@ class OptimizationWorker(QThread):
             np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy4(
                 closes, toma_trend, toma_val,
                 hhv1, llv1, hhv2, llv2, hhv3, llv3,
-                mom_arr, trix_arr, mask_arr, test_cache.times_arr,
-                ml, mh, lb1, lb2, ka / 100.0, iz / 100.0
+                mom_arr, trix1_arr, trix2_arr, mask_arr, test_cache.times_arr,
+                ml, mh, lb1, lb2, ka / 100.0, iz / 100.0,
+                3  # phase_mode=3: all layers
             )
             
             return {

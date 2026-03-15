@@ -125,32 +125,35 @@ STRATEGY3_PARAMS = {
     'atr_trail': (0.5, 6.0, 0.25, False),
 }
 
-# Strateji 4 (TOMA) Parametre Uzayi (16 parametre)
+# Strateji 4 (TOMA) Parametre Uzayi (17 parametre)
+# NOT: Genetik/Bayesian icin genis aralik - Grid'den daha genis tutulmustur.
+# Grid (brute-force) dar aralik kullanir, Genetik/Bayesian akilli arama yapar.
 STRATEGY4_PARAMS = {
-    # TOMA (Layer 3)
-    'toma_period': (1, 4, 1, True),
-    'toma_opt': (0.1, 4.0, 0.1, False),
-    'hhv1_period': (5, 1200, 5, True),
-    'llv1_period': (5, 1200, 5, True),
+    # TOMA (Layer 3 - Izleyen Stop) — fiziksel sinir, dar tutulmali
+    'toma_period': (1, 3, 1, True),
+    'toma_opt': (0.1, 5.0, 0.1, False),
+    'hhv1_period': (10, 500, 5, True),
+    'llv1_period': (10, 500, 5, True),
     
-    # Global Settings
-    'mom_period': (100, 10000, 100, True),
-    'trix_period': (10, 300, 10, True),
+    # Global Settings — genis aralik, akilli arama avantaji
+    'mom_period': (100, 3000, 50, True),
+    'trix_period': (10, 300, 5, True),
+    'trix_period2': (10, 300, 5, True),  # TRIX2 for Layer 2 (MOM < low)
     
     # Layer 1 (Mom High)
-    'mom_limit_high': (100.25, 109.75, 0.25, False),
-    'trix_lb1': (10, 300, 10, True),
-    'hhv2_period': (5, 1200, 5, True),
-    'llv2_period': (5, 1200, 5, True),
+    'mom_limit_high': (100.25, 115.0, 0.25, False),
+    'trix_lb1': (10, 300, 5, True),
+    'hhv2_period': (10, 500, 5, True),
+    'llv2_period': (10, 500, 5, True),
     
     # Layer 2 (Mom Low)
-    'mom_limit_low': (90.25, 99.75, 0.25, False),
-    'trix_lb2': (10, 300, 10, True),
-    'hhv3_period': (5, 1200, 5, True),
-    'llv3_period': (5, 1200, 5, True),
+    'mom_limit_low': (85.0, 99.75, 0.25, False),
+    'trix_lb2': (10, 300, 5, True),
+    'hhv3_period': (10, 500, 5, True),
+    'llv3_period': (10, 500, 5, True),
     
     # Risk
-    'kar_al': (0.0, 10.0, 0.5, False),
+    'kar_al': (0.0, 15.0, 0.5, False),
     'iz_stop': (0.0, 5.0, 0.25, False),
 }
 
@@ -572,6 +575,7 @@ class FitnessEvaluator:
             
             mom_period = int(params.get('mom_period', 1900))
             trix_period = int(params.get('trix_period', 120))
+            trix_period2 = int(params.get('trix_period2', 100))
             
             mh = float(params.get('mom_limit_high', 101.5))
             trix_lb1 = int(params.get('trix_lb1', 145))
@@ -592,7 +596,8 @@ class FitnessEvaluator:
             llv1 = cache.get_llv(llv1_p)
             
             mom_arr = cache.get_mom(mom_period)
-            trix_arr = cache.get_trix(trix_period)
+            trix1_arr = cache.get_trix(trix_period)
+            trix2_arr = cache.get_trix(trix_period2)
             
             hhv2 = cache.get_hhv(hhv2_p)
             llv2 = cache.get_llv(llv2_p)
@@ -614,11 +619,12 @@ class FitnessEvaluator:
                 hhv1, llv1, 
                 hhv2, llv2, 
                 hhv3, llv3, 
-                mom_arr, trix_arr, 
+                mom_arr, trix1_arr, trix2_arr,
                 mask_arr, cache.times_arr,
                 ml, mh, 
                 trix_lb1, trix_lb2, 
-                ka / 100.0, iz / 100.0
+                ka / 100.0, iz / 100.0,
+                3  # phase_mode=3: all layers
             )
             
             np_val, trades, pf, max_dd, sharpe, active_days, total_days = result

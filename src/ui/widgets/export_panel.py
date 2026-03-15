@@ -259,6 +259,17 @@ class ExportPanel(QWidget):
                 if self.period_combo.itemText(i) == period_text:
                     self.period_combo.setCurrentIndex(i)
                     break
+            
+            # Strateji combo'yu ayarla (DB'deki strategy_index)
+            strategy_idx = proc.get('strategy_index', 0)
+            if 0 <= strategy_idx <= 5:
+                self.strategy_combo.setCurrentIndex(strategy_idx)
+            
+            # Vade Tipi combo'yu ayarla
+            vade = proc.get('vade_tipi', 'ENDEKS')
+            vade_idx = self.vade_combo.findText(vade)
+            if vade_idx >= 0:
+                self.vade_combo.setCurrentIndex(vade_idx)
     
     def _generate_preview(self):
         """Kod önizlemesi oluştur"""

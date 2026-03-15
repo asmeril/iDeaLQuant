@@ -76,17 +76,18 @@ class StrategyPanel(QWidget):
     }
     
     STRATEGY4_DEFAULTS = {
-        'toma_period': 97,
-        'toma_opt': 1.5,
-        'mom_period': 1900,
-        'mom_limit_low': 99.0,
+        'toma_period': 2,
+        'toma_opt': 2.1,
+        'mom_period': 500,
+        'mom_limit_low': 98.5,
         'mom_limit_high': 101.5,
-        'trix_period': 120,
-        'trix_lb1': 145,
-        'trix_lb2': 160,
+        'trix_period': 50,
+        'trix_period2': 40,  # TRIX2 for Layer 2 (MOM < low)
+        'trix_lb1': 50,
+        'trix_lb2': 60,
         'hhv1_period': 20, 'llv1_period': 20,
-        'hhv2_period': 150, 'llv2_period': 190,
-        'hhv3_period': 150, 'llv3_period': 190,
+        'hhv2_period': 40, 'llv2_period': 40,
+        'hhv3_period': 40, 'llv3_period': 40,
         'kar_al': 0.0,
         'iz_stop': 0.0
     }
@@ -367,8 +368,8 @@ class StrategyPanel(QWidget):
         # TOMA & Layer 3
         toma_group = QGroupBox("📈 TOMA (Layer 3 - Trend)")
         toma_layout = QFormLayout(toma_group)
-        self._add_spin('toma_period', "TOMA Periyot:", 10, 200, defaults.get('toma_period', 97), toma_layout)
-        self._add_double_spin('toma_opt', "TOMA Opt %:", 0.1, 10.0, defaults.get('toma_opt', 1.5), toma_layout)
+        self._add_spin('toma_period', "TOMA Periyot:", 1, 3, defaults.get('toma_period', 2), toma_layout)
+        self._add_double_spin('toma_opt', "TOMA Opt %:", 0.1, 3.0, defaults.get('toma_opt', 2.1), toma_layout)
         self._add_spin('hhv1_period', "Filtre HHV:", 10, 100, defaults.get('hhv1_period', 20), toma_layout)
         self._add_spin('llv1_period', "Filtre LLV:", 10, 100, defaults.get('llv1_period', 20), toma_layout)
         self.params_layout.addWidget(toma_group)
@@ -393,6 +394,7 @@ class StrategyPanel(QWidget):
         l2_group = QGroupBox("📉 Momentum Low (Layer 2)")
         l2_layout = QFormLayout(l2_group)
         self._add_double_spin('mom_limit_low', "Mom Low Eşik <", 90.0, 110.0, defaults.get('mom_limit_low', 99.0), l2_layout)
+        self._add_spin('trix_period2', "TRIX2 P (Low):", 10, 200, defaults.get('trix_period2', 100), l2_layout)
         self._add_spin('trix_lb2', "TRIX LB (Low):", 50, 200, defaults.get('trix_lb2', 160), l2_layout)
         self._add_spin('hhv3_period', "L2 HHV:", 50, 500, defaults.get('hhv3_period', 150), l2_layout)
         self._add_spin('llv3_period', "L2 LLV:", 50, 500, defaults.get('llv3_period', 190), l2_layout)

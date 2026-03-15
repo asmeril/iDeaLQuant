@@ -201,10 +201,12 @@ def s4_p2_eval(params):
         g['hhv1'], g['llv1'],
         g['hhv'][h2p], g['llv'][l2p],
         dummy, dummy,
-        g['mom'][mom_p], g['trix'][trix_p], g['mask'], g['times_arr'],
+        g['mom'][mom_p], g['trix'][trix_p], dummy,
+        g['mask'], g['times_arr'],
         -9999.0, mh,
         lb1, 100,
-        0.0, 0.0
+        0.0, 0.0,
+        2  # phase_mode=2: Layer 1 (TOMA) + Layer 2 (MOM high)
     )
     
     score = res[0] * res[2] if res[2] > 0 else 0.0
@@ -222,23 +224,28 @@ def s4_p2_eval(params):
 def s4_p3_eval(params):
     """
     Phase 3: Single parameter combination evaluation.
-    params: (h3p, l3p, ml, lb2, ka, iz, meta_dict)  — SCALARS + tiny metadata dict
+    params: (h3p, l3p, ml, lb2, trix_p2, ka, iz, meta_dict)  — SCALARS + tiny metadata dict
     Returns: result dict (with fitness) or None
     """
     from src.optimization.fitness import quick_fitness
     
-    h3p, l3p, ml, lb2, ka, iz, meta = params
+    h3p, l3p, ml, lb2, trix_p2, ka, iz, meta = params
     g = _g_s4
+    
+    # TRIX2: use variable trix2 period from grid
+    trix2_arr = g['trix'][trix_p2] if trix_p2 in g['trix'] else g['trix_fixed']
     
     res = fast_backtest_strategy4(
         g['closes'], g['toma_trend'], g['toma_val'],
         g['hhv1'], g['llv1'],
         g['hhv2_fixed'], g['llv2_fixed'],
         g['hhv'][h3p], g['llv'][l3p],
-        g['mom_fixed'], g['trix_fixed'], g['mask'], g['times_arr'],
+        g['mom_fixed'], g['trix_fixed'], trix2_arr,
+        g['mask'], g['times_arr'],
         ml, meta['fix_mh'],
         meta['fix_lb1'], lb2,
-        ka / 100.0, iz / 100.0
+        ka / 100.0, iz / 100.0,
+        3  # phase_mode=3: All layers active
     )
     
     np_val, tr, pf, dd, sh, adays, tdays = res
@@ -250,6 +257,7 @@ def s4_p3_eval(params):
                 'toma_period': meta['fix_tp'], 'toma_opt': meta['fix_to'],
                 'hhv1_period': meta['p1_hhv1'], 'llv1_period': meta['p1_llv1'],
                 'mom_period': meta['fix_mom_p'], 'trix_period': meta['fix_trix_p'],
+                'trix_period2': trix_p2,
                 'mom_limit_high': meta['fix_mh'], 'trix_lb1': meta['fix_lb1'],
                 'hhv2_period': meta['p2_hhv2'], 'llv2_period': meta['p2_llv2'],
                 'mom_limit_low': ml, 'trix_lb2': lb2,
@@ -268,12 +276,13 @@ def fast_backtest_strategy4(closes,
                             hhv1, llv1, # Layer 3 Breakout (20)
                             hhv2, llv2, # Layer 1 Breakout (150/190)
                             hhv3, llv3, # Layer 2 Breakout (150/190)
-                            mom_arr, trix_arr, # Indicators
+                            mom_arr, trix1_arr, trix2_arr, # Indicators (TRIX1 + TRIX2)
                             mask_arr, times_arr, # Trading Mask & Dates
                             # Params
                             mom_limit_low, mom_limit_high, # 98, 101.5
                             trix_lookback1, trix_lookback2, # 110, 140
-                            kar_al_ratio, iz_stop_ratio):
+                            kar_al_ratio, iz_stop_ratio,
+                            phase_mode):  # 1=TOMA only, 2=+MOM high, 3=all layers
     
     n = len(closes)
     pos = 0 
@@ -333,29 +342,27 @@ def fast_backtest_strategy4(closes,
             
         signal = 0 # ""
         
-        # --- LAYER 1: MOM > 101.5 ---
-        if mom_arr[i] > mom_limit_high:
-            # Long: HH2 Breakout & TRIX1 Divergence (Lower than 110 bars ago, but ticking up)
-            # TRIX1[i] < TRIX1[i-110] && TRIX1[i] > TRIX1[i-1]
-            if hhv2[i] > hhv2[i-1] and trix_arr[i] < trix_arr[i - trix_lookback1] and trix_arr[i] > trix_arr[i-1]:
+        # --- LAYER 1: MOM > 101.5 (only if phase_mode >= 2) ---
+        if phase_mode >= 2 and mom_arr[i] > mom_limit_high:
+            # Long: HH2 Breakout & TRIX1 Divergence (Lower than LB1 bars ago, but ticking up)
+            if hhv2[i] > hhv2[i-1] and trix1_arr[i] < trix1_arr[i - trix_lookback1] and trix1_arr[i] > trix1_arr[i-1]:
                 signal = 1
             
-            # Short: LL2 Breakout & TRIX1 Divergence (Higher than 110 bars ago, but ticking down)
-            # TRIX1[i] > TRIX1[i-110] && TRIX1[i] < TRIX1[i-1]
-            if llv2[i] < llv2[i-1] and trix_arr[i] > trix_arr[i - trix_lookback1] and trix_arr[i] < trix_arr[i-1]:
+            # Short: LL2 Breakout & TRIX1 Divergence (Higher than LB1 bars ago, but ticking down)
+            if llv2[i] < llv2[i-1] and trix1_arr[i] > trix1_arr[i - trix_lookback1] and trix1_arr[i] < trix1_arr[i-1]:
                 signal = -1
                 
-        # --- LAYER 2: MOM < 98 ---
-        if mom_arr[i] < mom_limit_low:
-            # Long: HH3 Breakout & TRIX2 Divergence (Lower than 140 bars ago, but ticking up)
-            if hhv3[i] > hhv3[i-1] and trix_arr[i] < trix_arr[i - trix_lookback2] and trix_arr[i] > trix_arr[i-1]:
+        # --- LAYER 2: MOM < 98 (only if phase_mode >= 3) ---
+        if phase_mode >= 3 and mom_arr[i] < mom_limit_low:
+            # Long: HH3 Breakout & TRIX2 Divergence (Lower than LB2 bars ago, but ticking up)
+            if hhv3[i] > hhv3[i-1] and trix2_arr[i] < trix2_arr[i - trix_lookback2] and trix2_arr[i] > trix2_arr[i-1]:
                 signal = 1
                 
-            # Short: LL3 Breakout & TRIX2 Divergence (Higher than 140 bars ago, but ticking down)
-            if llv3[i] < llv3[i-1] and trix_arr[i] > trix_arr[i - trix_lookback2] and trix_arr[i] < trix_arr[i-1]:
+            # Short: LL3 Breakout & TRIX2 Divergence (Higher than LB2 bars ago, but ticking down)
+            if llv3[i] < llv3[i-1] and trix2_arr[i] > trix2_arr[i - trix_lookback2] and trix2_arr[i] < trix2_arr[i-1]:
                 signal = -1
 
-        # --- LAYER 3: TOMA (Priority) ---
+        # --- LAYER 3: TOMA (Priority — always active) ---
         # Overwrites previous signals
         # Long: HH1 Breakout & C > TOMA
         if hhv1[i] > hhv1[i-1] and closes[i] > toma_val[i]:
@@ -463,23 +470,25 @@ def solve_chunk(args):
     results = []
     
     # Fixed periods (can be optimized later)
-    mom_period = 1900
-    trix_period = 120
+    mom_period = 500
+    trix_period = 50
+    trix_period2 = 40  # TRIX2 for Layer 2 (MOM < low)
     
     hhv1_p = 20
     llv1_p = 20
     
-    hhv2_p = 150
-    llv2_p = 190 #(LL2=190 in code)
+    hhv2_p = 40
+    llv2_p = 40 
     
-    hhv3_p = 150
-    llv3_p = 190
+    hhv3_p = 40
+    llv3_p = 40
     
     # Get Cached Arrays
     try:
         toma_val, toma_trend = g_cache.get_toma(toma_p, toma_opt)
         mom_arr = g_cache.get_mom(mom_period)
-        trix_arr = g_cache.get_trix(trix_period)
+        trix1_arr = g_cache.get_trix(trix_period)
+        trix2_arr = g_cache.get_trix(trix_period2)
         
         hhv1 = g_cache.get_hhv(hhv1_p)
         llv1 = g_cache.get_llv(llv1_p)
@@ -513,11 +522,12 @@ def solve_chunk(args):
                                 hhv1, llv1,
                                 hhv2, llv2,
                                 hhv3, llv3,
-                                mom_arr, trix_arr,
+                                mom_arr, trix1_arr, trix2_arr,
                                 g_mask, g_cache.times_arr,
                                 ml, mh,
                                 lb1, lb2,
-                                ka/100.0, iz/100.0
+                                ka/100.0, iz/100.0,
+                                3  # phase_mode=3: all layers
                             )
                             
                             if np_val > 0:

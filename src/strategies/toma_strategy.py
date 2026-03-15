@@ -31,6 +31,7 @@ class TomaStrategy:
         self.mom_upper = params.get('mom_upper', 101.5)
         self.mom_lower = params.get('mom_lower', 98.0)
         self.trix_period = int(params.get('trix_period', 120))
+        self.trix_period2 = int(params.get('trix_period2', 100))  # TRIX2 for Layer 2
         
         # HHV/LLV Period (Kısa Vade)
         self.hh_ll_period = int(params.get('hh_ll_period', 20))
@@ -56,6 +57,7 @@ class TomaStrategy:
             'mom_upper': config.get('mom_limit_high', 101.5),
             'mom_lower': config.get('mom_limit_low', 98.0),
             'trix_period': config.get('trix_period', 120),
+            'trix_period2': config.get('trix_period2', 100),
             'toma_period': config.get('toma_period', 97),
             'toma_opt': config.get('toma_opt', 1.5),
             
@@ -164,6 +166,7 @@ class TomaStrategy:
             
             mom1 = self.cache.get_momentum(self.mom_period)
             trix1 = self.cache.get_trix(self.trix_period)
+            trix2 = self.cache.get_trix(self.trix_period2)  # Separate TRIX2 for Layer 2
             
         else:
             # Calculate Fresh
@@ -191,9 +194,9 @@ class TomaStrategy:
             # 4. Momentum (1900)
             mom1 = Momentum(closes, self.mom_period)
             
-            # 5. TRIX (120)
+            # 5. TRIX (120 / 100)
             trix1 = TRIX(closes, self.trix_period)
-        # trix2 = trix1 
+            trix2 = TRIX(closes, self.trix_period2)  # Separate TRIX2 for Layer 2
 
         son_yon = Signal.NONE
         
@@ -215,12 +218,12 @@ class TomaStrategy:
             
             # --- KURAL 2: MOM < 98 (Aşırı Satım Bölgesinde Uyuşmazlık/Teyit) ---
             if mom1[i] < self.mom_lower:
-                # LONG
-                if (hh3[i] > hh3[i-1]) and (trix1[i] < trix1[i-trix_lb2]) and (trix1[i] > trix1[i-1]):
+                # LONG (TRIX2 divergence)
+                if (hh3[i] > hh3[i-1]) and (trix2[i] < trix2[i-trix_lb2]) and (trix2[i] > trix2[i-1]):
                     sinyal = Signal.LONG
                 
-                # SHORT
-                if (ll3[i] < ll3[i-1]) and (trix1[i] > trix1[i-trix_lb2]) and (trix1[i] < trix1[i-1]):
+                # SHORT (TRIX2 divergence)
+                if (ll3[i] < ll3[i-1]) and (trix2[i] > trix2[i-trix_lb2]) and (trix2[i] < trix2[i-1]):
                     sinyal = Signal.SHORT
             
             # --- KURAL 3: HHV/LLV + TOMA (Ana Trend) ---

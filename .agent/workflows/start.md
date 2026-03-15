@@ -1,3 +1,4 @@
+İletişim Dili: Tüm iletişim SADECE Türkçe olacaktır.
 ---
 description: Start session checklist - project status report
 ---
