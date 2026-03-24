@@ -223,13 +223,14 @@ def s4_p2_eval(params):
 
 def s4_p3_eval(params):
     """
-    Phase 3: Single parameter combination evaluation.
-    params: (h3p, l3p, ml, lb2, trix_p2, ka, iz, meta_dict)  — SCALARS + tiny metadata dict
+    Phase 3: Layer 2 (Mom Low) parametrelerini optimize eder.
+    Risk parametreleri (kar_al, iz_stop) bu fazda SABİT (0.0) kalır, Faz 4'te optimize edilir.
+    params: (h3p, l3p, ml, lb2, trix_p2, meta_dict)  — SCALARS + tiny metadata dict
     Returns: result dict (with fitness) or None
     """
     from src.optimization.fitness import quick_fitness
     
-    h3p, l3p, ml, lb2, trix_p2, ka, iz, meta = params
+    h3p, l3p, ml, lb2, trix_p2, meta = params
     g = _g_s4
     
     # TRIX2: use variable trix2 period from grid
@@ -244,7 +245,7 @@ def s4_p3_eval(params):
         g['mask'], g['times_arr'],
         ml, meta['fix_mh'],
         meta['fix_lb1'], lb2,
-        ka / 100.0, iz / 100.0,
+        0.0, 0.0,  # Faz 3'te risk parametresi yok, Faz 4'te optimize edilir
         3  # phase_mode=3: All layers active
     )
     
@@ -262,6 +263,54 @@ def s4_p3_eval(params):
                 'hhv2_period': meta['p2_hhv2'], 'llv2_period': meta['p2_llv2'],
                 'mom_limit_low': ml, 'trix_lb2': lb2,
                 'hhv3_period': h3p, 'llv3_period': l3p,
+                'kar_al': 0.0, 'iz_stop': 0.0,  # Faz 4'te doldurulacak
+                'net_profit': np_val, 'trades': tr, 'pf': pf, 'max_dd': dd,
+                'sharpe': sh, 'fitness': fitness,
+                'active_days': adays, 'total_days': tdays
+            }
+    return None
+
+
+def s4_p4_eval(params):
+    """
+    Phase 4: Risk parametrelerini (kar_al, iz_stop) bağımsız olarak optimize eder.
+    Faz 3'ün en iyi sonucu sabitlenmiş; sadece exit stratejisi aranır.
+    params: (ka, iz, meta_dict) — meta_dict Faz 3'ün en iyi parametrelerini içerir
+    Returns: result dict (with fitness) or None
+    """
+    from src.optimization.fitness import quick_fitness
+    
+    ka, iz, meta = params
+    g = _g_s4
+    
+    res = fast_backtest_strategy4(
+        g['closes'], g['toma_trend'], g['toma_val'],
+        g['hhv1'], g['llv1'],
+        g['hhv2_fixed'], g['llv2_fixed'],
+        g['hhv3_fixed'], g['llv3_fixed'],
+        g['mom_fixed'], g['trix_fixed'], g['trix2_fixed'],
+        g['mask'], g['times_arr'],
+        meta['fix_ml'], meta['fix_mh'],
+        meta['fix_lb1'], meta['fix_lb2'],
+        ka / 100.0, iz / 100.0,
+        3  # phase_mode=3: All layers active
+    )
+    
+    np_val, tr, pf, dd, sh, adays, tdays = res
+    if np_val > 0 and pf >= 1.0 and tr >= 5:
+        fitness = quick_fitness(np_val, pf, dd, tr, active_days=adays, total_days=tdays, sharpe=sh)
+        if fitness > 0:
+            return {
+                # Faz 1-3'ten sabit parametreler
+                'toma_period': meta['fix_tp'], 'toma_opt': meta['fix_to'],
+                'hhv1_period': meta['p1_hhv1'], 'llv1_period': meta['p1_llv1'],
+                'mom_period': meta['fix_mom_p'], 'trix_period': meta['fix_trix_p'],
+                'trix_period2': meta['fix_trix_p2'],
+                'mom_limit_high': meta['fix_mh'], 'trix_lb1': meta['fix_lb1'],
+                'hhv2_period': meta['p2_hhv2'], 'llv2_period': meta['p2_llv2'],
+                'mom_limit_low': meta['fix_ml'], 'trix_lb2': meta['fix_lb2'],
+                'hhv3_period': meta['p3_hhv3'], 'llv3_period': meta['p3_llv3'],
+                # Faz 4: Optimize edilen risk parametreleri
                 'kar_al': ka, 'iz_stop': iz,
                 'net_profit': np_val, 'trades': tr, 'pf': pf, 'max_dd': dd,
                 'sharpe': sh, 'fitness': fitness,

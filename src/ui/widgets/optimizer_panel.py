@@ -1062,10 +1062,9 @@ class OptimizationWorker(QThread):
                 for l3p in llv3_ranges:
                     for ml, lb2 in mom_low_ranges:
                         for trix_p2 in trix_periods2:
-                            for ka, iz in risk_ranges:
-                                yield (h3p, l3p, ml, lb2, trix_p2, ka, iz, p3_meta)
+                            yield (h3p, l3p, ml, lb2, trix_p2, p3_meta)
         
-        total_p3 = len(hhv3_ranges) * len(llv3_ranges) * len(mom_low_ranges) * len(trix_periods2) * len(risk_ranges)
+        total_p3 = len(hhv3_ranges) * len(llv3_ranges) * len(mom_low_ranges) * len(trix_periods2)
         self._emit_progress(66, f"Faz 3: {total_p3:,} kombinasyon...".replace(',', '.'))
         _cp(f"P3 total kombinasyon hesaplandi: {total_p3:,}".replace(',', '.'))
         
@@ -1122,9 +1121,9 @@ class OptimizationWorker(QThread):
                         
                         if done % 500 == 0:
                             try:
-                                prog = 66 + int(33 * done / total_p3)
+                                prog = 66 + int(16 * done / total_p3)
                                 if result is not None:
-                                    p3_txt = f"ML={result.get('mom_limit_low','')} LB2={result.get('trix_lb2','')} H3={result.get('hhv3','')} L3={result.get('llv3','')} KA={result.get('kar_al','')} IZ={result.get('iz_stop','')}"
+                                    p3_txt = f"ML={result.get('mom_limit_low','')} LB2={result.get('trix_lb2','')} H3={result.get('hhv3_period','')} L3={result.get('llv3_period','')}"
                                 else:
                                     p3_txt = "tarama devam ediyor..."
                                 self._emit_progress(prog, f"Faz 3 [{done:,}/{total_p3:,}]: {p3_txt} (Heap: {len(final_heap)})".replace(',', '.'))
@@ -1202,6 +1201,112 @@ class OptimizationWorker(QThread):
         ckpt.delete(job_id)
         _cp(f"CHECKPOINT TEMIZLENDI: {job_id}")
         
+        # Faz 3 tamamlandı. En iyi sonucu Faz 4 için sabitliyoruz.
+        best_phase3 = final_results[0] if final_results else None
+        if not best_phase3:
+            self.error.emit("Faz 3 sonuç bulunamadı.")
+            return
+        
+        _cp(f"FAZ 3 BITTI. En iyi: ML={best_phase3.get('mom_limit_low')}, LB2={best_phase3.get('trix_lb2')}")
+        self._emit_progress(82, f"Faz 3 Tamamlandı → Faz 4: Risk Parametreleri Optimizasyonu...")
+        
+        # ==============================================================================
+        # PHASE 4: Risk Parameters (kar_al / iz_stop) — PARALLEL
+        # ==============================================================================
+        self._emit_progress(82, "FAZ 4: Risk Çıkış Parametreleri (PARALEL)...")
+        
+        p4_meta = {
+            'fix_tp': best_phase3.get('toma_period'), 'fix_to': best_phase3.get('toma_opt'),
+            'p1_hhv1': best_phase3.get('hhv1_period'), 'p1_llv1': best_phase3.get('llv1_period'),
+            'fix_mom_p': best_phase3.get('mom_period'), 'fix_trix_p': best_phase3.get('trix_period'),
+            'fix_trix_p2': best_phase3.get('trix_period2'),
+            'fix_mh': best_phase3.get('mom_limit_high'), 'fix_lb1': best_phase3.get('trix_lb1'),
+            'p2_hhv2': best_phase3.get('hhv2_period'), 'p2_llv2': best_phase3.get('llv2_period'),
+            'fix_ml': best_phase3.get('mom_limit_low'), 'fix_lb2': best_phase3.get('trix_lb2'),
+            'p3_hhv3': best_phase3.get('hhv3_period'), 'p3_llv3': best_phase3.get('llv3_period'),
+        }
+        
+        # Faz 4 için gerekli sabit array'leri hazırla
+        fix_trix_p2 = best_phase3.get('trix_period2', list(trix_periods2)[0] if trix_periods2 else 100)
+        shared_data_p4 = {
+            'closes': closes,
+            'toma_trend': toma_trend,
+            'toma_val': toma_val,
+            'hhv1': hhv1,
+            'llv1': llv1,
+            'mask': mask_arr,
+            'times_arr': cache.times_arr,
+            'hhv2_fixed': hhv2,
+            'llv2_fixed': llv2,
+            'hhv3_fixed': cache.get_hhv(best_phase3.get('hhv3_period', 150)),
+            'llv3_fixed': cache.get_llv(best_phase3.get('llv3_period', 190)),
+            'mom_fixed': mom_arr,
+            'trix_fixed': trix_arr,
+            'trix2_fixed': cache.get_trix(fix_trix_p2),
+        }
+        
+        def p4_gen():
+            for ka, iz in risk_ranges:
+                yield (ka, iz, p4_meta)
+        
+        total_p4 = len(risk_ranges)
+        self._emit_progress(83, f"Faz 4: {total_p4} kombinasyon (KA/IZ taramasi)...")
+        _cp(f"P4 total kombinasyon: {total_p4}")
+        
+        p4_heap = []  # min-heap: (fitness, counter, result_dict)
+        p4_counter = 0
+        TOP_N_P4 = 500
+        
+        if total_p4 > 0:
+            from multiprocessing import Pool, cpu_count
+            from src.optimization.strategy4_optimizer import s4_parallel_init, s4_p4_eval
+            
+            n_workers_p4 = min(self.n_parallel or 8, cpu_count())
+            p4_chunk = min(50, max(1, total_p4 // (n_workers_p4 * 4)))
+            
+            try:
+                self.pool = Pool(
+                    processes=n_workers_p4,
+                    initializer=s4_parallel_init,
+                    initargs=(shared_data_p4,),
+                    maxtasksperchild=10000
+                )
+                _cp("P4 Pool olusturuldu.")
+                p4_done = 0
+                for result in self.pool.imap_unordered(s4_p4_eval, p4_gen(), chunksize=p4_chunk):
+                    p4_done += 1
+                    p4_counter += 1
+                    if result is not None:
+                        f_score = result.get('fitness', 0)
+                        if len(p4_heap) < TOP_N_P4:
+                            heapq.heappush(p4_heap, (f_score, p4_counter, result))
+                        elif f_score > p4_heap[0][0]:
+                            heapq.heapreplace(p4_heap, (f_score, p4_counter, result))
+                    
+                    prog = 83 + int(15 * p4_done / max(total_p4, 1))
+                    self._emit_progress(prog, f"Faz 4 [{p4_done}/{total_p4}]: KA/IZ taranıyor...")
+                    if not self._is_running:
+                        self.pool.terminate()
+                        self.pool = None
+                        return
+            finally:
+                if self.pool:
+                    self.pool.close()
+                    self.pool.join()
+                    self.pool = None
+                    _cp("P4 Pool kapandı.")
+        
+        # Faz 4 sonuçlarını Faz 3 sonuçlarıyla birleştir
+        p4_results = [item[2] for item in sorted(p4_heap, reverse=True)]
+        if p4_results:
+            # Faz 4'te geçerli sonuç bulunduysa bunları önceliklendir
+            final_results = p4_results + final_results
+            _cp(f"FAZ 4 BITTI: {len(p4_results)} risk kombinasyonu ile zenginleştirildi.")
+        else:
+            _cp("FAZ 4: Geçerli risk kombinasyonu bulunamadı, Faz 3 sonuçları kullanılıyor.")
+        
+        top_results = final_results[:500]  # Show Top 500
+        
         # OOS Validation for S4
         if self.do_oos and self.test_data is not None and top_results:
             self._emit_progress(98, "S4 Test verisinde validasyon yapiliyor...")
@@ -1213,11 +1318,7 @@ class OptimizationWorker(QThread):
                            'active_days', 'total_days', 'test_active_days', 'test_total_days', 'robust_fitness', 'oos_penalized_fitness'}
             
             for r in top_results[:50]:  # Top 50 icin validasyon
-                # Optimizer'dan gelen anahtarlari validasyonun bekledigi formata cevir (LB1 vs lb1 vb.)
-                # Strategy4Optimizer 'LB1', 'KA', 'ML' gibi buyuk harf kullaniyor
                 params = {k.lower(): v for k, v in r.items() if k not in s4_excluded}
-                
-                # Ozel mapping'ler (lb1 -> trix_lb1 vb. eger gerekiyorsa alt tarafta cozuluyor ama burada netlestirelim)
                 if 'lb1' in params and 'trix_lb1' not in params: params['trix_lb1'] = params.pop('lb1')
                 if 'lb2' in params and 'trix_lb2' not in params: params['trix_lb2'] = params.pop('lb2')
                 if 'ka' in params and 'kar_al' not in params: params['kar_al'] = params.pop('ka')
@@ -1226,7 +1327,6 @@ class OptimizationWorker(QThread):
                 if 'mh' in params and 'mom_limit_high' not in params: params['mom_limit_high'] = params.pop('mh')
                 if 't_per' in params and 'toma_period' not in params: params['toma_period'] = params.pop('t_per')
                 if 't_opt' in params and 'toma_opt' not in params: params['toma_opt'] = params.pop('t_opt')
-                
                 oos_res = self._validate_s4_result(params)
                 r.update(oos_res)
             
@@ -1248,14 +1348,10 @@ class OptimizationWorker(QThread):
                     )
                 else:
                     r['oos_penalized_fitness'] = r.get('robust_fitness', r.get('fitness', 0))
-            
-            # OOS testi yapılmamış olanlar olduğu gibi kalsın
             for r in top_results[50:]:
                 r['oos_penalized_fitness'] = r.get('robust_fitness', r.get('fitness', 0))
-            
-            # Test sonuçlarına göre yeniden sırala
             top_results.sort(key=lambda x: x.get('oos_penalized_fitness', 0), reverse=True)
-            _cp(f"OOS RE-RANK: #1 test_net={top_results[0].get('test_net', 'N/A')}, penalized_fitness={top_results[0].get('oos_penalized_fitness', 0):.2f}")
+            _cp(f"OOS RE-RANK: #1 test_net={top_results[0].get('test_net', 'N/A')}")
         
         self._emit_progress(100, "Optimizasyon Tamamlandi!")
         self.result_ready.emit(top_results)

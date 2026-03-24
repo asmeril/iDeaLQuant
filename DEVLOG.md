@@ -1,3 +1,24 @@
+## 2026-03-24 (S4 Faz 4 Refaktörü: KA/IZ Ayrıştırması)
+
+### ✅ Yapılanlar
+- **S4 Faz 4 Refaktörü (İmplementasyon):**
+  - `s4_p3_eval` fonksiyonundan `kar_al` ve `iz_stop` (risk) parametreleri çıkarıldı. Faz 3 artık `ka=0, iz=0` sabit değerleriyle Layer 2 (Mom Low) parametrelerini optimize ediyor.
+  - Yeni `s4_p4_eval(ka, iz, meta)` fonksiyonu `strategy4_optimizer.py`'ye eklendi. Faz 3'ün en iyi parametreleri sabitlenmiş halde, sadece çıkış stratejisi (risk) optimize ediliyor.
+  - `optimizer_panel.py`'deki `p3_gen` generator'ından `risk_ranges` iterasyonu çıkarıldı.
+  - `optimizer_panel.py`'ye Faz 4'e özel yeni paralel pool+generator bloğu eklendi. Progress oranları: `%66-82` Faz 3, `%82-98` Faz 4.
+  - OOS validasyon bloğu ve `top_results` ataması doğru sıraya alındı.
+  - Sözdizim kontrolü: her iki dosya da `ast.parse` testinden geçti ✅
+
+### 🔑 Önemli Kararlar
+- Faz 4, Faz 3'ün **en iyi tek sonucu** üzerinden çalışır (ilk `best_phase3`). İleride TOP-K sonuç üzerinden yapılıp daha kapsamlı bir risk taraması sağlanabilir.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 12 (Strateji 7 DeepScalp)
+- **Sıradaki Adım (Öncelik 1):** S7 `get_supertrend` Python implementasyonu + kalibrasyon.
+- **Tamamlanan:** S4 Faz 4 refaktörü ✅
+
+---
+
 ## 2026-03-15 (S4 Optimizasyon Analizi & S7 Phase 4 Planı)
 
 ### ✅ Yapılanlar
