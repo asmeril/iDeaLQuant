@@ -207,10 +207,11 @@ STRATEGY4_PARAM_GROUPS = {
         }
     },
     'Risk': {
-        'label': 'Risk Yonetimi',
+        'label': 'Faz 4: Risk Parametreleri (Kar Al / İz Stop)',
+        'note': 'Bu grup, Faz 3 (Layer 2) tamamladıktan sonra bağımsız olarak optimize edilir.',
         'params': {
             'kar_al': {'label': 'Kar Al %', 'type': 'float', 'default': 0.0, 'min': 0.0, 'max': 10.0, 'step': 0.5},
-            'iz_stop': {'label': 'Izleyen Stop %', 'type': 'float', 'default': 0.0, 'min': 0.0, 'max': 5.0, 'step': 0.25},
+            'iz_stop': {'label': 'İz Süren Stop %', 'type': 'float', 'default': 0.0, 'min': 0.0, 'max': 5.0, 'step': 0.25},
         },
         'is_cascaded': True
     }
@@ -396,11 +397,13 @@ class ParameterGroupWidget(QGroupBox):
     
     def _setup_ui(self):
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(5, 15, 5, 5)  # Başlık için üstte boşluk
-        
-        # Kademeli grup uyarısı
+        layout.setContentsMargins(5, 15, 5, 5)  # Kademeli grup uyarisi (is_cascaded = True)
         if self.group_config.get('is_cascaded', False):
-            cascade_label = QLabel("(Bu grup, diger gruplar optimize edildikten sonra calisir)")
+            note_text = self.group_config.get(
+                'note',
+                '(Bu grup, diğer gruplar optimize edildikten sonra çalışır)'
+            )
+            cascade_label = QLabel(note_text)
             cascade_label.setStyleSheet("color: #e94560; font-style: italic;")
             layout.addWidget(cascade_label)
         
@@ -1004,9 +1007,9 @@ class OptimizationWorker(QThread):
             _cp(f"GC Hatasi: {e}")
             
         # ==============================================================================
-        # PHASE 3: Layer 2 + Risk (PARALLEL — Lightweight)
+        # PHASE 3: Layer 2 (Mom Low) — PARALLEL
         # ==============================================================================
-        self._emit_progress(65, "FAZ 3: Layer 2 (Mom Low) ve Risk (PARALEL)...")
+        self._emit_progress(65, "FAZ 3: Layer 2 (Mom Low) — TRIX2, HHV3, LLV3 (PARALEL)...")
         
         # Fix Phase 2
         fix_mom_p = best_phase2['mom_period']
@@ -2417,7 +2420,12 @@ class OptimizerPanel(QWidget):
 
         # Kalan parametreleri (eğer varsa) 'Diğer' grubuna ekle
         all_params = set(params.keys())
-        remaining = all_params - processed_params - {'net_profit', 'trades', 'pf', 'max_dd', 'sharpe', 'fitness', 'group', 'win_count', 'win_rate', 'params', 'test_net', 'test_pf', 'test_trades', 'test_dd', 'test_sharpe'}
+        remaining = all_params - processed_params - {
+            'net_profit', 'trades', 'pf', 'max_dd', 'sharpe', 'fitness', 'group',
+            'win_count', 'win_rate', 'params', 'test_net', 'test_pf', 'test_trades',
+            'test_dd', 'test_sharpe', 'active_days', 'total_days', 'test_active_days',
+            'test_total_days', 'robust_fitness', 'density_score', 'oos_penalized_fitness'
+        }
         
         if remaining:
             if col != 0: row += 1; col = 0
@@ -3490,7 +3498,13 @@ class OptimizerPanel(QWidget):
         self.method_results[method] = results
         
         # Tablo doldur
-        cols = ['Sira', 'Kar (Egt)', 'Test Kar', 'Test PF', 'Islem', 'PF (Egt)', 'Max DD', 'Sharpe', 'Fitness']
+        # Strateji 4 (TOMA) icin risk parametresi sutunlari ekle
+        strategy_idx = self.strategy_combo.currentIndex()
+        is_s4 = (strategy_idx == 3)
+        if is_s4:
+            cols = ['Sira', 'Kar (Egt)', 'Test Kar', 'Test PF', 'Islem', 'PF (Egt)', 'Max DD', 'Sharpe', 'KA %', 'IZ %', 'Fitness']
+        else:
+            cols = ['Sira', 'Kar (Egt)', 'Test Kar', 'Test PF', 'Islem', 'PF (Egt)', 'Max DD', 'Sharpe', 'Fitness']
         table.setColumnCount(len(cols))
         table.setHorizontalHeaderLabels(cols)
         table.setRowCount(len(results))
@@ -3534,14 +3548,33 @@ class OptimizerPanel(QWidget):
             # Sharpe
             table.setItem(row_idx, 7, QTableWidgetItem(f"{result.get('sharpe', result.get('Sharpe', 0)):.2f}"))
             
-            # Fitness skoru (Renkli)
-            fitness = result.get('fitness', 0)
-            fit_item = QTableWidgetItem(f"{fitness:,.0f}")
-            if fitness > 0:
-                fit_item.setForeground(Qt.darkGreen)
+            if is_s4:
+                # KA % — Faz 4 risk parametresi
+                ka_val = result.get('kar_al', 0)
+                ka_item = QTableWidgetItem(f"{ka_val:.2f}")
+                ka_item.setForeground(Qt.cyan if ka_val > 0 else Qt.gray)
+                table.setItem(row_idx, 8, ka_item)
+                
+                # IZ % — Faz 4 risk parametresi
+                iz_val = result.get('iz_stop', 0)
+                iz_item = QTableWidgetItem(f"{iz_val:.2f}")
+                iz_item.setForeground(Qt.cyan if iz_val > 0 else Qt.gray)
+                table.setItem(row_idx, 9, iz_item)
+                
+                # Fitness (S4'te indeks 10)
+                fitness = result.get('fitness', 0)
+                fit_item = QTableWidgetItem(f"{fitness:,.0f}")
+                fit_item.setForeground(Qt.darkGreen if fitness > 0 else Qt.red)
+                table.setItem(row_idx, 10, fit_item)
             else:
-                fit_item.setForeground(Qt.red)
-            table.setItem(row_idx, 8, fit_item)
+                # Fitness skoru (Renkli)
+                fitness = result.get('fitness', 0)
+                fit_item = QTableWidgetItem(f"{fitness:,.0f}")
+                if fitness > 0:
+                    fit_item.setForeground(Qt.darkGreen)
+                else:
+                    fit_item.setForeground(Qt.red)
+                table.setItem(row_idx, 8, fit_item)
         
         # Tab'ı aktif yap
         method_names = ["Hibrit Grup", "Genetik", "Bayesian"]
