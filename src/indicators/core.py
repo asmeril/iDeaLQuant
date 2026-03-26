@@ -760,3 +760,8 @@ def TRIX(closes: List[float], period: int = 9) -> List[float]:
     return result
 
 
+
+# Aliases for DeepScalp Compatibility
+get_ema = EMA
+get_mfi = MoneyFlowIndex
+get_atr = ATR

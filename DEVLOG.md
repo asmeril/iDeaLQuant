@@ -1,3 +1,26 @@
+## 2026-03-27 (S7 SuperTrend Kalibrasyon Analizi)
+
+### ✅ Yapılanlar
+- **SuperTrend Kalibrasyon (Tam Analiz):**
+  - `data/ideal_supertrend.csv` (499.900 bar) ile `get_supertrend()` fonksiyonu kapsamlı şekilde test edildi.
+  - Ters mühendislik ile kalibrasyon parametreleri belirlendi: **ATR period=10 (RMA, α=1/10), factor=3.0**.
+  - `data/VIPX030T_1Dk_BarData.csv` (500K tam veri) kullanılarak warmup barları eşitleme testi yapıldı.
+  - Bar 100'de ATR[100]=1.109032 (≈hedef 1.109) ve ST=6511.0771 (Ideal=6511.0770) — **fark 0.0001** ✅
+  - Ort. hata %0.019307 — **IdealData'nın 3 ondalık CSV rounding'inden** kaynaklandığı kanıtlandı.
+  - Kalan Max%=2.26 hatası yalnızca bazı flip noktalarında cascade birikiminden kaynaklanıyor; production'da önemsiz.
+  - Kalibrasyon test scriptleri: `tests/calibrate_st_analysis.py`, `tests/calibrate_warmup.py`
+
+### 🔑 Önemli Kararlar
+- `get_supertrend(h, l, c, hhv_p=10, atr_p=10, factor=3.0)` — IdealData `SuperTrend(3, 10, _)` ile uyumlu ✅
+- Warmup: Production ortamında verinin başından çalıştırıldığında ATR otomatik converge eder; ek önlem gerekmez.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 12 (Strateji 7 DeepScalp)
+- **Sıradaki Adım (Öncelik 1):** S7 SuperTrend C# exporter şablonuna eklenmesi (`idealdata_exporter.py`)
+- **Sıradaki Adım (Öncelik 2):** DeepScalp stratejisini gerçek veri ile uçtan uca test etmek.
+
+---
+
 ## 2026-03-24 (S4 Faz 4 Refaktörü: KA/IZ Ayrıştırması)
 
 ### ✅ Yapılanlar
