@@ -30,17 +30,33 @@ def main():
     
     pyinstaller_args = [
         sys.executable, "-m", "PyInstaller",
-        "--name=IdealQuant_v4.9",
+        "--name=IdealQuant_v5.0",
         "--onefile",           # Tek bir EXE haline getir
         "--noconfirm",         # Sormadan uzerine yaz
         "--clean",
         "--windowed",          # Konsol penceresi acma (Sadece arayuz)
+        # Core
+        "--hidden-import=multiprocessing.pool",
+        "--hidden-import=multiprocessing.util",
+        "--hidden-import=multiprocessing.managers",
         "--hidden-import=numba",
+        "--hidden-import=numba.core",
+        "--hidden-import=numba.typed",
         "--hidden-import=optuna",
         "--hidden-import=scipy.optimize",
+        # Strategies
         "--hidden-import=src.strategies",
-        "--hidden-import=src.indicators",
+        "--hidden-import=src.strategies.gap_reversal_strategy",
+        "--hidden-import=src.strategies.deepscalp_strategy",
+        "--hidden-import=src.strategies.tott_hott_strategy",
+        "--hidden-import=src.strategies.oliver_kell_s5",
+        # Optimization
         "--hidden-import=src.optimization",
+        "--hidden-import=src.optimization.strategy8_optimizer",
+        "--hidden-import=src.optimization.strategy7_optimizer",
+        "--hidden-import=src.optimization.hybrid_group_optimizer",
+        # Indicators & others
+        "--hidden-import=src.indicators",
         "--hidden-import=src.core",
         "--hidden-import=src.export",
         "--add-data=src/ui/assets:src/ui/assets",
@@ -57,7 +73,7 @@ def main():
     
     if result.returncode == 0:
         print("\n=== DERLEME BASARILI! ===")
-        print(f"Execute edin: {os.path.join(project_root, 'dist', 'IdealQuant_v4.9.exe')}")
+        print(f"Execute edin: {os.path.join(project_root, 'dist', 'IdealQuant_v5.0.exe')}")
     else:
         print("\n=== DERLEME BASARISIZ! ===")
         

@@ -14,7 +14,11 @@ Format (32 byte per record):
 - float32: Amount (Hacim TL)
 - int32: Flags
 
-Base Date: 1988-02-28
+Base Date: 1988-02-19 00:00:00 (IdealData epoch)
+Doğrulama: 
+  - THYAO vadelisi (Spot) son barı: 18:09 (Binary minutes: 20,050,209)
+  - X030-T (Akşam Seanslı) son barı: 22:59 (Binary minutes: 20,050,499)
+  (18:09 ile 22:59 arasında tam 290 dakika fark var, binary dosyalar bunu kanıtlıyor)
 """
 
 import struct
@@ -24,9 +28,8 @@ from typing import List, Optional, Dict
 import pandas as pd
 
 
-# Base Date: 1988-02-24 (IdealData epoch)
-# Hesaplama: 06.02.2026 22:59 = 19962659 dakika → 19962659 dakika önce = 1988-02-24
-BASE_DATE = datetime(1988, 2, 24)
+# Base Date: 1988-02-19 00:00:00 (IdealData epoch)
+BASE_DATE = datetime(1988, 2, 19, 0, 0)
 
 
 

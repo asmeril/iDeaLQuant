@@ -195,7 +195,7 @@ class ParadiseStrategy:
             return self.data_cache.get_vade_dates(self.config.vade_tipi)
             
         vade_dates = set()
-        dates = pd.to_datetime(self.times)
+        dates = pd.to_datetime(self.times, dayfirst=True)
         months = dates.to_period('M').unique()
         
         for m in months:
@@ -213,7 +213,7 @@ class ParadiseStrategy:
             return self.data_cache.get_vade_transitions(self.config.vade_tipi)
             
         transitions = set()
-        dates = pd.to_datetime(self.times)
+        dates = pd.to_datetime(self.times, dayfirst=True)
         
         for i in range(1, len(dates)):
             if dates[i].month != dates[i-1].month:

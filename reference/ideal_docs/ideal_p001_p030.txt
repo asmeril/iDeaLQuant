@@ -1,0 +1,1688 @@
+--- PAGE 1 ---
+ 
+ 
+ 
+Sezai KILIÇ
+
+--- PAGE 2 ---
+İÇİNDEKİLER 
+SİSTEM TANIMLARI PANELİNE ERİŞİM VE PANELİN BÖLÜMLERİ…………………………………………………….
+1
+1 Numaralı Bölge…………………………………………………………………………………………………………………
+2
+2 Numaralı Bölge………………………………………………………………………………………………………………….
+2
+3 Numaralı Bölge………………………………………………………………………………………………………………….
+2
+4 Numaralı Bölge………………………………………………………………………………………………………………….
+2
+5 Numaralı Bölge………………………………………………………………………………………………………………….
+2
+6 Numaralı Bölge………………………………………………………………………………………………………………….
+2
+SİSTEMLERİN GRAFİĞE UYGULANMASI……………………………………………………………………………………. 
+3 
+SİSTEMLERİ ÜZERİNDE DEĞİŞİKLİK YAPMAK VEYA BAŞKA BİR İSİMLE (FARKLI) KAYDETMEK……………
+4
+SİSTEMLERİ ŞİFRELEYEREK BAŞKALARIYLA PAYLAŞMAK………………………………………………………………….
+5
+SİSTEMLERE KULLANICI BAZINDA LİSANS VE TARİH SINIRI KOYMAK……………………………………………….
+6
+SİSTEMLERİN İSİMLENDİRİLMESİ…………………………………………………………………………………………………….
+7
+FORMÜLLERİN KULLANIM AMAÇLARI (SORGU-SİSTEM-ROBOT-OPTİMİZASYON)……………………………
+7
+Sistem………………………………………………………………………………………………………………………………….
+7
+Robot……………………………………………………………………………………………………………………………………
+7
+Sorgu……………………………………………………………………………………………………………………………………
+9
+Optimizasyon……………………………………………………………………………………………………………………….
+11
+Performans…………………………………………………………………………………………………………………………..
+14
+Sembol Bazında Sistem Kıyasla…………………………………………………………………………………………….
+15
+Son Pozisyonlar…………………………………………………………………………………………………………………….
+16
+Multi Performans Eğrisi………………………………………………………………………………………………………..
+17
+İDEAL SİSTEM MODÜLÜNÜ KUL. BİLİNMESİNDE YARAR OLAN TEMEL C# YAZILIM DİLİ KURALLARI…
+18
+IDEAL ÜZERİNDE FORMÜL YAZMANIN GENEL AKIŞ DİYAGRAMI………………………………………………………
+18
+Değişken Tipleri………………………………………………………………………………………………………………………………
+19
+Eğer ise / Değil ise ve Mantıksal Operatörler (if / else if)…………………………………………………………………
+19
+Listeler Tanımlamak………………………………………………………………………………………………………………………..
+21
+Listeler Üzerinde İşlem (Hesaplama) Yapmak………………………………………………………………………………….
+21
+Döngüler…………………………………………………………………………………………………………………………………………
+22
+İDEAL SİSTEM KÜTÜPHANESİ VE SİSTEM FONKSİYONLARI………………………………………………………………
+24
+LİSTE ve VERİLER ile indikatör Komutları Kullanımı………………………………………………………………………….
+24
+Birinci Kullanım Yöntemi……………………………………………………………………………………………….. 
+25 
+İkinci Kullanım Yöntemi (LİSTE)…………………………………………………………………………………………….
+25
+Üçüncü Kullanım Yöntemi (VERİLER……………………………………………………………………………………..
+25
+ACCUMULATİONDİSTRİBUTİON - SİSTEM. ACCUMULATİONDİSTRİBUTİON…………………………………….
+25
+ADR - Sistem. ADR(14)…………………………………………………………………………………………………………….. 
+25 
+ADX - Sistem. ADX(14)…………………………………………………………………………………………………………….. 
+26 
+Aktif Viop Kontrat - Sistem. AktifViopKontrat………………………………………………………………………….. 
+26 
+Algo Açıklama - Sistem. AlgoAciklama…………………………………………………………………………………….. 
+26 
+Alış Fiyat - Sistem. AlisFiyat(Sembol)……………………………………………………………………………… 
+27 
+Alış Lot - Sistem. AlisLot(Sembol)………………………………………………………………………………….. 
+28 
+Alligator - Sistem. Alligator……………………………………………………………………………………………. 
+28 
+Aroon Up/Down - Sistem. AroonUp(14) / Sistem.AroonDown(14)………………………………………….. 
+29 
+Aroon Oscilator - Sistem. AroonOsc(14)………………………………………………………………………………………….
+30
+Aşağı Kestiyse - Sistem. AsagiKestiyse…………………………………………………………………………………………….
+30
+ATR (Average True Range) - Sistem. AverageTrueRange(14)…………………………………………………………..
+31
+Awesome Oscilator - Sistem. AwesomeOsc(5, 34)………………………………………………………………………….
+31
+BaglantiVar - Sistem. BaglantiVar……………………………………………………………………………………………
+31
+BarCiz - Sistem. BarCiz…………………………………………………………………………………………………………….
+32
+BarRengi - Sistem. BarRengi……………………………………………………………………………………………………
+33
+
+--- PAGE 3 ---
+BarSayisi - Sistem. BarSayisi……………………………………………………………………………………………………………
+34
+Bilanco İndikatörleri - Sistem. Bilanco…………………………………………………………………………………………….
+34
+BistHesapOku - Sistem. BistHesapOku…………………………………………………………………………………………….
+35
+BollingerUp/BollingerDown/BollingerMid/BollingerWidth - Sistem. BollingerXXX………………………….
+37
+Chaikin Money Flow (CMF) - Sistem. ChaikinMoneyFlow(14)…………………………………………………………
+38
+Chaikin Osc - Sistem. ChaikinOsc(14)……………………………………………………………………………………………..
+38
+Chaikin Volatility - Sistem. ChaikinVolatility(10,10)………………………………………………………………………..
+38
+Chande Momentum - Sistem. ChandeMomentum(20)………………………………………………………………….
+38
+CizgiCiz - Sistem. CizgiCiz(panel, bar1, fiyat1, bar2, fiyat2, renk, kalinlik, stil)…………………………………
+39
+Cizgiler - Sistem.Cizgiler[x].Deger…………………………………………………………………………………………………..
+40
+CCI – Commodity Channel Index - Sistem. CommodityChannelIndex(14)……………………………………….
+42
+Debug - Sistem. Debug()………………………………………………………………………………………………………………..
+42
+DEMA –Sistem.DEMA(5)………………………………………………………………………………………………………………..
+43
+Demand Index - Sistem.DemandIndex()…………………………………………………………………………………………
+44
+De Marker - Sistem.DeMarker(13)………………………………………………………………………………………………….
+44
+Derinlik Verileri - Sistem.DerinlikVerisiOku(Sembol)……………………………………………………………………….
+45
+De Trended Price Oscilator - Sistem.DetrendedPriceOscillator(14)…………………………………………………
+47
+Devre Kesici Listesini Oku - Sistem. DevreKesiciListesiniOku()………………………………………………………..
+47
+Dikey Çizgi Ekle - Sistem.DikeyCizgiEkle(BarNo, Color.Yellow, 2, 1)………………………………………………..
+48
+Dip - Sistem. Dip(Barsayısı)…………………………………………………………………………………………………………….
+49
+DI+ / DI- (PDI/MDI) - Sistem. DirectionalIndicatorMinus/Plus(14)…………………………………………………..
+49
+Directional Movement - Sistem. DirectionalMovement(14)……………………………………………………………
+50
+Dolgu Ekle - Sistem. DolguEkle()……………………………………………………………………………………………………..
+50
+Dönem Çevir - Sistem.Donemcevir()……………………………………………………………………………………………….
+51
+Veriler………………………………………………………………………………………………………………………………….
+51
+UstDonemVerileri………………………………………………………………………………………………………………..
+51
+UstDonemCevrilecekData…………………………………………………………………………………………………….
+52
+Dörtgen Çiz - Sistem.DortgenCiz()…………………………………………………………………………………………………..
+53
+Düşük (Dusuk) Fiyat - Sistem.Dusuk(Sembol)………………………………………………………………………………….
+53
+Ease Of Movement - Sistem.EaseOfMovement(10)………………………………………………………………………..
+55
+Ehler’s Diff Coef Filter - Sistem.EhlersEhlersDiffCoefFilter()…………………………………………………………….
+55
+Ehler’s Filter - Sistem.EhlersFilter()…………………………………………………………………………………………………
+56
+Elliot Wave Oscilator (EWO) - Sistem.ElliotWaveOscilator(15,34)……………………………………………………
+56
+Emir - Sistem.Emir FonksiyonlarıXXXXX(5)………………………………………………………………………………………
+56
+En Çok Tekrar - Sistem.EncokTekrar………………………………………………………………………………………………..
+56
+Envelope Up/Down/Mid - Sistem.Envelope()………………………………………………………………………………….
+58
+Excel Kopyala - Sistem.ExcelKopyala……………………………………………………………………………………………….
+60
+Excel Oku - Sistem.ExcelOku……………………………………………………………………………………………………………
+62
+Fark - Sistem.Fark(Sembol)……………………………………………………………………………………………………………..
+64
+Fibonacci Up/Down/Mid - Sistem.Fibonacci()…………………………………………………………………………………
+65
+Forecast Osc - Sistem.ForecastOsc(5)……………………………………………………………………………………………..
+66
+FRAMA - Sistem.FRAMA()……………………………………………………………………………………………………………….
+66
+FX Sniper - Sistem.FxSniper(3,2)……………………………………………………………………………………………………..
+66
+Getiri Hesapla (GetiriKZ) - Sistem.GetiriHesapla(Tarih, Komisyon)………………………………………………….
+66
+Görüntü Kaydet - Sistem.GoruntuKaydet(DosyaAdı)………………………………………………………………………
+73
+Grafik Verileri – Grafik Fiyat Seç – Grafik Fiyat Oku…………………………………………………………………………
+74
+GrafikVerileri………………………………………………………………………………………………………………………..
+74
+GrafikVerileriniOku(Sembol, Periyot)……………………………………………………………………………………
+76
+GrafikFiyatSec(“Deger”)……………………………………………………………………………………………………….
+76
+GrafikFiyatOku(GrafikVerileri, “Deger”)……………………………………………………………………………….
+76
+78GrafikFiyatOku(“IMKBH’YKBNK”,”G”,”Kapanis”)……………………………………………………………..
+77
+Grafik Güncelle – Sistem.GrafikGuncelle(Sembol)…………………………………………………………………………
+78
+
+--- PAGE 4 ---
+Grafik Verisi İndir – Sistem.GrafikVerisiIndir(Sembol,Periyot)……………………………………………………….
+78
+Grafik Verisilerinde Tarih Hizalama – Sistem.GrafikVerisiIndir(Sembol,Periyot……………………………..
+78
+Hacim - Sistem.Hacim(Sembol)………………………………………………………………………………………………………
+80
+Hafta Sonu - Sistem.HaftaSonu………………………………………………………………………………………………………
+81
+Hesap Kurum - Sistem.HesapKurum()…………………………………………………………………………………………….
+81
+HHLL - Sistem.HHLL(14)………………………………………………………………………………………………………………….
+82
+HHV - Sistem.HHV(14)……………………………………………………………………………………………………………………
+82
+Hisse İşlemlerini Oku - Sistem. HisseIslemleriniOku()…………………………………………………………………….
+82
+HY - Sistem. HY(Periyot)………………………………………………………………………………………………………………..
+84
+Ichi Moku - Sistem.Ichimoku()……………………………………………………………………………………………………….
+85
+IFISH CCI - Sistem. IFISHCCI(6, 9)……………………………………………………………………………………………………
+85
+IFISH RSI - Sistem. IFISHRSI(6, 9)…………………………………………………………………………………………………….
+86
+IMI / Intraday Momentum Index - Sistem.IMI(14)………………………………………………………………………….
+86
+İzleyen Stop Puan - Sistem. IzleyenStopPuan(2,i)……………………………………………………………………………
+86
+İzleyen Stop Yüzde - Sistem. IzleyenStopYuzde(1.5,i) …………………………………………………………………….
+87
+Kademe Analizi Oku – Sistem.KademeAnalizOku(Sembol) …………………………………………………………….
+88
+KAİRİ - Sistem.Kairi(14) ………………………………………………………………………………………………………………….
+91
+KAMA - Sistem.KAMA(10,2,30) ……………………………………………………………………………………………………..
+91
+KAR AL PUAN - Sistem.KarAlPuan(3,i) ……………………………………………………………………………………………
+91
+KAR AL YÜZDE - Sistem.KarAlYuzde(3,i) …………………………………………………………………………………………
+92
+Kar Zarar İşlem - Sistem.KarZararIslem(IslemSayisi, KaymaMaliyeti) ……………………………………………..
+93
+Keltner Kanalı - Sistem.KeltnerUp/KeltnerDown(10) ……………………………………………………………………..
+94
+Kesişme Tara - Sistem.KesismeTara(x,y) ………………………………………………………………………………………..
+95
+Klinger Oscilator - Sistem.KlingerOsc(13) ………………………………………………………………………………………
+97
+Kurum Hacim Oku - Sistem.KurumHacimOku(“IYF”) ………………………………………………………………………
+97
+Linear Regresyon - Sistem.LinearReg(14) ………………………………………………………………………………………
+98
+Linear Regresyon Inter Cept - Sistem.LinearRegInterCept(14) ……………………………………………………….
+99
+Linear Regresyon Slope- Sistem.LinearRegSlope(14) ……………………………………………………………………..
+99
+Lisans Kontrol - Sistem.LisansKontrol(“KullaniciAdi”) …………………………………………………………………….
+99
+Liste Oluşturmak - Sistem.Liste(Deger) ………………………………………………………………………………………….
+100
+LLV - Sistem.LLV(14) ………………………………………………………………………………………………………………………
+102
+Lot - Sistem.Lot(Sembol) ……………………………………………………………………………………………………………….
+102
+LY - Sistem. LY(Periyot) ………………………………………………………………………………………………………………….
+103
+MA – Moving Average (Hareketli Ortalamalar) - Sistem. .MA()………………………………………………………
+103
+MACD - Sistem. MACD(12,26) ……………………………………………………………………………………………………….
+105
+MAFARK - Sistem. MAFARK(Liste, “Exp”, 9) ……………………………………………………………………………………
+105
+MAM (MA’ların MA larını almak) - Sistem. MAM(Liste, “Exp”, P1, P2, P3, P4) ……………………………….
+106
+MAİL GÖNDERMEK - Sistem. MailGonder()…………………………………………………………………………………….
+106
+MASS INDEX - Sistem.MassIndex(25) …………………………………………………………………………………………….
+108
+MEDIAN - Sistem.Median(Liste,14) ve Sistem.MedianDeger(Liste) ……………………………………………….
+108
+MESAJ - Sistem.Mesaj(Metin)109…………………………………………………………………………………………………..
+109
+Momentum - Sistem.Momentum(12) ……………………………………………………………………………………………
+110
+Money Flow Index (Para Akış Endeksi) - Sistem.MoneyFlowIndex(14)……………………………………………
+111
+Multi Sembol Birleştir Aynı Yön - Sistem.MultiSembolBirlestirAyniYon(Sistem,Sembol1, Sembol2).
+111
+NVI – Negative Volume Index - Sistem.NegativeVolumeIndex()…………………………………………………….
+112
+NESNE Kullanımı (Nesne Getir/ Kaydet) - Sistem.NesneGetir()………………………………………………………
+112
+NET HACİM Okuma Fonksiyonları – Sistem.NetHacim()…………………………………………………………………
+115
+NET LOT Okuma Fonksiyonları – Sistem.NetLot()……………………………………………………………………………
+116
+Non Linear Ehler’s Filter - Sistem.NonlinearEhlersFilter(15)…………………………………………………………..
+117
+OBV – OnBalance Volume - Sistem.OnBalanaceVolume()………………………………………………………………
+118
+Önceki Kapanış - Sistem.OncekiKapanis…(Sembol)…………………………………………………………………………
+118
+Optimizasyon - Sistem.Optimizasyon()…………………………………………………………………………………………..
+118
+
+--- PAGE 5 ---
+SİSTEM KURGUSU………………………………………………………………………………………………………………………….
+119
+OPTİMİZASYON KURGUSU……………………………………………………………………………………………………………..
+120
+Ortalama Fiyat - Sistem.Ortalama…(Sembol)………………………………………………………………………………….
+120
+OtoTrend Düşen - Sistem.OtoTrendDusen(TopmaBar, SonXbar)…………………………………………………….
+121
+OtoTrend Yükselen - Sistem.OtoTrendYukselen(TopmaBar, SonXbar)……………………………………………
+122
+Özel Emirleri Oku - Sistem.OzelEmirleriGetir()……………………………………………………………………………….
+123
+PSAR / PARABOLIC - Sistem.Parabolic(0.02 , 0.2)……………………………………………………………………………
+125
+Parametreler - Sistem.Parametreler………………………………………………………………………………………………
+126
+Periyot - Sistem.Periyot()……………………………………………………………………………………………………………….
+127
+PH01 - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)………………………………………………..
+129
+PL01 - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)…………………………………………………
+129
+Pivot Kanalı Sistem.Pivot(SembolAdı, OndalıkBasamakSayısı)………………………………………………………..
+130
+Polarized Fractal Efficiency - Sistem.PolarizedFractalEfficiency(14,3)……………………………………………..
+130
+Positive Volume Index - Sistem.PositiveVolumeIndex()………………………………………………………………….
+131
+Pozisyon Kontrol Oku/Güncelle - Sistem.PozisyonKontrolOku/Guncelle()………………………………………
+131
+Price Channel Up/Down - Sistem.PriceChannelDown/Up(10)…………………………………………………………
+133
+Price Oscillator Percent - Sistem.PriceOscPercent(10, 30 , “Exp”)…………………………………………………..
+134
+Price Oscillator Point - Sistem.PriceOscPoint(10, 30 , “Exp”)…………………………………………………………..
+134
+Price ROC Percent - Sistem.PriceRocPercent(12)……………………………………………………………………………
+134
+Price Oscilator Point - Sistem.PriceRocPoint(12) ……………………………………………………………………………
+134
+Price Volume Trend - Sistem.PriceVolumeTrend()…………………………………………………………………………
+135
+Profit Factor - Sistem. ProfitFactor ()……………………………………………………………………………………………..
+135
+Projection Bands (Up/Down) - Sistem.ProjectionUp/Down(14) …………………………………………………….
+136
+Projection Oscillator - Sistem.ProjectionOsc(14) ……………………………………………………………………………
+136
+Projection Bandwith - Sistem.ProjectionBandWith(14) …………………………………………………………………
+136
+PİVOT - Sistem.PVT01()………………………………………………………………………………………………………………….
+136
+Range Indicator - Sistem.RangeIndicator(10,3) ……………………………………………………………………………..
+137
+RAVI - Sistem.RAVI()……………………………………………………………………………………………………………………….
+137
+Relative Momentum Index - Sistem.RelativeMomIndex(20,5) ……………………………………………………….
+137
+Relative Vigor Index - Sistem.RelativeVigorIndex(14) …………………………………………………………………….
+138
+Relative Vigor Index Signal - Sistem.RelativeVigorIndexSignal(14) …………………………………………………
+138
+Relative Volatility Index - Sistem.RelativeVolatilityIndex(14,10) ……………………………………………………
+138
+RSI- Sistem.RSI(14) ………………………………………………………………………………………………………………………..
+138
+RSI Denvelope Kanal - Sistem.RSIDenvelope Up/Mid/Down()………………………………………………………..
+139
+R Squared - Sistem.RSquared(14) ………………………………………………………………………………………………….
+139
+REF - Sistem.Ref(Liste, Barsayısı) …………………………………………………………………………………………………..
+139
+Renk - Sistem.Renk(Opaklık Oranı, Kırmızı, Yeşil, Mavi)…………………………………………………………………
+139
+Renk Litesi - Sistem.RenkListesi()…………………………………………………………………………………………………..
+140
+Resim Ekle - Sistem.ResimEkle(DosyaAdı, Panel, X, Y)……………………………………………………………………
+141
+Robot Fonksiyonları - Sistem.Robotxxxxx………………………………………………………………………………………
+143
+RobotHisseAktifAcigaVar…………………………………………………………………………………………………….
+143
+RobotHisseAktifAcigaYok…………………………………………………………………………………………………….
+144
+RobotViopAktif……………………………………………………………………………………………………………………
+144
+RobotViopAktifTumGun………………………………………………………………………………………………………
+144
+RobotViopGunSonuKapat……………………………………………………………………………………………………
+144
+RobotStop…………………………………………………………………………………………………………………………..
+144
+Saat - Sistem.Saat()……………………………………………………………………………………………………………………….
+145
+Saat Aralıiğı - Sistem.SaatAraligi(“15:00”, “16:30”)………………………………………………………………………..
+146
+Satış Fiyat - Sistem.SatisFiyat(Sembol)…………………………………………………………………………………………..
+147
+Satış Lot - Sistem. SatisLot(Sembol)……………………………………………………………………………………………….
+147
+Sayı Listesi - Sistem.SayiListesi()…………………………………………………………………………………………………….
+148
+Sayı Tablosu Kontrol Oku/Güncelle - Sistem.SayiTablosunu Oku/Guncelle()………………………………….
+148
+
+--- PAGE 6 ---
+Sayı Yuvarla - Sistem.SayiYuvarla(Sayı, Adım)………………………………………………………………………………..
+149
+Select BarNo (Mouse ile Kliklenen Barı Okumak) - Sistem.SelectBarNo…………………………………………
+150
+Select Tarih(Mouse ile Kliklenen Barın TarihiniOkumak) - Sistem.SelectTarih…………………………………
+152
+Sembol - Sistem.Sembol()………………………………………………………………………………………………………………
+152
+Sembol Adları Listesi - Sistem.SembolAdListesi(market, seri)…………………………………………………………
+153
+Sembol Veri Listesi - Sistem.SembolVeriListesi(market, seri)………………………………………………………….
+154
+Sembol Tanımla - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)……………………………….
+155
+Sembol İşlemlerini Oku - Sistem.SembolslemleriniOku(Sembol, Tarih)…………………………………………..
+157
+Ses Çalma - Sistem.Ses()…………………………………………………………………………………………………………………
+157
+Seviye Fonkisyonu - Sistem.Seviye[]……………………………………………………………………………………………….
+157
+Sistem Birleştirme - Sistem.Birlestir(Sistem1, Sistem2)…………………………………………………………………..
+158
+Sistem Getir - Sistem.SistemGetir(SistemAdı, Sembol, Periyot)………………………………………………………
+159
+Son Fiyat - Sistem. SonFiyat(Sembol)……………………………………………………………………………………………..
+162
+Son Hacim - Sistem. SonHacim(Sembol)…………………………………………………………………………………………
+163
+Son Lot - Sistem. SonLot(Sembol)…………………………………………………………………………………………………..
+163
+Son Yön Getir - Sistem.SonYonGetir(Sistem, Sembol, Periyot)……………………………………………………….
+163
+Sorgu Fonksiyonları - Sistem.Sorgu………………………………………………………………………………………………..
+165
+Sözcük Tablosu - Sistem.SozcukTablosunu Oku/Guncelle()…………………………………………………………….
+167
+Sum - Sistem.Sum()………………………………………………………………………………………………………………………..
+168
+Süper Trend - Sistem.SuperTrend()………………………………………………………………………………………………..
+169
+Standart Deviation (Standart Sapma) - Sistem.StDev()……………………………………………………………………
+169
+Standart Error - Sistem.StEr()…………………………………………………………………………………………………………
+169
+Standart Error Bands - Sistem.StErDown/Mid/Up()………………………………………………………………………..
+169
+Stochastic Fast - Sistem.StochasticFast(5,3)…………………………………………………………………………………..
+170
+Stochastic Momentum Index - Sistem.StochasticMomIndex(5,3,3)………………………………………………..
+170
+Stochastic Oscillator - Sistem.StochasticOsc(5,3)……………………………………………………………………………
+170
+Stochastic RSI - Sistem.StochasticRSI(14)……………………………………………………………………………………….
+170
+Stochastic Slow - Sistem.StochasticSlow(5,3)…………………………………………………………………………………
+170
+Stop veya KarAl Puan/Yüzde - Sistem.StopVeyaKarAl(stop,kar)……………………………………………………..
+171
+Swing Index - Sistem.SwingIndex(3)……………………………………………………………………………………………….
+172
+Taban Fiyat - Sistem.Taban(Sembol)………………………………………………………………………………………………
+172
+Tavan Fiyat - Sistem.Tavan(Sembol)………………………………………………………………………………………………
+173
+Tablo Kullanımları - Sistem.Tablo…(Sembol)………………………………………………………………………………….
+173
+Tarih - Sistem.Tarih()……………………………………………………………………………………………………………………..
+177
+Saat Tarih Aralığı - Sistem.TarihAraligi(“2019.01.20”, “2020.12.31”)……………………………………………..
+178
+TEMA – Sistem.TEMA(5)………………………………………………………………………………………………………………..
+178
+Tillson T3 - Sistem.TillsonT3(9, 0.618)……………………………………………………………………………………………
+178
+TSF / Time Series Forecast - Sistem.TimeSeriesForecast(14)………………………………………………………….
+178
+TKE - Sistem.TKE()………………………………………………………………………………………………………………………….
+179
+TOMA (Trailing Oscilator Of Moving Average) - Sistem.TOMA(3,2)………………………………………………..
+179
+TOMA PUAN - Sistem.TOMAPUAN(3,2)………………………………………………………………………………………….
+180
+Trend Çiz - Sistem.TrendCiz()………………………………………………………………………………………………………….
+180
+Trend Paralel Çiz - Sistem.ParalelTrendCiz()……………………………………………………………………………………
+182
+Trend Kontrol - Sistem.TrendKontrol(Liste, Değer)…………………………………………………………………………
+183
+Trend Score (TS) - Sistem.TrendScore(10)………………………………………………………………………………………
+184
+TRIX - Sistem.TRIX(12)……………………………………………………………………………………………………………………
+184
+TTI (Trend Takip İndikatörü) - Sistem.TTI(3 , 2, “Simple”)……………………………………………………………….
+184
+Tipik Fiyat - Sistem.TypicalPrice()……………………………………………………………………………………………………
+184
+Üçgen Çiz - Sistem.UcgenCiz()………………………………………………………………………………………………………..
+185
+Ultimate Oscillator - Sistem.UltimateOsc(7 ,14, 28)……………………………………………………………………….
+186
+VHF / Vertical Horizontal Filter - Sistem.VerticalHorizontalFilter(28)……………………………………………..
+186
+VIDYA - Sistem.VIDYA(30, 9)…………………………………………………………………………………………………………..
+187
+
+--- PAGE 7 ---
+Volume (Hacim) - Sistem.Volume()…………………………………………………………………………………………………
+187
+Volume Oscillator Percent - Sistem.VolumeOscPercent(12,26, “Exp”)……………………………………………
+187
+Volume Oscillator Point - Sistem.VolumeOscPoint(12,26, “Exp”)……………………………………………………
+187
+VORTEX - Sistem.VorteksMinus/Plus(24)………………………………………………………………………………………..
+187
+VIOP Hesap Oku - Sistem. ViopHesapOku()…………………………………………………………………………………….
+188
+Yay Çiz - Sistem.YayCiz()…………………………………………………………………………………………………………………
+190
+Yazı Ekle - Sistem.YaziEkle()……………………………………………………………………………………………………………
+191
+Yön Listesi - Sistem.Yon()……………………………………………………………………………………………………………….
+193
+Yukarı Kestiyse - Sistem. YukariKestiyse………………………………………………………………………………………….
+194
+Yüksek (Yuksek) Fiyat - Sistem.Yuksek(Sembol)………………………………………………………………………………
+195
+Yüzde Değişim - Sistem.Yuzde(Sembol)………………………………………………………………………………………….
+195
+Yüzeysel Liste Getir - Sistem.YuzeyselListeGetir(Kriter)………………………………………………………………….
+195
+Yüzeysel Veri Oku - Sistem.YuzeyselVeriOku(Sembol)……………………………………………………………………
+199
+Zemin Yazısı Ekle - Sistem.ZeminYazisiEkle()………………………………………………………………………………….
+199
+Zaman Konrol / Güncelle - Sistem.ZamanKontrol()………………………………………………………………………..
+201
+ZigZag / Peak-Through - Sistem.Zigzag()…………………………………………………………………………………………
+202
+Zirve - Sistem. Zirve(Barsayısı)………………………………………………………………………………………………………..
+203
+ 
+
+--- PAGE 8 ---
+ 
+SEZAİ KILIÇ 
+1 
+ 
+ 
+SİSTEM TANIMLARI PANELİNE ERİŞİM VE PANELİN BÖLÜMLERİ: 
+ 
+Sistem modülüne Grafikler üzerinde bulunan “S” harfine basınca açılan (aşağıda gösterilen) 
+menü üzerinden ulaşır. Modülün en çok kullanılacak kısmı, formül yazmak, yazılmış hazır 
+formüllere ulaşmak, formüllerin çizgi ve diğer parametrelerini değiştirmek gibi işlemlerin 
+yapılacağı SİSTEM TANIMLARI panelidir.  
+ 
+ 
+ 
+Sistem Tanımları satırına tıkladığınızda ekrana gelen pencere aşağıdaki gibidir. 
+ 
+
+--- PAGE 9 ---
+ 
+SEZAİ KILIÇ 
+2 
+ 
+1 Numaralı Bölge: Önceden yazılmış ve kaydedilmiş tüm formüller buradan görülebilir. 
+Herhangi bir tanesi seçildiğinde, alt bölgede bu formülün açık kodu, sağ bölümde de varsa çizgi 
+ve parametre değerleri görülür. Grafik üzerinde çalışan bir formül yazılmışsa (indikatör, sistem 
+vs.) doğrudan formülün adını çift tıklamak yeterlidir. 
+ 
+2 Numaralı Bölge: Formülü yazdıktan veya var olan formül değişiklik yaptıktan sonra 
+kaydetme, formülde yazım ve mantık hataları var mı diye test etme, kod içine debug satırları 
+konulmuşsa (Bkz debug fonksiyonu) debug sonuçlarını görme, formülü bir başkasına 
+vermeden önce şifreleme işlevleri buradaki butonlarla yapılır. 
+NOT: ŞİFRELE butonu, kodunuzu üretilen rastgele algoritma ile karıştırıp gizler. ŞİFRELENMİŞ 
+kodu artık hiçbir şekilde geri açamazsınız. Bu nedenle şifrelemeden önce, başka bir isim 
+vererek aynı kodu mutlaka yedekleyin. 
+3 Numaralı Bölge: Formülde ÇİZGİLER varsa, bu çizgilerin panelin bu bölümünden aktif 
+edilmesi gerekir. Kodda kullanılan veya elde edilen bir liste ekrana çizgi olarak çizdirilecekse, 
+her çizgiye bir numara verilir. İLK çizginin numarası SIFIRDIR ve toplam 50 adet çizgi imkânı 
+vardır. Çizgi numaraları kodda Sistem.Cizgiler[x] şeklinde yazılır. Sıfır numaralı çizgiyi aktif 
+etmek için panelin bu bölgesindeki kutu işaretlenmelidir.  
+Her çizginin panel numarası da (koddan da atanabilir) buradan atanır. Grafik zeminin panel 
+numarası 1’dir ve sonraki her alt bölge (indikatör bölgesi) panel numarası artarak gider. 
+Toplam 10 alt panel açılabilir. 
+Çizgilerin renkleri, kalınlıkları, tipleri bu bölgeden seçilip değiştirilebilir. 
+ 
+4 Numaralı Bölge: Formül yazarken, zaman zaman değişen/değişmesi gereken bilgileri kodun 
+içine yazmak yerine, PARAMETRELER isimli bölgede sunulan alanlara yazmak ve formül içinde 
+o bilgiyi kullanmak gerektiği zaman bir komutla o bilgiyi kullanmak işi kolaylaştırır. Grafik 
+periyodu, indikatörün parametreleri, sembol kodu, işlem miktarı, hesap numarası vs. gibi 
+birçok bilgi parametre satırlarına yazılır ve kullanılır. 
+Kodun içine yazmak yerine Parametreler bölümüne yazıp bir bilgiyi kullanmanın temelde iki 
+nedeni vardır:  
+1- Sıkça değiştirmek durumunda olduğunuz bir bilgiyi kolayca değiştirmek, formül içinde 
+o bilginin yazılı olduğu yeri aramamak. 
+2- Formülü şifreleyip birisine verecekseniz, verdiğiniz kişiye değiştirme imkânı verdiğiniz 
+bilgileri bu alana yazmak. Zira KOD şifrelendiği zaman, parametreler alanı şifrelenmez.  
+5 Numaralı Bölge: Sistem paneli, kodlama yaparken ihtiyaç duyabileceğiniz bazı 
+parametrelerin veya fonksiyonların listelerini size topluca gösterir. “Sistem.” Diye başlayarak 
+kullanılan tüm fonksiyonlar Sistem Elemanları kutusunda gösterilir. Sistem.GrafikVerileri 
+komutuyla okuduğunuz grafik verileri listesinde hangi alt listeler olduğunu, Hareketli Ortalama 
+(Moving Average) indikatörü için hangi yöntemleri kullanabileceğinizi (ve nasıl yazılmaları 
+gerektiğini), Bir sembole ait YÜZEYSEL fiyatlardan hangilerini kullanabileceğini bu bölgedeki 
+seçim kutularında bulabilirsiniz. 
+6 Numaralı Bölge: Bu bölge kod/formül yazılan bölgedir. 
+7 Numaralı Bölge: Siz kod yazarken, Sistem. İbaresini yazdıktan sonra, bu bölgede size 
+önerilen/uygun fonksiyonların neler olduğu gösterilir. Gösterilen uygun seçeneklerden birine 
+sağ klik kopyala deyip, kodu yazdığınız yere yapıştır diyerek yazmaya devam edebilirsiniz. 
+Örneğin Sistem.Grafik dediğinizde, satırı nasıl devam ettirebileceğinizi, hangi ihtimaller 
+olduğunu bu bölge size sunar; 
+
+--- PAGE 10 ---
+ 
+SEZAİ KILIÇ 
+3 
+ 
+ 
+ 
+ 
+ 
+SİSTEMLERİN GRAFİĞE UYGULANMASI: 
+Hazır yazılmış veya sizin yazdığınız bir sistemi grafiğin üzerine uygulamak için yapmanız 
+gereken tek şey, sol bölgedeki sistemin ismine çift tıklamaktır. Bu andan itibaren, 
+formülünüzde var olan çizgiler veya varsa AL/SAT koşullarını gösteren OK’lar, zemine atanmış 
+resim veya yazılar grafik üzerinde gösterilir. Grafik üst kısmındaki S HARFİ yerine, grafiğe 
+atanmış olan sistemin adı gözükür. SİSTEM modülü menülerine girmek için bu isme tıklamak 
+gerekir. Uygulanmış sistemi grafikten kaldırmak için menüdeki ilk satır olan HİÇBİRİ seçeneği 
+tıklanır.  
+ 
+ 
+ 
+
+--- PAGE 11 ---
+ 
+SEZAİ KILIÇ 
+4 
+ 
+ 
+ 
+SİSTEMLERİ ÜZERİNDE DEĞİŞİKLİK YAPMAK VEYA BAŞKA BİR İSİMLE (FARKLI) KAYDETMEK: 
+Bir sistemin formülünde değişiklikler yaparak, ekrandaki görüntüde (çizgi veya al/sat 
+noktalarında) meydana gelecek değişiklikleri hemen görebilirsiniz. 
+Bunun için sistemin kodunu açıp (Grafik tepesinde yazan sistem adına basıp, SİSTEM 
+TANIMLARI satırını tıkladığınızda, o sistemin formülü açılır) en alttaki kod kısmında istediğiniz 
+değeri veya parametreyi değiştirip KAYDET butonuna bastığınız anda, yeni değerler anında 
+grafiğe yansır. 
+ÖRNEK: 27’lik HHV ve 27’lik LLV indikatör değerleri kullanılarak yazılmış aşağıdaki sistem 
+örneğinde, 27 yerine başka bir değer yazıp kaydet butonuna basıldığı anda yeni girilen değere 
+göre hesaplama yapılıp grafikte yeni AL/SAT noktaları gösterilir. Başka başka değerler için 
+sürekli parametreleri girip sistemi çift tıklamadan, değeri değiştirip kaydet dedikçe denemeleri 
+sürdürebilirsiniz. 
+Bir formülün üzerinde değişiklikler yaptınız ama eskisini bozmayıp, bunu yeni bir isimle 
+kaydetmek istiyorsanız, tek yapmanız gereken, en sol üst köşedeki satıra, sisteme vermek 
+istediğiniz yeni adı girip kaydet butonuna basmaktır. 
+ 
+
+--- PAGE 12 ---
+ 
+SEZAİ KILIÇ 
+5 
+ 
+ 
+ 
+SİSTEMLERİ ŞİFRELEYEREK BAŞKALARIYLA PAYLAŞMAK: 
+Yazdığınız bir formülü/sistemi/robotu başkalarıyla paylaşmak isteyen ama paylaştığı kişinin 
+formülü görmesini istemeyen kullanıcılar ŞİFRELE butonuna basarak kodu gizleyebilirler. 
+Burada dikkat edilmesi gereken çok önemli bir detay vardır. ŞİFRELENMİŞ BİR SİSTEMİN 
+KODLARI TEKRAR GÖRÜNÜR YAPILAMAZ. Bu nedenle şifrelemek istediğiniz formülü ÖNCE 
+MUTLAKA BAŞKA BİR İSİMLE kaydedin. Şifrelenmiş formülde, paylaşılan kişinin değiştirmesi 
+gereken veya değiştirmesine izin verilen bilgiler (grafik periyodu, indikatör parametresi, 
+sembol kodu vs) var ise, bu bilgileri kodu içine yazmak yerine PARAMETRELER kutusuna 
+yazarak kullanın. Şifreleme yapıldığı zaman bu alan açık kalacaktır ve şifrelenmiş kod içindeki 
+veriler bu panelden değiştirilebilecektir. 
+ 
+SİSTEMLERE KULLANICI BAZINDA LİSANS VE TARİH SINIRI KOYMAK: 
+ 
+Yazmış olduğunuz sistem veya robotları, tanıtmak, fikir almak veya başka bir sebeple diğer 
+ideal kullanıcılarıyla da paylaşmak isteyebilirsiniz.  Fakat bu paylaşımda eğer 
+formülünüzün/stratejinizin görülmesini istemiyorsanız, formülü mutlaka şifrelemeniz 
+gerekiyor. 
+ 
+Sistem modülündeki şifreleme yapısı, kodun sahibi tarafından atanan bir şifre değeri verilmesi 
+ve sonrasında ancak bu şifrenin girilmesiyle kodun görülmesini sağlayan bir yapı değildir. 
+Burada, şifreleme yapıldığı zaman, iDeal çok fazla parametreyi (o anın zamanı, disk seri 
+numarası ve rastgele üretilen ID vs) kullanarak kodu karıştırır ve görünmez hale getirir. 
+Yani formülün sahibi olan kişi de artık formülün açık halini göremez. Bu nedenle mutlaka, önce 
+başka bir verip kaydetmek ve şifrelemek gerekir. 
+ 
+Şifreleyip bir ideal kullanıcısına verdiğiniz dosyayı, onun da bir başkasına vermesini önlemek 
+isterseniz, formülün sadece sizin belirlediğiniz ideal kullanıcı adıyla login olan kişi/kişiler 
+tarafından görünmesini ve hatta belirlediğiniz bir tarih aralığı içinde çalışıp, o tarihten sonra 
+izin verdiğiniz kişilerde de çalışmamasını sağlayabilirsiniz. 
+ 
+Şifreleme: Kodu yazdığınız panel üzerinde bulunan ŞİFRELE butonuna basmak yeterlidir. 
+ 
+Kullanıcı Adına göre lisanslama: Yazılan formülün tamamı EĞER KULLANICI ADI (“X”, “Y”, “Z”) 
+İSE çalış, DEĞİLSE çık şeklinde bir “if” bloğunun içine yazılır. 
+Kullanıcı adı kontrolü yapan fonksiyonumuz Sistem.LisansKontrol(“KullanıcıAdı”) şeklinde 
+kullanılır. 
+ 
+
+--- PAGE 13 ---
+ 
+SEZAİ KILIÇ 
+6 
+ 
+Formülün Tarih/Süre Yetkisi Vermek: Yazılan kodun tamamı veya mesela sadece strateji 
+bölgesi (nasıl istenirse) EĞER Tarih1 VE Tarih2 ARALIĞINDAYSA kontrolü içine alınırsa, o formül 
+bu tarihlerin dışındaki zamanlarda çalışmaz. 
+ 
+ÖRNEK-1: Sadece AHMET, Sezai_1 ve zeynep2015 kullanıcılarının kullanmasına izin verilen 
+sistem.. 
+ 
+if (Sistem.LisansKontrol("AHMET","Sezai_1", "zeynep2015")) 
+{ 
+   var Veriler = Sistem.GrafikFiyatSec("Kapanis"); 
+   var MA1 = Sistem.MA(Veriler, "Exp", 10); 
+   var MA2 = Sistem.MA(Veriler, "Exp", 100); 
+ 
+   Sistem.KesismeTara(MA1, MA2); 
+} 
+ 
+else 
+   Sistem.Mesaj("Bu Sistemi Kullanmaya Yetkiniz Yoktur"); 
+ 
+ 
+ 
+ÖRNEK-2: Sadece 2015 yılı boyunca çalışsın, 31 Aralık 2015 tarihinden sonra, kullanıcı mesaj 
+ile sürenin bittiği uyarısı verip çalışmasın 
+ 
+if (Sistem.TarihAraligi("2015.01.01", "2015.12.31")) 
+{ 
+   var TOMA = Sistem.TOMA(3, 2.48); 
+   var Veriler = Sistem.GrafikFiyatSec("Kapanis"); 
+   var EMA = Sistem.MA(Veriler, "Exp", 3); 
+ 
+   Sistem.KesismeTara(EMA, TOMA); 
+   Sistem.DolguEkle(1,0,Color.Blue,Color.Pink); 
+ 
+   Sistem.GetiriHesapla("01/01/2010", 0.00); 
+ 
+   Sistem.Cizgiler[0].Deger = Sistem.GetiriKZ; 
+   Sistem.Cizgiler[1].Deger = Sistem.GetiriKZPoz; 
+   Sistem.Cizgiler[2].Deger = Sistem.GetiriKZGun; 
+   Sistem.Cizgiler[3].Deger = Sistem.GetiriKZGun; 
+   Sistem.Cizgiler[4].Deger = Sistem.GetiriKZYil; 
+   Sistem.Cizgiler[5].Deger = Sistem.GetiriMiktar; 
+   Sistem.Cizgiler[6].Deger = Sistem.GetiriPozisyon; 
+} 
+else 
+   Sistem.Mesaj("Sistemin Kullanım Süresi Dolmuştur. abc@xyz.com adresine mail gönderin"); 
+ 
+
+--- PAGE 14 ---
+ 
+SEZAİ KILIÇ 
+7 
+ 
+ 
+ 
+ 
+SİSTEMLERİN İSİMLENDİRİLMESİ: 
+Yazılan Sistem, Sorgu, Robot, Özel indikatör ve her türlü formül bir isim verilerek kaydedilir. 
+Sistemlere isim verirken aşağıdaki kurallara dikkat edilmelidir: 
+a- Sistem isimleri rakamla başlayamaz. 
+b- İsimlerde boşluk kullanılmamalıdır. (deneme sistemi gibi bir isim) 
+c- Sistem isimlerinde özel işaretler kullanılamaz. (+/-?%&#’! gibi işaretler ve 
+parantezler) 
+d- Sistem isimlerinin içinde yada başında alt tire (_) işareti kullanılabilir. 
+e- Sistem isimlerinde Türkçe karakterler (İı, Şş, Ğğ, Üü,Çç,Öö) kullanılamaz. 
+ 
+FORMÜLLERİN KULLANIM AMAÇLARI (SORGU-SİSTEM-ROBOT-OPTİMİZASYON): 
+ 
+IDEAL sistem modülünde yazılan formüller, çok çeşitli amaçlar için yazılmış olabilir. Mail atmak, 
+alarm veya uyarı amaçlı ses/mesaj çıkarmak, bilgisayara çeşitli verileri yazıp saklamak, ekranın 
+görüntüsünü kaydetmek, grafikler üzerinde çizgi/sinyal/resim/yazı göstermek, otomatik 
+olarak borsaya emir iletmek, sinyal üretip, üretilen sinyalleri önceden girilmiş bir emire 
+bağlamak vs. 
+ 
+Bu işlemleri arttırmak, kullanıcıların amaçlarına ve kodlama yapabilme becerilerine bağlı 
+olarak daha da artabilir. Ama temel olarak IDEALDE bir formülün üç kullanım şekli vardır. 
+Kabaca bir formül bir SİSTEM, bir SORGU, OPTİMİZASYON veya bir ROBOT olabilir. Sistem 
+menüsü altındaki araçlar ve kullanım detayları aşağıda özetlenmiştir. 
+ 
+SİSTEM: Yazılan formül grafik üzerine uygulanıyorsa, grafik üzerinde çizgi/yazı/resim vs 
+göstermek veya AL/SAT sinyal noktalarını göstermek, grafik rengini de girilen pozisyona göre 
+belirlemek ve yazılan formülün stratejisine göre Kar/Zarar hesabı, geçmişe dönük performans 
+testleri, getiri kıyaslama yapmak gibi amaçlar için kullanılacaksa bu bir SİSTEMDİR. 
+ROBOT: Sistemler gibi, sizin belirlediğiniz stratejilerde AL veya SAT sinyali üretilen ama 
+diğerlerinden farklı olarak, sinyal üretildiği anda belirlenen sembol için, belirlenen kriterlerde 
+emri doğrudan borsaya ileten formüller ROBOT olarak çalışır. ROBOTLAR, yazılan formülleri, 
+PORFÖY penceresindeki ROBOT sekmesinden, kullanıcı tarafından seçilen sayıda robotu aynı 
+anda sürekli olarak çalıştırır ve formüllerinde yazılı senaryoları işletirler. 
+
+--- PAGE 15 ---
+ 
+SEZAİ KILIÇ 
+8 
+ 
+En temel kullanım alanı, bir stratejinin gerçekleşmesi durumunda, bir senet veya vadeli 
+sözleşmeye AL veya SAT emrini direk yollamak olmakla birlikte, sürekli çalışan bir koda 
+yaptırılabilecek her türlü iş, ROBOT olarak kaydedilen ve çalıştırılan formüllere yazılabilir. 
+(Her saat xx değerleri mail olarak gönder gibi.) 
+ 
+IDEAL PORTFÖY penceresi açılır. ROBOT sekmesine geçilir. Sol bölgedeki SİSTEM SEÇ butonuna 
+basılır. Kullanıcı tarafından yazılmış tüm formüllerin listesi gelir. Bu listeden çalıştırılacak robot 
+veya robotlar işaretlenir ve kaydet denir. AKSİYON kısmından SANAL seçildiği anda robot veya 
+robotlar çalışmaya başlar. (GERÇEK seçilirse ve bir hesaba login olunmuş ise, sinyal üretildiği 
+zaman gönderilecek emir, gerçek hesaba gönderilir.) Aynı anda çok sayıda robot çalışabilir. 
+ 
+ 
+Grafik üzerinde AL/SAT sinyalleri üreten bir sisteminiz varsa ise, bunu aşağıdaki gibi bir ROBOT 
+KALIP kodu kullanarak otomatik emir gönderimine bağlayabilirsiniz. 
+Bu robot kalıp koduna bir isim verip kaydetmeniz ve sadece ilk 5 satırını kendinize göre 
+değiştirip (sisteminizin adı, grafik periyodunuz, işlem yapacağınız sembol ve işlem adedi 
+bilgileri girerek) kullanabilirsiniz; 
+ 
+var LotSize = 1; //işlem adedi 
+var SistemAdi = "xxxx"; //sistemizin adı 
+var GrafikSembolu = "IMKBH'DOHOL"; //sistemin sinyal ürettiği grafik sembolü 
+var GrafikPeriyodu = "60";  //grafiğin periyodu 
+var EmirSembol = "IMKBH'DOHOL"; 
+ 
+var MySistem = Sistem.SistemGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin adı, 
+grafik sembolü, grafiğin periyodu 
+ 
+var SonFiyat = Sistem.SonFiyat(EmirSembol); 
+var Anahtar = Sistem.Name + "," + EmirSembol; 
+double IslemFiyat = 0; 
+DateTime IslemTarih; 
+var Miktar = 0.0; 
+var Rezerv = ""; 
+var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih); 
+ 
+var SonYon = Sistem.SonYonGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin adı, grafik 
+sembolü, grafiğin periyodu 
+if (Sistem.Saat.CompareTo("10:00:00") <= 0 || Sistem.Saat.CompareTo("17:59:59") >= 0)  // seans 
+yok işlem yapma 
+{ 
+} 
+else  
+{ 
+   if (SonYon == "F" && Pozisyon != 0)  // Flata Geç 
+      Miktar = -Pozisyon; 
+   else if (SonYon == "A" && Pozisyon != LotSize)  // Al 
+      Miktar = LotSize - Pozisyon; 
+   else if (SonYon == "S" && Pozisyon != -LotSize)  // Sat 
+      Miktar = -LotSize - Pozisyon; 
+    // Emir Gönder 
+    var Islem = ""; 
+    if (Miktar > 0) {Islem = "ALIS"; Rezerv = "ALIŞ YAPILDI";} 
+    if (Miktar < 0) {Islem = "SATIS"; Rezerv = "SATIŞ YAPILDI";} 
+    if (Islem != "") 
+    { 
+
+--- PAGE 16 ---
+ 
+SEZAİ KILIÇ 
+9 
+ 
+        Sistem.PozisyonKontrolGuncelle(Anahtar, Miktar + Pozisyon, SonFiyat, Rezerv); 
+        Sistem.EmirSembol = EmirSembol ; 
+        Sistem.EmirIslem = Islem; 
+        Sistem.EmirSuresi = "KIE";  
+        Sistem.EmirTipi = "Piyasa"; 
+        Sistem.EmirMiktari = Math.Abs(Miktar); 
+        Sistem.EmirGonder(); 
+    } 
+} 
+ 
+SORGU: Belli kriterlere uyan hisse veya sembol taratmak için SORGULAR kullanılır.  
+Yatırımcıların en çok ihtiyaç duyabileceği çalışmalardan biri de, kendi belirledikleri kriterlere 
+göre sembol aramaktır. Pek çok strateji veya filtre kriterini sistem modülünde formül olarak 
+yazıp, bu filtreye uyan senetleri bul çalışmasını SORGU analiz aracı üzerinden yapabilirsiniz. 
+Sorgu filtrelerinizde kullanacağınız kriterler/koşullar neredeyse düşünebildiklerinizle sınırlı. 
+Çünkü iDeal’de var olan yüzeysel, derinlik, bilanço, grafik ve indikatör verilerinin tamamını 
+kullanabileceğiniz özel filtreler yazabilirsiniz. 
+ 
+Örneğin; 
+- 
+Hacmi son 1 aylık hacim ortalamasının üzerine çıkan senetleri bul, 
+- 
+RSI değeri 70’İ geçen, Fiyatı 100’lük ortalamasının üstünde olan, FK oranı 1 den küçük 
+senetleri bul, 
+- 
+Derinlikte alış tarafında bekleyen lot miktarı, satış tarafında bekleyen lot miktarının iki 
+katından fazla olan senetleri bul, 
+- 
+XU100 yüzde getirisi pozitif iken, kendi yüzde getirisi negatif olan senetleri bul, 
+- 
+Haftalık grafikte Bolinger AL vermiş, günlük grafikte Bolinger orta çizginin altında 
+olanları bul, 
+ 
+Gibi, böyle ve daha kapsamlı binlerce filtre düşünülebilir. Bu örnekleri, hangi verilerle nasıl 
+kriterler yazabileceğinizi göstermek adına örnekledik. 
+ 
+• Sorgu Penceresinde grafik periyotlarından istediğiniz kadar seçebilir ve tarama 
+sonuçlarını aynı anda birden fazla periyot için dökebilirsiniz. 
+• Taramayı daha hızlı yapabilmek için Son 5000 bar (veya daha az) grafik verisi 
+kullanabilirsiniz. 
+• Sorgu sonuçlarını kod içinde ilgili komutları yazarak yazı ve zemin renkleriyle 
+işaretleyebilirsiniz. 
+• Sorgu kriterinize uyan senetler aksini belirtmedikçe en son bardaki değerlere göre 
+filtrelenir. Siz dilerseniz belli bir tarihteki durumu sorgulayabilirsiniz. Tarih kutusunu 
+işaretleyip taramanın sonuçlarının dökülmesini istediğiniz tarihi seçebilirsiniz. 
+• Sorgu sonuç tablosundaki verileri Excele aktarabilirsiniz. 
+• Sorgu kriterinin, grafik verisi veya indikatör kullanan bir formül ise, grafik için 
+kullanılacak periyodu seçebilir ve yeni periyot için sorgu sonuçlarını görebilirsiniz. 
+• Sorgu sonuç tablosunu ekranda açık tutup, istediğiniz zaman aralıklarla otomatik 
+güncellenmesini sağlayabilirsiniz. 
+• Sorgu formülünü FORMÜL butonuyla açıp, formülde herhangi bir değişiklik yapıp 
+kaydedebilir ve HESAPLA butonuna basarak yapılan değişiklik sonrası yeni sorgu 
+sonuçlarını görebilirsiniz. 
+
+--- PAGE 17 ---
+ 
+SEZAİ KILIÇ 
+10 
+ 
+• Sorgu analizinin tarayacağı senet/sembol grubunu seçebilir, hazır gruplar kullanabilir 
+veya kendi yarattığınız sembol listesinde sorgulama yapabilirsiniz. (kendi özel sembol 
+listenizi yaratmayı bilmiyorsanız teknik servisimizden destek alabilirsiniz) 
+• Menü butonuna basarak başka bazı ek ayarlar yapabilirsiniz; 
+(örneğin tarama sonucunda çıkan sembolleri otomatik olarak grafik döngü dosyasına 
+kaydetmek veya o senetlerin yazılı olduğu bir fiyat penceresi açtırmak gibi) 
+ 
+ 
+• Var olan filtre kriterinizi formüle dökmek konusunda destek almak için 
+algo@idealdata.com.tr adresine mail atabilirsiniz. 
+ 
+Örnek: RSI için sorgu/tarama yapmak ve aşırı alım/satım bölgesinde olan senetleri sorgula. 
+ 
+Sistem.SorguBaslik[0] = "Açılış"; 
+Sistem.SorguBaslik[1] = "Yüksek"; 
+Sistem.SorguBaslik[2] = "Düşük"; 
+Sistem.SorguBaslik[3] = "Kapanış"; 
+Sistem.SorguBaslik[4] = "Hacim"; 
+Sistem.SorguBaslik[6] = "RSI 14"; 
+Sistem.SorguBaslik[7] = "MOM 12"; 
+ 
+var RSI = Sistem.RSI(14); 
+var MOM = Sistem.Momentum(12); 
+var SonRSI = RSI[Sistem.BarSayisi-1]; 
+var SonMOM = MOM[Sistem.BarSayisi-1]; 
+ 
+if (SonRSI < 35 || SonRSI > 65) 
+{ 
+   Sistem.SorguDeger[0] = Sistem.GrafikVerileri[Sistem.BarSayisi-1].Open; 
+   Sistem.SorguDeger[1] = Sistem.GrafikVerileri[Sistem.BarSayisi-1].High; 
+   Sistem.SorguDeger[2] = Sistem.GrafikVerileri[Sistem.BarSayisi-1].Low; 
+   Sistem.SorguDeger[3] = Sistem.GrafikVerileri[Sistem.BarSayisi-1].Close; 
+   Sistem.SorguDeger[4] = Sistem.GrafikVerileri[Sistem.BarSayisi-1].Vol; 
+   Sistem.SorguDeger[6] = SonRSI; 
+   Sistem.SorguDeger[7] = SonMOM; 
+ 
+   if (SonRSI < 30.0F) 
+      Sistem.SorguAciklama = "Aşırı Satım"; 
+   else if (SonRSI > 70.0F) 
+      Sistem.SorguAciklama = "Aşırı Alım"; 
+   else 
+      Sistem.SorguAciklama = "Normal"; 
+ 
+   Sistem.SorguEkle(); 
+} 
+ 
+
+--- PAGE 18 ---
+ 
+SEZAİ KILIÇ 
+11 
+ 
+Yukarıdaki formülü kaydedip, S menüsü altındaki SORGU penceresini açıp, taramanın 
+yapılmasını istediğimiz periyotları seçip, her bir periyotta taratılan senet/sembol grupları için 
+sonuçları aşağıdaki gibi ekrana dönebilirsiniz. 
+ 
+ 
+ 
+ 
+OPTİMİZASYON: Sistem modülü altındaki analiz araçları, yatırımcıların kafalarındaki bazı 
+sorulara cevap bulmak amacıyla kullanılmaktadır. Optimizasyon analiz aracı da bu sorular 
+arasından önemli birine cevap bulmak için geliştirilmiştir: AL/SAT Sinyalleri üreten 
+formülünüzdeki stratejinizde kullandığınız değerler veya indikatör parametreleri ne olursa 
+sisteminiz en iyi getiriyi sağlar? 
+ 
+Örneğin, iki hareketli ortalamanın birbirini kesmesiyle AL/SAT sinyalleri üreten bir sistem 
+kullanıyorsunuz, ama bu hareketli ortalamaların periyotları ne olmalı? 
+Veya RSI indikatörünün, belli bir değeri yukarı kesmesiyle AL yapacaksınız, ama RSI HANGİ 
+DEĞERİ YUKARI KESERSE? 
+İşte bu sorulara cevap bulmak için, stratejinizi içeren sistemi yazdıktan sonra, Optimizasyon 
+Analiz aracından geçirecek birkaç ilave yapıp, sonuçları görebilir ve sonra, bulduğunuz ve 
+uygun gördüğünüz sonuçları gidip sisteminizde değiştirip kullanmaya başlayabilirsiniz. 
+ 
+- 
+Yazılı bir sistemi optimize edebilmek için, Optimizasyon analizi için gerekli birkaç 
+değişiklik yaparak sistemi Optimizasyon Formülü olarak da kaydedin. 
+- 
+Sisteminizde, en uygun değerini aradığınız parametre sayısı kadar “for” döngüsü açıp, 
+AL/SAT noktalarını belirleyen stratejinizi bu for döngülerinin içine yazın 
+- 
+Stratejinizi 
+belirleyen 
+kod 
+parçasının 
+hemen 
+altına 
+şu 
+satırı 
+ekleyin: 
+Sistem.Optimizasyon(“açıklama”, x,y,z);   
+o Değişken olarak sunup, taratarak en uygun değerini aradığınız parametreleri 
+(x,y,z) for döngüleri içinde tanımlarken hangi iki seviye arasında taranmasını 
+istiyorsanız belirtin 
+o Son satırda, optimizasyon fonksiyonunun parantezi içinde, taratılan 
+değişkenleri açtığınız for’ların sırasıyla ekleyin, 
+- 
+Optimizasyon işlemi (hesaplaması) sürerken, diğer tüm işlemlerinizi, analizlerinizi 
+yapmaya devam edin. Çünkü bu işlem, ayrı CPU çekirdeğinde yapılacak ve ana çalışma 
+yapısını etkilemeyecektir. 
+- 
+Optimizasyon işlemi sürerken, taranan parametrelere göre hesaplanan NETGETİRİ 
+değerinin, taramada rastlanan/hesaplanan en büyük değeri ekranda gösterilir. 
+
+--- PAGE 19 ---
+ 
+SEZAİ KILIÇ 
+12 
+ 
+- 
+Optimizasyon sürerken, taranan değerler için elde edilen getiri grafiksel olarak alt 
+kısımda gösterilir. 
+- 
+Optimizasyonu tüm kodun belli bir bar sayısı için veya iki tarih arasındaki barlar için 
+yapılması tercih edilebilir. 
+- 
+Opsiyonel olarak, sisteminizin MaxDD (Getirideki en büyük zarar miktarı ve tarihi) 
+hesaplanmasını da isteyebilirsiniz. (Bu işlem, hesaplama süresini biraz daha fazla uzatır) 
+- 
+Optimize edilmek istenen stratejiyi içeren sistemi istediğiniz herhangi bir grafik 
+periyodu için hesaplatabilirsiniz. 
+- 
+Sonuçları Excel sayfasına aktarabilirsiniz. 
+- 
+İşlemi herhangi bir anda durdurabilir veya herhangi bir anda, o ana kadarki sonuçları 
+işlemin bitmesini beklemeden göster diyebilirsiniz. 
+- 
+FORMÜL butonuyla, optimizasyon formülünüzü açıp, değişiklikler yapıp kaydet diyerek 
+yeniden yeni değerlere göre hesaplatma yapabilirsiniz. 
+- 
+Optimizasyon işleminin, taranacak bar sayısı, kullanılan stratejinin içeriği ve 
+karmaşıklığı, taratılan parametrelerin ilk ve son değerleri arasındaki fark, taratılıp en 
+uygun değeri bulunmaya çalışılan parametre sayısı ve bilgisayarınızın işlemci ve Ram 
+gücüne bağlı olarak zaman alacağını, bazı durumlarda saatler ve hatta günler 
+sürebilecek kodları optimize etmeye çalışabileceğinizi unutmayınız. 
+- 
+Sistemi 
+yazdınız 
+ama 
+Optimizasyon 
+kodunu 
+yazamadığınız 
+durumlarda 
+algo@idealdata.com.tr adresine mail atarak yardım talebinde bulunabilirsiniz. 
+- 
+Aşağıda birkaç değişik strateji için örnek optimizasyon formülü bulabilirsiniz. 
+- 
+ 
+ÖRNEK-1: Kullanılan İndikatörler MA ve RSI 
+Strateji: İki Ortalamanın kesişimi VE RSI’ın kendi ortalamasıyla kesişimi 
+En uygun değeri aranan parametreler: MA1, MA2, RSI ve RSI2ın ortalamasının periyotları 
+ 
+var Kapanis = Sistem.GrafikFiyatSec("Kapanis"); 
+var SonYon=""; 
+ 
+for (int P1 = 3; P1 < 11; P1++) 
+{ 
+   var MA1 = Sistem.MA(Kapanis , "Exp", P1); 
+   for (int P2 = 15; P2 < 20; P2++) 
+   { 
+      var MA2 = Sistem.MA(Kapanis , "Exp", P2); 
+      for (int P3 = 6; P3 < 12; P3++) 
+      { 
+         var RSI = Sistem.RSI(Kapanis , P3); 
+         for (int P4 = 2; P4 < 6; P4++) 
+         { 
+            var RSIAVR = Sistem.MA(RSI , "Exp", P4);   
+             
+               for (int i = 1; i < Kapanis.Count; i++) 
+               Sistem.Yon[i] = "";   
+            // strateji 
+            for (int i = 1; i < Kapanis.Count; i++) 
+            { 
+               if (RSI[i] > RSIAVR[i] && MA1[i] > MA2[i] && SonYon != "A") // alış 
+               { 
+                  Sistem.Yon[i] = "A";   
+                  SonYon="A"; 
+               } 
+               else if (RSI[i] < RSIAVR[i] && MA1[i] < MA2[i] && SonYon != "S") // satış 
+               { 
+                  Sistem.Yon[i] = "S";   
+                  SonYon="S"; 
+               } 
+             } 
+
+--- PAGE 20 ---
+ 
+SEZAİ KILIÇ 
+13 
+ 
+             Sistem.Optimizasyon("MA1,MA2,RSI,AVR", P1 , P2 , P3 , P4); 
+          } 
+       } 
+   } 
+} 
+ 
+ 
+ 
+ÖRNEK-2:  Kullanılan indikatör: Bollinger 
+Strateji: Fiyatın, Bolinger alt ve üst bandını kesmesi 
+Aranan değer: Bollinger indikatörünün parametreleri 
+ 
+ 
+var Veriler= Sistem.GrafikVerileri; 
+var Kapanislar= Sistem.GrafikFiyatOku(Veriler, "Kapanis"); 
+ 
+var SonYon = ""; 
+for (int x = 5; x < 15; x++) 
+{ 
+   for (double y = 0.1; y < 3; y+=0.1) 
+   { 
+      var BolingerAlt = Sistem.BollingerDown(Veriler, "Exp", x, y); 
+      var BolingerUst = Sistem.BollingerUp(Veriler, "Exp", x, y); 
+ 
+  
+      for (int i = 1; i < Veriler.Count; i++) 
+      Sistem.Yon[i] = "";      
+          
+         for (int i = 1; i < Sistem.BarSayisi; i++) 
+         { 
+            if (Kapanislar[i] > BolingerUst[i]) 
+            { 
+               if (SonYon != "A") 
+               { 
+                  Sistem.Yon[i] = "A";  // alış 
+                  SonYon = "A"; 
+               } 
+            } 
+            if (Kapanislar[i] < BolingerAlt[i]) 
+            { 
+               if (SonYon != "S") 
+               { 
+                  Sistem.Yon[i] = "S";  //  
+                  SonYon = "S"; 
+               } 
+            } 
+         } 
+      Sistem.Optimizasyon("BollingerParams",x,y); 
+   } 
+} 
+ 
+ 
+
+--- PAGE 21 ---
+ 
+SEZAİ KILIÇ 
+14 
+ 
+ 
+ 
+ 
+PERFORMANS: Sistem ve Robot kullanıcılarının neredeyse başucu ekranlarından biri de 
+Performans Analiz aracıdır.  
+Yazdığınız, optimize ettiğiniz, güncellediğiniz, sık sık hareketlerini gözlemlediğiniz sisteminize 
+ait bütün analiz raporu detaylarına bu tablodan ulaşabilirsiniz. 
+ 
+- 
+Sisteminizi, sistemin uygulanmasını istediğiniz sembolünüzü ve baz alınacak grafik 
+periyodunu seçip, bu sistem geçmişte neler yapmış sorusunun cevabını pek çok detay 
+ile birlikte görebilirsiniz. 
+- 
+İsterseniz, sistemi uygulama başladığınızdaki bakiye değerini girip, sistem uygulansaydı 
+son bakiyeniz ne olurdu bilgisi görün. (bakiyeye sıfır girip, sadece puan/tl bazında kayıp 
+kazanç da görebilirsiniz.) 
+- 
+Açığa satış olmayan (örneğin AL/KAPAT, AL/KAPAT) şeklinde işleyen bir HİSSE SENEDİ 
+için analiz yapıyorsanız, AÇIĞA SATIŞ kutusundaki işareti kaldırın 
+- 
+Her bir sinyalde kaç lot işlem yapılacağı bilgisini de kullanıp, portföyün sanal 
+simülasyonunu daha net yapın 
+- 
+Sonuçları Excel sayfasına aktarabilirsiniz. 
+- 
+Sistemi belli bir bar sayısı için taratabilirsiniz. 
+- 
+Sisteminizin, gireceğiniz iki tarih arası için, MaxDD (en büyük zararı yaşadığı tarih ve 
+değer) sorgusunu da yapabilirsiniz. 
+- 
+Performans tablosunun ana gövdesinde, geçmişten günümüze (yada formülde 
+hesaplattırılan tarihler arasında) yaptığı tüm işlemlerin detaylarını (işlem yönü, tarihi, 
+işleme girdiği fiyat, işlemin kazancı veya zararı, o işlem sonrası bakiyenin son durumu) 
+gözlemleyebilirsiniz. 
+ 
+
+--- PAGE 22 ---
+ 
+SEZAİ KILIÇ 
+15 
+ 
+ 
+ 
+ 
+SEMBOL BAZINDA SİSTEM KIYASLA: IDEAL üzerinde yazdığınız sistemleri birbirleriyle en hızlı 
+kıyaslama aracı SEMBOL BAZINDA SİSTEM KIYASLA analiz aracıdır. Sistem menüsünden 
+SEMBOL BAZINDA SİSTEM KIYASLA satırına basarak açabileceğiniz bu analiz ekranında, 
+istediğiniz kadar sistem seçerek, belirlediğiniz sembolün belirlediğiniz periyodu için sistemlerin 
+performanslarını hesaplatır ve aşağıdaki analiz kalemleri bazında sonuçları görürsünüz 
+ 
+- 
+KAÇ ADET İŞLEM (SİNYAL) ÜRETMİŞ, 
+- 
+İŞLEMLERİN KAÇI KAZANDIRAN YÖNDE İŞLEM OLMUŞ, 
+- 
+İŞLEMLERİN KAÇI KAYBETTİREN YÖNDE İŞLEM OLMUŞ, 
+- 
+HER BİR SİSTEM 5 BAZINDA NE KADAR KAZANDIRMIŞ/KAYBETTİRMİŞ, 
+- 
+HER BİR SİSTEM PUAN BAZINDA NE KADAR KAZANDIRMIŞ/KAYBETTİRMİŞ. 
+ 
+Sembol Bazında Sistem Kıyasla ekranında, sembolü, grafik periyodunu veya bar sayısını 
+değiştirerek hızlıca yeni tercihler için sonuçları görebilirsiniz. 
+ 
+Sol bölgeden yeni bir sistem ekleyebilir veya var olan bir sistemi çıkarabilirsiniz. 
+Sistem ekleme/çıkarma yaptıktan sonra yeniden HESAPLA butonuna basmanız yeterlidir. 
+ 
+Kıyaslama sonuçlarını Excel sayfasına aktarabilirsiniz. 
+ 
+HİÇBİRİ butonuna basarak, seçili sistemlerdeki seçim işaretini kaldırabilir, TÜM butonuna 
+basarak arşivdeki tüm sistemleri seçtirebilirsiniz. 
+ 
+ 
+
+--- PAGE 23 ---
+ 
+SEZAİ KILIÇ 
+16 
+ 
+ 
+ 
+SON POZİSYONLAR: IDEAL üzerinde belirlediğiniz stratejiye dayalı AL/SAT sinyalleri üreten bir 
+sistem yazdınız diyelim. 
+Bu sistemin kullandığı stratejiye göre tüm hisselerde/sembollerde SON DURUM/YÖN nedir 
+görmek için SON POZİSYONLAR analiz aracı kullanılır. 
+ 
+Örneğin, 5 ve 50 periyotlu iki hareketli ortalama kesişince AL/SAT üreten MA sistemini, 
+belirlediğiniz bir senet/sembol grubu için taratıp, bu sisteme göre bu gruptaki sembollerin son 
+durumu/yönleri nedir, ne zaman hangi fiyattan sinyal üretilmiş, son fiyat ve bu fiyata göre son 
+yöndeki kar/zarar nedir bir tablo olarak görebilirsiniz. 
+ 
+SON POZİSYONLAR analiz aracı, oldukça yararlı ve pratik bir analiz aracıdır ve şu imkânları 
+sunar; 
+ 
+- 
+Seçtiğiniz sistemi istediğiniz herhangi bir grafik periyoduna göre hesaplattırabilirsiniz. 
+- 
+Sol üst köşedeki kutudan, istediğiniz herhangi bir Sistemi seçebilirsiniz 
+- 
+Tabloya aktarılan sonuçları Excel’e aktarabilirsiniz. 
+- 
+Seçtiğiniz Sistemin EN SON NE ZAMAN SİNYAL ÜRETTİĞİ filtresi yapabilirsiniz. (Örn Son 
+60 dk içinde bir sinyal üretilmiş senetleri görmek için 60 DK seçeneği işaretlenir. Sadece 
+Bugün sinyal üretilmişleri görmek için BUGÜN seçeneği) 
+- 
+Sistemin tarayacağı sembol grubunu değiştirebilirsiniz. Üstteki XU-100 butonuna 
+basarak hazır bir grup seçebilir veya kendi oluşturduğunuz bir sembol listesi içindeki 
+kodları taratabilirsiniz.(kendi özel sembol listelerinizi nasıl yaratacağınızı bilmiyorsanız 
+teknik servisimizden yardım isteyebilirsiniz.) 
+  
+ 
+
+--- PAGE 24 ---
+ 
+SEZAİ KILIÇ 
+17 
+ 
+ 
+ 
+ 
+MULTİ PERFORMANS EĞRİSİ: IDEAL üzerinde birden fazla sistem yazdınız ve bu sistemlerin 
+hangisi daha iyi, hangisi daha karlı görmek istiyorsunuz. Bunu tespit etmenin çokça yolu var. 
+En doyurucu analizi yapabileceğiniz özellik, sistemlerin getiri eğrilerini tek bir grafik üzerinde 
+karşılaştırmalı olarak görmenizi sağlayan Multi Performans Eğrisidir. Sistem menüsünden 
+MULTİ PERFORMANS EĞRİSİ satırına basarak açabileceğiniz bu analiz ekranında, istediğiniz 
+kadar sistem seçerek birbiriyle kıyaslayabilir ve getiri eğrilerini bir grafik üzerinde 
+gözlemleyebilirsiniz. 
+ 
+- 
+Ekle butonuna basarak, kıyaslama listesine sistem ekleyebilirsiniz. 
+- 
+Çıkart butonuna basarak bir sistemi listeden kaldırabilirsiniz. 
+- 
+Her sistemin getiri eğrisi için renk seçebilirsiniz. 
+- 
+Bir sistemi o an için kıyaslama ekranında görmek istemiyorsanız (listeden tamamen 
+çıkarmadan) sadece başındaki kutudaki işareti kaldırabilirsiniz. 
+- 
+Seçili tüm sistemlerin getiri eğrilerini istediğiniz herhangi bir sembol (senet, endeks, 
+parite, vadeli kod vs.) bazında bakabilirsiniz. Orta üst kısımdan bir sembol kodu 
+girmeniz yeterli 
+- 
+Seçili Sistemleri, seçili sembolün istediğiniz herhangi bir periyotlu grafikleri bazında 
+kıyaslayabilirsiniz. (orta üst kısımdaki periyot seçim kutundan) 
+- 
+Tüm sistemlerin getirileri orta üst kısımda yazılı bar sayısı kadar performans sonucu 
+döndürür. Son 5000 bar için sonuç görmek isterseniz bar sayısı kutusuna 5000 yazıp 
+ENTER’layın. 
+- 
+Sembol, periyot veya bar sayısı değiştirip HESAPLA butonuna basmak yeterlidir. 
+
+--- PAGE 25 ---
+ 
+SEZAİ KILIÇ 
+18 
+ 
+- 
+Panelin sağ kısmında seçilen sembolün seçilen periyotlu grafiği, onun alt kısmında ise 
+seçili sistemlerin GETİRİ grafikleri gösterilir. 
+- 
+Sol bölgede hangi sistem adına tıklanırsa, sağ taraftaki grafik üzerinde, o sistemin 
+AL/SAT noktaları gösterilir. 
+ 
+ 
+ 
+ 
+ 
+iDeal Sistem Modülünü kullanırken bilinmesinde yarar olan Temel C# 
+Yazılım dili kuralları 
+ 
+iDeal Sistem modülünde C# yazılım dili kurallarına göre formül yazılır. iDeal tarafından sunulan 
+hazır fonksiyonlarla birlikte, C# dilinde yazılım geliştirirken kullanılabilecek hemen hemen tüm 
+C# komutlarını da kodlarınızda kullanabilirsiniz. 
+Yazılımcılık konusunda deneyimli olan kullanıcılar C# kodlamanın elverdiği hemen hemen tüm 
+imkânları kullanarak formül yazabilirler. Örneğin bir sayının karesi C# dilinde Math.Pow(x,2) 
+şeklinde alınır ve aynı yazım şekli ideal formüllerinde de kullanılabilir. 
+ 
+IDEAL Sistem Modülünde bir sistem/formül yazma aşamalarında ihtiyaç duyabileceğiniz temel 
+bilgileri ve önemli ipuçlarını aşağıda sıraladık. 
+ 
+IDEAL Üzerinde Formül Yazmanın Genel Akış Diyagramı 
+ 
+- 
+Kullanıcı tarafından girilecek tüm önceden tanımlı bilgiler (sayılar, fiyatlar, periyotlar, 
+semboller, süreler vs) birer değişken olarak tanımlanır. (değişkenler ve tanımlanmaları 
+aşağıda açıklanacaktır) 
+- 
+IDEAL üzerinden elde edilecek tüm veriler ve bilgiler (yüzeysel, derinlik, grafik veya 
+indikatör verileri) ilgili fonksiyonlarla okutulup (Her fonksiyonun kullanım şekli ve 
+örnekleri IDEAL SİSTEM FONKSİYONLARI menüsü altında anlatılmıştır.) birer değişkene 
+atanır. 
+
+--- PAGE 26 ---
+ 
+SEZAİ KILIÇ 
+19 
+ 
+- 
+Formül süresince bazı hesaplamalar sonucu elde edilecek yeni bilgiler veya listeler için 
+de birer değişken tanımlanır. 
+- 
+Her değişken tanımlandığında, değişkene bir değer atamak şarttır. (bu değer BOŞLUK 
+(NULL) veya SIFIR olabilir. 
+- 
+Değişken tanımlamak için değişkenin tipini yazıp bir boşluk bırakıp, tanımlanan 
+değişkene bir isim verilir. (değişken isimleri Türkçe karakter veya noktalama işaretleri 
+içeremez, birden fazla kelimeden oluşamaz ve büyük küçük harfe duyarlıdır.) 
+- 
+Değişken tanımı bir atama ile (değişkeni bir değere eşitlemek ile) tamamlanır. Bu 
+durumda değişken tanımlanan satır  
+DEGISKENTİPİ (BOŞLUK)DEGISKENE VERİLEN İSİM = DEĞER 
+- 
+Son olarak satırın tamamlandığı bilgisi için satır sonuna NOKTALI VİRGÜL konur. (bazı 
+özel durumlar hariç her satırın tamamlandığı bilgisi için satır Noktalı Virgül ile bitirilir.)  
+- 
+Tam satır şu şekilde oluşur:  
+DEGISKENTİPİ (BOŞLUK)DEGISKENE VERİLEN İSİM = DEĞER; 
+ 
+ 
+ 
+Değişken Tipleri: 
+Sadece C# değil, diğer programlama dillerinde de en sık kullanılan elemanlar değişkenlerdir. 
+Bilinen/bilinmeyen tüm VERİ değişkenlere atanır ve tüm hesaplamalar/kıyaslamalar ve yeni 
+veri elde etmeler Değişkenler üzerinden elde edilir. Böylece kodlama anlaşılır ve sadeleşir. 
+En sık ihtiyaç duyulan değişken tipleri aşağıda gösterilmiştir: 
+• var = Global/Genel değişken tipi. Bu türde değişkenlere bir değer verildiği zaman, o 
+değerin (sayı, tarih, metin vs) formatına uygun bir tipte veri saklar. 
+• int = Tam Sayı cinsinde veriler için kullanılır (1,3,10,2500 vs) 
+• float = kesirli sayısal değerler için kullanılır 
+• single = çok sayıda ondalık basamak içeren reel sayılar için kullanılır 
+• double = çok sayıda ondalık basamak içeren reel sayılar için kullanılır 
+• string = yazı/metin formatındaki bilgiler için kullanılır 
+ 
+ÖRNEKLER: 
+var x = 0; 
+var y = ""; 
+int adet = 25; 
+float fiyat = 1.52f; 
+double oran = 0.1254; 
+string mesaj = "merhaba ideal"; 
+ 
+Eğer ise / Değil ise ve Mantıksal Operatörler (if / else if): 
+ 
+Sistem, Robot, indikatör formülü yazarken en çok ihtiyaç duyulan işlerden biri de bazı 
+koşulların olup olmadığını kontrol etmektir. EĞER şöyle İSE böyle yap gibi kontrolleri if (EĞER) 
+ve else (DEĞİLSE) komutlarıyla yaparız. 
+Bu tür kontrolleri yaparken de matematikteki mantıksal operasyonları kullanılırız. İhtiyaç 
+duyacağınız mantıksal operatörler ve kullanım şekilleri aşağıda gösterilmiştir. 
+
+--- PAGE 27 ---
+ 
+SEZAİ KILIÇ 
+20 
+ 
+ 
+- 
+x  > x    
+x BÜYÜKTÜR y 
+- 
+x  < y   
+x KÜÇÜKTÜR y 
+- 
+x == y   
+x EŞİTTİR y 
+- 
+x != y  
+x EŞİT DEĞİLDİR y 
+- 
+x  >= y  
+x BÜYÜKTÜR VEYA EŞİTTİR y 
+- 
+x  <= y  
+x KÜÇÜKTÜR VEYA EŞİTTİR y 
+- 
+x  && x   
+x VE y 
+- 
+x  || x   
+x VEYA y  (Bu işaret ALTGR ile TİRE/EKSİ işaretine basılarak yapılır) 
+ 
+ 
+Bu durumda bir koşul sağlanıyorsa bir işi, sağlanmıyorsa başka bir işi yaptırtmak için aşağıdaki 
+gibi bir kod satırı gerekir; (x değeri y değerinden küçükse, “a” değerini eksi 5, değilse 5 yap) 
+   if (x < y) 
+      a = -5; 
+   else 
+      a = 5;    
+ 
+ 
+Yazılım dillerinde (aksini yapacak komutlar kullanılmamışsa) kodlar satır satır okunur ve 
+işletilir. Yukarıdaki örneği çalıştıran uygulama önce “if” satırına gelecek ve if parantezi içindeki 
+koşula bakacak. 
+Koşul içindeki ifade DOĞRU ise ALT SATIRA geçecek ve orada söylenen işi yapacak, “else” 
+satırını ve o satır altına yazılan işi direk atlayacaktır. Tam tersi durumda, if komutunun içindeki 
+koşul sağlanmıyorsa, uygulama bu kez else (DEĞİLSE) satırında tanımlanan işi yapacaktır. 
+ 
+Eğer koşul sayısı birden fazla ise (Koşul1 sağlanıyorsa bir iş, koşul2 sağlanıyorsa bir başka iş, 
+koşul3 sağlanıyorsa bir başka iş……. Hiçbiri sağlanmıyorsa bir başka iş) şeklinde seri olarak 
+koşullar varsa komutun kullanım şekli şöyle olur: 
+ 
+EĞER (Koşul1) 
+İŞ 1; 
+YOK EĞER (Koşul2) 
+İŞ 2; 
+YOK EĞER (Koşul3) 
+İŞ 3; 
+HİÇBİRİ 
+İŞ 4; 
+ 
+Bu algoritmanın C# dilince yazımı şöyledir; 
+ 
+if (0 < x < 10) 
+    
+ 
+a = 0; 
+else if (10 < x < 20) 
+a = 1;    
+else if (20 < x < 50) 
+a = 2;    
+else 
+a = 10; 
+ 
+Eğer, IF/ELSE koşullarının altında yaptırılacak işlemlere ait satır sayısı BİRDEN FAZLA İSE, tüm bu 
+satırlar iki tane parantez (güzel parantez) içine alınmak zorundadır. 
+
+--- PAGE 28 ---
+ 
+SEZAİ KILIÇ 
+21 
+ 
+if (x < y) 
+{ 
+    a = -5; 
+    b = 10; 
+        } 
+        else 
+        { 
+    
+    a = 5; 
+ 
+    b = 100; 
+        } 
+ 
+Listeler Tanımlamak:  
+ 
+IDEAL üzerinde formül yazarken genellikle LİSTELER kullanılacaktır. LİSTE birden fazla elemanı 
+olan bir tablo gibi düşünülebilir.  
+Zira Sistem/Robot formülleri genellikle hisse senedi, parite, endeks veya vadeli sözleşmelerin 
+tarihsel GRAFİK VERİLERİ üzerinde kurulan strateji ve hesaplamalar içerir.  
+GRAFİK VERİSİ, belirli bir zaman (periyot) boyunca her bir zaman dilimine karşılık bir veya 
+birden fazla veri içeren (BARLAR) bir LİSTEDİR. 
+Aynı şekilde İndikatörler de birer listedir ve her bir BARA karşılık bir değer içerirler. Zaman 
+ekseninde (grafikteki yatay eksen) her bir zaman dilimine karşılık bir değeri olan listeler aslında 
+aynı zamanda birer ÇİZGİDİR. 
+ 
+Bir hissenin AÇILIŞ, KAPANIŞ, YÜKSEK, DÜŞÜK fiyatları, Bir indikatörün değerleri, bir yatay çizgi 
+vs. Hepsi birer listedir. 
+IDEAL Sistem modülündeki pek çok fonksiyon, bir liste formatında veri okur ve kullanıcıya 
+sunar.   
+Kullanıcılar, daha sonra hesaplanacak verileri atayacakları listeleri kodlarının başında, bir isim 
+vererek sisteme tanımlarlar. Liste tanımlarken global değişken tipi olan “var” kullanılır.  
+Diğer (sayı veya metin tipindeki) değişkenlerde olduğu gibi, listeleri tanımlarken de eleman 
+listenin içindeki her bir elemanın başlangıçtaki değeri belirtilir. 
+ 
+Örnek: var Listem1 = Sistem.Liste(x); 
+Bu örnekte Listem1 isimli bir liste tanımlanır ve listenin tüm elemanları başlangıçta x değeridir. 
+(Boş listede x = 0) 
+Örneğin grafiğe belli bir fiyat seviyesinde bir yatay çizgi çizilecekse ve o çizgiye SEVIYE adını 
+verelim) 
+ 
+var SEVIYE = Sistem.Liste(95.400); 
+Sistem.Cizgiler[0].Deger = SEVIYE; 
+ 
+Satırlarını yazmak yeterli olacaktır. 
+(Kütüphane Ana sayfamızdaki IDEAL Sistem Fonksiyonları kısmından, Liste ve Çizgiler isimli 
+fonksiyonları kullanım detayları incelenebilir.) 
+ 
+ 
+Listeler Üzerinde işlem (hesaplama) Yapmak: 
+ 
+
+--- PAGE 29 ---
+ 
+SEZAİ KILIÇ 
+22 
+ 
+Listeler üzerinde işlem yapmak için genel yazılım kuralı olarak birer isim verip değişkenler 
+tanımlar ve işlemleri bu değişkenler üzerinden yaparız. Fakat Metastock ve benzeri 
+programlarda alışılagelen yöntemle, doğrudan listelerin kendileri işleme tabi tutulamaz. 
+Listeler, birden fazla eleman içerirler ve her türlü işlem (matematiksel işlem, mantıksal kıyas 
+vb.) LİSTELERİN ELEMANLARI arasında yapılabilir. 
+ 
+Bir listenin her hangi bir elemanı, o listenin bir INDEX’i ile belirtilir.  
+Yani: Listenin x numaralı elemanı, liste adının yanına köşeli parantez içinde x yazılarak belirtilir. 
+ 
+ÖRNEK: Bir grafikte 1350 numaralı (ilk bar en eski bar) barın kapanış değeri KAPANISLAR[1350] 
+olarak belirtilir ve bu şekilde kullanılır. 
+ÖRNEK2: KAPANISLAR isimli listeye, bir grafiğin barlarının kapanış fiyatları alınsın. 350 ve 500 
+numaralı barların kapanış fiyatlarının toplamı X olsun. X değerini bulalım; 
+ 
+ 
+var KAPANISLAR = Sistem.GrafikFiyatSec(“Kapanis”); 
+        var X = KAPANISLAR[350] + KAPANISLAR[500]; 
+ 
+ÖRNEK3: 100 numaralı bar kapanışı, önceki bar kapanışından büyükse, x değerini 1 arttır 
+ 
+var KAPANISLAR = Sistem.GrafikFiyatSec(“Kapanis”); 
+        var x = 0; 
+ 
+        if (KAPANISLAR[100] > KAPANISLAR[100-1]) 
+           x = x+1; 
+ 
+(Burada 99 yazmak yerine özellikle 100-1 yazdık köşeli parantez içine. Aslında aynı şey ama 
+sonraki satırlarda anlatılacak diğer örnek ve açıklamalara yatkınlık olsun diye 99 yerine 100-1 
+yazdık. ) 
+ 
+Döngüler: 
+ 
+IDEAL de formül yazarken en çok kullanılacak işlemlerin başında DÖNGÜLER gelir. DÖNGÜ, bir 
+işlemi/hesaplamayı birden fazla kere yaptırtmak için kullanılır. 
+Yani örnek olarak, MA5 ile MA100 değerlerini kıyaslayacaksak bu kıyaslamayı HER BAR 
+BARDAKİ DEĞERLERİ için yapmak gerekir. 5’lik ve 100’lük ortalamaların birbirinden 
+büyük/küçük olduğu ya da birbirini kestiği noktalar  
+Birer BAR’dır ve bu kontrol HER BAR için yapılınca, sinyalin/koşulun hangi Bar’da olduğu, o 
+barın fiyat/zaman/barno gibi bilgileri de elde edilmiş olur. 
+ 
+Yine örneğin, bir sembolün grafiğindeki Yüksek ve Düşük değerlerinin toplamının yarısına 
+ihtiyacımız varsa, Yapılacak olan matematiksel işlem olan (H + L) / 2 işlemi HER BAR için 
+yaptırılır ve HER BAR için çıkan sonuç, bir listenin o bara karşılık gelen elemanına yazılır. 
+Bu işlemler DÖNGÜ içerisinde yapılır. 
+ 
+KALIP olarak her zaman kullanabileceğiniz döngü formatı şöyledir; 
+ 
+for (int x = 1;  x < 100;  x++) 
+{ 
+   //DÖNGÜ BOYUNCA YAPILACAK TÜM İŞLEMLER 
+} 
+
+--- PAGE 30 ---
+ 
+SEZAİ KILIÇ 
+23 
+ 
+ 
+Bu kalıpta “for” kelimesi yazılıp bir parantez açılır ve 3 adet bilgi parantezin içine sırayla 
+girilir ve parantez kapatılır 
+- 
+Parantezin içindeki ilk bilgi (x), döngünün uygulanacağı listenin başlangıç değeri (veya 
+kaç numaralı elemanından itibaren). Yazının en başında bahsettiğimiz bazı C# kuralları 
+burada tekrar devreye girer: 
+o Her bilgi satırı NOKTALI VİRGÜL ile biter 
+o Döngünün başlangıç ve bitiş değerlerini bir değişken kontrol eder. Bu nedenle 
+değişken tanımlama kuralı gereği DEGISKENTIPI (BOŞLUK) DEGISKENADI = 
+DEĞER; kalıbı ile ilk döngü bilgisi verilmiş olur. (Bar numaraları birer birer 
+artacağından, bize TAMSAYI değişkeni yeterli bu yüzden x değişkenimizin tipini 
+“int” yaptık) 
+- 
+Parantezin içine girilmesi gereken ikinci bilgi, döngünün ne zaman sona ereceğidir. Yani 
+örneğimizdeki “x” kaç olana kadar bu işlem yapılsın. (Örnekte x = 99 olana kadar 
+işlemler sürer. 100’ün de dahil olması için KÜÇÜK EŞİT ifadesi yazılmalı) 
+o Bu da bir bilgi alanıydı ve diğer bilgi alanları gibi NOKTALI VİRGÜL İLE bitirildi. 
+- 
+Parantezin içindeki son bilgi, ilk değerden son değere kadar dönecek olan işlemler 
+boyunca, x değeri kaçar kaçar artacak. Birer birer artacaksa değişken adının yanına iki 
+tane “+” işareti konur (x++ ile x=x+1 aynı şeydir.) 
+o Döngüyü bar bar yapmayıp, başka bir değere göre yapıyorsak ve tarama birer 
+birer artan değerler için değilse, döngüdeki x değişkenini integer (int) olarak 
+değil double (reel sayı) olarak tanımlarız. 
+o Örneğin for (double x=0.25;  x <= 10; x+=0.05)    Bu döngüde, işlemler, x 
+değerinin 0.25’ten başlayıp 10 olana kadar (10 dahil) ilerlenir ve her seferinde 
+x değeri 0.05 arttırılır. 
+- 
+for ve if/else komut satırlarında (ve bu bloklar için açılmış olan güzel parantezlerin 
+olduğu satırlara) NOKTALI VİRGÜL KONULMAZ. 
+ 
+Artık döngü kalıbının içinde, listeler arasında kıyaslama, hesaplama ve bir başka listeye değer 
+atama işlemleri yapılabilir.  
+Burada dikkat edilecek tek nokta, yukarılarda da birkaç kez vurguladığımız gibi, işlem, kıyas 
+veya atamayı yaparken listenin hangi elemanı olduğunu belirterek (idexini de yazarak) 
+yapmaktır. Yani LISTEADI[x] şeklinde kullanmak. 
+ 
+ÖRNEK-1: Bir grafiğin High, Low ve Close değerlerini toplayıp 3’e bölelim ve sonucu ekranda 
+çizgi olarak görelim: 
+(Her satırın yanına, o satırda ne yapıldığına dair notlar düşülmüştür.) 
+var V = Sistem.GrafikVerileri ;    //Kodun uygulanacağı kodun, o an seçili periyodu için tüm grafiği 
+(oku ve V isimli listeye al) 
+var C = Sistem.GrafikFiyatOku(V, "Kapanis" ); //V listesinden (OHLC barlardan) KAPANIŞ FİYATI 
+listesini oku ve C isimli listeye al 
+var H = Sistem.GrafikFiyatOku(V, "Yuksek" ); // V listesinden (OHLC barlardan) HIGH FİYATI 
+listesini oku ve H isimli listeye al 
+var L = Sistem.GrafikFiyatOku(V, "Dusuk" ); // V listesinden (OHLC barlardan) LOW FİYATI 
+listesini oku ve L isimli listeye al 
+var Sonuc = Sistem.Liste(0); //Boş (bütün elemanları sıfır olarak tanımlanan) bir liste tanımla ve 
+listeye “Sonuc” adını ver 
+ 

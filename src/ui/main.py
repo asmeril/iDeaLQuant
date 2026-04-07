@@ -8,11 +8,12 @@ import sys
 import os
 import multiprocessing
 
-# CRITICAL: freeze_support MUST be the very first call in frozen executables.
-# Worker sub-processes re-execute this file; freeze_support() detects that and
-# exits early before any Qt/GUI imports happen — preventing pickle truncation.
-if __name__ == "__main__":
-    multiprocessing.freeze_support()
+# CRITICAL: freeze_support MUST be called UNCONDITIONALLY at module level.
+# When PyInstaller spawns a worker sub-process, it re-executes this file with
+# __name__ == '__main__'. freeze_support() detects that it's a worker and
+# exits early — BEFORE Qt/GUI imports happen. If it's inside an if-guard,
+# the worker may run the full main() and cause WinError 5 / PermissionError.
+multiprocessing.freeze_support()
 
 # Proje kök dizinini path'e ekle
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -51,7 +52,7 @@ def main():
     
     app = QApplication(sys.argv)
     app.setApplicationName("IdealQuant")
-    app.setApplicationVersion("4.9")
+    app.setApplicationVersion("5.0")
     app.setOrganizationName("IdealQuant")
     
     # Varsayılan font
@@ -69,5 +70,11 @@ def main():
 
 
 if __name__ == "__main__":
+    # Explicitly set spawn method for Windows — prevents WinError 5 (handle
+    # inheritance blocked by UAC/antivirus in frozen executables).
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass  # Already set (e.g. in development mode)
     main()
 

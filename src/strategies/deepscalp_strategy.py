@@ -7,7 +7,7 @@ from numba import jit
 
 from src.indicators.core import get_ema, get_mfi, get_atr
 from src.indicators.trend import get_supertrend, get_toma
-from src.indicators.math import get_highest_high, get_lowest_low
+from src.indicators.math import get_highest_high, get_lowest_low, safe_round_ideal
 from src.strategies.base_strategy import BaseStrategy
 from src.engine.types import StrategyConfig
 from src.engine.events import SignalType
@@ -69,6 +69,182 @@ class DeepScalpStrategy(BaseStrategy):
     def __init__(self, config: DeepScalpStrategyConfig):
         super().__init__(config)
         self.config = config
+    
+    @classmethod
+    def from_config_dict(cls, cache, params: dict):
+        """Create strategy from a cache object and parameter dict (OOS validation compat)."""
+        config = DeepScalpStrategyConfig(**params)
+        instance = cls(config)
+        instance._cache = cache
+        return instance
+    
+    def generate_all_signals(self):
+        """
+        Generate entry signals and exit arrays for backtest compatibility.
+        Returns: (signals, exits_long, exits_short) — numpy int8 arrays.
+        Uses the same logic as the Numba kernel for consistency.
+        """
+        cache = self._cache
+        closes = np.asarray(cache.closes, dtype=np.float64)
+        highs = np.asarray(cache.highs, dtype=np.float64)
+        lows = np.asarray(cache.lows, dtype=np.float64)
+        volumes = np.asarray(cache.volumes, dtype=np.float64)
+        n = len(closes)
+        
+        # Indicators
+        ars_ema = get_ema(closes, self.config.ars_ema_period)
+        st_result = get_supertrend(highs, lows, closes, self.config.st_hhv_period, self.config.st_atr_period, self.config.st_factor)
+        st_val = np.array(st_result[0], dtype=np.float64)
+        ema_fast = get_ema(closes, self.config.ema_fast_period)
+        ema_slow = get_ema(closes, self.config.ema_slow_period)
+        _, toma_trend = get_toma(closes, self.config.toma_period1, self.config.toma_period2)
+        toma_trend = np.array(toma_trend, dtype=np.float64)
+        mfi = get_mfi(highs, lows, closes, volumes, self.config.mfi_period)
+        atr = get_atr(highs, lows, closes, self.config.atr_period)
+        
+        is_spot = (self.config.vade_type == 'SPOT')
+        
+        signals = np.zeros(n, dtype=np.int8)
+        exits_long = np.zeros(n, dtype=np.int8)
+        exits_short = np.zeros(n, dtype=np.int8)
+        
+        in_long = False
+        in_short = False
+        entry_price = 0.0
+        extreme_val = 0.0
+        stop_level = 0.0
+        bars_in_pos = 0
+        cooldown_ct = 0
+        
+        for i in range(1, n):
+            if cooldown_ct > 0:
+                cooldown_ct -= 1
+            
+            ars_ema_val = ars_ema[i]
+            ars_band = safe_round_ideal(ars_ema_val * self.config.ars_k, 0.01)
+            
+            rejim_long = (closes[i] > ars_ema_val) and (closes[i] < ars_ema_val + ars_band)
+            rejim_short = (closes[i] < ars_ema_val) and (closes[i] > ars_ema_val - ars_band)
+            
+            st_long = (st_val[i] < closes[i])
+            st_short = (st_val[i] > closes[i])
+            ema_long = (ema_fast[i] > ema_slow[i])
+            ema_short = (ema_fast[i] < ema_slow[i])
+            trend_long = st_long and ema_long
+            trend_short = st_short and ema_short
+            
+            toma_kros_up = (toma_trend[i] > 0) and (toma_trend[i - 1] <= 0)
+            toma_kros_down = (toma_trend[i] < 0) and (toma_trend[i - 1] >= 0)
+            
+            prev_hhv = 0.0
+            for k in range(1, self.config.hhv_period + 1):
+                if i - k >= 0 and highs[i - k] > prev_hhv:
+                    prev_hhv = highs[i - k]
+            hhv_break = (closes[i] > prev_hhv)
+            
+            prev_llv = float('inf')
+            for k in range(1, self.config.llv_period + 1):
+                if i - k >= 0 and lows[i - k] < prev_llv:
+                    prev_llv = lows[i - k]
+            llv_break = (closes[i] < prev_llv)
+            
+            tetik_long = toma_kros_up or hhv_break
+            tetik_short = toma_kros_down or llv_break
+            
+            prev_mfi_max = 0.0
+            for k in range(1, self.config.mfi_hhv_period + 1):
+                if i - k >= 0 and mfi[i - k] > prev_mfi_max:
+                    prev_mfi_max = mfi[i - k]
+            mfi_long_ok = (mfi[i] > self.config.mfi_long) and (mfi[i] > prev_mfi_max)
+            
+            prev_mfi_min = float('inf')
+            for k in range(1, self.config.mfi_llv_period + 1):
+                if i - k >= 0 and mfi[i - k] < prev_mfi_min:
+                    prev_mfi_min = mfi[i - k]
+            mfi_short_ok = (mfi[i] < self.config.mfi_short) and (mfi[i] < prev_mfi_min)
+            
+            vol_avg = 0.0
+            count = 0
+            for k in range(1, 21):
+                if i - k >= 0:
+                    vol_avg += volumes[i - k]
+                    count += 1
+            if count > 0:
+                vol_avg /= count
+            vol_ok = (volumes[i] >= vol_avg * self.config.vol_ratio)
+            
+            onay_long = mfi_long_ok and vol_ok
+            onay_short = mfi_short_ok and vol_ok
+            cooldown_ok = (cooldown_ct == 0)
+            
+            # Entry
+            giris_long = (not in_long) and (not in_short) and rejim_long and trend_long and tetik_long and onay_long and cooldown_ok
+            giris_short = (not in_long) and (not in_short) and rejim_short and trend_short and tetik_short and onay_short and cooldown_ok
+            
+            if giris_long:
+                signals[i] = 1
+                in_long = True
+                entry_price = closes[i]
+                extreme_val = closes[i]
+                stop_level = entry_price - atr[i] * self.config.atr_stop_mult_long
+                bars_in_pos = 0
+            elif giris_short and not is_spot:
+                signals[i] = -1
+                in_short = True
+                entry_price = closes[i]
+                extreme_val = closes[i]
+                stop_level = entry_price + atr[i] * self.config.atr_stop_mult_short
+                bars_in_pos = 0
+            
+            # Long management
+            if in_long:
+                bars_in_pos += 1
+                if closes[i] > extreme_val:
+                    extreme_val = closes[i]
+                    stop_level = extreme_val - atr[i] * self.config.atr_stop_mult_long
+                
+                kar_al_fiyat = entry_price * (1.0 + self.config.kar_al_yuzde_long / 100.0)
+                stop_hit = (closes[i] <= stop_level)
+                kar_al_hit = (closes[i] >= kar_al_fiyat)
+                rejim_kirildi = not rejim_long
+                trend_kirildi = not trend_long
+                min_hold_ok = (bars_in_pos >= self.config.min_hold_bars)
+                max_hold_hit = (bars_in_pos >= self.config.max_hold_bars)
+                
+                if stop_hit or kar_al_hit or rejim_kirildi or (trend_kirildi and min_hold_ok) or max_hold_hit:
+                    exits_long[i] = 1
+                    in_long = False
+                    cooldown_ct = self.config.cooldown_bars
+                    bars_in_pos = 0
+                    entry_price = 0.0
+                    extreme_val = 0.0
+                    stop_level = 0.0
+            
+            # Short management
+            if in_short:
+                bars_in_pos += 1
+                if closes[i] < extreme_val:
+                    extreme_val = closes[i]
+                    stop_level = extreme_val + atr[i] * self.config.atr_stop_mult_short
+                
+                kar_al_fiyat = entry_price * (1.0 - self.config.kar_al_yuzde_short / 100.0)
+                stop_hit = (closes[i] >= stop_level)
+                kar_al_hit = (closes[i] <= kar_al_fiyat)
+                rejim_kirildi = not rejim_short
+                trend_kirildi = not trend_short
+                min_hold_ok = (bars_in_pos >= self.config.min_hold_bars)
+                max_hold_hit = (bars_in_pos >= self.config.max_hold_bars)
+                
+                if stop_hit or kar_al_hit or rejim_kirildi or (trend_kirildi and min_hold_ok) or max_hold_hit:
+                    exits_short[i] = 1
+                    in_short = False
+                    cooldown_ct = self.config.cooldown_bars
+                    bars_in_pos = 0
+                    entry_price = 0.0
+                    extreme_val = 0.0
+                    stop_level = 0.0
+        
+        return signals, exits_long.astype(bool), exits_short.astype(bool)
         
     def generate_signals(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -127,7 +303,8 @@ class DeepScalpStrategy(BaseStrategy):
             # Layer 1: ARS Regime
             ars_ema_val = ars_ema[i]
             # Match rounded arithmetic of C# to avoid subtle differences
-            ars_band = round(ars_ema_val * self.config.ars_k, 2)
+            # iDeal: Sistem.SayiYuvarla(arsEmaVal * arsK, 0.01f)
+            ars_band = safe_round_ideal(ars_ema_val * self.config.ars_k, 0.01)
             
             rejim_long = (closes[i] > ars_ema_val) and (closes[i] < ars_ema_val + ars_band)
             rejim_short = (closes[i] < ars_ema_val) and (closes[i] > ars_ema_val - ars_band)

@@ -603,6 +603,7 @@ STRATEGY8_GROUPS = [
 # DATA & CACHE
 # ==============================================================================
 g_cache = None
+g_mask = None  # Trading mask (vade/tatil filtresi) — _init_group_pool'da doldurulur
 
 def load_data() -> pd.DataFrame:
     # Hardcoded path kaldırıldı.
@@ -1072,29 +1073,39 @@ def _build_s8_arrays(cache: 'IndicatorCache', mask) -> tuple:
     Döner: (opens, closes, highs, lows, vols,
              session_arr, time_gap_arr, day_of_week_arr, mask_arr, late_aksam_arr)
     """
-    times = cache.times
+    raw_times = cache.times
     n = len(cache.closes)
     session_arr     = np.zeros(n, dtype=np.int8)
     time_gap_arr    = np.zeros(n, dtype=np.float64)
     day_of_week_arr = np.zeros(n, dtype=np.int8)
     late_aksam_arr  = np.zeros(n, dtype=np.bool_)
 
+    # Robust datetime dönüşümü: string, None, NaT hepsi güvenli şekilde işlenir
+    try:
+        parsed = pd.to_datetime(raw_times, dayfirst=True, errors='coerce').tolist()
+        times = [t if not pd.isna(t) else None for t in parsed]
+    except Exception:
+        times = raw_times  # Fallback: orijinal değerleri kullan
+
     for i, dt in enumerate(times):
         if dt is None:
             continue
-        h, m = dt.hour, dt.minute
-        t_sec = h * 3600 + m * 60
-        if 9 * 3600 + 25 * 60 <= t_sec < 9 * 3600 + 30 * 60:
-            session_arr[i] = 1   # emirToplama
-        elif 9 * 3600 + 30 * 60 <= t_sec <= 18 * 3600 + 9 * 60 + 59:
-            session_arr[i] = 2   # gunSeansi
-        elif 19 * 3600 <= t_sec <= 22 * 3600 + 59 * 60 + 59:
-            session_arr[i] = 3   # aksamSeansi
-        # else: 0 = seans disi
-        day_of_week_arr[i] = dt.weekday()   # 0=Pzt, 4=Cum
-        late_aksam_arr[i]  = bool(h == 22 and m >= 50)
-        if i > 0 and times[i - 1] is not None:
-            time_gap_arr[i] = (dt - times[i - 1]).total_seconds() / 3600.0
+        try:
+            h, m = dt.hour, dt.minute
+            t_sec = h * 3600 + m * 60
+            if 9 * 3600 + 25 * 60 <= t_sec < 9 * 3600 + 30 * 60:
+                session_arr[i] = 1   # emirToplama
+            elif 9 * 3600 + 30 * 60 <= t_sec <= 18 * 3600 + 9 * 60 + 59:
+                session_arr[i] = 2   # gunSeansi
+            elif 19 * 3600 <= t_sec <= 22 * 3600 + 59 * 60 + 59:
+                session_arr[i] = 3   # aksamSeansi
+            # else: 0 = seans disi
+            day_of_week_arr[i] = dt.weekday()   # 0=Pzt, 4=Cum
+            late_aksam_arr[i]  = bool(h == 22 and m >= 50)
+            if i > 0 and times[i - 1] is not None:
+                time_gap_arr[i] = (dt - times[i - 1]).total_seconds() / 3600.0
+        except Exception:
+            continue  # Tek bir bozuk bar tüm build'i çökertmesin
 
     opens    = np.ascontiguousarray(cache.opens,   dtype=np.float64)
     closes   = np.ascontiguousarray(cache.closes,  dtype=np.float64)
@@ -1138,6 +1149,10 @@ def _evaluate_s8_params(params: Dict[str, Any], commission: float = 0.0, slippag
         yon = params.get('yon_modu', 'CIFT')
         yon_code = 0 if yon == 'CIFT' else (1 if yon == 'SADECE_AL' else 2)
 
+        # Vade tipi kodu: 0=SPOT (no short), 1=VIOP_ENDEKS, 2=VIOP_SPOT
+        vt = params.get('vade_tipi', 'ENDEKS')
+        vt_code = 0 if vt == 'SPOT' else (2 if vt == 'VIOP_SPOT' else 1)
+
         res = fast_backtest_strategy8(
             opens, closes, highs, lows, vols,
             session_arr, time_gap_arr, dow_arr, mask_arr, late_aksam_arr,
@@ -1155,6 +1170,7 @@ def _evaluate_s8_params(params: Dict[str, Any], commission: float = 0.0, slippag
             int(params.get('gap_window_bars',      210)),
             int(params.get('cooldown_bars',        3)),
             yon_code,
+            vt_code,   # YENİ: vade_tipi — SPOT'ta short yasak
         )
 
         np_val, tr, pf, dd, sh, adays, tdays = res

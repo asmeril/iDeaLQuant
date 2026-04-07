@@ -1,0 +1,632 @@
+﻿=== PAGE 63 ===
+ 
+SEZA¦ KILIÃ 
+56 
+ 
+ 
+- 
+EhlerÆs Filter - Sistem.EhlersFilter()  
+ 
+EhlerÆs Diff Coef Filter olarak bilinen indikat÷r³n³ a­²r²r. Hi parametre almaz. A■a­²daki gibi 
+2 kullan²m ■ekli vard²r; 
+ 
+Sistem.EhlersEhlersDistCoefFilter(); 
+Sistem.EhlersEhlersDistCoefFilter(Veriler); 
+ 
+Írnek: ¦ndikat÷r³ a­²r²p izdirmek 
+ 
+var EDCF = Sistem. EhlersEhlersDistCoefFilter(); 
+Sistem.Cizgiler[0].Deger = EDCF; 
+ 
+- 
+Elliot Wave Oscilator (EWO) - Sistem.ElliotWaveOscilator(15,34)  
+ 
+Elliot Wave Oscilator (EWO) olarak bilinen indikat÷r³n³ a­²r²r. 2 adet parametre al²r. 
+A■a­²daki gibi 2 kullan²m ■ekli vard²r; 
+ 
+Sistem.ElliotWaveOscillator(12, 26); 
+Sistem.ElliotWaveOscillator(Veriler,12, 26); 
+ 
+Írnek: ¦ndikat÷r³ a­²r²p izdirmek 
+ 
+var ewo = Sistem. ElliotWaveOscillator (); 
+Sistem.Cizgiler[0].Deger = ewo; 
+ 
+ 
+- 
+Emir - Sistem.Emir Fonksiyonlar²XXXXX(5)  
+ 
+Robot ³zerinden emir g÷ndermek iin bir emir iletmek iin gerekli b³t³n bilgileri tan²mlamak 
+(emir adedi, emir fiyat², emrin s³resi, emrin sembol³, emrin y÷n³ gibi) ve emri g÷ndermek iin 
+Sistem Emir fonksiyonlar² kullan²l²r. Bu fonksiyonlar²n tek ba■lar²na kullan²m alanlar² yoktur. 
+Birka tanesi birlikte kullan²l²rlar. Emir fonksiyonlar²n²n tam listesi ve yaz²m ■ekilleri a■a­²daki 
+gibidir; 
+ 
+Hisse/Varant/Viop hepsi iin geerli emir fonksiyonlar²: 
+   Sistem.EmirSembol = "IMKBH'GARAN"; 
+   Sistem.EmirIslem = "Al²■"; 
+   Sistem.EmirMiktari = 1; 
+   Sistem.EmirTipi = "Limit"; //veya Piyasa 
+   Sistem.EmirFiyati = 9.50; 
+   Sistem.EmirSuresi = "GUN"; 
+   Sistem.EmirAltHesap = "1"; 
+   Sistem.EmirHesapAdi = "123456, ABC YATIRIM"; 
+   Sistem.EmirSatisTipi = "ACIGA"; 
+   Sistem.Emir = "GUN"; 
+    
+Sadece VIOP iin geerli Emir Fonksiyonlar² 
+   Sistem.EmirAksamSeansi = 1; //VER¦LEN EMR¦N AKÌAM SEANSINDA DA GEÃERL¦ OLMASI ¦Ã¦N 
+   Sistem.EmirSartBool = true; 
+   Sistem.EmirSartSembol = "VIP'F_XU0300620"; 
+   Sistem.EmirSartFiyat = 132.500; 
+   Sistem.EmirSartTipi = "ALIÌ >= Ìart Fiyat"; 
+   Sistem.EmirGonder(); 
+
+
+=== PAGE 64 ===
+ 
+SEZA¦ KILIÃ 
+57 
+ 
+ 
+Notlar:  
+ò Piyasa emirlerinde S▄RE = KIE olmal²d²r 
+ò Piyasa emri verilirken Emir Fiyat komutu gereksizdir. 
+ò Emir Fiyat Tipi komutu BISTÆ²n nasdaq ÷ncesi d÷nemden kalmad²r, i■levsizdir. 
+ò Hisselerde A²­a Sat²■ yap²lacaksa Emir Sat²■ Tipi = ôACIGAö yaz²lmal²d²r. Normal 
+sat²■ iin bu komutu yazmaya gerek yoktur.  
+ò Emri Sembol yaz²l²rken PiyasakoduÆSenetKodu ■eklinde yaz²lmal²d²r ve ift t²rnak 
+iine al²nmal²d²r. (ôIMKBHÆGARANö veya ôVIPÆF_XU0300620ö) 
+ò Fiyata emir verirken Hisse iin EmirTipi = Limit, VIOP iin Emir Tipi = Limitli Yaz²l²r 
+ò Emir G÷nder komutu di­er emir ÷zellikleri atamas² yap²lm²■ olan bilgileri bir araya 
+getirip emri arac² kuruma iletir. ¦DEAL Portf÷y penceresinde login olunmu■ ve seili 
+durumda olan hesap ne ise emir o hesaba iletilir. 
+ò Seili olunmu■ hesaptan ba■ka bir hesaba emir iletilmek isteniyorsa EmirHesapAdi 
+ve EmirAltHesap sat²rlar²na emrin g÷nderilmek istendi­i hesab²n bilgileri Ã¦FT 
+TIRNAK i■aretleri iinde yaz²l²r. 
+ 
+Írnek bir hesap iin bu emrin iletilmek istendi­i hesap ve alt hesap bilgilerinin hangileri oldu­u 
+resimde g÷sterildi­i gibidir; 
+ 
+ 
+ 
+ 
+Írnek: Her 10 saniyede bir aktiften (piyasa emri) DOHOL al²■ emri g÷nderen robot kodu 
+ 
+var Sembol = "IMKBH'DOHOL"; 
+var Miktar = 1; 
+ 
+if (Sistem.ZamanKontrolSaniye(Sembol) >= 10) 
+{ 
+   Sistem.ZamanKontrolGuncelle(Sembol); 
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = "Al²■"; 
+   Sistem.EmirTipi = "Piyasa"; 
+   Sistem.EmirSuresi = "KIE"; 
+   Sistem.EmirGonder( 
+} 
+ 
+
+
+=== PAGE 65 ===
+ 
+SEZA¦ KILIÃ 
+58 
+ 
+Írnek 2:  VIOP AKBANK Vadeli kontrata her 10 saniyede bir Ìartl² emir g÷nderen kod 
+ 
+var Sembol = "VIP'F_AKBNK0520"; 
+if (Sistem.ZamanKontrolSaniye(Sembol) >= 10) 
+{ 
+   Sistem.ZamanKontrolGuncelle(Sembol); 
+   var Miktar = 1; 
+      Sistem.EmirSembol = Sembol; 
+      Sistem.EmirIslem = "Al²■";      
+      Sistem.EmirMiktari = Miktar; 
+      Sistem.EmirSuresi = "GUN";      // GUN, SNS, IKG 
+      Sistem.EmirTipi = "Limitli";        // KPY, KIE, GIE, SAR 
+      Sistem.EmirFiyati = 5.10; 
+      Sistem.EmirSartSembol=Sembol; 
+      Sistem.EmirSartBool=true; 
+      Sistem.EmirSartFiyat= 4.50; 
+      Sistem.EmirSartTipi="ALIÌ >= Ìart Fiyat"; 
+      Sistem.EmirGonder(); 
+} 
+- 
+En Ãok Tekrar - Sistem.EncokTekrar  
+ 
+Bir sembol³n herhangi bir periyotlu grafi­inde, bir fiyat²n veya bir indikat÷r³n, en fazla 
+say²da tekrar etmi■ olan de­erini bulmaya yarayan ideal sistem fonksiyonudur. ¦ki ayr² kullan²m 
+■ekli vard²r. Birinci kullan²m ■ekli bir fiyat/indikat÷r listesinin son x adet bar² iinde en ok 
+tekrar eden de­eri veren ve bu sayede bir indikat÷r olarak da izilebilen kullan²md²r. T²pk² 
+14Æl³k ortalama izdirmek gibi, hep son 14 bar iindeki en ok tekrar eden kapan²■ de­erini 
+alarak iz diyerek en ok tekrar isimli bir indikat÷r elde edebiliriz. ¦kinci kullan²m ■ekli ide, bir 
+listenin TAMAMININ iindeki en ok say²da tekrar eden de­eri (tek bir de­er) elde etmek 
+amal² kullan²md²r. Kullan²m ■ekillerinin yaz²m y÷ntemleri a■a­²daki gibidir; 
+ 
+Sistem.EnCokTekrar(Liste, 14); 
+Sistem.EnCokTekrarDeger(Liste); 
+ 
+Írnek 1:  Son 50 bar ierisinde en ok kez g÷r³len kapan²■ de­erlerini indikat÷r olarak 
+hesaplay²p izen kod. 
+ 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var IND = Sistem.EnCokTekrar(C,50); 
+Sistem.Cizgiler[0].Deger = IND; 
+ 
+
+
+=== PAGE 66 ===
+ 
+SEZA¦ KILIÃ 
+59 
+ 
+ 
+ 
+Írnek 2:  Son 1000 bar ierisinde hangi y³ksek seviyesi ka kez g÷r³ld³ bilgisini bu komutu 
+kullanmadan elde etmek: 
+ 
+var V = Sistem.GrafikVerileri; 
+var H = Sistem.GrafikFiyatSec("Yuksek"); 
+var Tekrarlar = new SortedDictionary<float, int>(); 
+for (int i = V.Count-1000; i < V.Count; i++) // v.count-1000 den ba■lamak son 1000 bar demektir. 
+{ 
+    float Fiyat = H[i]; 
+    int Defa = 0; 
+    if (Tekrarlar.ContainsKey(Fiyat)) 
+        Defa = Tekrarlar[Fiyat]; 
+    Defa++; 
+    Tekrarlar[Fiyat] = Defa; 
+} 
+var Str = string.Join("\r\n", Tekrarlar.Select(x => x.Key.ToString("0.00") + "\t " + 
+x.Value.ToString()).ToList()); 
+Sistem.Mesaj(Str); 
+ 
+
+
+=== PAGE 150 ===
+ 
+SEZA¦ KILIÃ 
+143 
+ 
+ 
+ 
+ 
+- 
+Robot Fonksiyonlar² - Sistem.Robotxxxxx 
+ 
+iDealde en ok kullan²lan fonksiyonlar aras²nda tek sat²rl²k robot fonksiyonlar² yer al²r. 
+Kullan²c²lar taraf²ndan yaz²lm²■ ve grafikler ³zerinde al²■t²r²ld²klar²nda AL/SAT sinyallri ³reten 
+sistemler/stratejiler bu tek sat²rl²k komutlarla kolayca robota ba­labilirler. 
+Toplam 5 adet tek sat²rl²k robot fonksiyonu bulunmaktad²r. Bunlar a■a­²daki ■ekilde a­²r²l²p 
+kullan²rlar; 
+Not: Aktif kelimesi, t³m emirlerin aktiften (P¦YASA EMR¦) g÷nderdi­ini vurgular. 
+ 
+Sistem.RobotHisseAktifAcigaVar(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+  
+Sistem.RobotHisseAktifAcigaYok(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopAktif(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopTumGun(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopGunSonuKapat(SistemAdi, EmirSembol); 
+Sistem.RobotStop(); 
+ 
+Kural ■udur; Komutlar²n iindeki paramatreler girilir, ve tek bir sat²rdan olu■an bu kodlar 
+ôIslemö isimli bir de­i■kene atan²p kaydedilir. Kaydedilen bu kod art²k bir robottur ve sanal 
+veya gerek aksiyonda al²■t²r²labilir. Komutlar ve ilerindeki bilgi giri■leri a■a­²da a²klanm²■t²r; 
+ 
+RobotHisseAktifAcigaVar : Hisse senetlerinde al²■²r ve A²­a Sat²■ yapar 
+(stratejide a²­a sat ko■ulu var ise) 
+SistemAdi = al/sat sinyalleri ³reten stratejinizi kaydetti­iniz form³l³n ismi (÷rmek: MA1) 
+BazSembol = Sinyaller hangi sembol³n grtafikleri ³zerinden hesaplan²yor (Írnek: ôIMKBHÆGARAN) 
+EmirSembol: Al veya Sat sinyali gelince al²nacak veya sat²lacak sembol (Írnek: ôIMKBHÆGARANö) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (÷rnek 5 dk iin ô5ö) 
+
+
+=== PAGE 151 ===
+ 
+SEZA¦ KILIÃ 
+144 
+ 
+Miktar: Al veya Sat gelince ka lot emir iletilecek (÷rnek 100) 
+ 
+Írnek Tek Sat²r Robot:  var Islem = Sistem.RobotHisseAktifAcigaVar("MA1", "IMKBH'GARAN", 
+"IMKBH'GARAN", "5", 100); 
+ 
+RobotHisseAktifAcigaYok : Hisse senetlerinde al²■²r ve A²­a Sat²■ yapmaz. Sadece 
+Al²m yap²l²r ve sat gelince eldeki lot sat²l²r.) 
+SistemAdi = al/sat sinyalleri ³reten stratejinizi kaydetti­iniz form³l³n ismi (÷rmek: MA1) 
+BazSembol = Sinyaller hangi sembol³n grtafikleri ³zerinden hesaplan²yor (Írnek: ôIMKBHÆGARAN) 
+EmirSembol: Al veya Sat sinyali gelince al²nacak veya sat²lacak sembol (Írnek: ôIMKBHÆGARANö) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (÷rnek 5 dk iin ô5ö) 
+Miktar: Al veya Sat gelince ka lot emir iletilecek (÷rnek 1) 
+ 
+Írnek Tek Sat²r Robot:  var Islem = Sistem. RobotHisseAktifAcigaYok("MA1", "IMKBH'GARAN", 
+"IMKBH'GARAN", "5", 100); 
+ 
+RobotViopAktif : VIOP kontratlar² iin al²■²r ve Piyasa Emri iletir) 
+SistemAdi = al/sat sinyalleri ³reten stratejinizi kaydetti­iniz form³l³n ismi (÷rmek: MA1) 
+BazSembol = Sinyaller hangi sembol³n grtafikleri ³zerinden hesaplan²yor (Írnek: ôVIPÆVIP-X030) 
+EmirSembol: Al veya Sat sinyali gelince al²nacak veya sat²lacak sembol (Írnek: ôVIPÆF_XU0301221ö) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (÷rnek 5 dk iin ô5ö) 
+Miktar: Al veya Sat gelince ka lot emir iletilecek (÷rnek 1) 
+ 
+Írnek Tek Sat²r Robot:  
+var 
+Islem 
+= 
+Sistem.RobotViopAktif("MA1", 
+"VIPÆVIP-X030", 
+"VIP'F_XU0300221", "5", 1); 
+ 
+RobotViopAktifTumGun : VIOP kontratlar² iin al²■²r, Piyasa Emri iletir ve Ak■am 
+Seans² dahil al²■²r) 
+SistemAdi = al/sat sinyalleri ³reten stratejinizi kaydetti­iniz form³l³n ismi (÷rmek: MA1) 
+BazSembol = Sinyaller hangi sembol³n grtafikleri ³zerinden hesaplan²yor (Írnek: ôVIPÆVIP-X030) 
+EmirSembol: Al veya Sat sinyali gelince al²nacak veya sat²lacak sembol (Írnek: ôVIPÆF_XU0301221ö) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (÷rnek 5 dk iin ô5ö) 
+Miktar: Al veya Sat gelince ka lot emir iletilecek (÷rnek 1) 
+ 
+Írnek Tek Sat²r Robot:  var Islem = Sistem.RobotViopAktifTumGun("MA1", "VIPÆVIP-X030", 
+"VIP'F_XU0300221", "5", 1); 
+ 
+Not: Ak■am seans²nda piyasa emri g÷ndermek yasakt²r. Bu seans diliminde AL sinyali gelirse emirler L¦M¦TL¦ 
+olarak TAVAN F¦YATA, SAT sinyali gelirse emirler L¦M¦TL¦ olarak TABAN F¦YATA g÷nderilir. 
+ 
+RobotViopGunSonuKapat : VIOP kontratlar² iin al²■²r,Piyasa Emri iletir ve g³n³n 
+sonunda varsa pozisyonu kapat²r. (ertesi g³n sisteminiz hangi y÷nde ise o y÷nde 
+tekrar pozisyon a■l²l²r.) 
+SistemAdi = al/sat sinyalleri ³reten stratejinizi kaydetti­iniz form³l³n ismi (÷rmek: MA1) 
+EmirSembol: Al veya Sat sinyali gelince al²nacak veya sat²lacak sembol (Írnek: ôVIPÆF_XU0301221ö) 
+ 
+ 
+Írnek Tek Sat²r Robot:  var Islem = Sistem.RobotViopGunSonuKapat(SistemAdi, EmirSembol); 
+ 
+RobotStop : Ãal²■an b³t³n robotlar² durdurmak amal² kullan²l²r 
+ 
+ 
+Herhangi bir ko■ulda al²■an B▄T▄N robotlar² durdurmak amal² kullan²l²r. 
+Írne­in endenksin de­er kayb² %5 olursa robotlar kapat²ls²n ■eklinde bir kod olarak kaydedip 
+bu kodu da robot olarak al²■t²rabiliriz. 
+ 
+
+
+=== PAGE 152 ===
+ 
+SEZA¦ KILIÃ 
+145 
+ 
+var Endeks = Sistem.YuzeyselVeriOku("IMKBX'XU100"); 
+var EndeksDegisim = Endeks.NetPerDay; 
+ 
+if (EndeksDegisim < -5 ) 
+{ 
+   Sistem.RobotStop();  
+} 
+ 
+- 
+Saat - Sistem.Saat() 
+ 
+iDeal Yay²n saatine eri■mek iin kullan²lan sistem fonksiyonudur. Saat/Dakika/Saniye olarak 
+iDeal yay²n²ndaki saati veririr. 
+ 
+Írnek kullan²m: ekrana o anki saati mesaj olarak getiren kod: 
+  
+var saat = Sistem.Saat; 
+Sistem.Mesaj(saat); 
+ 
+Saat verisi kullan²larak yap²lan ok fazla kodlama vard²r ve s²ka kullan²l²r. Burada dikkat 
+edilmesi gereken en ÷nemli husus, bu komutla al²nan saatin, KODUN ÃALIÌTIºI ANDAK¦ saat 
+oldu­udur. Grafik barlar²n²n saati de­ildir. GRAF¦K VER¦LER¦ komutu anlat²m²nda, barlar²n saat 
+verisine nas²l eri■ilebilece­i anlat²lm²■t²r. 
+ 
+ 
+Belli saatlerde belli i■lemleri yapt²rmak veya robotlara belli saatlerde al²■ma gibi komutlar 
+vermek iin saat bilgisi kullan²c² taraf²ndan tan²mlanan saatlerle k²yaslan²r. 
+E­er saat xx:xx:xx den b³y³kse pozisyonu kapat 
+E­er saat xx:xx:xx den k³³kse AL  gibi. 
+Zaman verileri ile ilgili KISYASLAMA iin c# yaz²m dilinde CompareTo komutu kullan²l²r. 
+Compare ¦ngilizce bir klime olarak KIYASLA anlam²ndad²r. 
+ 
+CompareTo(x) ■eklinde bir kullan²m, verilen zaman² x ile k²yaslar ve b³y³kt³r s²f²r, k³³kt³r 
+s²f²r, e■ittir s²f²r, b³y³ke■it, k³³ke■ittir s²f²r  gibi sonular verir. 
+ 
+ 
+ÍRNEK: Sistemin saati kullan²c² taraf²ndan girilen bir saatten (11:05:30) b³y³k veya e■it oldu­u 
+anda 1 lot DOHOL al kodu 
+ 
+ 
+var Sembol = "IMKBH'DOHOL"; 
+var Miktar = 1; 
+var islemsaati = "11:05:30"; 
+ 
+if (Sistem.Saat.CompareTo(islemsaati) >= 0)    
+{ 
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = "Al²■"; 
+   Sistem.EmirTipi = "Piyasa";     
+   Sistem.EmirSuresi = "KIE";    
+   Sistem.EmirMiktari = Miktar; 
+   Sistem.EmirGonder(); 
+} 
+ 
+ 
+
+
+=== PAGE 153 ===
+ 
+SEZA¦ KILIÃ 
+146 
+ 
+ÍRNEK 2: Grafik barlar²n²n saatlerini kullanma amal² olarak, RSI 55 ten b³y³kse AL yapan, RSI 45 
+ten k³³kse SAT yapan, saat 17:40 bar²nda nakite geen sistem; 
+ 
+var V = Sistem.GrafikVerileri; 
+var RSI = Sistem.RSI(14); 
+var SonYon=""; 
+for (int i = 1; i < V.Count; i++) 
+{ 
+   if (V[i].Date.Hour >= 17 && V[i].Date.Minute >= 40 && SonYon != "F") 
+   { 
+      Sistem.Yon[i] = "F"; 
+      SonYon = "F"; 
+   } 
+   else if (RSI[i] > 55 && SonYon != "A" )// % 2 stop 
+   { 
+      Sistem.Yon[i] = "A"; 
+      SonYon = "A"; 
+   } 
+   else if (RSI[i] < 45 && SonYon != "S" )// % 2 stop 
+   { 
+      Sistem.Yon[i] = "S"; 
+      SonYon = "S"; 
+   } 
+} 
+ 
+ 
+NOT: Barlara ait saat / tarih bilgilerine eri■im iin ipucu kodlar²: 
+ 
+var V = Sistem.GrafikVerileri; 
+ 
+for (int i = 1; i < V.Count; i++) 
+{ 
+   if (V[i].Date.DayOfWeek.ToString() == "Monday" ) 
+      Sistem.Yon[i] = "A"; 
+   else if (V[i].Date.DayOfWeek.ToString() == "Friday") 
+      Sistem.Yon[i] = "S"; 
+   else if (V[i].Date.ToString("yyyyMMdd")=="20171204") 
+      Sistem.Yon[i] = "A"; 
+   else if (V[i].Date.Hour == 18 && V[i].Date.Minute == 05) 
+      Sistem.Yon[i] = "F"; 
+   else if (V[i].Date.Month == 12) 
+      Sistem.Yon[i] = "F"; 
+   else if (V[i].Date.Year == 2016) 
+      Sistem.Yon[i] = "F"; 
+} 
+ 
+- 
+Saat Aral²i­²  - Sistem.SaatAraligi(ô15:00ö, ô16:30ö) 
+ 
+Belli saatler aras²nda bir i■ yapt²rmak veya yapt²rmamak iin Saat Aral²­² fonksiyonu 
+kullanu²labilir. 
+ 
+ÍRNEK: Saat 09:30 ile 09:50 aras²nda ve 17:50 ile 18:00 aras²nda hibir i■lem yapma, geri kalan 
+zamanlarda form³l³ al²■t²r; 
+ 
+if (Sistem.SaatAraligi("09:30", "09:50") || Sistem.SaatAraligi("17:50", "18:00")) 
+{ 
+ 
+} 
+else 
+{ 
+   // al²■malar²n²z 
+ 
+} 
+
+
+=== PAGE 195 ===
+ 
+SEZA¦ KILIÃ 
+188 
+ 
+ÍRNEK: Vortex izdirmek 
+ 
+var period = 14; 
+var VORTEX_Plus = Sistem.VortexPlus( period ); 
+var VORTEX_Minus = Sistem.VortexMinus(period ); 
+ 
+Sistem.Cizgiler[0].Deger = VORTEX_Plus; 
+Sistem.Cizgiler[1].Deger = VORTEX_Minus; 
+ 
+- 
+VIOP Hesap Oku - Sistem. ViopHesapOku()  
+ 
+Portf÷y penceresine ekleyerek, parola ve ■ifrenizi de girip LOGIN oldu­unuz arac² 
+kurumdaki hesab²n²z²n VIOP taraf²na ait bilgileri okumak iin Sistem.ViopHesapOku() 
+fonksiyonu kullan²l²r. 
+Sistem kod edit÷r³ne Bu komut yaz²l²p al²■t²r²ld²­² zaman iDeal arac² kurumunuzdaki hesap 
+iin (V¦OP TARAFI) a■a­²daki bilgileri kurumunuzdan eker ve kullanabilmeniz iin sunar; 
+ 
+- 
+Teminatlar (birka e■it teminat bilgisi vard²r ve hepsi birer say²sal de­er d÷ner) 
+- 
+Pozisyonlar (portf÷ydeki pozisyonlar² ieren birden fazla eleman² olan bir listedir) 
+- 
+Bekleyen Emirler (g³n ii bekleyen durumunda olan emirlerinizi ieren bir listedir) 
+- 
+Gerekle■en Emirler (g³n ii gerekle■mi■  emirlerinizi ieren bir listedir) 
+ 
+ 
+Teminatlar Viop Hesap Oku komutu yaz²ld²ktan sonra, okutulan hesap d÷n³■ listesi iin 
+kullan²lan de­i■kenden sonra NOKTA i■areti konulup a■a­²daki teminat bilgilerine eri■ilebilir; 
+ 
+var ViopHesap = Sistem.ViopHesapOku(); 
+ViopHesap.TeminatToplam; 
+ViopHesap.TeminatBaslangic; 
+ViopHesap.TeminatSurdurme; 
+ViopHesap.TeminatKullanilabilir; 
+ViopHesap.TeminatCekilebilir; 
+ 
+ 
+ÍRNEK: Login olunmu■ olan hesab²m²zdaki teminat bilgileri oku, ekrana bir tablo a²p, tabloda bu 
+bilgileri g÷ster form³l³; 
+ 
+var ViopHesap = Sistem.ViopHesapOku(); 
+if (ViopHesap != null) // e­er kurumdan d÷nen cevap bo■ de­ilse 
+{ 
+   string TabloAd = "VIOP TEMINAT"; 
+   SutunGenislik = new int[2]{200,100}; 
+   SutunHizala = new int[2]{0,2}; 
+   SutunBaslik = new string[2]{"A²klama","De­er"}; 
+   Sistem.Tablo(TabloAd, 450, 100, 400, 200, 2, 50, SutunGenislik, SutunHizala, 
+SutunBaslik); 
+   Sistem.TabloTemizle(TabloAd); 
+   Sistem.TabloYazdir(TabloAd, 0, 0, "Teminat Toplam²", Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 
+1, 
+0, 
+ViopHesap.TeminatToplam.ToString("0.00"), 
+Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 0, 1, "Ba■lang² Teminat²", Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 
+1, 
+1, 
+ViopHesap.TeminatBaslangic.ToString("0.00"), 
+Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 0, 2, "S³rd³rme Teminat²", Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 
+1, 
+2, 
+ViopHesap.TeminatSurdurme.ToString("0.00"), 
+Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 0, 3, "Kullan²labilir Teminat", Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 1, 3, ViopHesap.TeminatKullanilabilir.ToString("0.00"), 
+Color.White, Color.Black); 
+
+
+=== PAGE 196 ===
+ 
+SEZA¦ KILIÃ 
+189 
+ 
+   Sistem.TabloYazdir(TabloAd, 0, 4, "Ãekilebilir Teminat", Color.White, Color.Black); 
+   Sistem.TabloYazdir(TabloAd, 
+1, 
+4, 
+ViopHesap.TeminatCekilebilir.ToString("0.00"), 
+Color.White, Color.Black); 
+} 
+ 
+Bu form³l bir kez al²■t²r²l²rsa (FORM▄L TEST butonuna bas²l²rsa) a■a­²daki tablo a²l²r. 
+ 
+ 
+ 
+ 
+ 
+Pozisyonlar, Bekleyen ve Gerekle■en Emirler birer Liste olduklar² iin, onlar²n da d÷nen 
+verilerinin her biri birden ok veri alan² sunar.  
+ 
+Pozisyonlar verisi ekildi­i zaman okunabilecek bilgi alanlar² iin, pozisyonlar² tan²mlad²­²m²z 
+de­i■kenin hemen devam²na NOKTA i■areti koyup sunulan bilgi alanlar²n²n ismi yaz²larak, sahip 
+olunan hissenin adedi, maliyeti, senet kodu, kar zarar bilgisi ve Son fiyat de­eri elde edilebilir. 
+Pozisyonlar Listesinin d÷n³■ de­erleri a■a­²daki gibidir; 
+ 
+ 
+    PozList.Symbol; 
+    PozList.NetAmount; 
+    PozList. ProfitAnlik; //anl²k fiyata g÷re KZ 
+    PozList.Profit; //Uzla■²ya g÷re KZ 
+ 
+ 
+Gerekle■en Emirler verisi ekildi­i zaman okunabilecek bilgi alanlar² iin, tan²mlad²­²m²z 
+de­i■kenin hemen devam²na NOKTA i■areti koyup sunulan bilgi alanlar²n²n ismi yaz²larak, g³n 
+iinde verdi­iniz ve GERÃEKLEÌM¦Ì olan emirlerinize ait fiyat, emir no, y÷n, emir s³resi, emir 
+tipi, emir tarihi/saati ve emir statusu (durumu) bilgileri elde edilebilir. Gerekle■en Emirler 
+Listesinin d÷n³■ de­erleri a■a­²daki gibidir; 
+ 
+    GerceklesenList.OrderNo; 
+    GerceklesenList.OrderDate; 
+    GerceklesenList.Symbol; 
+    GerceklesenList.BuySell; //Al²■ - Sat²■ 
+    GerceklesenList.Session; //s³re 
+    GerceklesenList.OrderType; //emir tipi 
+    GerceklesenList.Price; //emir giyat² 
+    GerceklesenList.Status; //emrin durumu 
+    GerceklesenList.GAmount; //gerekle■en adey 
+ 
+Bekleyen Emirler verisi ekildi­i zaman okunabilecek bilgi alanlar² iin, tan²mlad²­²m²z 
+de­i■kenin hemen devam²na NOKTA i■areti koyup sunulan bilgi alanlar²n²n ismi yaz²larak, g³n 
+iinde verdi­iniz ve BEKL¦YOR DURUMDA OLAN olan emirlerinize ait fiyat, emir no, y÷n, emir 
+s³resi, emir tipi, emir tarihi/saati ve emir statusu (durumu)bilgileri elde edilebilir. Gerekle■en 
+Emirler Listesinin d÷n³■ de­erleri a■a­²daki gibidir; 
+ 
+    BekleyenList.OrderNo; 
+    BekleyenList.OrderDate; 
+
+
+=== PAGE 197 ===
+ 
+SEZA¦ KILIÃ 
+190 
+ 
+    BekleyenList.Symbol; 
+    BekleyenList.BuySell; 
+    BekleyenList.Session; 
+    BekleyenList.OrderType; 
+    BekleyenList.Price; 
+    BekleyenList.Status; 
+ 
+Írnek1: Hesab²m² oku, VIOP taraf²nda gerekle■mi■ olan emirlerimi getir ve ekranda bir 
+tablo a²p g÷ster. 
+ 
+Not: Bu sonucu g÷rebilmek iin iDeal Portf÷y penceresinde HERSAP EKLE diyerek arac² kurumdaki 
+hesab²n²z² eklemi■, parola ve/veya ■ifrenizi girerek hesab²n²za login olmu■ olmal²s²n²z. 
+ 
+var ViopHesap = Sistem.ViopHesapOku(); 
+if (ViopHesap != null) 
+{ 
+   // Gerekle■en Emirler 
+   var GerceklesenList = ViopHesap.GerceklesenEmirler; 
+   string TabloAd = "VIOP GERCEKLESEN"; 
+   SutunGenislik = new int[5]{140,70,100,100,160}; 
+   SutunHizala = new int[5]{0,1,2,2,1}; 
+   SutunBaslik = new string[5]{"Sembol", "¦■lem", "Fiyat", "Miktar", "Emir No"}; 
+   Sistem.Tablo(TabloAd, 200, 500, 620, 200, 5, 100, SutunGenislik, SutunHizala, SutunBaslik); 
+   Sistem.TabloTemizle(TabloAd); 
+   for (int i = 0; i < GerceklesenList.Count; i++) 
+   { 
+      var Renk = Color.Black; 
+      if (GerceklesenList[i].BuySell.Substring(0,1) == "A") 
+         Renk = Color.Blue; 
+      else if (GerceklesenList[i].BuySell.Substring(0,1) == "S") 
+         Renk = Color.Red; 
+      Sistem.TabloYazdir(TabloAd, 0, i, GerceklesenList[i].Symbol, Color.White, Renk); 
+      Sistem.TabloYazdir(TabloAd, 1, i, GerceklesenList[i].BuySell, Color.White, Renk); 
+      Sistem.TabloYazdir(TabloAd, 2, i, GerceklesenList[i].Price.ToString("0.000"), Color.White, 
+Renk); 
+      Sistem.TabloYazdir(TabloAd, 3, i, GerceklesenList[i].GAmount.ToString("0"), Color.White, 
+Renk); 
+      Sistem.TabloYazdir(TabloAd, 4, i, GerceklesenList[i].OrderTime, Color.White, Renk); 
+   } 
+} 
+ 
+ 
+- 
+Yay Ãiz - Sistem.YayCiz()  
+ 
+Grafik ³zerinde kullan²c² taraf²ndan girilen 3 veya 4 noktay² (3/4 bar numaras² ve 3/4 fiyat 
+seviyesi) birle■tirerek yay izme amal² kullan²l²r. Ízellikle patern/Flama/Formasyon bulma 
+amal² kodlar yazan kullan²c²lar²m²z, formasyonu olu■turan barlar² ve fiyat seviyeleri koddan 
+tespit edip formasyonun oldu­unu otomatik olarak d÷rtgen veya kelebek ■eklinde 
+izdirtebilirler. 
+ 
+Kullan²m ■ekilleri a■a­²daki gibidir; (3 veya 4 noktadan geen yay olmak ³zere 2 ayr² komut 
+vard²r) 
+ 
+Sistem.YayCiz(panel, bar1, fiyat1, bar2, fiyat2, bar3, fiyat3, renk, kalinlik, dolgu, dolgurenk, nokta, noktarenk) 
+Sistem.YayCiz(panel, bar1, fiyat1, bar2, fiyat2, bar3, fiyat3, bar4, fiyat4, renk, kalinlik, dolgu, dolgurenk, nokta, 
+noktarenk) 
+ 
+ 
+Parantez iindeki giri■ bilgileri a²klamalar² a■a­²daki gibidir; 
+
+

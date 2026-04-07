@@ -186,7 +186,7 @@ class ARSTrendStrategyV2:
         """Vade sonu tarihlerini hesapla - IdealData ile birebir aynı mantık"""
         vade_dates = set()
         # Veri setindeki aylar
-        dates = pd.to_datetime(self.times)
+        dates = pd.to_datetime(self.times, dayfirst=True)
         months = dates.to_period('M').unique()
         
         for m in months:

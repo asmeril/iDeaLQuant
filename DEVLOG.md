@@ -1,3 +1,59 @@
+## 2026-04-08 — S8 Bug Fix Turu & v5.0 Release
+
+### ✅ Yapılanlar
+
+#### S8 (Gap Reversal) — Kritik Bug Fix'ler
+- **WinError 5 (PermissionError) Giderildi:**
+  - `main.py`: `freeze_support()` artık module seviyesinde (unconditional) çağrılıyor — frozen EXE worker spawn güvenliği sağlandı.
+  - `main.py`: `set_start_method('spawn', force=True)` eklendi — Windows handle inheritance sorunu çözüldü.
+  - `build_idealquant.py`: Eksik `--hidden-import` girdileri eklendi (`multiprocessing.pool/util/managers`, `numba.core/typed`, S8 modülleri).
+- **SPOT Vade Short Bug Giderildi:**
+  - `strategy8_optimizer.py`: `fast_backtest_strategy8` kernel'e `vade_tipi: int` parametresi eklendi.
+  - SPOT vadede short sinyali bloklama C# export kodu ile birebir eşleştirildi.
+  - `hybrid_group_optimizer.py`: `_evaluate_s8_params` → `vt_code` kernel'e iletiliyor.
+- **`_build_s8_arrays` Sağlamlaştırıldı:**
+  - `pd.to_datetime(errors='coerce')` ile robust datetime parsing: string/None/NaT değerler güvenli işleniyor.
+  - Her bar `try/except` ile izole edildi — tek bozuk bar tüm build'i çökertemiyor.
+- **Lint Fix:** `g_mask` module seviyesinde `= None` olarak tanımlandı.
+- **Genetik & Bayesian S8:** `active_days` / `total_days` `quick_fitness`'e iletildi — Hibrit ile fitness tutarlılığı sağlandı.
+
+### 🔑 Önemli Kararlar
+- S8 Numba kernel imzasına `vade_tipi` eklenmesi: S7 ile parite sağlandı, optimizer ve export kodları tutarlı hale getirildi.
+- `freeze_support()` module-level taşıma: PyInstaller frozen + Windows multiprocessing için best practice.
+
+### 📌 Mevcut Durum
+- **v5.0 yayınlandı** (S8 full entegrasyon + bug fix'ler).
+- **Sıradaki Adım:** Gerçek veri üzerinde S7/S8 Walk-Forward ve Monte Carlo analizleri.
+
+---
+
+## 2026-04-08 (S7 Full Entegrasyon & S8 Gap Reversal v1.0)
+
+### ✅ Yapılanlar
+
+#### Strateji 7: DeepScalp v1.2 (Full-Stack)
+- **Komple Entegrasyon:** `deepscalp_strategy.py` (6 katmanlı: ARS, ST, TOMA, MFI, ATR, Zaman) tamamlandı.
+- **C# Export:** `_generate_strategy7_code` şablonu tüm parametreler ve IdealData uyumlu sinyal döngüsüyle hazırlandı.
+- **Optimizasyon:** `strategy7_optimizer.py` Numba JIT desteğiyle entegre edildi.
+
+#### Strateji 8: Gap Reversal v1.0 (YENİ)
+- **Strateji Mantığı:** BIST30 vadeli gece gap'lerini Opening Range (OR) kırılımı ile tersine trade eden sistem kuruldu.
+- **Python Çekirdeği:** `gap_reversal_strategy.py` Wilder RSI, Wilder ATR ve hacim filtrelerini içeriyor.
+- **Optimizasyon:** `strategy8_optimizer.py` ile pre-computed arrays kullanılarak ~80x hızlanma sağlandı.
+- **Full-Stack:** StrategyPanel, OptimizerPanel ve ExportPanel'e S8 tam destek eklendi.
+- **C# Export:** `_generate_strategy8_code` ile IdealData için hazır `GapReversal_S8` kodu eklendi.
+
+### 🔑 Önemli Kararlar
+- S8 için iDeal platformuyla birebir uyumlu **Wilder RSI/ATR** manuel implemente edildi (Numba uyumlu).
+- S5-S8 arası tüm yeni stratejilerde **3-Mod Vade Tipi** (VIOP_ENDEKS, VIOP_SPOT, SPOT) standart hale getirildi.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** 🔄 Faz 3: Robust Parametre Seçimi (S7 ve S8 için).
+- **Sıradaki Adım:** S1-S4 stratejilerini 3-mod vade yapısına modernize etmek.
+
+---
+
+
 ## 2026-04-04 (Kritik Bug Fix: IdealData BASE_DATE & CSV Period Normalizasyonu)
 
 ### ✅ Yapılanlar

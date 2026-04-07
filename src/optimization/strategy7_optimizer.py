@@ -1,5 +1,11 @@
 """
 Strateji 7 (DeepScalp) Numba-JIT Support
+=========================================
+v1.3 - Pre-computation Optimization
+- fast_backtest_strategy7: HHV/LLV/MFI-HHV/MFI-LLV/VolMA döngüleri kaldırıldı.
+  Bu diziler artık dışarıda (DeepScalpCache veya IndicatorCache) bir kez hesaplanıp
+  hazır numpy array olarak geçiliyor. Böylece her kombinasyon için sadece basit
+  karşılaştırmalar yapılıyor (~50-100x hızlanma).
 """
 import numpy as np
 from numba import jit
@@ -19,12 +25,14 @@ def fast_backtest_strategy7(
     atr_arr: np.ndarray,
     mask_arr: np.ndarray,
     times_arr: np.ndarray,
+    # Pre-computed arrays (artık kernel içinde döngü yok)
+    hhv_arr: np.ndarray,       # highs'ın hhv_period rolling max'i (shifted: prev bar)
+    llv_arr: np.ndarray,       # lows'ın llv_period rolling min'i (shifted: prev bar)
+    mfi_hhv_arr: np.ndarray,   # mfi'nın mfi_hhv_period rolling max'i (shifted)
+    mfi_llv_arr: np.ndarray,   # mfi'nın mfi_llv_period rolling min'i (shifted)
+    vol_ma_arr: np.ndarray,    # volumes'ın 20-bar SMA'sı (shifted)
     # Params
     ars_k: float,
-    hhv_period: int,
-    llv_period: int,
-    mfi_hhv_period: int,
-    mfi_llv_period: int,
     mfi_long: float,
     mfi_short: float,
     vol_ratio: float,
@@ -39,6 +47,7 @@ def fast_backtest_strategy7(
 ):
     """
     Numba-optimized core logic for DeepScalp.
+    Pre-computed array versiyonu: HHV/LLV/MFI-HHV/MFI-LLV/VolMA döngüleri yok.
     Returns: (net_profit, total_trades, profit_factor, max_dd, sharpe_ratio, oos_active_days, total_days)
     """
     n = len(closes)
@@ -109,7 +118,9 @@ def fast_backtest_strategy7(
             cooldown_ct -= 1
             
         ars_ema_val = ars_ema[i]
-        ars_band = round(ars_ema_val * ars_k, 2)
+        # Match rounded arithmetic of C# to avoid subtle differences
+        # iDeal: Sistem.SayiYuvarla(arsEmaVal * arsK, 0.01f)
+        ars_band = round(ars_ema_val * ars_k / 0.01 + 1e-9) * 0.01
         
         rejim_long = (closes[i] > ars_ema_val) and (closes[i] < ars_ema_val + ars_band)
         rejim_short = (closes[i] < ars_ema_val) and (closes[i] > ars_ema_val - ars_band)
@@ -125,42 +136,25 @@ def fast_backtest_strategy7(
         toma_kros_up = (toma_val[i] > 0) and (toma_val[i - 1] <= 0)
         toma_kros_down = (toma_val[i] < 0) and (toma_val[i - 1] >= 0)
         
-        prev_hhv = 0.0
-        for k in range(1, hhv_period + 1):
-            if i - k >= 0 and highs[i - k] > prev_hhv:
-                prev_hhv = highs[i - k]
+        # Pre-computed array'lerden oku (döngü yok!)
+        prev_hhv = hhv_arr[i]      # i-1'e kadar olan hhv_period periyotun max'i
         hhv_break = (closes[i] > prev_hhv)
         
-        prev_llv = 9999999.0
-        for k in range(1, llv_period + 1):
-            if i - k >= 0 and lows[i - k] < prev_llv:
-                prev_llv = lows[i - k]
+        prev_llv = llv_arr[i]      # i-1'e kadar olan llv_period periyotun min'i
         llv_break = (closes[i] < prev_llv)
         
         tetik_long = toma_kros_up or hhv_break
         tetik_short = toma_kros_down or llv_break
         
-        prev_mfi_max = 0.0
-        for k in range(1, mfi_hhv_period + 1):
-            if i - k >= 0 and mfi_arr[i - k] > prev_mfi_max:
-                prev_mfi_max = mfi_arr[i - k]
+        # Pre-computed MFI extremes (döngü yok!)
+        prev_mfi_max = mfi_hhv_arr[i]
         mfi_long_ok = (mfi_arr[i] > mfi_long) and (mfi_arr[i] > prev_mfi_max)
         
-        prev_mfi_min = 9999999.0
-        for k in range(1, mfi_llv_period + 1):
-            if i - k >= 0 and mfi_arr[i - k] < prev_mfi_min:
-                prev_mfi_min = mfi_arr[i - k]
+        prev_mfi_min = mfi_llv_arr[i]
         mfi_short_ok = (mfi_arr[i] < mfi_short) and (mfi_arr[i] < prev_mfi_min)
         
-        vol_avg = 0.0
-        v_count = 0
-        for k in range(1, 21):
-            if i - k >= 0:
-                vol_avg += volumes[i - k]
-                v_count += 1
-        if v_count > 0:
-            vol_avg /= float(v_count)
-            
+        # Pre-computed volume MA (döngü yok!)
+        vol_avg = vol_ma_arr[i]
         vol_ok = (volumes[i] >= vol_avg * vol_ratio)
         
         onay_long = mfi_long_ok and vol_ok
@@ -292,6 +286,12 @@ class DeepScalpCache:
         self.mfi_cache = {}
         self.atr_cache = {}
         self.st_cache = {}
+        # Pre-computed rolling arrays
+        self._hhv_cache = {}
+        self._llv_cache = {}
+        self._mfi_hhv_cache = {}
+        self._mfi_llv_cache = {}
+        self._vol_ma_cache = {}
 
     def get_ema(self, period):
         if period not in self.ema_cache:
@@ -326,3 +326,49 @@ class DeepScalpCache:
             st_val, _, _ = get_supertrend(self.highs, self.lows, self.closes, hhv_p, atr_p, factor)
             self.st_cache[key] = st_val
         return self.st_cache[key]
+
+    # --- Pre-computed rolling arrays (shifted: bar i'de i-1'e kadar olan max/min) ---
+    
+    def get_hhv_shifted(self, period: int) -> np.ndarray:
+        """highs dizisinin hhv_period rolling max'i, i-1 shift'li (prev bar'ın max'i)."""
+        if period not in self._hhv_cache:
+            import pandas as pd
+            ser = pd.Series(self.highs).shift(1).rolling(period, min_periods=1).max()
+            self._hhv_cache[period] = ser.fillna(0.0).values.astype(np.float64)
+        return self._hhv_cache[period]
+
+    def get_llv_shifted(self, period: int) -> np.ndarray:
+        """lows dizisinin llv_period rolling min'i, i-1 shift'li."""
+        if period not in self._llv_cache:
+            import pandas as pd
+            ser = pd.Series(self.lows).shift(1).rolling(period, min_periods=1).min()
+            self._llv_cache[period] = ser.fillna(9999999.0).values.astype(np.float64)
+        return self._llv_cache[period]
+
+    def get_mfi_hhv_shifted(self, mfi_period: int, hhv_period: int) -> np.ndarray:
+        """MFI'nın mfi_hhv_period rolling max'i, i-1 shift'li."""
+        key = (mfi_period, hhv_period)
+        if key not in self._mfi_hhv_cache:
+            import pandas as pd
+            mfi = self.get_mfi(mfi_period)
+            ser = pd.Series(mfi).shift(1).rolling(hhv_period, min_periods=1).max()
+            self._mfi_hhv_cache[key] = ser.fillna(0.0).values.astype(np.float64)
+        return self._mfi_hhv_cache[key]
+
+    def get_mfi_llv_shifted(self, mfi_period: int, llv_period: int) -> np.ndarray:
+        """MFI'nın mfi_llv_period rolling min'i, i-1 shift'li."""
+        key = (mfi_period, llv_period)
+        if key not in self._mfi_llv_cache:
+            import pandas as pd
+            mfi = self.get_mfi(mfi_period)
+            ser = pd.Series(mfi).shift(1).rolling(llv_period, min_periods=1).min()
+            self._mfi_llv_cache[key] = ser.fillna(9999999.0).values.astype(np.float64)
+        return self._mfi_llv_cache[key]
+
+    def get_vol_ma_shifted(self, period: int = 20) -> np.ndarray:
+        """Volume'ün period-bar SMA'sı, i-1 shift'li."""
+        if period not in self._vol_ma_cache:
+            import pandas as pd
+            ser = pd.Series(self.volumes).shift(1).rolling(period, min_periods=1).mean()
+            self._vol_ma_cache[period] = ser.fillna(0.0).values.astype(np.float64)
+        return self._vol_ma_cache[period]

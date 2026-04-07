@@ -1,0 +1,129 @@
+{
+  "symbol": "VIP_X030-T_1dk_20260329_222850",
+  "period": "1 dk",
+  "strategy_index": 6,
+  "strategy_name": "Strateji 7 - DeepScalp v1.2",
+  "created": "2026-03-29 22:31:02",
+  "params": {
+    "ars_k": {
+      "min": 0.8,
+      "max": 2.0,
+      "step": 0.1,
+      "active": true
+    },
+    "hhv_period": {
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "active": true
+    },
+    "llv_period": {
+      "min": 30,
+      "max": 100,
+      "step": 10,
+      "active": true
+    },
+    "vol_ratio": {
+      "min": 0.5,
+      "max": 1.2,
+      "step": 0.1,
+      "active": true
+    },
+    "st_factor": {
+      "min": 2.0,
+      "max": 4.0,
+      "step": 0.5,
+      "active": true
+    },
+    "ema_fast_period": {
+      "min": 25,
+      "max": 75,
+      "step": 5,
+      "active": true
+    },
+    "ema_slow_period": {
+      "min": 75,
+      "max": 150,
+      "step": 5,
+      "active": true
+    },
+    "toma_period2": {
+      "min": 0.5,
+      "max": 3.0,
+      "step": 0.1,
+      "active": true
+    },
+    "mfi_period": {
+      "min": 50,
+      "max": 90,
+      "step": 10,
+      "active": true
+    },
+    "mfi_hhv_period": {
+      "min": 15,
+      "max": 45,
+      "step": 5,
+      "active": true
+    },
+    "mfi_llv_period": {
+      "min": 15,
+      "max": 45,
+      "step": 5,
+      "active": true
+    },
+    "mfi_long": {
+      "min": 45.0,
+      "max": 65.0,
+      "step": 5.0,
+      "active": true
+    },
+    "mfi_short": {
+      "min": 35.0,
+      "max": 55.0,
+      "step": 5.0,
+      "active": true
+    },
+    "atr_stop_mult_long": {
+      "min": 1.0,
+      "max": 2.5,
+      "step": 0.25,
+      "active": true
+    },
+    "atr_stop_mult_short": {
+      "min": 1.0,
+      "max": 2.5,
+      "step": 0.25,
+      "active": true
+    },
+    "kar_al_yuzde_long": {
+      "min": 1.0,
+      "max": 4.0,
+      "step": 0.5,
+      "active": true
+    },
+    "kar_al_yuzde_short": {
+      "min": 1.0,
+      "max": 4.0,
+      "step": 0.5,
+      "active": true
+    },
+    "min_hold_bars": {
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "active": true
+    },
+    "max_hold_bars": {
+      "min": 5,
+      "max": 60,
+      "step": 5,
+      "active": true
+    },
+    "cooldown_bars": {
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "active": true
+    }
+  }
+}

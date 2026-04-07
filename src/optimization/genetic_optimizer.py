@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 Genetic Algorithm Optimizer for Strategy 2 (ARS Trend v2)
 Hibrit yaklaÅŸÄ±m: Grid Search + Genetic Algorithm
@@ -949,20 +949,25 @@ class FitnessEvaluator:
             strategy = GapReversalStrategy.from_config_dict(cache, params)
             signals, exits_long, exits_short = strategy.generate_all_signals()
 
-            trading_days = 252.0
+            # Trading days: veri aralığından hesapla (active_days proxy)
+            total_days = 252
+            active_days = 252
             if self.dates and len(self.dates) > 1:
                 try:
-                    trading_days = (self.dates[-1] - self.dates[0]).days
+                    delta = (self.dates[-1] - self.dates[0]).days
+                    total_days = max(1, delta)
+                    active_days = total_days  # Conservative: tüm günler aktif sayılır
                 except:
                     pass
 
             np_val, trades, pf, dd, sharpe = fast_backtest(
                 self.closes, signals, exits_long, exits_short,
-                self.commission, self.slippage, trading_days=trading_days
+                self.commission, self.slippage, trading_days=float(total_days)
             )
 
             fitness = quick_fitness(
                 np_val, pf, dd, trades, sharpe=sharpe,
+                active_days=active_days, total_days=total_days,
                 commission=0.0, slippage=0.0
             )
 
@@ -978,8 +983,6 @@ class FitnessEvaluator:
             import traceback
             traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
-
-
 
 # ==============================================================================
 # GENETIC ALGORITHM ENGINE

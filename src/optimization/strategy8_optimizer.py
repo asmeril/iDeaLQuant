@@ -128,6 +128,7 @@ def fast_backtest_strategy8(
     gap_window_bars: int,
     cooldown_bars: int,
     yon_modu: int,                # 0=CIFT, 1=SADECE_AL, 2=SADECE_SAT
+    vade_tipi: int,               # 0=SPOT (no short), 1=VIOP_ENDEKS, 2=VIOP_SPOT
 ):
     """
     Gap Reversal state machine — Numba nopython.
@@ -270,7 +271,8 @@ def fast_backtest_strategy8(
             hacim_ok = (hacim_filtre_aktif == 0) or (vol_ma_val > 0.0 and volumes[i] >= vol_ma_val * hacim_oran)
 
             # YUKARI GAP → SHORT
-            if gap_dir == 1 and yon_modu != 1:
+            if gap_dir == 1 and yon_modu != 1 and vade_tipi != 0:
+                # C# ile ayni: VadeTipi != "SPOT" kosulu (SPOT'ta short yasakli)
                 or_kirildi = closes[i] < or_low
                 fill_olmadi = closes[i] > gap_fill_lvl
                 rsi_ok = (rsi_filtre_aktif == 0) or (rsi_arr[i] > rsi_ob)

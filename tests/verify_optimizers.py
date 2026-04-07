@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 # Strategies
 try:
     from src.optimization.strategy1_optimizer import fast_backtest_score
-    from src.optimization.strategy2_optimizer import fast_backtest_strategy2
+    # strategy2_optimizer archived — S2 uses ARSTrendStrategyV2 via hybrid_group_optimizer
     from src.optimization.strategy3_optimizer import fast_backtest_paradise
     from src.optimization.strategy4_optimizer import fast_backtest_strategy4
     print("Imports Successful")

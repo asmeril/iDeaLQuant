@@ -1,0 +1,1491 @@
+--- PAGE 151 ---
+ 
+SEZAİ KILIÇ 
+144 
+ 
+Miktar: Al veya Sat gelince kaç lot emir iletilecek (örnek 100) 
+ 
+Örnek Tek Satır Robot:  var Islem = Sistem.RobotHisseAktifAcigaVar("MA1", "IMKBH'GARAN", 
+"IMKBH'GARAN", "5", 100); 
+ 
+RobotHisseAktifAcigaYok : Hisse senetlerinde çalışır ve Açığa Satış yapmaz. Sadece 
+Alım yapılır ve sat gelince eldeki lot satılır.) 
+SistemAdi = al/sat sinyalleri üreten stratejinizi kaydettiğiniz formülün ismi (örmek: MA1) 
+BazSembol = Sinyaller hangi sembolün grtafikleri üzerinden hesaplanıyor (Örnek: “IMKBH’GARAN) 
+EmirSembol: Al veya Sat sinyali gelince alınacak veya satılacak sembol (Örnek: “IMKBH’GARAN”) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (örnek 5 dk için “5”) 
+Miktar: Al veya Sat gelince kaç lot emir iletilecek (örnek 1) 
+ 
+Örnek Tek Satır Robot:  var Islem = Sistem. RobotHisseAktifAcigaYok("MA1", "IMKBH'GARAN", 
+"IMKBH'GARAN", "5", 100); 
+ 
+RobotViopAktif : VIOP kontratları için çalışır ve Piyasa Emri iletir) 
+SistemAdi = al/sat sinyalleri üreten stratejinizi kaydettiğiniz formülün ismi (örmek: MA1) 
+BazSembol = Sinyaller hangi sembolün grtafikleri üzerinden hesaplanıyor (Örnek: “VIP’VIP-X030) 
+EmirSembol: Al veya Sat sinyali gelince alınacak veya satılacak sembol (Örnek: “VIP’F_XU0301221”) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (örnek 5 dk için “5”) 
+Miktar: Al veya Sat gelince kaç lot emir iletilecek (örnek 1) 
+ 
+Örnek Tek Satır Robot:  
+var 
+Islem 
+= 
+Sistem.RobotViopAktif("MA1", 
+"VIP’VIP-X030", 
+"VIP'F_XU0300221", "5", 1); 
+ 
+RobotViopAktifTumGun : VIOP kontratları için çalışır, Piyasa Emri iletir ve Akşam 
+Seansı dahil çalışır) 
+SistemAdi = al/sat sinyalleri üreten stratejinizi kaydettiğiniz formülün ismi (örmek: MA1) 
+BazSembol = Sinyaller hangi sembolün grtafikleri üzerinden hesaplanıyor (Örnek: “VIP’VIP-X030) 
+EmirSembol: Al veya Sat sinyali gelince alınacak veya satılacak sembol (Örnek: “VIP’F_XU0301221”) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (örnek 5 dk için “5”) 
+Miktar: Al veya Sat gelince kaç lot emir iletilecek (örnek 1) 
+ 
+Örnek Tek Satır Robot:  var Islem = Sistem.RobotViopAktifTumGun("MA1", "VIP’VIP-X030", 
+"VIP'F_XU0300221", "5", 1); 
+ 
+Not: Akşam seansında piyasa emri göndermek yasaktır. Bu seans diliminde AL sinyali gelirse emirler LİMİTLİ 
+olarak TAVAN FİYATA, SAT sinyali gelirse emirler LİMİTLİ olarak TABAN FİYATA gönderilir. 
+ 
+RobotViopGunSonuKapat : VIOP kontratları için çalışır,Piyasa Emri iletir ve günün 
+sonunda varsa pozisyonu kapatır. (ertesi gün sisteminiz hangi yönde ise o yönde 
+tekrar pozisyon açşlılır.) 
+SistemAdi = al/sat sinyalleri üreten stratejinizi kaydettiğiniz formülün ismi (örmek: MA1) 
+EmirSembol: Al veya Sat sinyali gelince alınacak veya satılacak sembol (Örnek: “VIP’F_XU0301221”) 
+ 
+ 
+Örnek Tek Satır Robot:  var Islem = Sistem.RobotViopGunSonuKapat(SistemAdi, EmirSembol); 
+ 
+RobotStop : Çalışan bütün robotları durdurmak amaçlı kullanılır 
+ 
+ 
+Herhangi bir koşulda çalışan BÜTÜN robotları durdurmak amaçlı kullanılır. 
+Örneğin endenksin değer kaybı %5 olursa robotlar kapatılsın şeklinde bir kod olarak kaydedip 
+bu kodu da robot olarak çalıştırabiliriz. 
+ 
+
+--- PAGE 152 ---
+ 
+SEZAİ KILIÇ 
+145 
+ 
+var Endeks = Sistem.YuzeyselVeriOku("IMKBX'XU100"); 
+var EndeksDegisim = Endeks.NetPerDay; 
+ 
+if (EndeksDegisim < -5 ) 
+{ 
+   Sistem.RobotStop();  
+} 
+ 
+- 
+Saat - Sistem.Saat() 
+ 
+iDeal Yayın saatine erişmek için kullanılan sistem fonksiyonudur. Saat/Dakika/Saniye olarak 
+iDeal yayınındaki saati veririr. 
+ 
+Örnek kullanım: ekrana o anki saati mesaj olarak getiren kod: 
+  
+var saat = Sistem.Saat; 
+Sistem.Mesaj(saat); 
+ 
+Saat verisi kullanılarak yapılan çok fazla kodlama vardır ve sıkça kullanılır. Burada dikkat 
+edilmesi gereken en önemli husus, bu komutla alınan saatin, KODUN ÇALIŞTIĞI ANDAKİ saat 
+olduğudur. Grafik barlarının saati değildir. GRAFİK VERİLERİ komutu anlatımında, barların saat 
+verisine nasıl erişilebileceği anlatılmıştır. 
+ 
+ 
+Belli saatlerde belli işlemleri yaptırmak veya robotlara belli saatlerde çalışma gibi komutlar 
+vermek için saat bilgisi kullanıcı tarafından tanımlanan saatlerle kıyaslanır. 
+Eğer saat xx:xx:xx den büyükse pozisyonu kapat 
+Eğer saat xx:xx:xx den küçükse AL  gibi. 
+Zaman verileri ile ilgili KISYASLAMA için c# yazım dilinde CompareTo komutu kullanılır. 
+Compare İngilizce bir klime olarak KIYASLA anlamındadır. 
+ 
+CompareTo(x) şeklinde bir kullanım, verilen zamanı x ile kıyaslar ve büyüktür sıfır, küçüktür 
+sıfır, eşittir sıfır, büyükeşit, küçükeşittir sıfır  gibi sonuçlar verir. 
+ 
+ 
+ÖRNEK: Sistemin saati kullanıcı tarafından girilen bir saatten (11:05:30) büyük veya eşit olduğu 
+anda 1 lot DOHOL al kodu 
+ 
+ 
+var Sembol = "IMKBH'DOHOL"; 
+var Miktar = 1; 
+var islemsaati = "11:05:30"; 
+ 
+if (Sistem.Saat.CompareTo(islemsaati) >= 0)    
+{ 
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = "Alış"; 
+   Sistem.EmirTipi = "Piyasa";     
+   Sistem.EmirSuresi = "KIE";    
+   Sistem.EmirMiktari = Miktar; 
+   Sistem.EmirGonder(); 
+} 
+ 
+ 
+
+--- PAGE 153 ---
+ 
+SEZAİ KILIÇ 
+146 
+ 
+ÖRNEK 2: Grafik barlarının saatlerini kullanma amaçlı olarak, RSI 55 ten büyükse AL yapan, RSI 45 
+ten küçükse SAT yapan, saat 17:40 barında nakite geçen sistem; 
+ 
+var V = Sistem.GrafikVerileri; 
+var RSI = Sistem.RSI(14); 
+var SonYon=""; 
+for (int i = 1; i < V.Count; i++) 
+{ 
+   if (V[i].Date.Hour >= 17 && V[i].Date.Minute >= 40 && SonYon != "F") 
+   { 
+      Sistem.Yon[i] = "F"; 
+      SonYon = "F"; 
+   } 
+   else if (RSI[i] > 55 && SonYon != "A" )// % 2 stop 
+   { 
+      Sistem.Yon[i] = "A"; 
+      SonYon = "A"; 
+   } 
+   else if (RSI[i] < 45 && SonYon != "S" )// % 2 stop 
+   { 
+      Sistem.Yon[i] = "S"; 
+      SonYon = "S"; 
+   } 
+} 
+ 
+ 
+NOT: Barlara ait saat / tarih bilgilerine erişim için ipucu kodları: 
+ 
+var V = Sistem.GrafikVerileri; 
+ 
+for (int i = 1; i < V.Count; i++) 
+{ 
+   if (V[i].Date.DayOfWeek.ToString() == "Monday" ) 
+      Sistem.Yon[i] = "A"; 
+   else if (V[i].Date.DayOfWeek.ToString() == "Friday") 
+      Sistem.Yon[i] = "S"; 
+   else if (V[i].Date.ToString("yyyyMMdd")=="20171204") 
+      Sistem.Yon[i] = "A"; 
+   else if (V[i].Date.Hour == 18 && V[i].Date.Minute == 05) 
+      Sistem.Yon[i] = "F"; 
+   else if (V[i].Date.Month == 12) 
+      Sistem.Yon[i] = "F"; 
+   else if (V[i].Date.Year == 2016) 
+      Sistem.Yon[i] = "F"; 
+} 
+ 
+- 
+Saat Aralıiğı  - Sistem.SaatAraligi(“15:00”, “16:30”) 
+ 
+Belli saatler arasında bir iş yaptırmak veya yaptırmamak için Saat Aralığı fonksiyonu 
+kullanuılabilir. 
+ 
+ÖRNEK: Saat 09:30 ile 09:50 arasında ve 17:50 ile 18:00 arasında hiçbir işlem yapma, geri kalan 
+zamanlarda formülü çalıştır; 
+ 
+if (Sistem.SaatAraligi("09:30", "09:50") || Sistem.SaatAraligi("17:50", "18:00")) 
+{ 
+ 
+} 
+else 
+{ 
+   // çalışmalarınız 
+ 
+} 
+
+--- PAGE 154 ---
+ 
+SEZAİ KILIÇ 
+147 
+ 
+ 
+ 
+- 
+Satış Fiyat - Sistem.SatisFiyat(Sembol) 
+ 
+Bir sembolün o an ki en iyi satış fiyatını okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) en iyi satış fiyatı okutulmak istenen sembol yazılır.   
+ 
+Not: iDeal programında bütün semboller ait oldukları piyasasının kodu ile birlikte yazılırlar. 
+Hisse senetlerinin piyasa kodu IMKBH dır. PİYASA kodundan sonra ÜSTTEN TEK TIRNAK işareti 
+ile ayrılıp borsadaki orijinal kod eklenir. GARAN hissesinin idealdeki sembol tanımı 
+IMKBH’GARAN şeklindedir. Örneğin USDTYR için FX’USDTRY şeklinde yazılır. Bir sembolün 
+PİYASA kodunun ne olduğu, o sembolü sayfanıza yazarken @ işareti yanında gösterilir.) 
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.SatisFiyat(Sembol); 
+Sistem.Mesaj(X.ToString()); 
+ 
+- 
+Satış Lot - Sistem. SatisLot(Sembol) 
+ 
+Bir sembolün o an ki en iyi satış fiyatında bekleyen lot miktarını okumak için kullanılır. 
+Parametre olarak fonksiyona (parantez içine) en iyi satış fiyatında bekleyen lot miktarı 
+okutulmak istenen sembol yazılır.   
+ 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.SatisLot(Sembol); 
+        Sistem.Mesaj(X.ToString()); 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 155 ---
+ 
+SEZAİ KILIÇ 
+148 
+ 
+ 
+- 
+Sayı Listesi - Sistem.SayiListesi() 
+ 
+iDeal sistem modülünde formüller yazarken çokça kez LİSTE tanımları kullanılır. 
+Başlangıçta tüm elemanları boş veya sıfır olan listeler tanımlar, sonra kendi koşullarımıza göre 
+bu listelerin elemanlarını doldurur ve bunları genelde çizgi olarak çizer veya başka indikatörleri 
+giriş listesi olarak veriririz. İleriki sayfalarda anlatılacak olan SİSTEM GETİR fonksiyonu, yazılmış 
+bir formülü çağırmak ve o formül içindeki bazı bilgileri kullanmak amaçlı bir komuttur. SİSTEM 
+GETİR ile xxx isimli bir sistemi çağırdığımızda, o sistem içindeki bir hesaplanmış listeye erişmek 
+ihtiyacı varsa o zaman listeyi SAYI LİSTESİ olarak tanımlamış olmak gerekir. 
+ 
+Yani bir sistemde x ve y isimli 2 liste olsun; Bu sistemi SİSTEM GETİR ile çağırdığımızda x 
+listesine erişebiliriz SAYI LİSTESİ olarak tanımlandığı için. 
+ 
+ 
+var x = Sistem.SayiListesi; 
+var y = Sistem.Liste(0); 
+for (int i = 1; i<Sistem.BarSayisi; i++) 
+{ 
+   if (A KOŞULU))  
+      x[i] = C[i]; 
+   else if (B KOŞULU)  
+      y[i] = H[i]; 
+} 
+ 
+- 
+Sayı Tablosu Kontrol Oku/Güncelle - Sistem.SayiTablosunu Oku/Guncelle() 
+ 
+iDeal veri terminali üzerinde robotlar çalıştırıken çoğu zaman bazı bilgileri bir dosyada veya 
+bellekte saklamak ve gerektiğinde kullanmak gerekir. Kod yazılırken bilgi atanan (var x = 5; 
+şeklinde tanımlanan) değişkenler bazen bu ihtiyacı karşılamaz. 
+Çünkü kod içerisinde tanımlanan değişkenler, kodun her seferinde dafalarca çalışması 
+durumunda hep ilk tanımladığı değerine döner ve ilerleyen satırlarda hesaplamalar sonucu 
+yeni değeri bulunur. Ama bu döngü her seferinde yeniden olur. Oysa istenen şey, bir kez değeri 
+değiştirilen bir verinin, bir daha kullanıcının tanımladığı bir koşul olmadan hiç değişmemesidir. 
+Bu nedenle iDealde Pozisyon Kontrol, Sayı Tablosu, Sözcük Tablosu gibi veri saklama işlevi olan 
+komutlar kullanılır. 
+ 
+Sayı Tablosu, sayısal verilerin saklandığı bir bellek değişkenidir. Kod içerisinde sadece istenen 
+koşullar gerçekleştiği zaman değeri değiştirilir. Kod her çalşıştığında yeniden başlangıuçta 
+tanımlanan değeri almaz.  
+ 
+Sayı Tablosunda saklanan bilgiler RAM de durur ve iDeal kapanırsa bu bilgiler sıfırlanır. 
+ 
+ÖRNEK: Bir işlemin GÜNDE 1 DEFA yapılması isteniyor. Bu durumda günün tarihi bir anahtar olarak 
+SayiTablosu komutuna verilir. Gün değişmemişse bir daha işlem yapmaması sağlanır. 
+ 
+ 
+var 
+Anahtar 
+= 
+Sistem.Name 
++ 
+" 
+, 
+" 
++ 
+Sistem.GrafikVerileri[Sistem.GrafikVerileri.Count-1].Date.ToString("yyyyMMdd"); 
+var Defa = Sistem.SayiTablosunuOku(Anahtar); 
+if (Defa == 0) 
+{ 
+
+--- PAGE 156 ---
+ 
+SEZAİ KILIÇ 
+149 
+ 
+   Sistem.SayiTablosunuGuncelle(Anahtar, 1); 
+ 
+   /// kodunuzun tamamı burada 
+ 
+} 
+ 
+ 
+ 
+ 
+- 
+Sayı Yuvarla - Sistem.SayiYuvarla(Sayı, Adım) 
+ 
+ 
+Formül yazarken yapılan hesaplamalarda elde edilen çeşitli sayılar/fiyatlar küsuratlı olabilir. 
+Özellikle sembolün fiyat adımlarına göre yapılacak kıyaslarda, bu sayıların o sembolün işlem 
+görebileceği bir fiyat seviyesinde olabilmesi için yuvarlanması ihtiyacı doğabilir. 
+  
+Sayı Yuvarla fonksiyonu, herhangi bir sayısı, kullanıcı tarafından tanımlanan formatta ve 
+adımda bir sayıya yuvarlamak için kullanılır 
+ 
+ 
+ 
+//2.547 sayısını, 0.005’erlik adımlara uygun olacak şekilde yuvarlamak 
+  
+var sayi = 2.547; 
+var x = Sistem.SayiYuvarla(sayi, 0.005); 
+Sistem.Mesaj(x.ToString()); 
+  
+ 
+ 
+ 
+/VIOP sözleşmesinin önceki günkü High ve Low değerlerinin toplamının yarısı olan sayısı .547 sayısını, 0.005’erlik adımlara 
+uygun olacak şekilde yuvarlamak 
+  
+var Sembol = "VIP'VIP-X030"; 
+var Veri = Sistem.YuzeyselVeriOku(Sembol); 
+var UZL = Veri.SettlementPrice; 
+var SonFiyat = Sistem.SonFiyat(Sembol); 
+  
+float Fark = UZL - SonFiyat; 
+Fark = Sistem.SayiYuvarla(Fark, 0.025); 
+  
+   Sistem.Mesaj("Son Fiyat ile Uzlaşı arasındaki fark " + Fark + " puan"); 
+  
+Yuvarlama yapılmaz ise sonuç; 
+
+--- PAGE 157 ---
+ 
+SEZAİ KILIÇ 
+150 
+ 
+ 
+  
+Yuvarlama Yapılırsa sonuç; 
+ 
+ 
+ 
+- 
+Select BarNo (Mouse ile Kliklenen Barı Okumak) - Sistem.SelectBarNo 
+ 
+ 
+iDeal kullanıcılarıi grafik üzerinde Mouse ile bir noktaya kliklendiği zaman, o kliklenen barın 
+tarihini, saatini, bar numarasını sistem üzerinden okuyabilirler. Bu sayede mesela Mouse ile 
+tıkladıkları noktadan geriye doğru olan bölgedeki yükselen veya düşen trend çizimlerini 
+otomatik olarak ve sadece Mouse ile tıklayarak yaptırabilirler. Aynı şekilde pivot seviyeleri 
+çizimini de Mouse tıklaması ile istedikleri bölge için kolayca yapabilirler. 
+ 
+ 
+Örnek1: Kliklenen barın tarih ve saatini öğren; 
+ 
+ 
+var V = Sistem.GrafikVerileri; 
+int nokta = Sistem.SelectBarNo; 
+ 
+Sistem.Mesaj(V[nokta].Date.ToString("yyyyMMdd HH:mm")); 
+ 
+
+--- PAGE 158 ---
+ 
+SEZAİ KILIÇ 
+151 
+ 
+ 
+ÖRNEK2: Mouse ile tıklanan bardan günümüze kadar olan bölgede varsa yükselen ve düşen trendleri 
+bul ve çiz: 
+ 
+int donem = Sistem.BarSayisi - Sistem.SelectBarNo; 
+Sistem.Cizgiler[0].Deger = Sistem.OtoTrendYukselen(donem, 10); 
+Sistem.Cizgiler[1].Deger = Sistem.OtoTrendDusen(donem, 10); 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 159 ---
+ 
+SEZAİ KILIÇ 
+152 
+ 
+- 
+Select Tarih(Mouse ile Kliklenen Barın TarihiniOkumak) - Sistem.SelectTarih 
+ 
+ 
+iDeal kullanıcıları grafik üzerinde Mouse ile bir noktaya kliklediği zaman, o kliklenen barın 
+tarihini ve saat olarak tam zamanını sistem üzerinden okuyabilirler.  
+ 
+ÖRNEK: Mouse ile kliklenen barın tam tarih + saat bilgisi:  
+ 
+var tarih = Sistem.SelectTarih; 
+Sistem.Mesaj(tarih.ToString()); 
+ 
+ 
+ 
+ 
+ 
+- 
+Sembol - Sistem.Sembol()  
+ 
+Üzerinde işlem yapılan, grafiği ,üzerinde bir takım çizim veya stratejiler uygulanan 
+sembolün (kodun) bilgisi bu fonksiyonla okutulur. IDEAL programında BÜTÜN kodlar işlem 
+gördükleri piyasada kullanıldıkları kısa kod ve dahil oldukları PİYASA’nın koduyla birlikte 
+tanımlıdır. 
+Örneğin BIST Hisse senetleri IMKBH, BIST endeksleri IMKBX, Serbest Piyasa Döviz/Altın kodları 
+SERPIY, Uluslararası spot pariteler FX, Vadeli işlem piyasası kontratları VIP, Tahvil Bono 
+sözleşmeleri THVX kısa market kodlarına sahiptir. 
+  
+IDEAL sayfasında bir boş hücreye bir kod klavye girişi ile yazılmaya başlandığında, program size 
+yazdığınız harf kadarıyla uyuşan kodları bir liste olarak sunar ve o listede PİYASA KODU da 
+gösterilir 
+ 
+ÖRNEK:  GARAN hisse kodunun son fiyatının, HALKB hisse senedi son fiyatına oranını bulan (bu oran 
+x olunca bir işlem yapan bir kod olarak kullanım devam edebilir) kod örneği 
+  
+  
+
+--- PAGE 160 ---
+ 
+SEZAİ KILIÇ 
+153 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Sembol Adları Listesi - Sistem.SembolAdListesi(market, seri)  
+ 
+Herhangi bir ihtiyaç için tüm sembol listesini veya belli bir grup sembolün listesini elde 
+etmek istediğimizde bu komutu kullanabiliriz. 
+Daha önceki fonksiyon tanıtımlarında da değindiğimiz gibi iDeal programında bir sembolün 
+tam yazılışı dahil olduğu piyasa ile birlikte olur. Örneğin GARANTİ BANKASI HİSSE SENEDİ 
+kodunun tam yazılışı IMKBH’GARAN şeklindedir. Buradaki IMKBH kısmı prefix (ön ek) tir ve 
+dahil olduğu piyasayı belirtir (IMKBH = İMKB Hisse) 
+Hisse piyasasında hisselerin seri kodları vardır. E (Eski), R (Rüçhan), V (Varant), F (Borsa Yatırım 
+Fonu), TE (Temerrüt), BE (Birincil Pazar), HE (Jalkha arz) gibi. 
+ 
+Örneğin bütün Rüçhan Hakkı Pazarı sesisi olan sembolleri erişmek istersek aşağıdaki kodu 
+yazabiliri; 
+ 
+var Liste = Sistem.SembolAdListesi("IMKB", "R"); 
+var Metin = ""; 
+foreach(var item in Liste) 
+{ 
+   Metin += item + "\r\n"; 
+} 
+Sistem.Mesaj(Metin); 
+ 
+ 
+ 
+ 
+
+--- PAGE 161 ---
+ 
+SEZAİ KILIÇ 
+154 
+ 
+ 
+ 
+Aynı formülde Eski serisi olan (hisse senetleri) odlara erişim için R harfini E yaparsak sonuç 
+listesi aşağıdaki gibi olur; 
+ 
+ 
+ 
+ 
+VIOP işlem gören vadeli kontratların YAKIN VADE kod listesini elde etmek istersek; 
+ 
+var Liste = Sistem.SembolAdListesi("VIP'VIP-", ""); 
+var Metin = ""; 
+foreach(var item in Liste) 
+{ 
+   Metin += item + "\r\n"; 
+} 
+Sistem.Mesaj(Metin); 
+ 
+ 
+ 
+- 
+Sembol Veri Listesi - Sistem.SembolVeriListesi(market, seri)  
+ 
+Herhangi bir ihtiyaç için tüm sembol listesine ait bir veya birkaç veriyi direk okumak için 
+kullanılır. 
+ 
+ 
+ÖRNEK: Bütün hisselerin yüzde değişimlerini oku ve ekrana göster; 
+ 
+
+--- PAGE 162 ---
+ 
+SEZAİ KILIÇ 
+155 
+ 
+var Liste = Sistem.SembolVeriListesi("IMKB", "E"); 
+double Hacim = 0; 
+float OrtalamaGetiri =0; 
+var Metin = ""; 
+foreach(var item in Liste) 
+{ 
+   Metin += item.Root + "  % " + item.NetPerSession.ToString("0.00" ) + "\r\n"; 
+ 
+} 
+ 
+Sistem.Mesaj(Metin); 
+ 
+ 
+ 
+ 
+ 
+- 
+Sembol Tanımla - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)  
+ 
+iDeal Sistem modülünü kullanarak, kendi sembol, endeks veya sepetlerini oluşturabilirsiniz. 
+Kendinize özel, çeşitli formüller içeren, başka sembollerin verilerini de kullanarak yeni bir veri 
+üreten sembol ya da semboller tanımladığınızda ve bu sembollerin fiyat veya diğer yüzeysel 
+bilgilerinin sürekli olarak güncellenmesini istediğiniz, iDeal’in Kullanıcı Sembol Sistemleri 
+özelliğini kullanmanız gerekmektedir  
+ 
+ 
+Bu özellik, sembol tanımlamalarının tamamının KullaniciSembolleri ismiyle kaydedilmesi ve 
+ideal ana menüsü altındaki Özellikler satırından Kullanıcı Sembollerini Aktifleştir seçeneğini 
+işaretlemenizle çalışır. 
+ 
+Sembol Tanımla fonksiyonunu Sistem.SembolTanimla(“sembol adı”, basamak sayısı); satırını 
+(satırlarını) ekleyerek kullanabilirsiniz. Bu satır eklenip, bir kez formül test denildiği anda 
+sembol yaratılır ve iDeal’in semboller listesine de eklenir. 
+·        Sembol tanımı satırı tek başına çok bir anlam ifade etmez. Bu yaratılan sembole veri 
+gelmesini de sağlamak için gerekli (sembolün verisine kaynak olacak ) formülleri de 
+yazmak gerekir. 
+·        Fonksiyonu kullanırken, parantezin içindeki ilk parametre SEMBOL ADI parametresidir. 
+Çift tırnak içinde, yaratılacak sembolün yer alacağı piyasa ve (üstten tek tırnakla 
+ayırarak) sembole vereceğiniz KISA KOD birlikte sembol adını oluşturur. (Örnek: 
+“DFN’TEST123” veya “IMKBH’GRNHLB” veya “SERPIY’GUMUSERUO” gibi.) 
+
+--- PAGE 163 ---
+ 
+SEZAİ KILIÇ 
+156 
+ 
+·        Yaratılan sembolleri genelde DFN prefixi ile (“DFN’SEMBOL1”) tanımlamanızı öneririz. 
+Bu market koduyla oluşturulan ve DirectFN tarafından da bu market koduyla yayını 
+sağlanan tüm kodlar, menüde ÇEŞİTLİ PİYASALAR altında görülebilir. 
+·        Fonksiyonun ikinci parametresi, yaratılan sembolün fiyat bilgisinin, noktadan sonra kaç 
+basamak olacağının belirtilmesidir. 
+·        Sembol tanımlandıktan sonra, sembole ait YÜZEYSEL BİLGİ ALANLARI da atanabilir. 
+(uzun adı, son fiyatı, önceki gün kapanışı vs) 
+  
+ÖRNEK: 
+-          var DENEMEKODU1 = Sistem.SembolTanimla("DFN'DENEMEKODU1", 2); 
+-          DENEMEKODU1.Description = "Test Amacli Deneme Kodudur"; 
+-          DENEMEKODU1.LastPrice = GARAN.LastPrice / HALKB.LastPrice ; 
+ 
+ 
+SembolTanimla fonksiyonu, tek başına kullanıldığında sadece sembolü yaratır. Sistem kodunda bu 
+yaratılan sembolün fiyatının ne olacağına dair formül olsa bile, değer sadece bir kez (kod 
+kaydedildiğinde veya formül test yapıldığında) oluşur/değişir. Girilen formüle uygun olarak, sembolün 
+değerinin de sürekli değişmesini sağlamak için ayrı, gelen her değerin saklanması ve bu sembole ait bir 
+grafik veri bankası oluşması için ayrı birer yardımcı fonksiyon daha vardır 
+  
+•        Sistem.YuzeyselGuncelle(Sembol): Her 1 saniyede bir formülü/kodu çalıştırır ve yaratılan 
+sembolün, kullanıcı tarafından atanmış tüm yüzeysel bilgi alanlarını günceller ve güncelleme 
+olduğunda ekranda update rengi (yanıp sönme) değişir (SON FİYAT, ALIŞ FİYATI, SATIŞ FİYATI, 
+TANIM vs). 
+•        Sistem.GrafikGuncelle(Sembol): Tanımlanmış 
+sembole 
+ait 
+SONFİYAT 
+bilgisi 
+her 
+güncellendiğinde, bu sembolün kendisi için oluşturulan dosyalarda GRAFİK VERİSİ saklanmaya 
+başlar ve yaratılan kodun kendi grafiği üzerinden teknik analiz yapılabilir. 
+ 
+ÖRNEK KODLAR: 
+ 
+var SGLDD = Sistem.YuzeyselVeriOku("SERPIY'SGLDD"); 
+var SUSD = Sistem.YuzeyselVeriOku("SERPIY'SUSD"); 
+ 
+//CEYREK ALTIN TANIMLA 
+var CEYREK = Sistem.SembolTanimla("DFN'CEYREK", 3); 
+CEYREK.Description = "Çeyrek Altın"; 
+CEYREK.BidPrice = Convert.ToSingle(((SGLDD.BidPrice-10)*SUSD.BidPrice/0.995)/1000*1.58); 
+CEYREK.AskPrice = Convert.ToSingle(((SGLDD.AskPrice+10)*SUSD.AskPrice/0.995)/1000*1.67); 
+CEYREK.LastPrice = (CEYREK.BidPrice+CEYREK.AskPrice)/2; 
+Sistem.YuzeyselGuncelle(CEYREK); 
+Sistem.GrafikGuncelle(CEYREK); 
+  
+  
+// ATA ALTIN TANIMLA 
+var ATA = Sistem.SembolTanimla("DFN'ATA", 2); 
+ATA.Description = "Yarım Altın"; 
+ATA.BidPrice = Convert.ToSingle(((SGLDD.BidPrice-10)*SUSD.BidPrice/0.995)/1000*3.18); 
+ATA.AskPrice = Convert.ToSingle(((SGLDD.AskPrice+10)*SUSD.AskPrice/0.995)/1000*3.35); 
+ATA.LastPrice = (ATA.BidPrice+ATA.AskPrice)/2; 
+Sistem.YuzeyselGuncelle(ATA); 
+ 
+ 
+
+--- PAGE 164 ---
+ 
+SEZAİ KILIÇ 
+157 
+ 
+ 
+ 
+- 
+Sembol İşlemlerini Oku -  Sistem.SembolslemleriniOku(Sembol, Tarih)  
+ 
+iDeal Sistem modülünü kullanarak, bir hisse veya vadeli sözleşmenin herhangti bir güne ait 
+gerçekleşen işlemleri (zaman satış tablosu) okunabilir. Bu komut ile okunan işlemler listesinde 
+her bir işlem için saat, fiyat, lot, (lisans varsa) alan ve satan kurum bilgileri yer alır. 
+ 
+Okuma komutu hisse ve viop için aşağıdaki gibidir; 
+ 
+var IslemlerVIOP = Sistem.SembolIslemleriniOku("VIP'F_XU0301220", "10/12/2020"); 
+var IslemlerHisse = Sistem.SembolIslemleriniOku("IMKBH'GARAN", "17/12/2020"); 
+ 
+Örnek olarak bir günün GARAN işlemlerini okuyup bir aracı kurumun (mesela Teb) için NET LOT 
+bilgisi hesaplatmak. 
+ 
+ 
+var IslemlerHisse = Sistem.SembolIslemleriniOku("IMKBH'GARAN", "17/12/2020"); 
+var NetLot = 0; 
+foreach (var item in IslemlerHisse) 
+{ 
+    if (item.BuyerCode == "TBY") NetLot += item.Size; //alışları ekle 
+    if (item.SellerCode == "TBY") NetLot -= item.Size; //satışları çıkar 
+} 
+ 
+Sistem.Mesaj(NetLot.ToString("0,000")); 
+ 
+ 
+- 
+Ses Çalma -  Sistem.Ses()  
+ 
+İstenilen bir anda veya bir koşula bağlı olarak, bir ses dosyasının oynatılması için 
+kullanılır. (Örnek ABCD hissesinin fiyatı önceden girilmiş bir değeri görürse zil sesi çalsın) 
+ 
+ÖRNEK://EREGL hissesinin Son İşlem Fiyatı 3.84’e eşit veya büyük olunca Media klasöründeki 
+“dingdong” isimli ses dosyasını çal 
+  
+var Sembol = "IMKBH'EREGL"; 
+var SembolDeger = Sistem.SonFiyat(Sembol); 
+  
+if (SembolDeger >= 3.84f)  
+  Sistem.Ses("Media\\dingdong.wav"); 
+  
+Not: Fonksiyon Dosya Adı verilmeden kullanılırsa, windows’un klasik “ding” sesi oynatılır. 
+ 
+- 
+Seviye Fonkisyonu -  Sistem.Seviye[]  
+ 
+iDeal programında bir strateji yazıldığı zaman PERFORMANS veya GETİRİ HESAPLA 
+yöntemletiyle sistemin geçmiş tarihlerdeki başarısı ölüçülürken, her bir al/sat sinyali için 
+işleme giriş fiyatı olarak AKSİ BELİRTİLMEDİĞİ MÜDDETÇE o sinyalin geldiği barın KAPANIŞ 
+FİYATI baz alınır. Bazı sistemlerde KAR AL ve/veya STOP seviyesi girilir ve bu sinyaller geldiğinde 
+
+--- PAGE 165 ---
+ 
+SEZAİ KILIÇ 
+158 
+ 
+ve sistem stop olduğunda aslında stop sinyali gelen barın kapanış fiyatından değil, stop için 
+girilen seviyeye denk gelen fiyattan stop olunduğu varsayımıyla performans ölçmek gerekir. 
+İster bu nedenle isterse kendi tercihiniz olarak sinyalin olduğu barın kapanışı dışında bir 
+fiyattan (mesela sonraki barın açılılından) işlem olmuş gibi getiri hesabı yapmak mümkündür. 
+Bu ihtiyaç için Sistem.Seviye komutu kullanılır. Seviye komutuna sinyal gelen bardaki işlemin 
+hangi fiyattan gerçekleştiğinin baz alınması kodu yazan tarafından verilir. 
+ 
+Örnek bir kullanım aşağıda yer almaktadır. 
+ 
+var C = Sistem.GrafikFiyatSec("Acilis"); 
+var MA1 = Sistem.MA(C, "Exp", 10); 
+var MA2 = Sistem.MA(C, "Exp", 100); 
+ 
+var SonYon = ""; 
+double Fiyat = 0; 
+float StopPuan = 0.500F; //500 Puan 
+ 
+for (int i = 1; i<Sistem.BarSayisi; i++) 
+{ 
+   if (MA1[i-1] < MA2[i-1] && MA1[i] >= MA2[i] && SonYon != "A") // AL 
+   { 
+      Sistem.Yon[i] = "A";  // alış 
+      SonYon = Sistem.Yon[i]; 
+      Fiyat = C[i]; 
+   } 
+   else if (MA1[i-1] > MA2[i-1] && MA1[i] <= MA2[i] && SonYon != "S") // SAT 
+   { 
+      Sistem.Yon[i] = "S";  // satış 
+      SonYon = Sistem.Yon[i]; 
+      Fiyat = C[i]; 
+   } 
+   else if (SonYon == "A" &&  C[i] < Fiyat -  StopPuan)   // Long için Stop 
+   { 
+      Sistem.Yon[i] = "F";  // flat 
+      SonYon = Sistem.Yon[i]; 
+      Sistem.Seviye[i] = Fiyat -  StopPuan; 
+   } 
+   else if (SonYon == "S" &&  C[i] > Fiyat + StopPuan)   // Short stop 
+   { 
+      Sistem.Yon[i] = "F";  // flat 
+      SonYon = Sistem.Yon[i]; 
+      Sistem.Seviye[i] = Fiyat -  StopPuan; 
+   } 
+} 
+ 
+ 
+- 
+Sistem Birleştirme -  Sistem.Birlestir(Sistem1, Sistem2)  
+ 
+Yazmış olduğunuz birden fazla sistemi birleştirip tek bir sistem olarak kullanmak 
+mümkündür. Bunun için var olan 2 fonksiyondan biri SistemBirlestir diğeri ise 
+SistemBirlestirAyniYon komutudur. 
+Kullanım şekillleri aşağıdaki gibidir; 
+ 
+ 
+Sistem.SistemBirlestir("XXX", "YYY", "ZZZZ","KKKK"); 
+Sistem.SistemBirlestirAyniYon("XXX", "YYY", "ZZZZ","KKKK"); 
+ 
+Sistem.Birleştir komutu, yazılmış olan bütün sistemlerin her bir bardaki yönlerine bakar, 
+birleştirilmiş olan YENİ SİSTEM için, aynı barda sistemlerin çoğu hangi yöndeyse o yönde sinyal 
+
+--- PAGE 166 ---
+ 
+SEZAİ KILIÇ 
+159 
+ 
+üretir. Örneğin aşağıdaki görselde birleştirilen 3 sistemde ikisi 30.06.2020 tarihinde AL yönüde, 
+biri SAT yönünde olduğu için, birleştirilmiş sistem aynı tarihli barda, çoğunluğun yönü olan AL 
+yönündedir. 
+ 
+Eğer sistemlerin gönderdiği yön satıları eşit ise, yani örneğin birleştirilen 4 sistemin ikisi AL ikisi 
+SAT ise, bu durumda o barlarda birleştirilmiş sistem FLAT (NAKİT) pozisyonda olur. 
+ 
+ 
+ 
+ 
+SistemBirlestirAyniYon  komutu ise; TÜM sistemlerin aynı yönde olduğu barda o yöne giren bir 
+yeni sistem oluşturur. Yukarıdaki üç sistem bu kez bu komutla birleştirilince aşağıdaki (son 
+fotodaki) sistem ortaya çıkmaktadır.; 
+ 
+
+--- PAGE 167 ---
+ 
+SEZAİ KILIÇ 
+160 
+ 
+ 
+ 
+ 
+ 
+- 
+Sistem Getir -  Sistem.SistemGetir(SistemAdı, Sembol, Periyot) 
+ 
+Herhangi bir sistem, robot veya formül yazarken, önceden yazmış olduğunuz bir başka 
+sistemden bir veriye ihtiyaç duyabilirsiniz. SistemGetir fonksiyonu, başka bir sistemin 
+belirtilen bir sembol ve grafik periyodu için tüm bilgilerini okur ve kullanmaya izin verir. 
+  
+IDEAL sistem modülünde yazılan her formül bir sistem formülü değildir veya olmayabilir. 
+Hesaplaması tamamen size özel bir indikatör de yazabilirsiniz. Diyelim ki kendi özel 
+indikatörünüzü yazdınız kaydettiniz ve grafiklerde kullanıyorsunuz. 
+Bir başka formül yazarken bu indikatörünüzün, ABCDE hisse senedinin X dakikalık grafiğine 
+uygulanmasıyla doğan sonuçları kullanmak istiyorsunuz. Sistem Getir fonksiyonu bu noktada 
+ihtiyacınız olan komuttur. 
+  
+Bu fonksiyon, yazılmış diğer formülden elde edilen HER BİLGİYİ çağırır ve kullanır. 
+Yani çağırdığınız sistemin YÖN listesi (al/sat verdiği barlar ve değerler), ÇİZGİLERİ, o sisteme 
+uygulanmış olan herhangi bir indikatörün sonuçları, o sistemin içinde hesaplanan herhangi bir 
+
+--- PAGE 168 ---
+ 
+SEZAİ KILIÇ 
+161 
+ 
+liste veya o sistemin getiri/KZ sonuçları….Hepsini tek fonksiyonla okutmuş olursunuz ve 
+istediğiniz anda bir başka kodda kullanabilirsiniz. 
+Hatta okutulan sistemin PARAMETRELER panelindeki verileri bile okuyabilirsiniz. 
+  
+ Sistem.Getir("Sistem Adı”, Sembol, Periyot);  Şeklinde kullanılır. 
+(Sistem adı, sembol ve periyot, birer değişken gibi tanımlanırsa, parantezi içine direk 
+değişkenlerin isimleri yazılır. Değişken tanımlanmadan kullanılırsa, bilgilerin üçü de çift tırnak 
+içinde yazılır. 
+  
+En yaygın kullanım şekillerinden biri de, birden fazla sistem arasında tercih veya kıyas yapmak 
+isteyen bir kullanıcının, o sistemlerin her birinin KARZARAR eğrilerini tek bir grafikte alt alta 
+(veya üst üste) çizdirip durumu görmeleridir. 
+ 
+ÖRNEK 1: TOMA, MACD ve Bollinger isimli sistemlerin GARAN hisse senedinin 60 dakika periyotlu grafiği için hesapladığı 
+KARZARAR listelerini okutup aynı panele çizdirme örneği. (garan grafiğini açıp, tek tek bu sistemleri çalıştırmak yerine, 
+üçünü de okutup, üçünün içindeki GetiriHesaplaKZ listelerini çekmek daha kolay. 
+Hatta ek olarak, bu sistemlerden birinin (Sistemim1 ismiyle çağırdığımız TOMA nın, yön listesini de kullandık. YANİ 
+GRAFİKTE GÖRÜLEN AL/SAT NKTALARI TOMA sisteminden gelenler) 
+  
+  
+var Sistemim1 = Sistem.SistemGetir("TOMA", "IMKBH'GARAN", "G") ; 
+var Sistemim2 = Sistem.SistemGetir("BolingerSys", "IMKBH'GARAN", "G") ; 
+var Sistemim3 = Sistem.SistemGetir("MACD", "IMKBH'GARAN", "G") ; 
+  
+Sistem.GetiriKZ = Sistemim1.GetiriKZ ; 
+Sistem.GetiriKZ = Sistemim2.GetiriKZ ; 
+Sistem.GetiriKZ = Sistemim3.GetiriKZ ; 
+  
+Sistem.Cizgiler[0].Deger =  Sistemim1.GetiriKZ; //Sistemim1 (TOMA) Kar Zarar grafiği 
+Sistem.Cizgiler[1].Deger =  Sistemim2.GetiriKZ; //Sistemim2 (Bolinger) Kar Zarar grafiği 
+Sistem.Cizgiler[2].Deger =  Sistemim3.GetiriKZ; //Sistemim2 (Bolinger) Kar Zarar grafiği 
+  
+Sistem.Yon = Sistemim1.Yon; 
+  
+  
+ 
+  
+Grafikteki Görüntü Aşağıdaki gibidir. 
+  
+
+--- PAGE 169 ---
+ 
+SEZAİ KILIÇ 
+162 
+ 
+ 
+ 
+ 
+ÖRNEK 2: MA_RSI_MOMENTUM isimli sistemimizin, 60 dakikalık VIOP grafiğine uygulanması durumunda, en son bardaki 
+yönünü okutup kullanmak… (Bu örnekte, sistemin Son Yönü o sistem içinde parametrelerin sıfırıncı satırına yazdırılıyor. Bu 
+kodda ise, o sistemin ilgili parametre satırı okunup, duruma göre kullanılıyor. 
+  
+  
+var digersistem = Sistem.SistemGetir("MA_RSI_Momentum","VIP'VIP-X030", "60" ); 
+var durum = digersistem.Parametreler[0]; 
+  
+if (durum == "S") 
+{ 
+   //Diğer Sistem SHORT 
+   Sistem.Mesaj("Diger Sistem Short"); 
+} 
+else if (durum == "A") 
+{ 
+   //Diğer Sistem LONG 
+   Sistem.Mesaj("Diger Sistem Long"); 
+} 
+  
+ 
+ 
+- 
+Son Fiyat - Sistem. SonFiyat(Sembol) 
+ 
+Bir sembolün o an ki son fiyatını okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) son fiyatı okutulmak istenen sembol yazılır.   
+
+--- PAGE 170 ---
+ 
+SEZAİ KILIÇ 
+163 
+ 
+ 
+Not: iDeal programında bütün semboller ait oldukları piyasasının kodu ile birlikte yazılırlar. 
+Hisse senetlerinin piyasa kodu IMKBH dır. PİYASA kodundan sonra ÜSTTEN TEK TIRNAK işareti 
+ile ayrılıp borsadaki orijinal kod eklenir. GARAN hissesinin idealdeki sembol tanımı 
+IMKBH’GARAN şeklindedir. Örneğin USDTYR için FX’USDTRY şeklinde yazılır. Bir sembolün 
+PİYASA kodunun ne olduğu, o sembolü sayfanıza yazarken @ işareti yanında gösterilir.) 
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.SonFiyat(Sembol); 
+Sistem.Mesaj(X.ToString() 
+ 
+- 
+Son Fiyat - Sistem. SonHacim(Sembol) 
+ 
+Bir sembolün o an ki en son hacim değerini okumak için kullanılır. Parametre olarak 
+fonksiyona (parantez içine) son fiyatı okutulmak istenen sembol yazılır.  Buradaki hacim değeri 
+o günün başından itibaren gerçekleşen tüm işlemlerin TL hacmidir. 
+ 
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.SonHacim(Sembol); 
+Sistem.Mesaj(X.ToString() 
+ 
+- 
+Son Lot - Sistem. SonLot(Sembol) 
+ 
+Bir sembolün o an ki son işlem adedini okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) son fiyatı okutulmak istenen sembol yazılır.  Buradaki dönüş değeri, o günün 
+en başından itibaren gerçekleşejn tüm işlemlerin ADET olarak toplam hacmidir. 
+ 
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.SonLot(Sembol); 
+Sistem.Mesaj(X.ToString() 
+ 
+- 
+Son Yön Getir - Sistem.SonYonGetir(Sistem, Sembol, Periyot) 
+ 
+Özellikle teknik analiz göstergelerine ve grafik barlarına dayalı stratejilerde, AL/SAT 
+sinyalleri geldiği zaman sıkça kullanılan kavramlardan biri de YÖN kavramıdır. Bir grafikte bir 
+strateji AL sinyaliyle pozisyon açtığında yönümüz artık AL dır ve bir başka sinyal gelene kadar 
+her bir barda son yön değeri A dır. iDealde yön isimli listeler (SİSTEM.YON kısmında da detaylı 
+anlatılacak) A/S/F harfleriyle doldurulurlar. 
+A = AL Sinyali 
+S = SAT (AÇIĞA SAT / SHORT POZ AÇ) Sinyali 
+F = FLAT (Al veya Sat pozisyonundan) Nakite / Flate geç sinyalidir. 
+
+--- PAGE 171 ---
+ 
+SEZAİ KILIÇ 
+164 
+ 
+Sistemleri okuyarak, herhangi bir hisse senedinde, varantta veya vadeli sözleşmede alım 
+satım yapan robotlar, sistemlerin son yön bilgisini okurlar ve çalılmaya başladıkları anda kendi 
+pozisyonlarını (ayarlanmış işlem adedi kadar alım veya satım yaparak) grafikten gelen bu yöne 
+eşitlerler. 
+SonYon fonksiyonunun aşağıda gösterilen iki kullanım şekli vardır; 
+ 
+Sistem.SonYonGetir(SistemAdi, Sembol, Periyot); 
+  
+Sistem.SonYonGetirCanli(SistemAdi, Sembol, Periyot); 
+ 
+Her iki kullanım şeklinde, sinyal üreten sistemin ismi, hangi sembolün hangi zaman periyotlu 
+grafiğinden sinyal elde edeceiği bilgisi kullanıcı tarafından girilir.  
+ 
+Birinci kullanım şekli, sistemin uygulandığı grafikteki EN SON (CANLI) barda sinyal oluşmasını 
+dikkate almaz, EN SONDAN BİR ÖNCEKİ BAR yönüne bakar. Sinyallerin son/canlı barda sürekli 
+değişebilme ve bu nedenle sürekş al/sat yapabilme ihtimali nedeniyle çoğu yatırımcı koşulların 
+kesinleşmesi, barın kapanması ile işleme girmek ister ve birinci kullanım şeklini tercih eder. 
+ 
+ 
+ 
+Yukarıdaki grafiğe uygulanan sistemi okuyarak alım satım yapan bir robot Sistem.SonYonGetir 
+komutu kullanıyorsa SON YÖN = S dir ve robot kendi pozisyonunu SHORT pozisyonda olacak 
+şekilde ayarlar. En son barda gelmiş olan AL sinyalini, henüz o bar kapanmadığıo için dikkate 
+almaz. 
+ 
+Eğer bu sistem Sistem.SonYonGetirCanli komutu kullanılarak robota bağlanmış ise, o zaman 
+çalışır çalışmaz AL işlemi yapacaktır çünkü SON YÖN = A dır. 
+ 
+SON Yon Getir komutunun kullanıldığı örnek bir çalışan robot kalıp kodu aşağıda verilmiştir: 
+ 
+var LotSize = 1; //işlem adedi 
+
+--- PAGE 172 ---
+ 
+SEZAİ KILIÇ 
+165 
+ 
+var SistemAdi = "MA500"; //sistemizin adı 
+var GrafikSembolu = "IMKBH'GARAN"; //sistemin sinyal ürettiği grafik sembolü 
+var GrafikPeriyodu = "1";  //grafiğin priyodu 
+var EmirSembol = "IMKBH'GARAN"; 
+ 
+var MySistem = Sistem.SistemGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin 
+adı, grafik sembolü, grafiğin periyodu 
+var SonYon = Sistem.SonYonGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin 
+adı, grafik sembolü, grafiğin periyodu 
+ 
+var SonFiyat = Sistem.SonFiyat(EmirSembol); 
+var Anahtar = Sistem.Name + "," + EmirSembol; 
+double IslemFiyat = 0; 
+DateTime IslemTarih; 
+var Miktar = 0.0; 
+var Rezerv = ""; 
+var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih); 
+ 
+if (Sistem.Saat.CompareTo("10:00:00") <= 0 || Sistem.Saat.CompareTo("17:59:59") >= 0)  // 
+seans yok işlem yapma 
+{ 
+} 
+else  
+{ 
+   if (SonYon == "F" && Pozisyon != 0)  // Flata Geç 
+      Miktar = -Pozisyon; 
+   else if (SonYon == "A" && Pozisyon != LotSize)  // Al 
+      Miktar = LotSize - Pozisyon; 
+   else if (SonYon == "S" && Pozisyon != -LotSize)  // Sat 
+      Miktar = -LotSize - Pozisyon; 
+    // Emir Gönder 
+    var Islem = ""; 
+    if (Miktar > 0) {Islem = "ALIS"; Rezerv = "ALIŞ YAPILDI";} 
+    if (Miktar < 0) {Islem = "SATIS"; Rezerv = "SATIŞ YAPILDI";} 
+    if (Islem != "") 
+    { 
+        Sistem.PozisyonKontrolGuncelle(Anahtar, Miktar + Pozisyon, SonFiyat, Rezerv); 
+        Sistem.EmirSembol = EmirSembol ; 
+        Sistem.EmirIslem = Islem; 
+        Sistem.EmirSuresi = "KIE";  
+        Sistem.EmirTipi = "Piyasa"; 
+        Sistem.EmirMiktari = Math.Abs(Miktar); 
+        Sistem.EmirGonder(); 
+    } 
+} 
+ 
+ 
+- 
+Sorgu Fonksiyonları - Sistem.Sorguxxxxx  
+ 
+iDeal sistem modülünün en çok kullanılan pencerelerinden biri de SORGU penceresidir. 
+Sorgu pencereresi, formül olarak yazdığımız kritere uyan hisseleri tarayıp ekrana döken bir 
+penceredir. Bu pencere, sorgulama işlemi sonrasında ekrana kullanıcı tarafından belirlenmiş 
+olan sütunlar içeen bir tablo getirir. Kaç tane sütun olacağı, hangi sütunda hangi bilginin 
+olacağı, sütunların yazı mı fiyat mı içerdiği, renkleri sola/sağa/ortaya hizalamaları, başlık olarak 
+ne yazacağı ve sayıların virgülden sonra kaç basamaklı gösterileceği gibi tüm seçimler kullanıcı 
+tarafaından belirlenebilir. 
+ 
+Sorgu formülleri yazarken kullanılabilecek fonksiyonlar ve işlevleri aşağıda açıklanmıştır: 
+ 
+      Sistem.SorguBaslik[0] = 0 nolu sütunun başlığında ne yazsın 
+      Sistem.SorguOndalik[0] = 0 nolu sütundaki sayılar virgülden sonra kaç basamak gösterilsin 
+      Sistem.SorguDeger[0] = 0 nolu sütunda neyin değeri dökülsün 
+      Sistem.SorguSutunTip[0] = 0 nolu sütun YAZI mı FİYAT mı gösterecek 
+      Sistem.SorguSutunHizala[0] = 0 nolu sütundaki veriler nasıl hizalansın (SAG, SOL, ORTA) 
+
+--- PAGE 173 ---
+ 
+SEZAİ KILIÇ 
+166 
+ 
+      Sistem.SorguSutunGenislik[0] = 0 nolu sütunun genişliği kaç pixel olsun (Örn: 100) 
+      Sistem.SorguHucreZeminRengi[0] = 0 nolu sütunun zemin rengi ne olsun (Örn: Color.Green) 
+      Sistem.SorguAciklamaGenislik = Açıklama sütununun genişiği kaç pixel olsun (Örn: 120) 
+      Sistem.SorguAciklama = Açıklama sütununda ne yazsın (Örn: "Filtrem") 
+      Sistem.SorguEkle(); Bu satır eklenirse sorgu tarama yapar, aksi halde yapmaz. 
+ 
+Örnek: RSI indikatörüni kendi seçeceğimiz hisseler için ve yine kendi seçeceğimiz grafik periyotları için tarayan, 
+RSI değeri 30 dan küçük, 70 den büyük veya iki seviye arasında olanlara göre renklendirerek tarayan sorgu 
+formülü; 
+ 
+            // Sütun Tanımları 
+            Sistem.SorguAciklamaGenislik = 1; 
+            Sistem.SorguBaslik[0] = "Kapanış"; 
+            Sistem.SorguOndalik[0] = 2; 
+            Sistem.SorguBaslik[1] = "RSI"; 
+            Sistem.SorguBaslik[2] = "Isı Haritası"; 
+            Sistem.SorguSutunTip[2] = "YAZI";  // YAZI 
+            Sistem.SorguBaslik[3] = "Yorum"; 
+            Sistem.SorguSutunTip[3] = "YAZI";  // YAZI 
+            Sistem.SorguSutunHizala[3] = "SOL";  // SAG, SOL, ORTA 
+            Sistem.SorguSutunGenislik[3] = 150; 
+ 
+            // Sütun Değerleri 
+            var C = Sistem.GrafikFiyatSec("Kapanis"); 
+            var RSI = Sistem.RSI(14); 
+            var SonBar = Sistem.BarSayisi - 1; 
+ 
+            Sistem.SorguDeger[0] = C[SonBar]; 
+            Sistem.SorguDeger[1] = RSI[SonBar]; 
+            Sistem.SorguDeger[3] = "RSI = " + RSI[SonBar].ToString("0.00"); 
+            if (RSI[SonBar] > 70) 
+                  Sistem.SorguHucreZeminRengi[2] = Color.Green; 
+             
+            else if (RSI[SonBar] < 30) 
+                Sistem.SorguHucreZeminRengi[2] = Color.Red; 
+            else if (RSI[SonBar] > 30 && RSI[SonBar] < 50 ) 
+                Sistem.SorguHucreZeminRengi[2] = Color.DarkRed; 
+            else if (RSI[SonBar] > 50 && RSI[SonBar] < 70 ) 
+                Sistem.SorguHucreZeminRengi[2] = Color.DarkGreen; 
+ 
+            Sistem.SorguEkle(); 
+ 
+Bu sorgu çalıştırılınca aşağıdaki ekran görüntüsü görülür. 
+ 
+
+--- PAGE 174 ---
+ 
+SEZAİ KILIÇ 
+167 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Saözcük Tablosu - Sistem.SozcukTablosunu Oku/Guncelle() 
+ 
+iDeal veri terminali üzerinde robotlar çalıştırıken çoğu zaman bazı bilgileri bir dosyada veya 
+bellekte saklamak ve gerektiğinde kullanmak gerekir. Kod yazılırken bilgi atanan (var x = 5; 
+şeklinde tanımlanan) değişkenler bazen bu ihtiyacı karşılamaz. 
+Çünkü kod içerisinde tanımlanan değişkenler, kodun her seferinde dafalarca çalışması 
+durumunda hep ilk tanımladığı değerine döner ve ilerleyen satırlarda hesaplamalar sonucu 
+yeni değeri bulunur. Ama bu döngü her seferinde yeniden olur. Oysa istenen şey, bir kez değeri 
+değiştirilen bir verinin, bir daha kullanıcının tanımladığı bir koşul olmadan hiç değişmemesidir. 
+Bu nedenle iDealde Pozisyon Kontrol, Sayı Tablosu, Sözcük Tablosu gibi veri saklama işlevi olan 
+komutlar kullanılır. 
+ 
+Sözcük Tablosu, sözel/text verilerin saklandığı bir bellek değişkenidir. Kod içerisinde sadece 
+istenen koşullar gerçekleştiği zaman değeri değiştirilir. Kod her çalşıştığında yeniden 
+başlangıuçta tanımlanan değeri almaz.  
+
+--- PAGE 175 ---
+ 
+SEZAİ KILIÇ 
+168 
+ 
+ 
+Sözcük Tablosunda saklanan bilgiler RAM de durur ve iDeal kapanırsa bu bilgiler sıfırlanır. 
+ 
+ÖRNEK: Üzerine uygulandığı grafiğin bar değerlerini bir dosyaya yazan, bunu kullanıcıdan onay alarak 
+sadece 1 kez yapan kor örneği. 
+ 
+ 
+var 
+Aktarildimi 
+= 
+Sistem.SozcukTablosunuOku(Sistem.Sembol 
++ 
+Sistem.Periyot 
++ 
+"DosyayVeriAktar"); 
+if (Aktarildimi != "OK") 
+{ 
+   Sistem.SozcukTablosunuGuncelle(Sistem.Sembol + Sistem.Periyot + "DosyayVeriAktar" , 
+"OK"); 
+   if 
+(MessageBox.Show("Dosyaya 
+Veri 
+Aktarılsın 
+mı 
+(?)", 
+"Veri 
+Aktarım", 
+MessageBoxButtons.YesNo) == DialogResult.Yes) 
+   { 
+      var Time1 = DateTime.Now;  // süre ölçümü için 
+      var Bars = Sistem.GrafikVerileri; 
+      var Liste = new List<string>(); 
+      for (var i=0; i<Bars.Count; i++) 
+      { 
+         Liste.Add(Bars[i].Date.ToString("dd.MM.yyyy")  
+           + ";" + Bars[i].Date.ToString("HH:mm") 
+           + ";" + Bars[i].Open.ToString() 
+           + ";" + Bars[i].High.ToString() 
+           + ";" + Bars[i].Low.ToString() 
+           + ";" + Bars[i].Close.ToString() 
+           + ";" + Bars[i].Size.ToString("0")); 
+      } 
+      var DosyaAdi = "\\Ideal\\Rapor\\ <file://Ideal/Rapor/>" + Sistem.Sembol + "_" + 
+Sistem.Periyot + ".Txt"; 
+      File.WriteAllLines(DosyaAdi, Liste); 
+      Sistem.Mesaj(Sistem.Sembol + "\r\nPeriyot = " + Sistem.Periyot + "\r\n DOsya Adı = " 
++ DosyaAdi + "\r\nSüre = " + (DateTime.Now-Time1).Milliseconds.ToString()); 
+   } 
+} 
+ 
+- 
+Sum - Sistem.Sum()  
+ 
+Bir listenin bütün elemanlarının toplamını veya o listenin her son x elemanının 
+toplamından elde edilen yeni bir liste hesaplatmak için Sistem.Sum fonksiyonları kullanılır. İki 
+kullanım şekli vardır; 
+ 
+Sistem.Sum(Liste) : Girdi olarak verilen bir listenin bütün elemanlarının toplam sayısal değerini 
+bulur. Örnek bar kapanışlarının listesi C ise; Sistem.Sum( C ) dersek, o grafikteki barların 
+hepsinin close değerlerinin toplamı bir sayı olarak bize verilir. 
+Sistem.Sum(Liste, 10) : Girdi olarak verilen bir listenin hep son elemanının toplam değerinden 
+oluşan yeni bir liste veriri. Örnek bar kapanışlarının listesi C ise; Sistem.Sum( C , 10 ) dersek, o 
+grafikteki barların her birinin son bardaki değerleri toplar ve yeni liste/çizgi/indikatör elde 
+eder. 
+ 
+ÖRNEK: Fiyat önceki bara göre daha küşük kapanış yaparsa değeri “-1” olan bir XX listesi oluşturup, 
+bunun 5 periyotlu SUM fonksiyonunu hesaplatalım; 
+Bu sonuç indikatörü 0 ile -5 arasında değerler alan bir indikatör olacak. Bu durumda değerin -5 
+olduğu bar bize fiyatın 5 bardır düştüğü bilgisini vereektir; 
+ 
+ 
+
+--- PAGE 176 ---
+ 
+SEZAİ KILIÇ 
+169 
+ 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var xx = Sistem.Liste(0); 
+for (int i=3; i < Sistem.BarSayisi; i++) 
+{ 
+   xx[i] = C[i] <= C[i-1] ? -1 : 0; 
+} 
+var sum = Sistem.Sum(xx,5); 
+ 
+ 
+- 
+Süper Trend - Sistem.SuperTrend() 
+ 
+iDeal indikatör kütüphanesinde yer alan Süper Trend isimli indikatörü çağırır. 3 adet 
+paramatre alır ve varsayılan değer olarak 3/10/14 kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+ Sistem.SuperTrend(Factor, HHVPeriyot, ATRPeriyot); 
+ Sistem.SuperTrend(Veriler, Factor, HHVPeriyot, ATRPeriyot); 
+ 
+ 
+- 
+Standart Deviation (Standart Sapma) - Sistem.StDev() 
+ 
+iDeal indikatör kütüphanesinde yer alan Standart Deviation (standart sapma) isimli 
+indikatörü çağırır. 2 adet paramatre alır ve varsayılan değer olarak 5/1 kullanılır. Aşağıdaki gibi 
+yazım şekilleri vardır; 
+ 
+  
+ Sistem.StDev(5, 1) 
+     Sistem.StDev(Verileri , 5, 1) 
+ 
+Ayrıca 2 amaç için daha standart sapma fonksiyon kullanımı sunulmuştur. Bunlardan biri bir 
+listenin tüm elmanlarının stnadart sapması, diğeri ise, listenin son x elemanının standart 
+sapmasından hesaplanan yeni bir liste sunan fonksiyondur. Bu iki fonksiyonun kullanım 
+şekilleri aşağıda belirtildiği gibidir. 
+ 
+Sistem.StDev(Liste, Deger) (örneğin close listesinin son 5 elemanının standart sapmaları) 
+Sistem.StDevDeger(Liste)  (Örneğin tüm close’ların standart sapmasını hesapla) 
+ 
+ 
+- 
+Standart Error -  Sistem.StEr() 
+ 
+iDeal indikatör kütüphanesinde yer alan Standart Error  isimli indikatörü çağırır. 1 adet 
+paramatre alır ve varsayılan değer olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+  
+Sistem.StEr(14) 
+  
+Sistem.StEr(Veriler , 14) 
+ 
+ 
+- 
+Standart Error Bands -  Sistem.StErDown/Mid/Up() 
+ 
+iDeal indikatör kütüphanesinden yer alan Standart Error Bands  isimli indikatörü çağırır. 4 
+adet paramatre alır ve varsayılan değer olarak 14/2/Simple/1 kullanılır. Bu indikatör Üst/Alt 
+ve Orta çizgisi olan bir band oscilatördür. Her bir çizgisi için ayrı ayrı ideal sistem fonksiyonu 
+
+--- PAGE 177 ---
+ 
+SEZAİ KILIÇ 
+170 
+ 
+vardır. İsteyen sadece bandın bir çizgisi çağırıp/çizdirip/kullanabilir. Aşağıdaki gibi yazım 
+şekilleri vardır; 
+ 
+  
+ Sistem.StErDown(14, 2,"Simple", 1) 
+  
+ Sistem.StErDown(Veriler , 14, 2,"Simple", 1) 
+ Sistem.StErMid(14, 2,"Simple", 1) 
+ Sistem.StErMid(Veriler , 14, 2,"Simple", 1) 
+ Sistem.StErUp(14, 2,"Simple", 1) 
+ Sistem.StErUp(Veriler , 14, 2,"Simple", 1) 
+ 
+- 
+Stochastic Fast  -  Sistem.StochasticFast(5,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Stochastic Fast isimli indikatörü çağırır. 2 adet 
+paramatre alır ve varsayılan değer olarak 5/3 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+ 
+  
+Sistem.StochasticFast(5, 3); 
+    Sistem.StochasticFast(Veriler , 5, 3); 
+ 
+ 
+- 
+Stochastic Momentum Index  -  Sistem.StochasticMomIndex(5,3,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Stochastic Momentum Index isimli indikatörü 
+çağırır. 3 adet paramatre alır ve varsayılan değer olarak 5/3/3 kullanılır. Aşağıdaki gibi yazım 
+şekilleri vardır; 
+ 
+ 
+  
+Sistem.StochasticMomIndex(5,3,3) 
+  
+Sistem.StochasticMomIndex(Liste,5,3,3) 
+Sistem.StochasticMomIndex(Veriler, 5,3,3) 
+ 
+- 
+Stochastic Oscillator  -  Sistem.StochasticOsc(5,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Stochastic Oscillator isimli indikatörü çağırır. 2 
+adet paramatre alır ve varsayılan değer olarak 5/3 kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.StochasticOsc(5,3) 
+Sistem.StochasticOsc(Veriler, 5,3) 
+ 
+- 
+Stochastic RSI  -  Sistem.StochasticRSI(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan Stochastic RSI  isimli indikatörü çağırır. 1 adet 
+paramatre alır ve varsayılan değer olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.StochasticRSI(14) 
+Sistem.StochasticRSI(Liste,14) 
+Sistem.StochasticRSI(Veriler, 14) 
+ 
+- 
+Stochastic Slow  -  Sistem.StochasticSlow(5,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Stochastic Slow isimli indikatörü çağırır. 2 adet 
+paramatre alır ve varsayılan değer olarak 5/3 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+
+--- PAGE 178 ---
+ 
+SEZAİ KILIÇ 
+171 
+ 
+ 
+ 
+Sistem.StochasticSlow(5,3); 
+Sistem.StochasticSlow(Veriler, 5,3); 
+ 
+ 
+- 
+Stop veya KarAl Puan/Yüzde  -  Sistem.StopVeyaKarAl(stop,kar) 
+ 
+Yazdığınız sistemin belli kriterler geçekleşirse pozisyondan çıkıp nakite geçmesini ve bir sonraki 
+sinyale kadar nakitte beklemesini sağlar. Burada nakite geçme (FLAT Olma) kriteri ya belli bir puan 
+veya yüzde miktarda kar elde edilmesi ya da işleme girdikten sonra gördüğü en iyi/karlı noktadan 
+belli bir puan veya yüzde geri dönmesi olabilir 
+ 
+Bu fonksiyon iki parametre ile birlikte kullanılır. 
+İlk parametre Stop, ikinci parametre ise KAR AL seviyesi için girilir: 
+  
+STOP SEVİYESİ: Sistem işlem yaptıktan sonra, gördüğü en iyi fiyat seviyesinden, buraya girilen 
+puan/yüzde kadar geri dönerse, sistem stop yapar ve FLAT pozisyona (nakite) geçer. 
+İşlem yapar yapmaz terse giden bir sistem, bu parametre kadar ters yöne giderse ve halen ana strateji 
+sinyal üretmemişse buraya girilen seviye kadar zararda STOP yapar 
+KAR AL SEVİYESİ: Sistem işlem yaptıktan sonra buraya girilen parametredeki puan/yüzde kadar kar 
+elde edilirse, sistem karı alır ve FLAT pozisyona geçer. 
+  
+Bu parametrelerden herhangi birisi kullanılmak istenmiyorsa “0” girilir. 
+İki parametre aynı anda kullanılabilir. Önce hangi şart sağlanırsa o şartın oluştuğu yerde STOP olur. 
+ 
+ÖRNEK: 50 VE 200’lik iki Exponatial ortalamanın kesişimlerine göre sinyal üreten sistemimize, 4500 puan kar 
+elde edince veya işleme girdikten sonra görülen en iyi fiyat seviyesinden 1500 puan terse dönüş olursa 
+pozisyonu kapat eklediğimiz örnek. 
+  
+var Yontem = “Exp”; 
+var Periyot1 = 50; 
+var Periyot2 = 200; 
+   
+// kapanış fiyatlarını oku 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+   
+// hareketli ortalamaları hesapla 
+var MA1 = Sistem.MA(C, Yontem, Periyot1); 
+var MA2 = Sistem.MA(C, Yontem, Periyot2); 
+  
+Sistem.KesismeTara(MA1, MA2); 
+Sistem.StopVeyaKarFlatPuan(1.500,4.500); 
+ 
+
+--- PAGE 179 ---
+ 
+SEZAİ KILIÇ 
+172 
+ 
+ 
+ 
+ 
+ 
+- 
+Swing Index  -  Sistem.SwingIndex(3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Swing Index isimli indikatörü çağırır. 1 adet 
+paramatre alır ve varsayılan değer olarak 3 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.SwingIndex(3); 
+Sistem.SwingIndex(Veriler, 3); 
+ 
+ 
+ 
+- 
+Taban Fiyat - Sistem.Taban(Sembol) 
+ 
+Bir sembolün o günkü TABAN fiyatını  okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) taban fiyatı okutulmak istenen sembol yazılır.   
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var TabanFiyat = Sistem.Taban(Sembol); 
+Sistem.Mesaj(TabanFiyat.ToString()); 
+ 
+ 
+ 
+ 
+
+--- PAGE 180 ---
+ 
+SEZAİ KILIÇ 
+173 
+ 
+- 
+Tavan Fiyat - Sistem.Tavan(Sembol) 
+ 
+Bir sembolün o günkü TAVAN fiyatını  okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) taban fiyatı okutulmak istenen sembol yazılır.   
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var TavanFiyat = Sistem.Tavan(Sembol); 
+Sistem.Mesaj(TavanFiyat.ToString()); 
+ 
+ 
+- 
+Tablo Kullanımları - Sistem.Tablo…(Sembol) 
+ 
+Ekrana satırları, sütunları kullanıcı tarafından belirlenebilen tablolar açmak isteyen ve ister 
+programdan okutulan isterse hesaplatılan verilerle de bu tabloların için doldurmak isteyen 
+kullanıcılarımız için 3 adet tablo fonksiyonu sunulmuştur. Bu fonksiyonların yazım şekilleri ve 
+işlevleri aşağıda belirtilmiştir; 
+ 
+ Sistem.Tablo(TabloAdi, 
+Sol, 
+Sag, 
+Genislik, 
+Yukseklik, 
+SutunSayisi, 
+SatirSayisi, 
+SutunGenislik, SutunHizala, SutunBaslik) 
+ Sistem.TabloTemizle(TabloAdi) 
+ Sistem.TabloYazdir(TabloAdi, Sutun, Satir, Metin, ZeminRenk, YaziRenk) 
+ 
+Sistem.Tablo Fonksiyonu: 
+ 
+ 
+Ekrana bir tablo açılmasını sağlayan komuttur. Ekrana bir tablo açtırmadan önce 12 
+adet parametreyi sisteme tanıtmak gerekir. Bu paramatreler fonksiyonun yukarıda belirtilen 
+yazıum şeklindeki sırayla girilir ve hangi parametrenin ne işe yaradığı bilgisi aşağıda 
+açıklanmıştır; 
+ 
+TabloAdi = Ekrana açılacak tablonun ismi (hem ekrana açılan tablonun başlığında bu isim yazılı 
+gözükür hem de formüllerde tablo açtırılırken, temizlenirken, yazdırılırken bu isim kullanılır) 
+Sol = Tablo, monitörde ekranın en solunda kaç pixe uzakta olsun bilgisidir (örnek olarak 100 
+gibi bir sayı girilebilir.) 
+Sag = Tablo, monitörde ekranın en üstünden kaç pixel aşağıda/uzakta olsun bilgisidir (örnek 
+olarak 100 gibi bir sayı girilebilir.) 
+Genislik = Açılacak tablonun genişliği kaç pixel olacak bilgisidir. (Örnek olarak 400 gibi bir sayı 
+girilebilir) 
+Yukseklik = Açılacak tablonun yüksekliği kaç pixel olacak bilgisidir (Örnek olarak 600 gibi bir 
+sayı girilebilir.) 
+SutunSayisi = Tabloda kaç adet sütun olacağı bilgisidir. 
+SatirSayisi = Tabloda kaç adet sütun olacağı bilgisidir. 
+SutunGenislik = HER BİR SÜTUN için ayrı ayrı olarak sütun genişliği kaç pixel olacak bilgisi bu 
+parametre ile belirlenir. Kaç adet sütun tanımlanmışsa o sayı kadar elemanı olan bşr liste 
+şeklinde tanıtılmalıdır.  
+ 
+Örnek: 4 sütunlu bir tablo açacağız. O zaman bu 4 sütunun her birinin pixel cinsinden 
+genişliklerini aşağıdaki gibi sisteme tanımlarız; 
+ 
+   var Genislikler = new int[4]{90,70,120,150}; 

@@ -1,4 +1,4 @@
-# 🗺️ IdealQuant - Yol Haritası v4.9
+# 🗺️ IdealQuant - Yol Haritası v5.0
 
 ## 🎯 Ana Hedef
 IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyon + robust parametre seçim sistemi.
@@ -16,13 +16,15 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 2 | ✅ | Optimizasyon Motoru | - |
 | Faz 3 | ✅ | Robust Parametre | - |
 | Faz 4 | ✅ | IdealData Entegrasyonu | - |
-| Faz 5 | ✅ | **v4.9 Sistem Hizalaması** | 🔴 Kritik |
+| Faz 5 | ✅ | **v5.0 Sistem Hizalaması** | 🔴 Kritik |
 | Faz 6 | ✅ | Desktop UI (PySide6) | - |
 | Faz 7 | ✅ | Veritabanı Entegrasyonu | - |
 | Faz 8 | 🔄 | Agent Dokümantasyonu | 🔴 Sürekli |
 | Faz 9 | 🔄 | Canlı Test & S5 Araştırma | 🟡 Düşük |
 | Faz 10| ✅ | Strateji 5 (Oliver Kell) | - |
 | Faz 11| ✅ | **Strateji 6 (TOTT_HOTT)** | - |
+| Faz 12 | ✅ | **Strateji 7 (DeepScalp v1.2)** | - |
+| Faz 13 | ✅ | **Strateji 8 (Gap Reversal v1.0)** | - |
 
 ---
 
@@ -208,7 +210,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 
 ---
 
-## 🔄 FAZ 12: Strateji 7 (DeepScalp v1.2) [AKTİF]
+## ✅ FAZ 12: Strateji 7 (DeepScalp v1.2) [TAMAMLANDI]
 
 ### 12.1 Python Altyapısı ✅
 - [x] `deepscalp_strategy.py` — 6 katmanlı strateji (ARS, SuperTrend, TOMA, MFI, ATR, Zaman)
@@ -222,7 +224,22 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
   - `strategy4_optimizer.py`: `s4_p4_eval` fonksiyonu eklendi ✅
   - `optimizer_panel.py`: Faz 3 gen'inden risk_ranges çıkarıldı, yeni Faz 4 Pool bloğu + checkpoint ✅
 - [x] **SuperTrend Kalibrasyonu:** `get_supertrend` Python impl. + IdealData doğrulaması ✅ (Ort%=0.019, rounding noise)
-- [ ] **C# Export:** S7 SuperTrend kodu C# exporter'a eklenmeli
+- [x] **C# Export:** S7 SuperTrend kodu C# exporter'a eklendi ✅
+
+---
+
+## ✅ FAZ 13: Strateji 8 (Gap Reversal v1.0) [TAMAMLANDI]
+
+> [!NOTE]
+> BIST30 vadeli piyasasında gece gap'lerinin tersine işlem yapan Opening Range tabanlı sistem.
+
+### 13.1 Python Altyapısı ✅
+- [x] `gap_reversal_strategy.py` — OR + Wilder RSI/ATR + Hacim Filtresi
+- [x] `strategy8_optimizer.py` — Numba JIT Support (~80x hızlanma)
+- [x] UI Entegrasyonu (StrategyPanel, OptimizerPanel, ExportPanel)
+- [x] C# Exporter Şablonu (`_generate_strategy8_code`)
+
+---
 
 
 

@@ -1,0 +1,707 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// Orijinal: ©jdehorty — Machine Learning: Lorentzian Classification
+// Geliştirme: Enhanced v2.0 — Tüm kritik iyileştirmeler entegre edildi
+//
+// YAPILAN GELİŞTİRMELER:
+// [1] Kernel Repaint Düzeltmesi       — yhat1[1]<yhat1 yerine yhat1[2]<yhat1[1] kullanıldı
+// [2] Confidence Threshold            — Zayıf/belirsiz sinyaller filtrelendi
+// [3] Temporal Decay                  — Yakın tarihli komşulara üstel ağırlık
+// [4] Signal Persistence              — Çırpınmayı önlemek için 2 ardışık bar zorunluluğu
+// [5] Multi-Horizon Ensemble          — 3 farklı horizon'dan ağırlıklı tahmin
+// [6] Yeni Feature Sınıfları          — ATR Rank (volatilite) + OBV Slope (hacim) eklendi
+// [7] Adaptif Training Window         — Rejim kırılmasına göre lookback küçülür
+// [8] Gelişmiş Backtest Tablosu       — Payoff Ratio, Expectancy, Max Ardışık Zarar
+
+// @version=5
+indicator('Machine Learning: Lorentzian Classification [Enhanced v2.0]', 
+          'LC Enhanced v2', true, precision=4, max_labels_count=500)
+
+import jdehorty/MLExtensions/2 as ml
+import jdehorty/KernelFunctions/2 as kernels
+
+// ======================
+// ==== Custom Types ====
+// ======================
+
+type Settings
+    float source
+    int   neighborsCount
+    int   maxBarsBack
+    int   featureCount
+    int   colorCompression
+    bool  showExits
+    bool  useDynamicExits
+
+type Label
+    int long
+    int short
+    int neutral
+
+type FeatureArrays
+    array<float> f1
+    array<float> f2
+    array<float> f3
+    array<float> f4
+    array<float> f5
+
+type FeatureSeries
+    float f1
+    float f2
+    float f3
+    float f4
+    float f5
+
+type FilterSettings
+    bool  useVolatilityFilter
+    bool  useRegimeFilter
+    bool  useAdxFilter
+    float regimeThreshold
+    int   adxThreshold
+
+type Filter
+    bool volatility
+    bool regime
+    bool adx
+
+// ==========================
+// ==== Helper Functions ====
+// ==========================
+
+// [6] YENİ: ATR Rank ve OBV Slope feature'ları eklendi
+series_from(feature_string, _close, _high, _low, _hlc3, f_paramA, f_paramB) =>
+    switch feature_string
+        "RSI"      => ml.n_rsi(_close, f_paramA, f_paramB)
+        "WT"       => ml.n_wt(_hlc3, f_paramA, f_paramB)
+        "CCI"      => ml.n_cci(_close, f_paramA, f_paramB)
+        "ADX"      => ml.n_adx(_high, _low, _close, f_paramA)
+        // [6] Volatilite sınıfı — ATR'nin yüzdelik sırası (0-1 arası normalize)
+        "ATR_RANK" => ta.percentrank(ta.atr(f_paramA), f_paramB) / 100.0
+        // [6] Hacim momentum sınıfı — OBV eğimi normalize edilmiş
+        "OBV_SLOPE"=> ml.n_rsi(ta.change(ta.obv, f_paramA), f_paramA, f_paramB)
+
+// Lorentzian mesafe hesaplama (değişmedi)
+get_lorentzian_distance(int i, int featureCount, FeatureSeries featureSeries, FeatureArrays featureArrays) =>
+    switch featureCount
+        5 => math.log(1+math.abs(featureSeries.f1 - array.get(featureArrays.f1, i))) +
+             math.log(1+math.abs(featureSeries.f2 - array.get(featureArrays.f2, i))) +
+             math.log(1+math.abs(featureSeries.f3 - array.get(featureArrays.f3, i))) +
+             math.log(1+math.abs(featureSeries.f4 - array.get(featureArrays.f4, i))) +
+             math.log(1+math.abs(featureSeries.f5 - array.get(featureArrays.f5, i)))
+        4 => math.log(1+math.abs(featureSeries.f1 - array.get(featureArrays.f1, i))) +
+             math.log(1+math.abs(featureSeries.f2 - array.get(featureArrays.f2, i))) +
+             math.log(1+math.abs(featureSeries.f3 - array.get(featureArrays.f3, i))) +
+             math.log(1+math.abs(featureSeries.f4 - array.get(featureArrays.f4, i)))
+        3 => math.log(1+math.abs(featureSeries.f1 - array.get(featureArrays.f1, i))) +
+             math.log(1+math.abs(featureSeries.f2 - array.get(featureArrays.f2, i))) +
+             math.log(1+math.abs(featureSeries.f3 - array.get(featureArrays.f3, i)))
+        2 => math.log(1+math.abs(featureSeries.f1 - array.get(featureArrays.f1, i))) +
+             math.log(1+math.abs(featureSeries.f2 - array.get(featureArrays.f2, i)))
+
+// ================
+// ==== Inputs ====
+// ================
+
+Settings settings =
+ Settings.new(
+   input.source(title='Source', defval=close, group="General Settings"),
+   input.int(title='Neighbors Count', defval=8, group="General Settings", minval=1, maxval=100, step=1),
+   input.int(title="Max Bars Back", defval=2000, group="General Settings"),
+   input.int(title="Feature Count", defval=5, group="Feature Engineering", minval=2, maxval=5),
+   input.int(title="Color Compression", defval=1, group="General Settings", minval=1, maxval=10),
+   input.bool(title="Show Default Exits", defval=false, group="General Settings", inline="exits"),
+   input.bool(title="Use Dynamic Exits", defval=false, group="General Settings", inline="exits")
+ )
+
+// [2] YENİ: Confidence Threshold ayarı
+confidenceThreshold = input.float(
+  title="Confidence Threshold", defval=0.625, minval=0.5, maxval=1.0, step=0.0625,
+  tooltip="Komşuların en az bu oranı aynı yönde olsun. 0.625 = 8 komşudan en az 5'i. Yüksek değer = daha az ama daha güvenilir sinyal.",
+  group="General Settings")
+
+// [4] YENİ: Signal Persistence
+persistenceBars = input.int(
+  title="Signal Persistence (bars)", defval=2, minval=1, maxval=5,
+  tooltip="Sinyal yön değiştirmeden önce kaç ardışık bar aynı yönde olmalı. Çırpınmayı önler.",
+  group="General Settings")
+
+// [3] YENİ: Temporal Decay
+useTemporalDecay = input.bool(
+  title="Use Temporal Decay", defval=true,
+  tooltip="Açık: Yakın tarihli komşulara daha fazla ağırlık verilir. Kapalı: Orijinal davranış.",
+  group="General Settings")
+decayFactor = input.float(
+  title="Decay Factor", defval=0.9995, minval=0.990, maxval=1.000, step=0.0001,
+  tooltip="0.9995 = 1000 bar önceki nokta yaklaşık %60 ağırlık taşır. Küçültünce tarih daha hızlı 'unutulur'.",
+  group="General Settings")
+
+// [7] YENİ: Adaptif Training Window
+useAdaptiveWindow = input.bool(
+  title="Use Adaptive Window", defval=true,
+  tooltip="Açık: Yüksek volatilite rejimlerinde lookback penceresi otomatik küçülür.",
+  group="General Settings")
+
+showTradeStats  = input.bool(true, 'Show Trade Stats', group="General Settings")
+useWorstCase    = input.bool(false, "Use Worst Case Estimates", group="General Settings")
+
+FilterSettings filterSettings =
+ FilterSettings.new(
+   input.bool(title="Use Volatility Filter", defval=true, group="Filters"),
+   input.bool(title="Use Regime Filter", defval=true, group="Filters", inline="regime"),
+   input.bool(title="Use ADX Filter", defval=false, group="Filters", inline="adx"),
+   input.float(title="Threshold", defval=-0.1, minval=-10, maxval=10, step=0.1, group="Filters", inline="regime"),
+   input.int(title="Threshold", defval=20, minval=0, maxval=100, step=1, group="Filters", inline="adx")
+ )
+
+Filter filter =
+ Filter.new(
+   ml.filter_volatility(1, 10, filterSettings.useVolatilityFilter),
+   ml.regime_filter(ohlc4, filterSettings.regimeThreshold, filterSettings.useRegimeFilter),
+   ml.filter_adx(settings.source, 14, filterSettings.adxThreshold, filterSettings.useAdxFilter)
+  )
+
+// [6] Feature seçeneklerine ATR_RANK ve OBV_SLOPE eklendi
+f1_string = input.string(title="Feature 1", options=["RSI","WT","CCI","ADX","ATR_RANK","OBV_SLOPE"], defval="RSI", inline="01", group="Feature Engineering")
+f1_paramA = input.int(title="Parameter A", defval=14, inline="02", group="Feature Engineering")
+f1_paramB = input.int(title="Parameter B", defval=1,  inline="02", group="Feature Engineering")
+
+f2_string = input.string(title="Feature 2", options=["RSI","WT","CCI","ADX","ATR_RANK","OBV_SLOPE"], defval="WT",  inline="03", group="Feature Engineering")
+f2_paramA = input.int(title="Parameter A", defval=10, inline="04", group="Feature Engineering")
+f2_paramB = input.int(title="Parameter B", defval=11, inline="04", group="Feature Engineering")
+
+f3_string = input.string(title="Feature 3", options=["RSI","WT","CCI","ADX","ATR_RANK","OBV_SLOPE"], defval="CCI", inline="05", group="Feature Engineering")
+f3_paramA = input.int(title="Parameter A", defval=20, inline="06", group="Feature Engineering")
+f3_paramB = input.int(title="Parameter B", defval=1,  inline="06", group="Feature Engineering")
+
+f4_string = input.string(title="Feature 4", options=["RSI","WT","CCI","ADX","ATR_RANK","OBV_SLOPE"], defval="ADX", inline="07", group="Feature Engineering")
+f4_paramA = input.int(title="Parameter A", defval=20, inline="08", group="Feature Engineering")
+f4_paramB = input.int(title="Parameter B", defval=2,  inline="08", group="Feature Engineering")
+
+// [6] Feature 5 varsayılanı RSI'dan OBV_SLOPE'a değiştirildi (korelasyon düşürme)
+f5_string = input.string(title="Feature 5", options=["RSI","WT","CCI","ADX","ATR_RANK","OBV_SLOPE"], defval="ATR_RANK", inline="09", group="Feature Engineering",
+  tooltip="Önerilen: Feature 1-4'ten farklı sınıf seçin. RSI+CCI yüksek korelasyonlu — biri yerine ATR_RANK veya OBV_SLOPE kullanın.")
+f5_paramA = input.int(title="Parameter A", defval=14, inline="10", group="Feature Engineering")
+f5_paramB = input.int(title="Parameter B", defval=50, inline="10", group="Feature Engineering")
+
+// [5] Multi-Horizon Ensemble ayarları
+useEnsemble  = input.bool(title="Use Multi-Horizon Ensemble", defval=true,
+  tooltip="3 farklı tahmin ufku (2, 4, 8 bar) için ayrı KNN çalıştırır ve ağırlıklı oylamayla karar verir. Daha stabil tahminler üretir.",
+  group="Ensemble Settings")
+w_h2 = input.float(title="Horizon 2 Weight", defval=0.20, minval=0.0, maxval=1.0, step=0.05, group="Ensemble Settings")
+w_h4 = input.float(title="Horizon 4 Weight", defval=0.50, minval=0.0, maxval=1.0, step=0.05, group="Ensemble Settings")
+w_h8 = input.float(title="Horizon 8 Weight", defval=0.30, minval=0.0, maxval=1.0, step=0.05, group="Ensemble Settings")
+
+// Kernel ayarları
+useKernelFilter    = input.bool(true, "Trade with Kernel", group="Kernel Settings", inline="kernel")
+showKernelEstimate = input.bool(true, "Show Kernel Estimate", group="Kernel Settings", inline="kernel")
+useKernelSmoothing = input.bool(false, "Enhance Kernel Smoothing", inline='1', group='Kernel Settings')
+h   = input.int(8, 'Lookback Window', minval=3, group="Kernel Settings", inline="kernel")
+r   = input.float(8., 'Relative Weighting', step=0.25, group="Kernel Settings", inline="kernel")
+x   = input.int(25, "Regression Level", group="Kernel Settings", inline="kernel")
+lag = input.int(2, "Lag", inline='1', group='Kernel Settings')
+
+// Görüntü ayarları
+showBarColors      = input.bool(true, "Show Bar Colors", group="Display Settings")
+showBarPredictions = input.bool(true, "Show Bar Prediction Values", group="Display Settings")
+useAtrOffset       = input.bool(false, "Use ATR Offset", group="Display Settings")
+barPredictionsOffset = input.float(0, "Bar Prediction Offset", minval=0, group="Display Settings")
+
+// ===========================
+// ==== Feature Hesaplama ====
+// ===========================
+
+featureSeries =
+ FeatureSeries.new(
+   series_from(f1_string, close, high, low, hlc3, f1_paramA, f1_paramB),
+   series_from(f2_string, close, high, low, hlc3, f2_paramA, f2_paramB),
+   series_from(f3_string, close, high, low, hlc3, f3_paramA, f3_paramB),
+   series_from(f4_string, close, high, low, hlc3, f4_paramA, f4_paramB),
+   series_from(f5_string, close, high, low, hlc3, f5_paramA, f5_paramB)
+ )
+
+var f1Array = array.new_float()
+var f2Array = array.new_float()
+var f3Array = array.new_float()
+var f4Array = array.new_float()
+var f5Array = array.new_float()
+array.push(f1Array, featureSeries.f1)
+array.push(f2Array, featureSeries.f2)
+array.push(f3Array, featureSeries.f3)
+array.push(f4Array, featureSeries.f4)
+array.push(f5Array, featureSeries.f5)
+
+featureArrays =
+ FeatureArrays.new(f1Array, f2Array, f3Array, f4Array, f5Array)
+
+Label direction =
+ Label.new(long=1, short=-1, neutral=0)
+
+// ===========================================================
+// [5] MULTI-HORIZON: 3 farklı etiket dizisi (2, 4, 8 bar)
+// ===========================================================
+src = settings.source
+
+// Horizon 2: 2 bar sonrası
+y_h2_series = src[2] < src[0] ? direction.short : src[2] > src[0] ? direction.long : direction.neutral
+// Horizon 4: 4 bar sonrası (orijinal)
+y_h4_series = src[4] < src[0] ? direction.short : src[4] > src[0] ? direction.long : direction.neutral
+// Horizon 8: 8 bar sonrası (uzun vade)
+y_h8_series = src[8] < src[0] ? direction.short : src[8] > src[0] ? direction.long : direction.neutral
+
+var y_h2_array = array.new_int(0)
+var y_h4_array = array.new_int(0)
+var y_h8_array = array.new_int(0)
+
+array.push(y_h2_array, y_h2_series)
+array.push(y_h4_array, y_h4_series)
+array.push(y_h8_array, y_h8_series)
+
+// =========================================================
+// [7] ADAPTİF TRAINING WINDOW — Volatilite rejimine göre
+// =========================================================
+atr_fast_vol  = ta.atr(10)
+atr_slow_vol  = ta.atr(100)
+vol_expansion = atr_fast_vol / math.max(atr_slow_vol, 0.0001)
+
+// Yüksek volatilite → Uzak geçmişi unut, yakın geçmişe bak
+// Düşük volatilite  → Uzun tarih daha güvenilir
+adaptiveMaxBars = useAdaptiveWindow ?
+  (vol_expansion > 1.5 ? 500   :
+   vol_expansion > 1.2 ? 1000  :
+   vol_expansion < 0.7 ? 2000  : settings.maxBarsBack) :
+  settings.maxBarsBack
+
+maxBarsBackIndex = last_bar_index >= adaptiveMaxBars ? last_bar_index - adaptiveMaxBars : 0
+
+// EMA/SMA filtreleri
+useEmaFilter  = input.bool(title="Use EMA Filter", defval=false, group="Filters", inline="ema")
+emaPeriod     = input.int(title="Period", defval=200, minval=1, group="Filters", inline="ema")
+isEmaUptrend   = useEmaFilter ? close > ta.ema(close, emaPeriod) : true
+isEmaDowntrend = useEmaFilter ? close < ta.ema(close, emaPeriod) : true
+
+useSmaFilter   = input.bool(title="Use SMA Filter", defval=false, group="Filters", inline="sma")
+smaPeriod      = input.int(title="Period", defval=200, minval=1, group="Filters", inline="sma")
+isSmaUptrend   = useSmaFilter ? close > ta.sma(close, smaPeriod) : true
+isSmaDowntrend = useSmaFilter ? close < ta.sma(close, smaPeriod) : true
+
+// =========================
+// ==== Core ML Logic   ====
+// =========================
+
+// ML değişkenleri — her horizon için ayrı prediction/distances dizisi
+var predictions_h4 = array.new_float(0)
+var distances_h4   = array.new_float(0)
+var prediction_h4  = 0.
+
+// [5] Ensemble için h2 ve h8 dizileri
+var predictions_h2 = array.new_float(0)
+var distances_h2   = array.new_float(0)
+var prediction_h2  = 0.
+
+var predictions_h8 = array.new_float(0)
+var distances_h8   = array.new_float(0)
+var prediction_h8  = 0.
+
+var signal = direction.neutral
+
+size     = math.min(adaptiveMaxBars-1, array.size(y_h4_array)-1)
+sizeLoop = math.min(adaptiveMaxBars-1, size)
+
+if bar_index >= maxBarsBackIndex
+    lastDistance_h4 = -1.0
+    lastDistance_h2 = -1.0
+    lastDistance_h8 = -1.0
+
+    for i = 0 to sizeLoop
+        d = get_lorentzian_distance(i, settings.featureCount, featureSeries, featureArrays)
+
+        // [3] TEMPORAL DECAY: Yakın tarihli noktalara daha düşük efektif mesafe
+        // i=0 en yeni bar, i büyüdükçe uzaklaşır → decay^i ile bölerek eskiyi "uzaklaştır"
+        effective_d = useTemporalDecay ? d / math.pow(decayFactor, i) : d
+
+        if effective_d >= lastDistance_h4 and i % 4
+            lastDistance_h4 := effective_d
+            array.push(distances_h4, effective_d)
+            array.push(predictions_h4, math.round(array.get(y_h4_array, i)))
+            if array.size(predictions_h4) > settings.neighborsCount
+                lastDistance_h4 := array.get(distances_h4, math.round(settings.neighborsCount * 3 / 4))
+                array.shift(distances_h4)
+                array.shift(predictions_h4)
+
+        // [5] Horizon 2 — sadece ensemble aktifse hesapla
+        if useEnsemble
+            if effective_d >= lastDistance_h2 and i % 4
+                lastDistance_h2 := effective_d
+                array.push(distances_h2, effective_d)
+                if i < array.size(y_h2_array)
+                    array.push(predictions_h2, math.round(array.get(y_h2_array, i)))
+                if array.size(predictions_h2) > settings.neighborsCount
+                    lastDistance_h2 := array.get(distances_h2, math.round(settings.neighborsCount * 3 / 4))
+                    array.shift(distances_h2)
+                    array.shift(predictions_h2)
+
+            if effective_d >= lastDistance_h8 and i % 4
+                lastDistance_h8 := effective_d
+                array.push(distances_h8, effective_d)
+                if i < array.size(y_h8_array)
+                    array.push(predictions_h8, math.round(array.get(y_h8_array, i)))
+                if array.size(predictions_h8) > settings.neighborsCount
+                    lastDistance_h8 := array.get(distances_h8, math.round(settings.neighborsCount * 3 / 4))
+                    array.shift(distances_h8)
+                    array.shift(predictions_h8)
+
+    prediction_h4 := array.sum(predictions_h4)
+
+    if useEnsemble
+        prediction_h2 := array.sum(predictions_h2)
+        prediction_h8 := array.sum(predictions_h8)
+
+// [5] MULTI-HORIZON ENSEMBLE — Ağırlıklı oylama
+// Her horizon'un tahmini kendi neighborsCount'una göre normalize edilir
+raw_h2 = prediction_h2 / math.max(settings.neighborsCount, 1)
+raw_h4 = prediction_h4 / math.max(settings.neighborsCount, 1)
+raw_h8 = prediction_h8 / math.max(settings.neighborsCount, 1)
+
+// Toplam ağırlık normalize et (kullanıcı girişi toplamı 1 olmayabilir)
+totalW  = w_h2 + w_h4 + w_h8
+ensemblePred = useEnsemble ?
+  (raw_h2 * (w_h2/totalW) + raw_h4 * (w_h4/totalW) + raw_h8 * (w_h8/totalW)) :
+  raw_h4
+
+// Görüntü için → orijinal skala'ya dönüştür
+displayPrediction = math.round(ensemblePred * settings.neighborsCount)
+
+// ==================================================
+// [2] CONFIDENCE THRESHOLD — Belirsiz sinyalleri filtrele
+// ==================================================
+// Confidence = |tahmin| / neighborsCount → 0.0 ile 1.0 arası
+// Örnek: 8 komşudan 5'i aynı yönde → confidence = 0.625
+confidence = math.abs(ensemblePred)  // Zaten 0-1 normalize (ensemble sonrası)
+isConfident = confidence >= confidenceThreshold
+
+// ============================
+// ==== Prediction Filters ====
+// ============================
+
+filter_all = filter.volatility and filter.regime and filter.adx
+
+// [2] Confidence threshold eklendi — belirsiz modeli sustur
+signal := ensemblePred > 0 and filter_all and isConfident ? direction.long  :
+          ensemblePred < 0 and filter_all and isConfident ? direction.short :
+          nz(signal[1])
+
+// ===========================================================
+// [4] SIGNAL PERSISTENCE — Çırpınma önüme
+// Sinyal ancak persistenceBars ardışık bar aynı yönde olursa değişir
+// ===========================================================
+var int bullishCount = 0
+var int bearishCount = 0
+
+bullishCount := ensemblePred > 0 and isConfident ? bullishCount + 1 : 0
+bearishCount := ensemblePred < 0 and isConfident ? bearishCount + 1 : 0
+
+stableLong  = bullishCount  >= persistenceBars
+stableShort = bearishCount  >= persistenceBars
+
+// Bar-Count Filters
+var int barsHeld = 0
+barsHeld := ta.change(signal) ? 0 : barsHeld + 1
+isHeldFourBars         = barsHeld == 4
+isHeldLessThanFourBars = 0 < barsHeld and barsHeld < 4
+
+// Fractal Filters
+isDifferentSignalType = ta.change(signal)
+isEarlySignalFlip     = ta.change(signal) and (ta.change(signal[1]) or ta.change(signal[2]) or ta.change(signal[3]))
+
+// [4] Persistence koşulları giriş sinyallerine eklendi
+isBuySignal  = signal == direction.long  and isEmaUptrend   and isSmaUptrend   and stableLong
+isSellSignal = signal == direction.short and isEmaDowntrend and isSmaDowntrend and stableShort
+
+isLastSignalBuy  = signal[4] == direction.long  and isEmaUptrend[4]   and isSmaUptrend[4]
+isLastSignalSell = signal[4] == direction.short and isEmaDowntrend[4] and isSmaDowntrend[4]
+
+isNewBuySignal  = isBuySignal  and isDifferentSignalType
+isNewSellSignal = isSellSignal and isDifferentSignalType
+
+// ===========================================
+// ==== Kernel Regression (Repaint Düzeltmesi içerir)
+// ===========================================
+
+c_green     = color.new(#009988, 20)
+c_red       = color.new(#CC3311, 20)
+transparent = color.new(#000000, 100)
+
+yhat1 = kernels.rationalQuadratic(settings.source, h, r, x)
+yhat2 = kernels.gaussian(settings.source, h-lag, x)
+kernelEstimate = yhat1
+
+// [1] KERNEL REPAINT DÜZELTMESİ
+// HATA (orijinal): yhat1[1] > yhat1 — Bu bar'ın yhat1'i henüz kapanmadı,
+//                  bar kapanana kadar değişmeye devam eder → REPAINT
+// DÜZELTME: Önceki iki kapanmış barı karşılaştır → kesinleşmiş yön
+bool wasBearishRate = yhat1[3] > yhat1[2]   // 3 bar önce → 2 bar önce
+bool wasBullishRate = yhat1[3] < yhat1[2]
+bool isBearishRate  = yhat1[2] > yhat1[1]   // 2 bar önce → 1 bar önce (kapanmış)
+bool isBullishRate  = yhat1[2] < yhat1[1]
+
+isBearishChange = isBearishRate and wasBullishRate
+isBullishChange = isBullishRate and wasBearishRate
+
+bool isBullishCrossAlert = ta.crossover(yhat2, yhat1)
+bool isBearishCrossAlert = ta.crossunder(yhat2, yhat1)
+bool isBullishSmooth     = yhat2 >= yhat1
+bool isBearishSmooth     = yhat2 <= yhat1
+
+color colorByCross = isBullishSmooth ? c_green : c_red
+color colorByRate  = isBullishRate   ? c_green : c_red
+color plotColor    = showKernelEstimate ? (useKernelSmoothing ? colorByCross : colorByRate) : transparent
+
+plot(kernelEstimate, color=plotColor, linewidth=2, title="Kernel Regression Estimate")
+
+bool alertBullish = useKernelSmoothing ? isBullishCrossAlert : isBullishChange
+bool alertBearish = useKernelSmoothing ? isBearishCrossAlert : isBearishChange
+
+isBullish = useKernelFilter ? (useKernelSmoothing ? isBullishSmooth : isBullishRate) : true
+isBearish = useKernelFilter ? (useKernelSmoothing ? isBearishSmooth : isBearishRate) : true
+
+// ===========================
+// ==== Entries and Exits ====
+// ===========================
+
+startLongTrade  = isNewBuySignal  and isBullish and isEmaUptrend   and isSmaUptrend
+startShortTrade = isNewSellSignal and isBearish and isEmaDowntrend and isSmaDowntrend
+
+lastSignalWasBullish = ta.barssince(startLongTrade)  < ta.barssince(startShortTrade)
+lastSignalWasBearish = ta.barssince(startShortTrade) < ta.barssince(startLongTrade)
+
+barsSinceRedEntry   = ta.barssince(startShortTrade)
+barsSinceRedExit    = ta.barssince(alertBullish)
+barsSinceGreenEntry = ta.barssince(startLongTrade)
+barsSinceGreenExit  = ta.barssince(alertBearish)
+
+isValidShortExit = barsSinceRedExit   > barsSinceRedEntry
+isValidLongExit  = barsSinceGreenExit > barsSinceGreenEntry
+
+endLongTradeDynamic  = isBearishChange and isValidLongExit[1]
+endShortTradeDynamic = isBullishChange and isValidShortExit[1]
+
+endLongTradeStrict  = ((isHeldFourBars and isLastSignalBuy)  or (isHeldLessThanFourBars and isNewSellSignal and isLastSignalBuy))  and startLongTrade[4]
+endShortTradeStrict = ((isHeldFourBars and isLastSignalSell) or (isHeldLessThanFourBars and isNewBuySignal  and isLastSignalSell)) and startShortTrade[4]
+
+isDynamicExitValid = not useEmaFilter and not useSmaFilter and not useKernelSmoothing
+
+endLongTrade  = settings.useDynamicExits and isDynamicExitValid ? endLongTradeDynamic  : endLongTradeStrict
+endShortTrade = settings.useDynamicExits and isDynamicExitValid ? endShortTradeDynamic : endShortTradeStrict
+
+// =========================
+// ==== Plotting Labels ====
+// =========================
+
+atrSpaced = useAtrOffset ? ta.atr(1) : na
+
+// [2] Confidence rengi — yüksek güven = doygun renk
+compressionFactor = settings.neighborsCount / settings.colorCompression
+c_pred = displayPrediction > 0 ?
+  color.from_gradient(displayPrediction, 0, compressionFactor, #787b86, #009988) :
+  displayPrediction <= 0 ?
+  color.from_gradient(displayPrediction, -compressionFactor, 0, #CC3311, #787b86) : na
+
+c_label = showBarPredictions ? c_pred : na
+c_bars  = showBarColors ? color.new(c_pred, 50) : na
+x_val   = bar_index
+y_val   = useAtrOffset ?
+  (displayPrediction > 0 ? high + atrSpaced : low - atrSpaced) :
+  (displayPrediction > 0 ? high + hl2*barPredictionsOffset/20 : low - hl2*barPredictionsOffset/30)
+
+label.new(x_val, y_val, str.tostring(displayPrediction), xloc.bar_index, yloc.price,
+  color.new(color.white, 100), label.style_label_up, c_label, size.normal, text.align_left)
+barcolor(showBarColors ? color.new(c_pred, 50) : na)
+
+// [2] Güven göstergesi: Düşük confident sinyal → daha soluk arka plan
+bgcolor(not isConfident and bar_index >= maxBarsBackIndex ?
+  color.new(color.gray, 92) : na, title="Low Confidence Zone")
+
+plotshape(startLongTrade  ? low  : na, 'Buy',  shape.labelup,   location.belowbar, color=ml.color_green(displayPrediction),  size=size.small, offset=0)
+plotshape(startShortTrade ? high : na, 'Sell', shape.labeldown,  location.abovebar, ml.color_red(-displayPrediction), size=size.small, offset=0)
+plotshape(endLongTrade  and settings.showExits ? high : na, 'StopBuy',  shape.xcross, location.absolute, color=#3AFF17, size=size.tiny, offset=0)
+plotshape(endShortTrade and settings.showExits ? low  : na, 'StopSell', shape.xcross, location.absolute, color=#FD1707, size=size.tiny, offset=0)
+
+// ================
+// ==== Alerts ====
+// ================
+
+alertcondition(startLongTrade,  title='Open Long ▲',   message='LC Enhanced Open Long ▲ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(endLongTrade,    title='Close Long ▲',  message='LC Enhanced Close Long ▲ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(startShortTrade, title='Open Short ▼',  message='LC Enhanced Open Short ▼ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(endShortTrade,   title='Close Short ▼', message='LC Enhanced Close Short ▼ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(startShortTrade or startLongTrade, title='Open Position ▲▼',  message='LC Enhanced Open ▲▼ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(endShortTrade   or endLongTrade,   title='Close Position ▲▼', message='LC Enhanced Close ▲▼ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(condition=alertBullish, title='Kernel Bullish', message='LC Enhanced Kernel Bullish ▲ | {{ticker}}@{{close}} | ({{interval}})')
+alertcondition(condition=alertBearish, title='Kernel Bearish', message='LC Enhanced Kernel Bearish ▼ | {{ticker}}@{{close}} | ({{interval}})')
+
+// =====================
+// ==== Backtesting ====
+// =====================
+
+backTestStream = switch
+    startLongTrade  =>  1
+    endLongTrade    =>  2
+    startShortTrade => -1
+    endShortTrade   => -2
+plot(backTestStream, "Backtest Stream", display=display.none)
+
+[totalWins, totalLosses, totalEarlySignalFlips, totalTrades, tradeStatsHeader, winLossRatio, winRate] =
+  ml.backtest(high, low, open, startLongTrade, endLongTrade, startShortTrade, endShortTrade,
+              isEarlySignalFlip, maxBarsBackIndex, bar_index, settings.source, useWorstCase)
+
+// =====================================================
+// [8] GELİŞMİŞ BACKTEST TABLOSU
+// Eklenenler: Payoff Ratio, Expectancy, Max Ardışık Zarar, Confidence Oranı
+// =====================================================
+
+// İşlem bazlı istatistik takibi
+var float totalProfitAmount = 0.0
+var float totalLossAmount   = 0.0
+var int   maxConsecLoss     = 0
+var int   consecLossCurrent = 0
+var int   totalSignals      = 0
+var int   confidentSignals  = 0
+
+if barstate.isconfirmed
+    // Confident sinyal oranını takip et
+    if isDifferentSignalType
+        totalSignals += 1
+        if isConfident
+            confidentSignals += 1
+
+    // Kardaki işlemleri takip et (yaklaşık)
+    if endLongTrade or endShortTrade
+        // Basit PnL tahmini: son değişim
+        approxPnL = endLongTrade ?
+          (close - close[barsHeld+1]) :
+          (close[barsHeld+1] - close)
+
+        if approxPnL > 0
+            totalProfitAmount += approxPnL
+            consecLossCurrent := 0
+        else
+            totalLossAmount   += math.abs(approxPnL)
+            consecLossCurrent += 1
+            maxConsecLoss      := math.max(maxConsecLoss, consecLossCurrent)
+
+// Hesaplanan metrikler
+safeWins   = math.max(totalWins, 1)
+safeLosses = math.max(totalLosses, 1)
+
+avgWin     = totalProfitAmount / safeWins
+avgLoss    = totalLossAmount   / safeLosses
+payoffRatio = avgWin / math.max(avgLoss, 0.0001)
+
+safeTotal   = math.max(totalTrades, 1)
+wr          = totalWins / safeTotal
+expectancy  = wr * avgWin - (1 - wr) * avgLoss
+
+confidenceRate = totalSignals > 0 ? (confidentSignals / totalSignals) * 100 : 0.0
+
+// Tablo oluşturma
+init_table() =>
+    c_transparent = color.new(color.black, 100)
+    table.new(position.top_right, columns=2, rows=12,
+      frame_color=color.new(color.black, 100), frame_width=1,
+      border_width=1, border_color=c_transparent)
+
+update_table(tbl, tradeStatsHeader, totalTrades, totalWins, totalLosses,
+             winLossRatio, winRate, stopLosses, _payoffRatio, _expectancy,
+             _maxConsecLoss, _confidenceRate, _adaptiveMaxBars, _confidence) =>
+    c_t  = color.new(color.black, 100)
+    c_g  = color.new(color.teal, 0)
+    c_gr = color.gray
+
+    // Başlık
+    table.cell(tbl, 0, 0, tradeStatsHeader,
+      text_halign=text.align_center, text_color=c_gr, text_size=size.normal, bgcolor=c_t)
+    table.merge_cells(tbl, 0, 0, 1, 0)
+
+    // Satır 1: Win Rate
+    table.cell(tbl, 0, 1, 'Win Rate',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 1, str.tostring(totalWins / safeTotal, '#.#%'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+
+    // Satır 2: İşlem sayısı
+    table.cell(tbl, 0, 2, 'Trades (W|L)',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 2,
+      str.tostring(totalTrades,'#') + ' (' + str.tostring(totalWins,'#') + '|' + str.tostring(totalLosses,'#') + ')',
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+
+    // Satır 3: W/L Oranı
+    table.cell(tbl, 0, 3, 'WL Ratio',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 3, str.tostring(totalWins / safeLosses, '0.00'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+
+    // [8] Satır 4: Payoff Ratio
+    payColor = _payoffRatio >= 1.5 ? color.teal : _payoffRatio >= 1.0 ? c_gr : color.red
+    table.cell(tbl, 0, 4, 'Payoff Ratio',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 4, str.tostring(_payoffRatio, '0.00'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=payColor, text_size=size.normal)
+
+    // [8] Satır 5: Expectancy
+    expColor = _expectancy > 0 ? color.teal : color.red
+    table.cell(tbl, 0, 5, 'Expectancy',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 5, str.tostring(_expectancy, '0.0000'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=expColor, text_size=size.normal)
+
+    // [8] Satır 6: Max Ardışık Zarar
+    consColor = _maxConsecLoss <= 2 ? color.teal : _maxConsecLoss <= 4 ? c_gr : color.red
+    table.cell(tbl, 0, 6, 'Max Consec. Loss',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 6, str.tostring(_maxConsecLoss, '#'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=consColor, text_size=size.normal)
+
+    // [8] Satır 7: Early Signal Flips
+    table.cell(tbl, 0, 7, 'Early Flips',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 7, str.tostring(stopLosses, '#'),
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+
+    // [2][8] Satır 8: Confidence Rate
+    confCol = _confidenceRate >= 70 ? color.teal : _confidenceRate >= 50 ? c_gr : color.orange
+    table.cell(tbl, 0, 8, 'Confidence Rate',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 8, str.tostring(_confidenceRate, '0.0') + '%',
+      text_halign=text.align_center, bgcolor=c_t, text_color=confCol, text_size=size.normal)
+
+    // [2][8] Satır 9: Anlık Confidence
+    curConf = _confidence * 100
+    curConfCol = curConf >= confidenceThreshold * 100 ? color.teal : color.orange
+    table.cell(tbl, 0, 9, 'Current Conf.',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 9, str.tostring(curConf, '0.0') + '%',
+      text_halign=text.align_center, bgcolor=c_t, text_color=curConfCol, text_size=size.normal)
+
+    // [7] Satır 10: Adaptif pencere
+    table.cell(tbl, 0, 10, 'Active Window',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+    table.cell(tbl, 1, 10, str.tostring(_adaptiveMaxBars, '#') + ' bars',
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.normal)
+
+    // [5] Satır 11: Ensemble durumu
+    ensembleStr = useEnsemble ?
+      str.tostring(math.round(raw_h2*100)/100,'0.00') + ' | ' +
+      str.tostring(math.round(raw_h4*100)/100,'0.00') + ' | ' +
+      str.tostring(math.round(raw_h8*100)/100,'0.00') : 'OFF'
+    table.cell(tbl, 0, 11, 'Ensemble H2|H4|H8',
+      text_halign=text.align_left, bgcolor=c_t, text_color=c_gr, text_size=size.small)
+    table.cell(tbl, 1, 11, ensembleStr,
+      text_halign=text.align_center, bgcolor=c_t, text_color=c_gr, text_size=size.small)
+
+if showTradeStats
+    var tbl = init_table()
+    if barstate.islast
+        update_table(tbl, tradeStatsHeader, totalTrades, totalWins, totalLosses,
+                     winLossRatio, winRate, totalEarlySignalFlips,
+                     payoffRatio, expectancy, maxConsecLoss, confidenceRate,
+                     adaptiveMaxBars, confidence)

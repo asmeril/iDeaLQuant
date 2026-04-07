@@ -1,0 +1,1532 @@
+--- PAGE 31 ---
+ 
+SEZAİ KILIÇ 
+24 
+ 
+for (int i = 1; i < V.Count; i++)    //1 numaralı bardan başla, V listesinin eleman sayısına kadar , 
+“i” değerini BİRER BİRER arttır 
+{ 
+   Sonuc[i] = ( H[i] + L[i] + C[i] ) / 3;     //her bir adımda (her bir “i” değeri için) H,L ve C listelerinin 
+o bara denk gelen elemanlarını H[İ], L[i] ve C[i] topla ve 3’e böl. Bunu boş listemizin “i” numaralı 
+satırına yaz (Sonuc[i] ) 
+} 
+//DÖNGÜ bitince her bar için hesaplanıp Sonuc listesine yazma işi tamamlanmış olur ve 
+Sonuc isimli liste bu satırda artık hesaplardan elde edilen değerlerle doldurulmuştur. 
+ 
+Sistem.Cizgiler[0].Deger = Sonuc;  //Sonuc isimli listeyi grafikte bir çizgi olarak göster. (yazılan 
+formüle LISTE_DONGU ismi verilip, çift tıklanarak grafiğe uygulanmıştır.) 
+ 
+ 
+ 
+ 
+NOT: Grafik barlarını tarayarak yapılan işlemlerde, yukardaki kalıp, 1’den başlar ve bar sayısı 
+kadar ileriye doğru ilerler. Yani ilk hesaplama/atama işlemi EN ESKİ TARİHLİ bar için yapılır. 
+Eğer işlemi ters sırayla yapmak istersek (önce en son bar, sonra birer birer geriye doğru 
+en eski bara gitmek) Kalıp şöyle olur: for (int x = 100;  x > 1;  x--) 
+ 
+ 
+ 
+İDEAL SİSTEM KÜTÜPHANESİ VE SİSTEM FONKSİYONLARI 
+ 
+Kılavuzumuzun buradan sonraki kısmında, formüller yazarken kullanabileceğiniz ve tamamı 
+Sistem.XXX şeklinde yazılan bütün sistem elemanları tek tek anlatılacaktır. Bu sistem 
+elemanlarının bazıları verilere erişim, bazıları çeşitli aksiyonlar almak (emir gönder, sorgu ekle, 
+mesaj çıkar vs.) bazıları ise iDeal içindeki indikatörleri çağırmak için kullanılır.  
+LİSTE ve VERİLER ile indikatör Komutları Kullanımı: 
+ 
+İndikatörlerin hemen hemen tamamında iki üç kullanım yöntemi vardır. Örneğin RSI için 
+aşağıdaki gibi üç çeşit fonksiyon kullanılabilir.  
+- 
+Sistem.RSI(14); 
+
+--- PAGE 32 ---
+ 
+SEZAİ KILIÇ 
+25 
+ 
+- 
+Sistem.RSI(Liste,14); 
+- 
+Sistem.RSI(Veriler,14); 
+ 
+Birinci Kullanım Yöntemi: Yazdığınız formüldeki 14 Periyotlu RSI indikatörü, formülü hangi 
+hissenin/sembolün kaç dakikalık grafiğine uyguladığınızı kendisi algılar ve o hissenin o dk’lık 
+priyodu için RSI hesaplar. En yaygın kullanım şekli bu şekildedir. Veri olarak üzerine uygulandığı 
+grafik barlarının KAPANIŞ değerlerini kullanır. 
+ 
+İkinci Kullanım yöntemi(LİSTE): Kullanıcı tarafından, RSI hesabında kullanılması istenen verinin 
+barların kapanış değeri dışında bir veri listesi olması durumunda kullanılır. Örneğin bir başka 
+indikatörün RSI’ı hesaplatılacaksa bu yöntem kullanılır. Mesela Momentum indikatörünün 
+RSI’ı hesaplatılacaksa Sistem.RSI(Momentum, 14) şeklinde yazılır. 
+ 
+Üçüncü Kullanım Yöntemi(VERİLER): Bu kullanım yönteminin temelde üç iki ihtiyaç nedeniyle 
+kullanımı söz konusu olur; 
+a- Formülü örneğin 5 dakikalık grafiğe uygulayacaksınız ama aynı sembolün başka bir 
+(mesela 60 dakikalık) periyodunun RSI değerini kullanmak istiyorsanız kullanılır. 
+ 
+var SaatlikVeriler = Sistem.GrafikVerileriniOku(Sistem.Sembol, "60"); 
+var SaatlikRSI = Sistem.RSI(SaatlikVeriler, 14); 
+ 
+b- Formülü örneğin GARAN hisse senedinin grafiği için yazıyorsunuz ama örneğin 
+XU100 endeksinin veya başka bir hissenin RSI değerini kullanmak istiyorsanız 
+kullanılır; 
+ 
+var Sembol2 = "IMKBH'HALKB"; 
+var Veriler2 = Sistem.GrafikVerileriniOku(Sembol, "60"); 
+var RSI_HALKB = Sistem.RSI(Veriler2, 14); 
+ 
+ 
+- 
+AccumulationDistribution  - Sistem. AccumulationDistribution 
+ 
+Accumulation Distribution Index, kapanışla günün düşüğü farkından, günün yükseği ile kapanış 
+farkının çıkarılarak, günün yükseği ile günün düşüğü farkına bölünmesi ile elde edilen değerin 
+hacimle çarpılmasıyla elde edilen bir indikatördür. Barların Yüksek ve Düşük Değerleri ve 
+Hacim değerleri gerektiği için, bir liste için hesaplanamaz. (Hesaplanması için HACİM verisi 
+gerektirdiğinden HİSSE veya VIOP için en az DÜZEY1+ / 1 Kademe Derinlik lisansı olmalıdır). 
+Ayrıca parametre almaz. Aşağıdaki gibi 2 yazım şekli vardır; 
+ 
+Sistem.AccumulationDistribution(); 
+Sistem.AccumulationDistribution(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var X = Sistem.AccumulationDistribution(); 
+Sistem.Cizgiler[0].Deger = X; 
+ 
+ 
+- 
+ADR   - Sistem. ADR(14) 
+ 
+
+--- PAGE 33 ---
+ 
+SEZAİ KILIÇ 
+26 
+ 
+ADR ( Average Directional Rating) indikatörünü çağırır. Hesaplanmasında barların Yüksek ve 
+Düşük Değerleri gerektiği için, bir liste için hesaplanamaz. O yüzden LİSTE kullanım şekli yoktur. 
+1 Adet parametre alır (varsayılan 14) . Aşağıdaki gibi 2 yazım şekli vardır; 
+ 
+Sistem.ADR(14); 
+Sistem.ADR(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var X = Sistem.ADR(14); 
+Sistem.Cizgiler[0].Deger = X; 
+ 
+- 
+ADX   - Sistem. ADX(14) 
+ 
+ADX ( Average Directional Index) indikatörünü çağırır. 1 Adet parametre alır (varsayılan 14) . 
+Aşağıdaki gibi 3 yazım şekli vardır; 
+ 
+Sistem.ADX(14); 
+Sistem.ADX(Liste, 14); 
+Sistem.ADR(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var X = Sistem.ADR(14); 
+Sistem.Cizgiler[0].Deger = X; 
+ 
+- 
+Aktif Viop Kontrat   - Sistem. AktifViopKontrat 
+ 
+VIOP için Sistem kullanan yatırımcılar her 2 ayda bir vadesi sona erip bir başka vade için 
+yeniden açılan XU030 endeks vadeli işlem sözleşmesi için, her zaman en yakın vadeyi ifade 
+eden VIP-X030 kodunu kullanmayı tercih ederler. Bu sayede sayfasına, sistemlerine VIP-X030 
+sembolü yazanlar, her 2 ayda bir sembol kodunu değiştirmekle uğraşmazlar. Fakat borsaya 
+emir gönderen robotlar için mutlaka borsada işlem gören orijinal endeks vadeli işlem 
+sözleşmesinin kodunu yazmak gerekir. Bu nedenle eklenmiş olan Aktif Viop Kontrat fonksiyonu 
+her zaman o an için en yakın vadeli endeks30 vadeli işlem sözleşmesinin orijinal kodunu veren 
+bu komutu kullanırlar. 
+ 
+Şu an en yakın vadeli endeks vadeli işlem sözleşmesinin orijinal kodunu ekrana mesaj 
+penceresi açıp gösteren örnek kullanım kodu;  
+ 
+var Sembol = Sistem.AktifViopKontrat; 
+Sistem.Mesaj(Sembol ); 
+  
+ 
+ 
+ 
+- 
+Algo Açıklama   - Sistem. AlgoAciklama 
+
+--- PAGE 34 ---
+ 
+SEZAİ KILIÇ 
+27 
+ 
+ 
+C# Programlama dilini iyi düzeyde bilen kullanıcılar için eklenmiştir. Yazılan bir formül (veya 
+Lib.Cs yada User.DLL içerisinden çağrılan bir formül) tyr/catch içerisine alınmışsa ve hata 
+üretmişse (catch içine düşmüşse), hatanın detayını (Exception Error) görmek için kullanılır. 
+ 
+Örnek Kullanım: 
+ 
+ 
+            try 
+            { 
+                var C = Sistem.GrafikFiyatSec("Kapanis"); 
+                var RSI = Sistem.RSI(14); 
+                var MAV = Sistem.MA(6, "Simple", "Kapanis"); 
+                var MACD = Sistem.MACD(12, 26); 
+ 
+                var SonYon = ""; 
+                for (int i = 4; i < Sistem.BarSayisi; i++) 
+                { 
+                    if (RSI[i] > 70f && MACD[i] > 0.10f && C[i] > MAV[i] && SonYon != "A") // AL 
+                    { 
+                        Sistem.Yon[i] = "A"; 
+                        SonYon = Sistem.Yon[i]; 
+                    } 
+                    else if (RSI[i] <60f && MACD[i] < -0.10f && C[i] < MAV[i] && SonYon != "S") // SAT 
+                    { 
+                        Sistem.Yon[i] = "S"; 
+                        SonYon = Sistem.Yon[i]; 
+                    } 
+                } 
+                Sistem.Cizgiler[0].Deger = RSI; //Panel 2 
+                Sistem.Cizgiler[1].Deger = MACD; //Panel 3 
+                Sistem.Cizgiler[2].Deger = MAV; //Panel 1 
+            } 
+            catch (Exception error) //hata olursa ekrana basması için 
+            { 
+                string errorline = "\r\n" + "\r\n" + 
+                    DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") + "\r\n" + "\r\n" + 
+                    "Message : " + error.Message + "\r\n" + "\r\n" + 
+                    "Source : " + error.Source + "\r\n" + "\r\n" + 
+                    "StackTrace : " + error.StackTrace + "\r\n"; 
+                    Sistem.AlgoAciklama = errorline; 
+            } 
+     
+ 
+ 
+- 
+Alış Fiyat - Sistem. AlisFiyat(Sembol) 
+ 
+Bir sembolün o an ki en iyi alış fiyatını okumak için kullanılır. Parametre olarak fonksiyona 
+(parantez içine) en iyi alış fiyatı okutulmak istenen sembol yazılır.   
+ 
+Not: iDeal programında bütün semboller ait oldukları piyasasının kodu ile birlikte yazılırlar. 
+Hisse senetlerinin piyasa kodu IMKBH dır. PİYASA kodundan sonra ÜSTTEN TEK TIRNAK işareti 
+ile ayrılıp borsadaki orijinal kod eklenir. GARAN hissesinin idealdeki sembol tanımı 
+IMKBH’GARAN şeklindedir. Örneğin USDTYR için FX’USDTRY şeklinde yazılır. Bir sembolün 
+PİYASA kodunun ne olduğu, o sembolü sayfanıza yazarken @ işareti yanında gösterilir.) 
+ 
+Örnek kullanım şekli aşağıdaki gibidir. 
+ 
+var Sembol = "IMKBH'GARAN"; 
+
+--- PAGE 35 ---
+ 
+SEZAİ KILIÇ 
+28 
+ 
+var X = Sistem.AlisFiyat(Sembol); 
+Sistem.Mesaj(X.ToString()); 
+ 
+ 
+ 
+ 
+ 
+- 
+Alış Lot - Sistem. AlisLot(Sembol) 
+ 
+Bir sembolün o an ki en iyi alış fiyatında bekleyen lot miktarını okumak için kullanılır. 
+Parametre olarak fonksiyona (parantez içine) en iyi alış fiyatında bekleyen lot miktarı  
+okutulmak istenen sembol yazılır.   
+ 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var X = Sistem.AlisLot(Sembol); 
+        Sistem.Mesaj(X.ToString()); 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Alligator   - Sistem. Alligator() 
+
+--- PAGE 36 ---
+ 
+SEZAİ KILIÇ 
+29 
+ 
+ 
+Alligator isimli indikatörü çağırır. Mavi Çizgi Timsahın çenesi, Kırmızı Çizgi Timsahın dişleri ve 
+Yeşil Çizgi Timsahın dudakları olarak kabul edilir. Eğer bu üç çizgi birbirine girerse, Timsah 
+uyuyor demektir, yani piyasa yatay bir kanal içerisindedir. Timsah uzun bir uykudan 
+uyandığında denge çizgileri birbirinden uzaklaşacak ve timsah avlanmaya başlayacaktır. 
+Yeterince avlandıktan sonra ise tekrar uykuya geçecektir. ( Denge çizgileri birleşmeye başlar) 
+Bu döneminde kar alma zamanı olduğu varsayılmaktadır. 
+ 
+Eğer timsah uykuda değilse, piyasada aşağı ya da yukarı bir trend var demektir. 
+-Eğer fiyatlar, timsahın ağzının üstünde ise yukarı yönlü bir trend, 
+-Eğer fiyatlar, timsahın ağzının altında ise aşağı doğru bir trendin var olduğu kabul edilir. 
+ 
+Mavi, Kırmızı ve Yeşil çizgilerin her biri için ayrı bir fonksiyon vardır.  
+Sistem.Alligator1(); 
+Sistem.Alligator1(Veriler); 
+Sistem.Alligator2(); 
+Sistem.Alligator2(Veriler); 
+Sistem.Alligator3(); 
+Sistem.Alligator3(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var cizgi1 = Sistem.Alligator1(); 
+var cizgi2 = Sistem.Alligator2(); 
+var cizgi3 = Sistem.Alligator3(); 
+ 
+Sistem.Cizgiler[0].Deger = cizgi1; 
+Sistem.Cizgiler[1].Deger = cizgi2; 
+Sistem.Cizgiler[2].Deger = cizgi3; 
+ 
+ 
+- 
+Aroon  Up/Down   - Sistem. AroonUp(14) / Sistem.AroonDown(14) 
+ 
+Aroon Up ve Aroon Down isimli iki çizgisi olan  indikatörü çağırır. Up ve Down çizgileri için ayrı 
+ayrı fonksiyonlar vardır. Piyasada bir Trend var olup olmadığını yorumlamak amaçlı kullanılır. 
+1 adet parametre alır (varsayılan 14). Bu parametre periyodu boyunca fiyat yeni bir yüksek 
+yaparsa UP olan çizgi 100 değerini alır. Aynı şekilde parametre olarak girilmiş periyot botunca 
+fiyat yeni bir düşük parsa DOWN olan çizgi 100 değerini alır.  
+Aroon Up ve Aroon Down için çizgilerinin her biri için ayrı bir fonksiyon vardır.  
+ 
+Sistem.AroonDown(14); 
+Sistem.AroonDown(Veriler,14); 
+Sistem.AroonUp(14); 
+Sistem.AroonUp(Verileri,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Down = Sistem.AroonDown(14); 
+var Up = Sistem.AroonUp(14); 
+ 
+Sistem.Cizgiler[0].Deger = Down; 
+Sistem.Cizgiler[1].Deger = Up; 
+ 
+ 
+ 
+ 
+
+--- PAGE 37 ---
+ 
+SEZAİ KILIÇ 
+30 
+ 
+ 
+- 
+Aroon Oscilator - Sistem. AroonOsc(14)  
+ 
+Aroon Up ve Aroon Down isimli iki çizgisi olan indikatördeki Up çizgisi ile Down çizgisi 
+arasındaki farkı veren ayrı bir indikatör olan AroonOsc indikatörünü çağırır. Aşağıdaki gibi 2 
+kullanım şekli vardır 
+ 
+Sistem.AroonOsc(14); 
+Sistem.AroonOsc(Veriler,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Osc = Sistem.AroonOsc(14); 
+Sistem.Cizgiler[0].Deger = Osc; 
+ 
+ 
+- 
+Aşağı Kestiyse - Sistem. AsagiKestiyse  
+ 
+Bir grafik periyodunda bir çizginin bir başka çizgiyi (veya sabit bir yatay seviyeyi/sayıyı) en son 
+barda aşağı kesme durumunu verir. Bu fonksiyonun dönüş değeri true veya false (yani evet 
+veya hayır gibi) şeklindedir ve sadece son 2 bardaki değerleri kıyaslar. Geçmişten son bara 
+kadar aşağı kesme durumlarında SAT sinyali üretsin amaçlı bir formülde kullanılmaz. Genellikle 
+Sorgu (Tarama) kodlarında kullanılır. 2 kullanım şekli vardır; 
+ 
+Sistem.AsagiKestiyse(Liste1, Liste2)) 
+Sistem.AsagiKestiyse(Liste, Sayı)) 
+ 
+Örnek1: 5’lik hareketli ortalaması 22’lik hareketli ortalamasını aşağı kesen senetleri tarayan 
+sorgu/tarama kodu 
+ 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var Mov1 = Sistem.MA(C, "Simple", 5); 
+var Mov2 = Sistem.MA(C, "Simple", 22); 
+ 
+Sistem.SorguBaslik[0] = "Mov1"; 
+Sistem.SorguBaslik[1] = "Mov2"; 
+if (Sistem.AsagiKestiyse(Mov1, Mov2)) 
+{ 
+   Sistem.SorguDeger[0] = Mov1[Sistem.BarSayisi-1]; 
+   Sistem.SorguDeger[1] = Mov2[Sistem.BarSayisi-1]; 
+   Sistem.SorguAciklama = "Aşağı Kesti"; 
+   Sistem.SorguEkle(); 
+} 
+ 
+Örnek2:  MACD indikatörü 0 seviyesi aşağı kesenleri sorgula/tara kodu 
+ 
+var MACD = Sistem.MACD(12,26); 
+Sistem.SorguBaslik[0] = "MACD"; 
+ 
+if (Sistem.AsagiKestiyse(MACD, 0)) 
+{ 
+   Sistem.SorguDeger[0] = MACD[Sistem.BarSayisi-1]; 
+   Sistem.SorguAciklama = "Aşağı Kesti"; 
+   Sistem.SorguEkle(); 
+} 
+
+--- PAGE 38 ---
+ 
+SEZAİ KILIÇ 
+31 
+ 
+ 
+ 
+ 
+- 
+ATR (Average True Range) - Sistem. AverageTrueRange(14)  
+ 
+ATR olarak bilinen ve uzun ismi Average True Range indikatörünü çağırır. 1 Adet paramatere 
+alır ve varsayılan olarak 14 değeri kullanılır. Aşağıdaki gibi 3 kullanım şekli vardır 
+ 
+Sistem.AverageTrueRange(14); 
+Sistem.AverageTrueRange(Liste,14); 
+Sistem.AverageTrueRange(Veriler,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var ATR = Sistem. AverageTrueRange (14); 
+Sistem.Cizgiler[0].Deger = ATR; 
+ 
+- 
+Awesome Oscilator - Sistem. AwesomeOsc(5, 34)  
+ 
+ATR olarak bilinen ve uzun ismi Average True Range indikatörünü çağırır. Aşağıdaki gibi 2 
+kullanım şekli vardır 
+ 
+Sistem. AwesomeOsc(5, 34); 
+Sistem. AwesomeOsc(Veriler, 5, 34); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Awe = Sistem. AwesomeOsc(5, 34); 
+Sistem.Cizgiler[1].Deger = Awe; 
+ 
+- 
+BaglantiVar - Sistem. BaglantiVar  
+ 
+iDeal Veri Terminalinin yayın sunucularına bağlı durumda olup olmadığının kontrolü için 
+kullanılır. 
+Sistem.BaglantiVar; “true” veya “false” şeklinde değer döner. 
+
+--- PAGE 39 ---
+ 
+SEZAİ KILIÇ 
+32 
+ 
+ 
+Örnek: Kullanım  
+ 
+if (Sistem.BaglantiVar == “true”) 
+{ 
+    Sistem.Mesaj(“Yayın var”); 
+} 
+else 
+   Sistem.Mesaj(“Yayın yok”); 
+ 
+ 
+- 
+BarCiz - Sistem. BarCiz  
+ 
+Grafiklerde indikatör bölgesine çizdirilen çizgilerin, tıpkı fiyat bilgilerinden elde edilen BARLAR 
+gibi (OHLC) değerlerinin hepsini birden gösterecek şekilde ve tipte BAR ÇİZDİRMEK için 
+kullanılır. Örneğin bir indikatörü Açılış, Kapanış, Yüksek ve Düşük değerlerine göre ayrı ayrı 
+hesaplanıp bir BAR gibi çizdirilmesi amaçlı kullanılabilir. 
+Aşağıdaki şekilde yazılır; 
+ 
+Sistem. BarCiz(Panel, 
+BarTip, 
+AcilisListe, 
+YuksekListe, 
+DusukListe, 
+KapanisListe, 
+YukselenRenk, DusenRenk) 
+ 
+ 
+Panel: 2-3-4 gibi numaralar girilir. Örneğin panel 2 ise, barlar grafiğin altındaki panelde çizilir. 
+Bar Tipi 0 ise OHLC, 1 ise MUM barlar, 2 ise HEIKINASHI barlar çizilir. 
+AcilisListe: Bir bar çizdirebilmek için gereken 4 veriden biri Açılış verisidir. Çizdirilecek barların 
+Open (Açılış) değerlerini hangi veri listesinden (bir indikatör mesela) alacağımızı belirtiriz. 
+YuksekListe: Bir bar çizdirebilmek için gereken 4 veriden biri Yüksek verisidir. Çizdirilecek 
+barların High (Yüksek) değerlerini hangi veri listesinden (bir indikatör mesela) alacağımızı 
+belirtiriz. 
+DusukListe: Bir bar çizdirebilmek için gereken 4 veriden biri Düşük verisidir. Çizdirilecek 
+barların Low (Düşük) değerlerini hangi veri listesinden (bir indikatör mesela) alacağımızı 
+belirtiriz. 
+KapanisListe: Bir bar çizdirebilmek için gereken 4 veriden biri Kapanış verisidir. Çizdirilecek 
+barların Close (Kapanış) değerlerini hangi veri listesinden (bir indikatör mesela) alacağımızı 
+belirtiriz. 
+YukselenRenk: Çizilen barların yüksek/düşük renk gösterimi yapılması durumunda, önceki 
+bara göre yüksek olan barın hangi renk olacağı belirtilir. Color.Green şeklinde de belirtilebilir 
+(Color. dan sonra ilk harfi büyük İngilizce renk ismi) Sistem.Renk(0,255,0,0) şeklinde RGB 
+(Kırmızı, yeşil mavi renk oranları) girilerek de renk seçimi yapılabilir. 
+DusenRenk: Çizilen barların yüksek/düşük renk gösterimi yapılması durumunda, önceki bara 
+göre düşük olan barın hangi renk olacağı belirtilir. Color.Red şeklinde de belirtilebilir (Color. 
+dan sonra ilk harfi büyük İngilizce renk ismi) Sistem.Renk(255,50,50,0) şeklinde RGB (Kırmızı, 
+yeşil mavi renk oranları) girilerek de renk seçimi yapılabilir. 
+ 
+Örnek: Grafiğimizin alt paneline, açılış/yüksek/düşük/kapanış değerleri RSI indikatörü olan barlar 
+çizdiren kod (sembolün kendi barlarının açılışlarından hesaplanan RSI, yeni barımızın açılış listesi, 
+sembolün kendi barlarının kapanışlarından hesaplanan RSI, yeni barımızın kapanış listesi, sembolün 
+kendi barlarının yüksek değerinden hesaplanan RSI, yeni barımızın yüksek listesi ve sembolün kendi 
+barlarının düşük değerlerinden hesaplanan RSI, yeni barımızın düşük listesi’dir. Dileyen kullanıcılar, 
+
+--- PAGE 40 ---
+ 
+SEZAİ KILIÇ 
+33 
+ 
+çılış listesi olarak Mov50, yüksek listesi olarak Mov10, düşük listesi olarak mov100, kapanış listesi 
+olarak mMov200 gibi ayrı indikatörler de kullanabilir. 
+ 
+var O = Sistem.GrafikFiyatSec("Acilis"); 
+var H = Sistem.GrafikFiyatSec("Yuksek"); 
+var L = Sistem.GrafikFiyatSec("Dusuk"); 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+ 
+var RSIOpen = Sistem.RSI(O, 14); 
+var RSIClose = Sistem.RSI(C, 14); 
+var RSIHigh = Sistem.RSI(H, 14); 
+var RSILow = Sistem.RSI(L, 14); 
+ 
+// bartip    0:OHLC   1:Candle     2:HeikinAshi 
+Sistem.BarCiz(2, 1, RSIOpen, RSIHigh , RSILow , RSIClose, Color.Green, Color.Red); 
+ 
+ 
+ 
+ 
+- 
+BarRengi - Sistem. BarRengi  
+ 
+Grafiklerdeki BARLARIN her birine ayrı bir renk verebilme imkanı sunar. Aşağıdaki şekilde 
+yazılır; 
+ 
+Sistem. BarRengi(BarNo, Color.Cyan, 1, 1); 
+ 
+Örnek Kullanım:  
+ 
+var C =  Sistem.GrafikFiyatSec("Kapanis"); 
+var H =  Sistem.GrafikFiyatSec("Yuksek"); 
+var L =  Sistem.GrafikFiyatSec("Dusuk"); 
+  
+
+--- PAGE 41 ---
+ 
+SEZAİ KILIÇ 
+34 
+ 
+for (int i=1; i < Sistem.BarSayisi; i++) 
+{ 
+   if(H[i] > H[i-1] && C[i] < (H[i]+ L[i])/2) 
+   { 
+      Sistem.BarRengi(i, Color.Cyan, 3, 1); //barın rengini turkuza mavisi/Cyan yap 
+   } 
+   if(L[i] < L[i-1] && C[i] > (H[i]+ L[i])/2) 
+   { 
+      Sistem.BarRengi(i, Color.White, 3, 1); //barın rengini GRİ YAP 
+   } 
+} 
+ 
+ 
+ 
+ 
+ 
+- 
+BarSayisi - Sistem. BarSayisi 
+ 
+Bir grafikteki toplam bar sayısını verir. Aşağıdaki şekilde yazılır.   
+ 
+var x = Sistem.BarSayisi; 
+Sistem.Mesaj(X.ToString()); 
+ 
+ 
+ 
+- 
+Bilanco İndikatörleri - Sistem. Bilanco()  
+ 
+Hisse senetlerinin açıklanmış olan bilançolarından bazı önemli kalemler için, grafikte indirkatör 
+olarak çizilebilenlerin hesaplanması yapan Sistem Fonksiyonlarının listesi ve yazılış şekilleri 
+aşağıdaki gibidir. 
+ 
+Sistem.BilancoFK(); 
+Sistem.BilancoPDDD(); 
+Sistem.BilancoOzSerm(); 
+Sistem.BilancoOdenmisSerm(); 
+Sistem.BilancoNetKar(); 
+Sistem.BilancoPD(); 
+ 
+Örnek: İndikatör olarak bilanço kalemlerini çağırıp çizdirmek 
+ 
+
+--- PAGE 42 ---
+ 
+SEZAİ KILIÇ 
+35 
+ 
+var FK = Sistem.BilancoFK(); 
+var PDDD = Sistem.BilancoPDDD(); 
+var OzSermaye = Sistem.BilancoOzSerm(); 
+var OdSermaye = Sistem.BilancoOdenmisSerm(); 
+var NetKar = Sistem.BilancoNetKar(); 
+var PiyDeg = Sistem.BilancoPD(); 
+ 
+Sistem.Cizgiler[0].Deger = FK; 
+Sistem.Cizgiler[1].Deger = PDDD; 
+Sistem.Cizgiler[2].Deger = OzSermaye; 
+Sistem.Cizgiler[3].Deger = OdSermaye; 
+Sistem.Cizgiler[4].Deger = NetKar; 
+Sistem.Cizgiler[5].Deger = PiyDeg; 
+ 
+ 
+ 
+ 
+ 
+- 
+BistHesapOku - Sistem. BistHesapOku()  
+ 
+Portföy penceresine ekleyerek, parola ve şifrenizi de girip LOGIN olduğunuz aracı 
+kurumdaki hesabınıza ait bilgileri okumak için Sistem.BistHesapOku() fonksiyonu kullanılır. 
+Sistem kod editörüne Bu komut yazılıp çalıştırıldığı zaman iDeal aracı kurumunuzdaki hesap 
+için (HİSSE TARAFI) aşağıdaki bilgileri kurumunuzdan çeker ve kullanabilmeniz için sunar; 
+ 
+- 
+İşlem Limiti (bir Sayısal değer döner) 
+- 
+Kullanılabilir Bakiye (bir sayısal değer döner) 
+- 
+Pozisyonlar (portföydeki senetleri içeren birden fazla elemanı olan bir listedir) 
+- 
+Bekleyen Emirler (gün içi bekleyen durumunda olan emirlerinizi içeren bir listedir) 
+- 
+Gerçekleşen Emirler (gün içi gerçekleşmiş  emirlerinizi içeren bir listedir) 
+ 
+Hesap Oku komutu yazıldıktan sonra, yukarıdakilerden hangisine erişilmek isteniyorsa, dönüş 
+okutulurken kullanılan değişkenden sonra NOKTA işareti konulup dönüş verilerden ilgili olanı 
+çağrılır. Dönüş değerlerine erişim (Hesap Oku komutu ile dönen veriler listesi) aşağıdaki gibidir; 
+
+--- PAGE 43 ---
+ 
+SEZAİ KILIÇ 
+36 
+ 
+ 
+ 
+ 
+   Sistem.BistHesapOku() 
+   Limit = BistHesap.IslemLimit; 
+   Bakiye = BistHesap.Bakiye; 
+   PozList = BistHesap.Pozisyonlar; 
+   BekleyenList = BistHesap.BekleyenEmirler; 
+   GerceklesenList = BistHesap.GerceklesenEmirler; 
+ 
+Pozisyonlar, Bekleyen ve Gerçekleşen Emirler birer Liste oldukları için, onların da dönen 
+verilerinin her biri birden çok veri alanı sunar.  
+ 
+Pozisyonlar verisi çekildiği zaman okunabilecek bilgi alanları için, pozisyonları tanımladığımız 
+değişkenin hemen devamına NOKTA işareti koyup sunulan bilgi alanlarının ismi yazılarak, sahip 
+olunan hissenin adedi, maliyeti, senet kodu, kar zarar bilgisi ve Son fiyat değeri elde edilebilir. 
+Pozisyonlar Listesinin dönüş değerleri aşağıdaki gibidir; 
+ 
+ 
+    PozList.Symbol; 
+    PozList.Lot; 
+    PozList.Cost; 
+    PozList.Profit; 
+    PozList.LastPrice; 
+ 
+Gerçekleşen Emirler verisi çekildiği zaman okunabilecek bilgi alanları için, tanımladığımız 
+değişkenin hemen devamına NOKTA işareti koyup sunulan bilgi alanlarının ismi yazılarak, gün 
+içinde verdiğiniz ve GERÇEKLEŞMİŞ olan emirlerinize ait fiyat, emir no, yön, emir süresi, emir 
+tipi, emir tarihi/saati ve emir statusu (durumu)bilgileri elde edilebilir. Gerçekleşen Emirler 
+Listesinin dönüş değerleri aşağıdaki gibidir; 
+ 
+    GerceklesenList.OrderNo; 
+    GerceklesenList.OrderDate; 
+    GerceklesenList.Symbol; 
+    GerceklesenList.BuySell; 
+    GerceklesenList.Session; 
+    GerceklesenList.OrderType; 
+    GerceklesenList.Price; 
+    GerceklesenList.Status; 
+ 
+Bekleyen Emirler verisi çekildiği zaman okunabilecek bilgi alanları için, tanımladığımız 
+değişkenin hemen devamına NOKTA işareti koyup sunulan bilgi alanlarının ismi yazılarak, gün 
+içinde verdiğiniz ve BEKLİYOR DURUMDA OLAN olan emirlerinize ait fiyat, emir no, yön, emir 
+süresi, emir tipi, emir tarihi/saati ve emir statusu (durumu)bilgileri elde edilebilir. Gerçekleşen 
+Emirler Listesinin dönüş değerleri aşağıdaki gibidir; 
+ 
+    BekleyenList.OrderNo; 
+    BekleyenList.OrderDate; 
+    BekleyenList.Symbol; 
+    BekleyenList.BuySell; 
+    BekleyenList.Session; 
+    BekleyenList.OrderType; 
+    BekleyenList.Price; 
+    BekleyenList.Status; 
+ 
+Örnek1: Hesabımı oku, sahip olduğum hisseleri ve onlara ait detayları oku, ekrana bir tablo 
+aç ve tabloya hisselerimi, adetlerini ve maliyetlerini yaz. (formülü kaydedip FORMÜL TEST 
+butonuna basarak sonucu görebilirsiniz.) 
+
+--- PAGE 44 ---
+ 
+SEZAİ KILIÇ 
+37 
+ 
+Not: Bu sonucu görebilmek için iDeal Portföy penceresinde HERSAP EKLE diyerek aracı kurumdaki 
+hesabınızı eklemiş, parola ve/veya şifrenizi girerek hesabınıza login olmuş olmalısınız. 
+ 
+var BistHesap = Sistem.BistHesapOku(); 
+if (BistHesap != null) 
+{ 
+   var Bakiye = BistHesap.Bakiye; 
+   var IslemLimit = BistHesap.IslemLimit; 
+ 
+   string TabloAd = "HISSE BAKIYE"; 
+   var SutunGenislik = new int[2]{110,80}; 
+   var SutunHizala = new int[2]{0,2}; 
+   var SutunBaslik = new string[2]{"Açıklama","Değer"}; 
+   Sistem.Tablo(TabloAd, 200, 300, 250, 400, 2, 50, SutunGenislik, SutunHizala, SutunBaslik); 
+   Sistem.TabloTemizle(TabloAd); 
+   
+     var Renk = Color.Black; 
+      Sistem.TabloYazdir(TabloAd, 0, 0, "Bakiye", Color.Gold, Renk); 
+      Sistem.TabloYazdir(TabloAd, 1, 0, Bakiye.ToString("0.00"), Color.White, Renk); 
+      Sistem.TabloYazdir(TabloAd, 0, 1, "İşlem Limiti", Color.Gold, Renk); 
+      Sistem.TabloYazdir(TabloAd, 1, 1, IslemLimit.ToString("0.00"), Color.White, Renk); 
+  
+} 
+ 
+ 
+- 
+BollingerUp/BollingerDown/BollingerMid/BollingerWidth -  Sistem. BollingerXXX()  
+ 
+Bollinger indikatörü 3 adet çizgiden oluşan bir indikatördür. Üst, Orta ve Alt Band çizgilerinin 
+her biri ayrı birer fonksiyon ile okutulup çağrılabilir. Ayrıca Bollinger Üst Band ile Bollinger Alt 
+Band arasındaki farkı sunan (bandın genişliği) Bollinger Width de ayrı  bir indikatör4 gibi 
+hesaplatılıp çağrılabilir ve kullanılabilir. Bandın sıkıştığı veya daraldığına yönelik analizler için 
+Width çizgisi tek başına çizdirilip yorumlanabilir. 
+ 
+Kullanım şekilleri aşağıdaki gibidir; 
+ 
+//ALT BAND 
+   Sistem.BollingerDown("Simple", 20, 2); 
+   Sistem.BollingerDown(Liste,"Simple", 20, 2); 
+   Sistem.BollingerDown(Veriler,"Simple", 20, 2); 
+//ÜST BAND 
+   Sistem.BollingerUp("Simple", 20, 2); 
+   Sistem.BollingerUp(Liste,"Simple", 20, 2); 
+   Sistem.BollingerUp(Veriler,"Simple", 20, 2); 
+//ORTA BAND 
+   Sistem.BollingerMid("Simple", 20, 2); 
+   Sistem.BollingerMid(Liste,"Simple", 20, 2); 
+   Sistem.BollingerMid(Veriler,"Simple", 20, 2); 
+//BAND GENİŞLİĞİ 
+   Sistem.BollingerWidth(20, 2); 
+   Sistem.BollingerWidth(Veriler,20, 2); 
+ 
+Örnek: Fiyatın, Bollinger Orta bandını yukarı kesip %1 de üstüne çıktığı senetleri tarayan 
+sorgu kodu (kaydedilip sorgu isimli pencereden çalıştırılabilir) 
+ 
+   Sistem.SorguBaslik[0] = "Fiyat"; 
+   Sistem.SorguBaslik[1] = "Bol.Orta"; 
+ 
+   var C = Sistem.GrafikFiyatSec("Kapanis"); 
+   var BolOrta = Sistem.BollingerMid(C,"Exp", 20, 1.8); 
+   var sonbar = Sistem.BarSayisi-1; 
+ 
+
+--- PAGE 45 ---
+ 
+SEZAİ KILIÇ 
+38 
+ 
+   if (C[sonbar-1] < BolOrta[sonbar-1] && 1.01F * BolOrta[sonbar] > C[sonbar]) 
+   {  
+      Sistem.SorguDeger[0] = C[sonbar];  
+      Sistem.SorguDeger[1] = BolOrta[sonbar]; 
+      Sistem.SorguAciklama = "Yukarı Kesti"; 
+      Sistem.SorguEkle(); 
+   } 
+ 
+ 
+ 
+- 
+Chaikin Money Flow (CMF) - Sistem. ChaikinMoneyFlow(14)  
+ 
+Chaikin Money Flow (CMF) olarak bilinen indikatörünü çağırır. 1 adet parametre (periyot) alır 
+ve varsayılan değer olarak 14 kullanılır. Hesaplamasında HACİM verisi kullandığından En Az 
+DÜZEY1+ lisans gerektirir. Aksi durumda hacim içeren barlar gecikmeli olarak kendini 
+günceller. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem.ChaikinMoneyFlow(14); 
+Sistem.ChaikinMoneyFlow(Veriler,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var CMF = Sistem. ChaikinMoneyFlow (14); 
+Sistem.Cizgiler[0].Deger = CMF; 
+ 
+- 
+Chaikin Osc - Sistem. ChaikinOsc(14)  
+ 
+Chaikin Oscilator olarak bilinen indikatörünü çağırır. 1 adet parametre (periyot) alır ve 
+varsayılan değer olarak 14 kullanılır. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem.ChaikinMoneyOsc(14); 
+Sistem.ChaikinMoneyOsc(Veriler,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var CM = Sistem. ChaikinMoneyOsc(14); 
+Sistem.Cizgiler[0].Deger = CM; 
+ 
+- 
+Chaikin Volatility - Sistem. ChaikinVolatility(10,10)  
+ 
+Chaikin Volatility olarak bilinen indikatörünü çağırır. 2 adet parametre (periyot) alır ve 
+varsayılan değer olarak 10-10 kullanılır. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem. ChaikinVolatility(10, 10); 
+Sistem. ChaikinVolatility(Veriler,10,10); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var CV = Sistem. ChaikinVolatility(10,10); 
+Sistem.Cizgiler[0].Deger = CV; 
+ 
+- 
+Chande Momentum - Sistem. ChandeMomentum(20)  
+ 
+
+--- PAGE 46 ---
+ 
+SEZAİ KILIÇ 
+39 
+ 
+Chande Momentum olarak bilinen indikatörünü çağırır. 1 adet parametre (periyot) alır ve 
+varsayılan değer olarak 20 kullanılır. Aşağıdaki gibi 3 kullanım şekli vardır; 
+ 
+Sistem. ChandeMomentum(20); 
+Sistem. ChandeMomentum(Liste,20); 
+ 
+Sistem. ChandeMomentum(Veriler,20); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Cha = Sistem. ChandeMomentum(20); 
+Sistem.Cizgiler[0].Deger = Cha; 
+ 
+ 
+ 
+- 
+CizgiCiz - Sistem. CizgiCiz(panel, bar1, fiyat1, bar2, fiyat2, renk, kalinlik, stil) 
+ 
+Grafiklerde kullanıcı tarafından KOD YAZILARAK veya MOUSE İLE KLİKLENEREK tespit edile iki 
+nokta arasına ÇİZGİ ÇİZDİRMEK için kullanılır. Kullanım alanları oldukça geniştir. Otomatik 
+yükselen düşen trendler, destek ve direnç noktaları, pivot seviyeleri, kullanıcı açısından 
+koşullandırılmış iki dönem arasını işaretleme gibi çok çeşitlki amaçlar için kullanılabilir. 
+Aşağıdaki şekilde yazılır; 
+ 
+Sistem.CizgiCiz(panel, bar1, fiyat1, bar2, fiyat2, renk, kalinlik, stil) 
+ 
+• 
+Panel = Çizgi barların olduğu bölgede çizilecekse 1 değeri verilmelidir. 
+Aşağıdaki indikatör çizim bölgelerinde çizdirilecekse 2 veya diğer panel numaraları kullanılır. 
+• 
+Bar1 ve Bar2 bilgileri çizginin başlayacağı ve biteceğiz barların numarasıdır.Elle sabit bar nosu da 
+girilebilir. (500 ve 1500 gibi) 
+• 
+Fiyat1 ve Fiyat2 çizgilerin başladığı ve bittiği barların HANGİ NOKTASINDAN çizilmelidir (barın en 
+tepesinden, dibinden, ortasından veya hesaplatılan bir fiyat seviyesinden) 
+• 
+Renk = Color.Red gibi noktadan sonra İngilizce renk ismi yazılarak çizgi rengi atanabilir. 
+• 
+Kalinlik = 1,2,3,4,5 değerleri verilebilir 
+• 
+Stil değerine 1-2-3-4-5 değerleri verilerek DÜZ, KESİK, NOKTA, DİKEY ve YASSI tipte çizgi çizdirtilebilir. 
+ 
+Örnek Kullanım: Mouse ile tıklanan yerden başla, devam eden 1200 bar sonrasına kadarki 
+bölgenin EN YÜKSEK ve EN DÜŞÜK seviyesine ve ikisinin tam orta seviyesine yatay çizgi çiz  
+Not: Mouse ile tıklanan bölgeyi algılayıp formül içinde kullanma kısmı için SELECTBARNO 
+komutu açıklamasını inceleyiniz. 
+ 
+var V = Sistem.GrafikVerileri; 
+int basla = Sistem.SelectBarNo; //mouse ile kliklenen bardan itibaren çizmeye başla 
+var bitis = Sistem.SelectBarNo + 1200; //kliklenen yerden sonra 1200 bar içindeki bölgeyi çiz 
+if (bitis > Sistem.BarSayisi-1) bitis = Sistem.BarSayisi-1; //1200 bar yoksa son bara kadarv    çiz 
+float yuksek = V[basla].High; 
+float dusuk = V[basla].Low; 
+for (int i=basla; i <= bitis; i++) 
+{ 
+   yuksek = Math.Max(yuksek,V[i].High); 
+   dusuk = Math.Min(dusuk,V[i].Low); 
+} 
+float pivot = (yuksek + dusuk)/2; 
+ 
+Sistem.CizgiCiz(1, basla, yuksek, bitis, yuksek, Color.Green, 3, 1); 
+Sistem.CizgiCiz(1, basla, dusuk, bitis, dusuk, Color.Red, 3, 3); 
+Sistem.CizgiCiz(1, basla, pivot, bitis, pivot, Color.White, 3, 2); 
+
+--- PAGE 47 ---
+ 
+SEZAİ KILIÇ 
+40 
+ 
+ 
+ 
+ 
+ 
+ 
+- 
+Cizgiler - Sistem.Cizgiler[x].Deger 
+ 
+IDEAL sistem modülünde yazılan bir formülde, grafik pencereleri üzerine bir çizgi çizilmesi 
+gerektiğinde Sistem.Cizgiler fonksiyonu kullanılır. Kendi özel indikatörünüz, bir veri listesi, 
+sabit bir değer listesi veya bir indikatör bu fonksiyonla ekrana çizdirilir. 
+Bir çizgi demek, zaman birimlerinde bir değere sahip olan bir veri listesi demektir. O yüzden 
+tek bir sabit değere bir yatay çizgi bile çizdirilmek istense, tüm elemanları o sabit değer olan 
+bir liste tanımlamak gerekir. 
+ 
+IDEAL sistem modülü en fazla 50 adet çizgiye izin vermektedir. Gelişmiş sistem paneli 
+(kodlamanın yapıldığı ana pencerenin sağ üst kısmı), çizgilerin pek çok özelliğine kod yazmadan 
+müdahale imkânı sunmaktadır. 
+  
+Çizginin alacağı değerlerin ne olacağı dışındaki tüm özellikler, kod yazmaksızın panel üzerinden 
+seçimlerle belirlenebilir. 
+Bir çizgi için aşağıdaki özellikler bulunmaktadır 
+  
+•         Deger (zorunlu) 
+•         Aciklama 
+•         ActiveBool (koddan yazılmazsa, x numaralı çizginin panelden AKTİF edilmesi zorunlu) 
+•         Stil (aksi belirtilmezse DÜZ çizgi stili kullanılır) 
+•         Kalınlık (Aksi belirtilmezse kalınlık 1 olarak kabul edilir) 
+•         Renk (Panelde varsayılan olarak her çizginin tarafımızdan atanmış bir rengi vardır. Kullanıcı istediği 
+rengi seçebilir) 
+•         Panel (Grafiğin kendisinin panel numarası SIFIRDIR. Grafiğin alt kısmına (indikatör bölgesine) atılan 
+her alan yeni bir paneldir. Grafiğin hemen altındaki ilk bölgenin panel numarası “1” dir ve maksimum 
+panel sayısı 10’dur. 
+  
+*** Her ÇİZGİ bir numaraya sahiptir ve tanımlanırken çizginin numarası mutlaka (köşeli parantez içinde) 
+belirtilmelidir. İLK ÇİZGİ NUMARASI SIFIRDIR. 
+
+--- PAGE 48 ---
+ 
+SEZAİ KILIÇ 
+41 
+ 
+***Cizgi fonksiyonu kullanılırken Sistem.Cizgiler[CizgiNumarası].OZELLİK şeklinde yazılmalıdır. Özellik 
+olarak yukarıda listelenen ifadeler kullanılabilir. 
+***KOD yazarken Sistem.Cizgiler[0].Deger satırını yazmak yeterli ve ZORUNLUDUR. (aktif etme, panel 
+numarası, renk, stil, kalınlık PANEL üzerinden seçilebilir. 
+ 
+Örnek Kullanım: Alt indikatör paneline (Panel No = 2) RSI indikatörünü ve aynı zamanda 30 
+ve 70 seviyelerine yatay çizgileri Kod yazarak ve tüm çizgi özelliklerini koddan atama yaparak 
+çizdirmek. 
+. 
+ 
+var RSI = Sistem.RSI(14); 
+ 
+Sistem.Cizgiler[0].Deger = RSI; 
+Sistem.Cizgiler[0].Aciklama = "RSI"; 
+Sistem.Cizgiler[0].ActiveBool = true; 
+Sistem.Cizgiler[0].Panel = 2; 
+Sistem.Cizgiler[0].Renk = Color.Gold; 
+Sistem.Cizgiler[0].Stil = 1; //1:Düz, 2:Nokta, 3:Kesik, 4:Yassı  
+Sistem.Cizgiler[0].Kalinlik = 2; 
+ 
+Sistem.Cizgiler[1].Deger = Sistem.Liste(70); 
+Sistem.Cizgiler[1].ActiveBool = true; 
+Sistem.Cizgiler[1].Stil = 3; //1:Düz, 2:Nokta, 3:Kesik, 4:Yassı  
+Sistem.Cizgiler[1].Kalinlik = 2; 
+Sistem.Cizgiler[1].Panel = 2; 
+Sistem.Cizgiler[1].Renk = Color.White; 
+Sistem.Cizgiler[1].Aciklama = "ÜstSeviye"; 
+ 
+Sistem.Cizgiler[2].Deger = Sistem.Liste(30); 
+Sistem.Cizgiler[2].ActiveBool = true; 
+Sistem.Cizgiler[2].Panel = 2; 
+Sistem.Cizgiler[2].Renk = Color.Lime; 
+Sistem.Cizgiler[2].Stil = 3; //1:Düz, 2:Nokta, 3:Kesik, 4:Yassı  
+Sistem.Cizgiler[2].Kalinlik = 2; 
+Sistem.Cizgiler[2].Aciklama = "AltSeviye"; 
+ 
+ 
+Yukarıdaki formül kaydedildiği zaman, kod yazma panelinin sağ üst kısmındaki yazı/renk/tip 
+seçimleri aşağıdaki gibi olur. 
+ 
+ 
+NOT: Özellikle mail yoluyla iDeal Data Teknik ekibinden formül desteği alındığında, kullanıcılarımızın 
+en çok yaptığı hata çizgileri aktif etmemektir. 
+Maille gelen bir formül kaydedilip grafiğe uyguladığında, ekrana bir çizgi çizilmesi gerekiyorsa 
+(formül içinde genelde de en altta Sistem Çizgiler satırı varsa ) ilgili çizgi numaralarının üstteki fotoda 
+gösterilen panelde, başlarındaki kutucuların işaretlenerek aktif edilmesi, çizgi grafiğin alt kısmına 
+çizilmesi gerekiyorsa panel numarasının 2 (veya 3-4-5) olarak kaydedilmesi gerekir. 
+
+--- PAGE 49 ---
+ 
+SEZAİ KILIÇ 
+42 
+ 
+ 
+ 
+ 
+- 
+CCI – Commodity Channel Index - Sistem. CommodityChannelIndex(14)  
+ 
+CCI olarak da bilinen Commodity Cahannel Index indikatörünü çağırır. 1 adet parametre 
+(periyot) alır ve varsayılan değer olarak 14 kullanılır. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem. CommodityChannelIndex(14); 
+Sistem. CommodityChannelIndex(Veriler,14); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var CCI = Sistem. CommodityChannelIndex (14); 
+Sistem.Cizgiler[0].Deger = CCI; 
+ 
+  
+- 
+Debug - Sistem. Debug()  
+ 
+ 
+ 
+IDEAL Sistem modülünde bir formül yazılırken, kodun herhangi bir noktasında DEBUG 
+fonksiyonu kullanılarak kodun o noktasında bir sorun olup olmadığı, kodda bir sorun varsa, 
+sorunun ne olduğu daha rahat tespit edilebilir. 
+ 
+Debug fonksiyonu, IDEAL Sistem panelinin sağ üst bölgesindeki çizgilere ait tercih bölgesinin 
+üzerini kaplayan bir boş pencere açar ve orada, debug edilen satırdaki bulgular gösterilir. 
+  
+
+--- PAGE 50 ---
+ 
+SEZAİ KILIÇ 
+43 
+ 
+Sistem.Debug() fonksiyonu çalışma mantığı bakımından MESAJ fonksiyonuna çok benzer. Tek 
+farkları, ekrana bir mesaj kutusu çıkarılması yerine, sonuç değerlerinin, panelde 
+gösterilmesidir. 
+  
+Bu özelliği nedeniyle, hata bulmak ve değişebilen bir sonucu gözlemlemek amacıyla mesajdan 
+daha yararlıdır. 
+Kod içinde birden fazla mesaj fonksiyonu varsa, satır olarak en aşağıda olan mesaj 
+fonksiyonunun sonucu ekranda görülür. 
+Ama birden fazla satıra debug konulmuşsa, debug ekranında bunları hepsi alt alt aynı anda 
+gösterilir. 
+(kodda en altta yer alan debug satırının sonuç değeri, debug panelinde ilk sırada gösterilir.) 
+  
+Debug butonuna basılara DEBUG alanı aktif edilir. Daha sonra FORMÜL TEST 
+butonuna basılınca, Tüm debug satırlarının sonuçları panelde gösterilir. 
+ 
+Örnek: Aşağıdaki kod yazılıp kaydedilir ve FORMÜL TEST butonuna basılırsa, Panelin 
+üst kısmındaki Debug penceresinde izlemek istediğimiz bilgileri görebiliriz; 
+ 
+var Sembol = "VIP'F_XU0300620"; 
+var Veriler = Sistem.GrafikVerileriniOku(Sembol, "20"); 
+ 
+Sistem.Debug("SON BARIN KAPANIS FIYATI = " + Veriler[Veriler.Count-1].Close.ToString()); 
+Sistem.Debug("537. BARIN TARİH VE SAATİ = " + Veriler[537].Date.ToString()); 
+Sistem.Debug("450.BARIN SAAT BİLGİSİ = " + Veriler[450].Date.Hour.ToString()); 
+Sistem.Debug("120.BARIN DAKİKA BİLGİSİ = " + Veriler[120].Date.Minute.ToString()); 
+ 
+ 
+ 
+ 
+- 
+DEMA –Sistem.DEMA(5)  
+ 
+DEMA indikatörünü çağırır. 1 adet parametre (periyot) alır. Aşağıdaki gibi 3 kullanım şekli 
+vardır; 
+ 
+Sistem.DEMA(5); 
+Sistem.DEMA(Liste,5); 
+        Sistem.DEMA(Veriler,5); 
+ 
+Örnek: DEMA5 değeri DEMA 21 değerisini aşağı keserse SAT, yukarı keserse AL sinyali üreten 
+strateji kod örneği 
+Not: KESİŞME TARA fonksiyonu detayı için ilgili fonksiyon detayını inceleyiniz. 
+ 
+var DEMA1 = Sistem.DEMA(5); 
+var DEMA2 = Sistem.DEMA(21); 
+
+--- PAGE 51 ---
+ 
+SEZAİ KILIÇ 
+44 
+ 
+ 
+Sistem.KesismeTara(DEMA5, DEMA21); 
+ 
+Sistem.Cizgiler[0].Deger = DEMA5; 
+Sistem.Cizgiler[1].Deger = DEMA21; 
+ 
+ 
+ 
+ 
+ 
+- 
+Demand Index - Sistem.DemandIndex()  
+ 
+Demand Index olarak bilinen indikatörünü çağırır. Hiç parametre almaz ve  Hesaplamasında 
+HACİM verisi kullandığından En Az DÜZEY1+ lisans gerektirir. Aksi durumda hacim içeren 
+barlar gecikmeli olarak kendini günceller. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem.DemandIndex(); 
+Sistem.DemandIndex(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Demand = Sistem.DemandIndex(); 
+Sistem.Cizgiler[0].Deger = Demand; 
+ 
+- 
+De Marker - Sistem.DeMarker(13)  
+ 
+De Marker olarak bilinen indikatörünü çağırır. 1 adet parametre alır ve varsayılan parametre 
+olarak 13 kullanılır. Aşağıdaki gibi 2 kullanım şekli vardır; 
+ 
+Sistem.DeMarker(13); 
+Sistem.DeMarker(Veriler,13); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+
+--- PAGE 52 ---
+ 
+SEZAİ KILIÇ 
+45 
+ 
+ 
+var Marker = Sistem.DeMarker(13); 
+Sistem.Cizgiler[0].Deger = Marker; 
+ 
+- 
+Derinlik Verileri - Sistem.DerinlikVerisiOku(Sembol)  
+ 
+Bir Hisse Senedinin, Varantın, Vadeli Kontratın ve Opsiyonun (lisansınız var ise) DERİNLİK 
+penceresindeki tüm verilerini okumak için kullanılır. Okunan veri biz dizi şeklindedir. Derinlik 
+penceresinin ALIŞ ve SATIŞ tarafı ayrı ayrı ve SATIR SATIR okunup hafızaya alınması ve okunan 
+bu verilerin formüllerde kullanılması mümkündür.  
+Bu fonksiyonla okutulan Veri Listesinin her bir elemanı şu şekilde çağırılır; 
+VeriListesi.Bids/Asks[DerinlikSatırNo].Eleman 
+ 
+Örnek1: VIOP Aktif kontratının Derinlik penceresindeki ilk satıra (hem alış hem satış tarafı) 
+ait bazı verileri ekrana mesaj olarak almak 
+ 
+var Sembol = "VIP'VIP-X030"; 
+var Derinlik = Sistem.DerinlikVerisiOku(Sembol); 
+var AlisFiyatKademe0 = Derinlik.Bids[0].Price; 
+var AlisLotKademe0 = Derinlik.Bids[0].Size; 
+var AlisEmirSayisi = Derinlik.Bids[0].OrderCount; 
+var SatisFiyatKademe0 = Derinlik.Asks[0].Price; 
+var SatisLotKademe0 = Derinlik.Asks[0].Size; 
+var SatisEmirSayisi = Derinlik.Asks[0].OrderCount; 
+var SatisEmirSaati = Derinlik.Asks[0].Time; 
+ 
+Sistem.Mesaj("Alış Fiyatı =" + AlisFiyatKademe0.ToString() + "\r\n" + "Alış Lot = " + SatisEmirSaati.ToString() + "\r\n" + "Alış Emir = " 
++ AlisEmirSayisi.ToString()+ "\r\n" + "Satış Emir Sayısı = " + SatisEmirSayisi.ToString()); 
+ 
+Bir sembolün derinlik penceresine ait veriler aşağıdaki şekilde erişilebilir durumdadır 
+ 
+ 
+ 
+NOT: DERİNLİK pencereleri altındaki TOPLAM satırındaki verileri okutmak için, derinlik verisi 
+oku dedikten sonra Derinlik.CalculateAverage2(); satırını da yazmak gerekir. Sonra ilgili bilgiye 
+erişilebilir. 
+ 
+Örnek2: DOAS hisse senedine ait derinlik penceresindeki bazı verileri okuyup ekrana MESAJ 
+olarak gösteren kod örneği; 
+ 
+var Sembol = "IMKBH'DOAS"; 
+var Derinlik = Sistem.DerinlikVerisiOku(Sembol); 
+var AlisFiyatKademe0 = Derinlik.Bids[0].Price; 
+var AlisLotKademe0 = Derinlik.Bids[0].Size; 
+var AlisEmirSayisi = Derinlik.Bids[0].OrderCount; 
+var SatisFiyatKademe0 = Derinlik.Asks[0].Price; 
+var SatisLotKademe0 = Derinlik.Asks[0].Size; 
+var SatisEmirSayisi = Derinlik.Asks[0].OrderCount; 
+var SatisEmirSaati = Derinlik.Asks[0].Time; 
+ 
+
+--- PAGE 53 ---
+ 
+SEZAİ KILIÇ 
+46 
+ 
+NOT: Derinlik penceresinin en altındaki toplam satırlarında gözüken verilere erişilecekse, kodun 
+için aşağıdaki satır (ortalamaları hesapla) eklenmeli. 
+Derinlik.CalculateAverage2(); 
+ 
+var Bid = Derinlik.Average2Bid.Size; 
+Sistem.Mesaj(Bid.ToString()); 
+ 
+Sistem.Mesaj("Alış Fiyatı =" + AlisFiyatKademe0.ToString() +  
+"\r\n" + "Alış Lot = " + AlisLotKademe0.ToString("0") +  
+"\r\n" + "Satış Fiyatı = " + SatisFiyatKademe0.ToString()+  
+"\r\n" + "Satış Lot = " + SatisLotKademe0.ToString("0")+ 
+"\r\n" + "Saat = " + SatisEmirSaati.ToString()+ 
+"\r\n" + "Toplam Lot = " + Derinlik.Average2Bid.Size.ToString()); 
+ 
+ 
+ 
+ 
+ 
+Örnek3: Alışta bekleyen lot sayısı, satışta bekleyen lot sayısının 2 katından fazla olan ve aynı 
+zamanda son fiyatı 50’lik ortalamasının üstünde olan senetleri tarayan kod örneği (sorgu): 
+ 
+var Derinlik = Sistem.DerinlikVerisiOku(Sistem.Sembol); 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var Mov = Sistem.MA(C, "Exp" , 50); 
+var Alistoplam = 0; 
+var Satistoplam = 0; 
+ 
+for (int i = 0; i < 6; i++) 
+{ 
+   Alistoplam +=  Derinlik.Bids[i].Size; 
+   Satistoplam +=  Derinlik.Asks[i].Size; 
+} 
+ 
+Sistem.SorguBaslik[0] = "Alış Lot"; 
+Sistem.SorguOndalik[0] = 0; 
+Sistem.SorguBaslik[1] = "Satış Lot"; 
+Sistem.SorguOndalik[1] = 0; 
+Sistem.SorguBaslik[2] = "Kapanış"; 
+Sistem.SorguBaslik[3] = "Mov"; 
+
+--- PAGE 54 ---
+ 
+SEZAİ KILIÇ 
+47 
+ 
+ 
+var sonbar = Sistem.BarSayisi-1; 
+if (Alistoplam  >  2 * Satistoplam && C[sonbar] > Mov[sonbar] ) 
+{ 
+   Sistem.SorguDeger[0] = Alistoplam; 
+   Sistem.SorguDeger[1] = Satistoplam ; 
+   Sistem.SorguDeger[2] = C[sonbar]; 
+   Sistem.SorguDeger[3] = Mov[sonbar] ; 
+ 
+   Sistem.SorguAciklama = "Filtrem";     
+   Sistem.SorguEkle();  
+} 
+ 
+ 
+- 
+De Trended Price Oscilator - Sistem.DetrendedPriceOscillator(14)  
+ 
+De Trended Price Oscillator indikatörünü çağırır. 1 adet parametre (periyot) alır ve varsayılan 
+değer olarak 14 kullanılır. Aşağıdaki gibi 3 kullanım şekli vardır; 
+ 
+Sistem.DetrendedPriceOscillator(14); 
+Sistem.DetrendedPriceOscillator(Liste,14); 
+        Sistem.DetrendedPriceOscillator(Veriler,14); 
+ 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var DT = Sistem.DetrendedPriceOscillator(14); 
+Sistem.Cizgiler[0].Deger = DT; 
+ 
+- 
+Devre Kesici Listesini Oku - Sistem. DevreKesiciListesiniOku()  
+ 
+Bir hisse senedinde borsa sisteminde devre kesici durumu oluştuğu zaman, toplu olarak tüm 
+hisselerdeki durumları da tespit ederek listenin tümünü okumak için kullanılır. 
+Formül alanına aşağıdaki komut yazıldığında DEVRE KESİCİ LİSTESİ okunup belleğe alınmış olur; 
+Sistem.DevreKesiciListesiniOku() 
+ 
+Daha sonra ise bu listenin içindeki bilgi alanlarına erişilebilir. 
+Listeyi çağırdığınızda aşağıdaki bilgileri içeren bir liste gelir.  
+ 
+string Sembol = ""; 
+string Saat = ""; 
+string StateCode = ""; 
+ 
+State Code değeri 55 olan hisseler devre kesici dönemine girmiştir 
+ 
+AYRICA YÜZEYSEL VERİ LİSTESİNİ OKUTARAK BİR TEK HİSSE SENEDİ İÇİN devre kesici 
+durumunun ne olduğu bilgisine erişilebilir.  
+ 
+Not: Yüzeysel Veri Oku Fonksiyonu detayları için ilgili komutun açıklama sayfasını inceleyiniz. 
+ 
+Aşağıdaki örnek kod ARTI hisse senedinin borsadaki o anki durum kodunu veriri. Durum kodu 
+2 olanlar sürekli müzayede seansında olanları, 55 olanlar devre kesmiş olanları veriri. Tüm 
+durum 
+kodlarının 
+ne 
+olduğu 
+bilgisi 
+için 
+gerek 
+duyulursa 
+ideal 
+algo 
+ekibine 
+(algo@idealdata.com.tr) başvurulabilir. 
+
+--- PAGE 55 ---
+ 
+SEZAİ KILIÇ 
+48 
+ 
+ 
+var Sembol = "IMKBH'ARTI"; 
+var V = Sistem.YuzeyselVeriOku(Sembol); 
+var Durum = V.Durum; 
+ 
+ 
+- 
+Dikey Çizgi Ekle  - Sistem.DikeyCizgiEkle(BarNo, Color.Yellow, 2, 1)  
+ 
+Grafiklerde kullanıcı tarafından istenilen herhangi bir bara DİKEY ÇİZGHİ çizdirilmesi imkanı 
+verir.  
+Kullanımda yazım şekli aşağıdaki gibidir; 
+Sistem.DikeyCizgiEkle(i, Color.Green, 2, 2); 
+Burada çizginin rengi, kaç numaralı BARA çizginin çizileceği, çizginin kalınlığı ve tipi (düz/kesik) 
+belirtilir. 
+ 
+Örnek: RSI indikatörünün 30 seviyesini aşağıdan yukarı kestiği barlara YEŞİL dikey çizgi ekleyen, RSI 
+indikatörünün 70 seviyesini yukarıdan aşağıya kestiği barlara KIRMIZI dikey çizgi ekleyen kor örneği; 
+ 
+var RSI = Sistem.RSI(14); 
+ 
+for(int i=1 ; i< Sistem.BarSayisi; i++) 
+{  
+   if(RSI[i-1] < 30 && RSI[i] >= 30) 
+      Sistem.DikeyCizgiEkle(i, Color.Green, 2, 2); 
+   if(RSI[i-1] > 70 && RSI[i] <= 70) 
+      Sistem.DikeyCizgiEkle(i, Color.Red, 2, 2); 
+} 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 56 ---
+ 
+SEZAİ KILIÇ 
+49 
+ 
+ 
+- 
+Dip - Sistem. Dip(Barsayısı)  
+ 
+Belli bir bar sayısı kadar bölgenin DİP seviyesini gösteren DİP indikatörünü hesaplayan 
+fonksiyondur. Girilen bar sayısı kadar öncesi ve sonrası bölgenin en dip noktasını verir. 
+Kullanım şekli aşağıdaki gibidir; 
+ 
+Sistem.Dip(100); 
+ 
+Bkz: Sistem.Zirev(100) aynı zamanda. 
+ 
+Örnek1: 50 periyotluk Dip/Zirve indikatörü çizdirme kodu 
+ 
+var Dip = Sistem.Dip(50); 
+var Zirve = Sistem.Zirve(50); 
+ 
+Sistem.Cizgiler[0].Deger = Dip; 
+Sistem.Cizgiler[1].Deger = Zirve; 
+ 
+ 
+ 
+ 
+- 
+DI+ / DI-  (PDI/MDI) - Sistem. DirectionalIndicatorMinus/Plus(14)  
+ 
+DI+ ve DI- olarak iki çizgisi olan veya Plus(+) olanın PDI, Minus(-) olanın MDI olarak da 
+adlandırıldığı Directonal Indicator indikatörünü çağıran fonksiyondur. DI+ için bir ve DI- için bir 
+olmak üzere iki ayrı komutu vardır. Kullanım şekilleri aşağıdaki gibidir; 
+ 
+Sistem.DirectionalIndicatorMinus(14)); 
+Sistem.DirectionalIndicatorMinus(Veriler,14)); 
+Sistem.DirectionalIndicatorPlus(14)); 
+Sistem.DirectionalIndicatorPlus(Veriler,14)); 
+ 
+ 
+
+--- PAGE 57 ---
+ 
+SEZAİ KILIÇ 
+50 
+ 
+ 
+Örnek1:  14 periyotluk DI+/DI- indikatörü çizdirme kodu 
+ 
+var MDI = Sistem.DirectionalIndicatorMinus(14); 
+var PDI = Sistem.DirectionalIndicatorPlus(14); 
+Sistem.Cizgiler[0].Deger = MDI; 
+Sistem.Cizgiler[1].Deger = PDI; 
+ 
+ 
+ 
+ 
+- 
+Directional Movement - Sistem. DirectionalMovement(14)  
+ 
+Directonal Movement indikatörünü çağıran fonksiyondur. Tek bir parametre alır ve varsayılan 
+parametre değeri 14’tür. Kullanım şekilleri aşağıdaki gibidir; 
+ 
+Sistem.DirectionalMovement(14); 
+Sistem.DirectionalMovement(Verileri,14); 
+ 
+Örnek1:  14 periyotluk Directional Movement indikatörü çizdirme kodu 
+ 
+var DM = Sistem.DirectionalMovement(14); 
+Sistem.Cizgiler[0].Deger = DM; 
+ 
+ 
+- 
+Dolgu Ekle - Sistem. DolguEkle()  
+ 
+Bir grafik üzerinde çizdirilen 2 çizgi arasında, bu çizgilerin birbirlerini kestikleri bölgeleri seçilen 
+renklerle boyama amaçlı kullanılır. 
+Kullanım şekli aşağıdaki gibidir; 
+ 
+  Sistem.DolguEkle(No1, No2, YukselisRenk, DususRenk); 
+ 
+
+--- PAGE 58 ---
+ 
+SEZAİ KILIÇ 
+51 
+ 
+Burada No1, dolgu ile boyanması istenen alanı oluşturacak birinci çizgi numarası, No2 ise söz 
+konusu boyalı alanı oluşturacak diğer çizginin numarasıdır. YükelisRenk bilgisi girilen iki 
+çizgiden birincisi ikincisinin üstünde olduğu bölgenin rengini, DususRenk ise birinci çizginin 
+ikinci çizginin altında kaldığı bölgenin boyanacağı bölge rengini belirtir. 
+ 
+Renkler belirtilirken C# dilinin renk tanımlayan kod yazım şekilleri (R-G-B oranları vererek renk 
+atamak vs.) geçerlidir ama en kolayı Color.Red, Color.Blue şeklinde, Color.IngilizceRenkAdı 
+şeklinde tanımlamaktır. 
+ 
+Örnek: MACD indikatörü ile SIFIR seviyesindeki çizgi arasında kalan bölgeleri, MACD üstteyken 
+yeşil, MACD alttayken kırmızı renk ile dolgu yapan kod: 
+ 
+var MACD = Sistem.MACD(12,26); 
+ 
+Sistem.Cizgiler[0].Deger = MACD; 
+Sistem.Cizgiler[1].Deger = Sistem.Liste(0); 
+Sistem.DolguEkle(0, 1, Color.Green, Color.Red); 
+ 
+ 
+ 
+ 
+- 
+Dönem Çevir - Sistem.Donemcevir()  
+ 
+Bir grafikte çalışma yapılan periyottan daha üst bir zaman dilimine ait barlara ait bilgileri, bu 
+üst dönem için çizilen indikatörleri alt periyotlarda kullanmak veya çizdirmek için kullanılır. 
+Kullanım şekli aşağıdaki gibidir; 
+ 
+  Sistem.DonemCevir(Veriler, UstDonemVerileri, UstDonemCevrilecekData); 
+ 
+Veriler yazan yere, çalışılan periyot ne ise, o periyoda ait BAR VERİLERİ yazılır. Eğer formülde 
+bu veriler bir değişkene atanmışsa o değişken ismi yazılır. Üst zaman diliminden alınan bilgileri 
+değişik alt zaman periyotlarında kullanacaksak (alt dönem sabit bir periyot değilse) o zaman 
+
+--- PAGE 59 ---
+ 
+SEZAİ KILIÇ 
+52 
+ 
+Veriler yazan kısma Sistem.GrafikVerileri yazılır. Bu komut, formül hangi zaman periyoduna 
+uygulanmışsa, o zaman diliminin BAR VERİLERİNİ (OHLC tamamını birden) verir. 
+ 
+UstDonemVerileri yazan yere, daha üst zaman dilimi olarak hangi grafik periyodu 
+kullanılacaksa o zaman diliminin BAR VERİLERİ yazılır. Örnek: var GUNVERILER = 
+Sistem.GrafikVerileriniOku(Sembol, “G”) diyerek GÜNLÜK BAR VERİSİ çağrılır. 
+ 
+UstDonemCevrilecekData yazan yere, üst zaman diliminden hesaplanmış ve alt dönemde 
+kullanılacak veya çizdirilecek veri (Fiyat veya indikatör) hangisi ise o yazılır. 
+ 
+Örnek: Günlük, 240 dakikalık, 60 dakikalık ve 30 dakikalık periyotların 50’lik Movlarını 10 dklık 
+grafik üzerine çizdirmek; 
+ 
+//üst periyot verilerini oku 
+var V_GUN = Sistem.GrafikVerileriniOku(Sistem.Sembol,"G");  
+var V_240 = Sistem.GrafikVerileriniOku(Sistem.Sembol,"240"); 
+var V_60 = Sistem.GrafikVerileriniOku(Sistem.Sembol,"60"); 
+var V_30 = Sistem.GrafikVerileriniOku(Sistem.Sembol,"30"); 
+ 
+var CGun = Sistem.GrafikFiyatOku(V_GUN,"Kapanis"); 
+var C240 = Sistem.GrafikFiyatOku(V_240,"Kapanis"); 
+var C60 = Sistem.GrafikFiyatOku(V_60,"Kapanis"); 
+var C30 = Sistem.GrafikFiyatOku(V_30,"Kapanis"); 
+ 
+var MovGUN = Sistem.MA(CGun, "Simple", 50); 
+var Mov240 = Sistem.MA(C240, "Simple", 50); 
+var Mov60 = Sistem.MA(C60, "Simple", 50); 
+var Mov30 = Sistem.MA(C30, "Simple", 50); 
+ 
+//Verilerin dönemini çevir 
+MovGUN = Sistem.DonemCevir(Sistem.GrafikVerileri, V_GUN, MovGUN); 
+Mov240 = Sistem.DonemCevir(Sistem.GrafikVerileri, V_240 , Mov240); 
+Mov60  = Sistem.DonemCevir(Sistem.GrafikVerileri, V_60 , Mov60); 
+Mov30  = Sistem.DonemCevir(Sistem.GrafikVerileri, V_30 , Mov30); 
+ 
+//ekranda çizgi olarak göster 
+Sistem.Cizgiler[0].Deger = MovGUN; 
+Sistem.Cizgiler[0].Aciklama = "MovGUN" ; 
+ 
+Sistem.Cizgiler[1].Deger = Mov60; 
+Sistem.Cizgiler[1].Aciklama = "Mov60 Dk" ; 
+ 
+Sistem.Cizgiler[2].Deger = Mov30; 
+Sistem.Cizgiler[2].Aciklama = "Mov30 Dk" ; 
+ 
+Sistem.Cizgiler[3].Deger = Mov240 ; 
+Sistem.Cizgiler[3].Aciklama = "Mov240 Dk" ; 
+ 
+
+--- PAGE 60 ---
+ 
+SEZAİ KILIÇ 
+53 
+ 
+ 
+ 
+ 
+ 
+- 
+Dörtgen Çiz - Sistem.DortgenCiz()  
+ 
+Grafik üzerinde kullanıcı tarafından girilen 4 noktayı (4 bar numarası ve 4 fiyat seviyesi) 
+birleştirerek dörtgen çizme amaçlı kullanılır. Özellikle patern/Flama/Formasyon bulma amaçlı 
+kodlar yazan kullanıcılarımız, formasyonu oluşturan barları ve fiyat seviyeleri koddan tespit 
+edip formasyonun olduğunu otomatik olarak dörtgen veya kelebek şeklinde çizdirtebilirler. 
+ 
+Kullanım şekli aşağıdaki gibidir; 
+ 
+  DortgenCiz(panel, bar1, fiyat1, bar2, fiyat2, bar3, fiyat3, bar4, fiyat4, renk, kalinlik, dolgu, dolgurenk, nokta, noktarenk); 
+ 
+Parantez içindeki giriş bilgileri açıklamaları aşağıdaki gibidir; 
+• Panel: Dörtgenin grafiğin hangi paneline çizileceği girilir (barların olduğu bölge=1, alt 
+indikatör bölgesi = 2) 
+• Bar1: Dörtgenin birinci köşesinin denk geldiği bar numarası 
+• Fiyat1: Dörtgenin birinci köşesinin fiyat skalasına denk gelen seviyesi 
+• Bar2: Dörtgenin ikinci köşesinin denk geldiği bar numarası 
+• Fiyat2: Dörtgenin ikinci köşesinin fiyat skalasına denk gelen seviyesi 
+• Bar3: Dörtgenin üçüncü köşesinin denk geldiği bar numarası 
+• Fiyat3: Dörtgenin üçüncü köşesinin fiyat skalasına denk gelen seviyesi 
+• Bar4: Dörtgenin dördüncü köşesinin denk geldiği bar numarası 
+• Fiyat4: Dörtgenin dördüncü köşesinin fiyat skalasına denk gelen seviyesi 
+• Renk: Dörtgenin dış çizgi rengi 
+• Kalınlık: Dörtgenin dış çizgisinin kalınlık seviyesi 
+• Dolgu: Dörtgenin içinin dolgu renkli olması isteniyorsa 1, istenmiyorsa 0 yazılır 

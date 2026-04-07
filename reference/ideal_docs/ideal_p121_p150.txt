@@ -1,0 +1,1649 @@
+--- PAGE 121 ---
+ 
+SEZAİ KILIÇ 
+114 
+ 
+if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday) DevamEt = false; 
+if (DateTime.Now.ToString("HHmm").CompareTo("1000") <= 0) DevamEt = false; 
+if (DateTime.Now.ToString("HHmm").CompareTo("1759") >= 0) DevamEt = false; 
+if (System.IO.File.Exists(FileName) == false) DevamEt = false; 
+ 
+if (DevamEt) 
+{ 
+    var ExcelArray = Sistem.NesneGetir(FileName + ";" + DateTime.Now.ToString("yyyyMMdd")); 
+    if (ExcelArray == null) 
+    { 
+        ExcelArray = Sistem.ExcelOku(FileName); 
+        Sistem.NesneKaydet(FileName + ";" + DateTime.Now.ToString("yyyyMMdd"), ExcelArray); 
+    } 
+    int SatirSayisi = ExcelArray.GetLength(0); //satırların sayısını bul 
+    for (int i = 2; i <= SatirSayisi; i++) 
+    { 
+        var Sembol = ExcelArray[i, 1].ToString(); 
+        var AlisFiyat = (decimal)ExcelArray[i, 2]; 
+        var HedefFiyat = (decimal)ExcelArray[i, 3]; 
+        var StopFiyat = (decimal)ExcelArray[i, 4]; 
+        var Lot = (int)ExcelArray[i, 5]; 
+        var Anahtar = Sistem.Name + " , " + Sembol; 
+        double IslemFiyat = 0; 
+        DateTime IslemTarih; 
+        var Rezerv = ""; 
+        var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih, out 
+Rezerv); 
+ 
+        var EmirSembol = "IMKBH'" + Sembol; 
+        var basicitem = Sistem.YuzeyselVeriOku(EmirSembol); 
+        var sonfiyat = (decimal)basicitem.LastPrice; 
+        var bidfiyat = (decimal)basicitem.BidPriceDec; 
+        var askfiyat = (decimal)basicitem.AskPriceDec; 
+ 
+        if (sonfiyat == 0) continue; 
+        if (bidfiyat == 0) continue; 
+        if (askfiyat == 0) continue; 
+ 
+        var Islem = ""; 
+        var Miktar = 0.0; 
+        if (sonfiyat < AlisFiyat && Pozisyon == 0 && Rezerv == "") // AL 
+        { 
+           Rezerv = "AL"; 
+           Miktar = Lot; 
+           IslemFiyat = Sistem.SonFiyat(EmirSembol); 
+        } 
+        else if (Pozisyon > 0 && askfiyat >= HedefFiyat && Rezerv == "AL")  // KARLA KAPAT 
+        { 
+           Rezerv = "KAR AL"; 
+           Miktar = -Lot; 
+        } 
+        else if (Pozisyon > 0 && bidfiyat < StopFiyat && Rezerv == "AL")  // STOP 
+        { 
+           Rezerv = "STOP"; 
+           Miktar = -Lot; 
+        } 
+ 
+        if (Miktar > 0) Islem = "ALIS"; 
+        if (Miktar < 0) Islem = "SATIS"; 
+        if (Islem != "") 
+        { 
+           Sistem.PozisyonKontrolGuncelle(Anahtar, Miktar + Pozisyon, IslemFiyat, Rezerv); 
+           Sistem.EmirSembol = EmirSembol; 
+           Sistem.EmirIslem = Islem; 
+           Sistem.EmirSuresi = "KIE"; 
+           Sistem.EmirTipi = "Piyasa"; 
+           Sistem.EmirMiktari = Math.Abs(Miktar); 
+           Sistem.EmirGonder(); 
+       } 
+   } 
+
+--- PAGE 122 ---
+ 
+SEZAİ KILIÇ 
+115 
+ 
+} 
+ 
+ÖRNEK3: Robot işlem yaptıktan sonra 20 saniye boyunca dursun, sonra devam etsin; 
+ 
+ 
+//İŞLEM YAPTIKTAN SONRA ROBOT 20 SANİYE DURSUN 
+//SONRA DVAM ETSİN 
+ 
+var DevamEt = false; 
+var Anahtar = Sistem.Name + ", ZAMAN KONTROL"; 
+var Saat = Sistem.NesneGetir(Anahtar); 
+if (Saat == null) 
+    DevamEt = true; 
+else if (DateTime.Now > Saat.AddSeconds(20)) 
+    DevamEt = true; 
+ 
+if (DevamEt) 
+{ 
+    var Islem = Sistem.RobotViopAktif("Sistem1", "VIP'VIP-X030", Sistem.AktifViopKontrat, "5", 4); 
+    if (Islem != "") 
+        Sistem.NesneKaydet(Anahtar, DateTime.Now); 
+} 
+ 
+ 
+- 
+NET HACİM Okuma Fonksiyonları – Sistem.NetHacim(…) 
+ 
+iDeal Sistem kütüphanesinde Net Hacim olarak ekranlarda izlediğimiz verilere erişim için 
+tanımlanmış 4 adet fonksiyon bulunmaktadır. Fonksiyonların kullanım şekilleri ve sunduğu 
+bilgilerin neler olduğu aşağıdadki gibidir; (Not: en az düzey1 plus Borsa lisansı gerekir) 
+ 
+• Sistem.NetHacim(Sembol): 
+ 
+Bu fonksiyon, herhangi bir hisse veya vadeli kontratın, bulunduğumuz gün, bu komutu 
+çalıştırdığımız an itibariyle TL bazlı NET hacim bilgisini (yani alıştan olan işlemlerin hacmi ile 
+satıştan olan işlemlerin hacmi arasındaki farkını) döner. 
+ 
+Örnek:  EKGYO hissenin şu an itibariyle net hacmi kaç TL? 
+ 
+var Sembol = "IMKBH'EKGYO"; 
+var NetHacim = Sistem.NetHacim(Sembol); 
+Sistem.Mesaj(NetHacim.ToString("0,000")); 
+ 
+ 
+ 
+• Sistem.NetHacimOran(Sembol): 
+ 
+Bu fonksiyon, herhangi bir hisse veya vadeli kontratın, bulunduğumuz gün, bu komutu 
+çalıştırdığımız an itibariyle TL bazlı NET hacim bilgisinin (yani alıştan olan işlemlerin hacmi ile 
+satıştan olan işlemlerin hacmi arasındaki farkının) o hissede o gün o ana kadarki toplam hacime 
+olan oranını döner. 
+
+--- PAGE 123 ---
+ 
+SEZAİ KILIÇ 
+116 
+ 
+ 
+Örnek:  GARAN hissenin şu an itibariyle Net Hacim / Tooplam Hacim oranı nedir? 
+ 
+var Sembol = "IMKBH'GARAN"; 
+var NetOran = Sistem.NetHacimOran(Sembol); 
+Sistem.Mesaj(NetOran.ToString("0.00")); 
+ 
+ 
+• Sistem.NetHacimBist(): 
+• Sistem.NetHacimBist(): 
+ 
+Bu 2 fonksiyon ise, tüm BIST pay piyasasının Net Hacim bilgisi ile NetHacim/ToplamHacim 
+oranı bilgilerini elde etmek için kullanılır. 
+ 
+ 
+BIST menüsü altından açılabilen TÜM İŞLEMLER isimli pencerenin üst kısmında, her bir işlem 
+oldukçşa anlık olarak hesaplanıp gösterilen aşağıdaki görseldeki bilgilere erişim için bu 
+fonksiyonlar kullanılır. 
+ 
+ 
+ 
+ 
+- 
+NET LOT Okuma Fonksiyonları – Sistem.NetLot(…) 
+ 
+iDeal Sistem kütüphanesinde Net Lot olarak ekranlarda izlediğimiz verilere erişim için 
+tanımlanmış 2 adet fonksiyon bulunmaktadır. Fonksiyonların kullanım şekilleri ve sunduğu 
+bilgilerin neler olduğu aşağıdadki gibidir; (Not: en az düzey1 plus Borsa lisansı gerekir) 
+ 
+• Sistem.NetLot(Sembol): 
+ 
+Bu fonksiyon, herhangi bir hisse veya vadeli kontratın, bulunduğumuz gün için, bu komutu 
+çalıştırdığımız an itibariyle LOT bazlı NET hacim bilgisini (yani alıştan olan işlemlerin lotu ile 
+satıştan olan işlemlerin lotu arasındaki farkını) döner. 
+ 
+Örnek:  Ekim 2020 Vadeli Endeks30 vadeli kontratının net lotu? 
+
+--- PAGE 124 ---
+ 
+SEZAİ KILIÇ 
+117 
+ 
+ 
+var Sembol = "VIP'F_XU0301020"; 
+var NetLot = Sistem.NetLot(Sembol); 
+Sistem.Mesaj(NetLot.ToString("0,000")); 
+ 
+ 
+ 
+• Sistem.NetLotOranOran(Sembol): 
+ 
+Bu fonksiyon, herhangi bir hisse veya vadeli kontratın, bulunduğumuz gün, bu komutu 
+çalıştırdığımız an itibariyle LOT bazlı NET hacim bilgisinin (yani alıştan olan işlemlerin lotu ile 
+satıştan olan işlemlerin lotu arasındaki farkının) o hissede o gün o ana kadarki toplam lot 
+miktarına olan oranını döner. 
+ 
+- 
+Non Linear Ehler’s Filter - Sistem.NonlinearEhlersFilter(15) 
+ 
+Non Lineer Ehler’s Filter olarak bilinen  indikatörü çağırır. 1 Adet parametre alır (varsayılan 15) 
+. Aşağıdaki gibi 2 yazım şekli vardır; 
+ 
+Sistem.NonlinearEhlersFilter(15); 
+Sistem.NonlinearEhlersFilter (Veriler,15); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var EF = Sistem. NonlinearEhlersFilter(15); 
+Sistem.Cizgiler[0].Deger = EF; 
+ 
+ 
+
+--- PAGE 125 ---
+ 
+SEZAİ KILIÇ 
+118 
+ 
+ 
+ 
+ 
+ 
+- 
+OBV – OnBalance Volume - Sistem.OnBalanaceVolume() 
+ 
+OBV veya On Balance Volume olarak bilinen indikatörü çağırır. İndikatör parametre almaz. 
+Aşağıdaki gibi 2 yazım şekli vardır; 
+ 
+NOT: Bu indikatörün anlık olarak hesaplanması için Anlık olarak hacim bilgisi görme yetkisi gerekir. 
+Bu da Borsa İstanbul Piyasaları için Düzey1 Plus (1 kademe derinlik) olarak bilinen yetkidir. 
+ 
+Sistem.OnBalanceVolume(); 
+Sistem.OnBalanceVolume(Veriler); 
+ 
+Örnek: İndikatörü ve ortalamasını çağırıp çizdirmek 
+ 
+var OBV = Sistem.OnBalanceVolume(); 
+var ORT = Sistem.MA(OBV, “Exp”, 10); 
+Sistem.Cizgiler[0].Deger = OBV; 
+ 
+Sistem.Cizgiler[1].Deger = ORT; 
+ 
+ 
+- 
+Önceki Kapanış - Sistem.OncekiKapanis…(Sembol) 
+ 
+Bir sembolün önceki zaaman dilimlerine göre istenen kapanış fiyatını okumak için kullanılır. 
+Fonksiyonun içine Önceki Kapanış fiyatı okutulmak istenen sembol yazılır.   
+ 
+Not: iDeal programında bütün semboller ait oldukları piyasasının kodu ile birlikte yazılırlar. Hisse senetlerinin 
+piyasa kodu IMKBH dır. PİYASA kodundan sonra ÜSTTEN TEK TIRNAK işareti ile ayrılıp borsadaki orijinal kod 
+eklenir. GARAN hissesinin idealdeki sembol tanımı IMKBH’GARAN şeklindedir. Örneğin USDTYR için FX’USDTRY 
+şeklinde yazılır. Bir sembolün PİYASA kodunun ne olduğu, o sembolü sayfanıza yazarken @ işareti yanında 
+gösterilir.) 
+ 
+Kullanım şekilleri aşağıdaki gibidir. 
+ 
+ Sistem.OncekiKapanisAltiAy (Sembol); 
+ Sistem.OncekiKapanisBirAy(Sembol); 
+ Sistem.OncekiKapanisBirHafta(Sembol); 
+ Sistem.OncekiKapanisBirYil(Sembol); 
+ Sistem.OncekiKapanisBuAy(Sembol); 
+ Sistem.OncekiKapanisBuHafta(Sembol); 
+ Sistem.OncekiKapanisBuYil(Sembol); 
+ Sistem.OncekiKapanisGun(Sembol); 
+ Sistem.OncekiKapanisSeans(Sembol); 
+ Sistem.OncekiKapanisUcAy(Sembol); 
+ 
+- 
+Optimizasyon - Sistem.Optimizasyon() 
+ 
+Bir algoritma geliştiren yatırımcı için, geliştirdiği algortima ile ilgi çok önemli 2 unsur vardır.  
+Bunlardan birincisi BacTest (geçmiş dönemde stratejisi ne kazandırmış veya kaybettirmiş bunu 
+görmek), 
+ikincisi 
+ise 
+Opitmizasyondur. 
+Optimizasyon, 
+stratejide 
+kullanılan 
+çeşitli 
+parametrelerin (stop veya kar al seviyeleri/oranları, kullanılan indikatörlerin periyotları, alım 
+veya satıma karar veren ve değişken olan hemen her kriter) kullanılan değerlerinin haricinde 
+
+--- PAGE 126 ---
+ 
+SEZAİ KILIÇ 
+119 
+ 
+değerler kullanılsa idi sonuçlar nasıl olurdu, hangi değerler kullanılsa idi getiri daha yüksek 
+olursu, işlem sayısı veya profit factor daha iyi olurdu gibi soruların cevapları Optimizasyon ile 
+aranır. 
+ 
+Optimizasyon işlemi, Sistem menüsü içersinde yer alan Optimizasyon isimli pencere açılıp, 
+bu amaçla yazılmış formülü seçerek yapılır. Yani al ve sat siyalleri üreten bir kod yazılmışsa, bu 
+kod doğrudan optimize edilmez, önce optimize edilebilecek şekilde yine kodlama gerekir.  
+Bir stratejinin kurgusu kabaca şu şekildedir; 
+• Veri ve Liste tanımlamaları yapılan satırlar (grafikten kapanış vs bilgileri okumak, 
+gerekiyorsa/varsa boş listeleri tanımlamak) 
+• Kullanılacak indikatörleri tanımlamak 
+• Hesaplama, kıyaslama ve bazı başka sonuçları listeleri elde etme satırları 
+• Stratejiyi kurgulama (yön değerlerini koşullara göre atama) 
+ 
+Bu genel yapıda kurgulanmış bir sistemin optimizasyon kodunu yazmak için söz konusu koda 
+3 ana yapı entegre edilir ve sonucundan yukarıdaki strateji kurgusunun akışı aşağıdaki hale 
+gelir; 
+ 
+• Veri ve Liste tanımlamaları yapılan satırlar 
+• Kullanılan indikatörlerde yer alan ve optimize edilerek en uygun değerleri aranacak 
+paramatreye sahip olan her bir indikagtör için, ilgili paremetre(ler)in başlayıp biteceği 
+değer aralıkları ve adımlarının belirtildiği for döngüleri açıp, o dönünün altında ilgili 
+indikatörü tanımlamak ve bu işi opt edilkecek her bir indikatör veya parametre için 
+tekrar etmek 
+• Strateji bölgesine gelip koşullara göre yön atamalarını yapmadan önce, her seferinde 
+bir önceki paramatre ile doldurulmuş YÖN listesini temizlemek 
+• Stratejiyi çalıştırıp yön listesini doldurmak 
+• Sistem.Optimizasyonu komutunu programa bildirmek 
+• Üst kısımda açılan her bir for döngüsünü kapatmak. 
+ 
+ÖRNEK:  2 hareketli ortalamanın birbirini kesmesi ve RSI indikatörünün kendi hareketli ortalamasının 
+üstünde/altında olmasıyla AL/SAT sinyalleri üreten bir strateji için ÖNCE SİSTEM sonra 
+OPTİMİZASYON kurgusunu kodlayalım; 
+ 
+SİSTEM KURGUSU: 
+ 
+// kapanış fiyatlarını oku 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var SonYon=""; 
+ 
+//indikatörleri tanımla 
+var MA1 = Sistem.MA(C , "Exp", 10); 
+var MA2 = Sistem.MA(C , "Exp", 15); 
+var RSI = Sistem.RSI(C , 9); 
+var RSIAVR = Sistem.MA(RSI , "Exp", 4);   
+             
+//Strateji bölgesi 
+for (int i = 1; i < C.Count; i++) 
+{ 
+   if (RSI[i] > RSIAVR[i] && MA1[i] > MA2[i] && SonYon != "A") // alış 
+   { 
+      Sistem.Yon[i] = "A";   
+      SonYon="A"; 
+
+--- PAGE 127 ---
+ 
+SEZAİ KILIÇ 
+120 
+ 
+   } 
+   else if (RSI[i] < RSIAVR[i] && MA1[i] < MA2[i] && SonYon != "S") // satış 
+   { 
+      Sistem.Yon[i] = "S";   
+      SonYon="S"; 
+   } 
+} 
+ 
+OPTİMİZASYON KURGUSU: 
+ 
+// kapanış fiyatlarını oku 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var SonYon=""; 
+ 
+for (int P1 = 10; P1 < 101; P1++)  // MA1 için periyodu 10 ile 101 arasında birer birer adımlarla 
+{ 
+   var MA1 = Sistem.MA(C , "Exp", P1); //yukarıdaki afdımların her biri için MA hesaplansın  
+ 
+   for (int P2 = 15; P2 < 250; P2++) 
+   { 
+      var MA2 = Sistem.MA(C , "Exp", P2); 
+ 
+      for (int P3 = 9; P3 < 59; P3++) 
+      { 
+         var RSI = Sistem.RSI(C , P3); 
+ 
+         for (int P4 = 4; P4 < 44; P4++) 
+         { 
+            var RSIAVR = Sistem.MA(RSI , "Exp", P4);   
+             
+ 
+               //ÖNCEKİ DÖNGÜLERDEN KALAN YÖN LİSTESİNİ TEMİZLE VE DEVAM ET 
+               for (int i = 1; i < C.Count; i++) 
+                  Sistem.Yon[i] = "";   
+ 
+            // strateji bölgesi 
+            for (int i = 1; i < C.Count; i++) 
+            { 
+               if (RSI[i] > RSIAVR[i] && MA1[i] > MA2[i] && SonYon != "A") // alış 
+               { 
+                  Sistem.Yon[i] = "A";   
+                  SonYon="A"; 
+               } 
+               else if (RSI[i] < RSIAVR[i] && MA1[i] < MA2[i] && SonYon != "S") // satış 
+               { 
+                  Sistem.Yon[i] = "S";   
+                  SonYon="S"; 
+               } 
+             } 
+             Sistem.Optimizasyon("MA1,MA2,RSI,AVR", P1 , P2 , P3 , P4); 
+ 
+//açılan for dmngüleri kapat (kapa süslü poarantezler) 
+          } 
+       } 
+   } 
+} 
+ 
+ 
+ 
+- 
+Ortalama Fiyat - Sistem.Ortalama…(Sembol) 
+ 
+Bir sembolün herhangi bir zaman dilimine ait ortalama fiyatını okumak için kullanılır. 
+Fonksiyonun içine Ortalama Fiyatı okutulmak istenen sembol yazılır.   
+ 
+
+--- PAGE 128 ---
+ 
+SEZAİ KILIÇ 
+121 
+ 
+Not: iDeal programında bütün semboller ait oldukları piyasasının kodu ile birlikte yazılırlar. Hisse senetlerinin 
+piyasa kodu IMKBH dır. PİYASA kodundan sonra ÜSTTEN TEK TIRNAK işareti ile ayrılıp borsadaki orijinal kod 
+eklenir. GARAN hissesinin idealdeki sembol tanımı IMKBH’GARAN şeklindedir. Örneğin USDTYR için FX’USDTRY 
+şeklinde yazılır. Bir sembolün PİYASA kodunun ne olduğu, o sembolü sayfanıza yazarken @ işareti yanında 
+gösterilir.) 
+ 
+Kullanım şekilleri aşağıdaki gibidir. 
+ 
+ Sistem.OrtalamaAltiAy(Sembol); 
+ Sistem.OrtalamaBirAy(Sembol); 
+ Sistem.OrtalamaBirHafta(Sembol); 
+ Sistem.OrtalamaBirYil(Sembol); 
+ Sistem.OrtalamaBuAy(Sembol); 
+ Sistem.OrtalamaBuHafta(Sembol); 
+ Sistem.OrtalamaBuYil(Sembol); 
+ Sistem.OrtalamaGun(Sembol); 
+ Sistem.OrtalamaSeans(Sembol); 
+ Sistem.OrtalamaUcAy(Sembol); 
+ 
+ 
+- 
+OtoTrend Düşen - Sistem.OtoTrendDusen(TopmaBar, SonXbar) 
+ 
+Bir grafik üzerinde, kullanıcı tarafından girilmiş kadar bar dilimi içerisindeki DÜŞEN TRENDİ 
+hesaplar. 2 parametre girilerek kullanılır. ToplamBar paramatresi grafikte SON KAÇ BAR İÇİNDE 
+düşen bir trend aranacağını, SonXbar paramatresi ise, grafikte en sondaki kaç barın bu trend 
+hesabında devre dışı bırakılacağını belirtir. EN SON BAR DAHİL trend aranmaz, çünkü zaten son 
+bar yükselen veya düşen trendin bir noktası olur ise, söz konusu trend için kıranlar gibi bir 
+tarama yapılamaz. 
+  
+Kullanım şekilleri aşağıdaki gibidir. 
+ 
+ Sistem.OtoTrendDusen(ToplamBar, SonBar); 
+ Sistem.OtoTrendDusen(Veriler, ToplamBar, SonBar); 
+ 
+İlk kullanım şekli, üzerine uygulandığı grafiğin sembol, periyot bilgilerini kendi algılar. Bu 
+komutları grafiğe uygulamadan (örneğin bir çok hissede düşen trend kırılımı arayan bir 
+robotta) kullanmak istersek o zaman ikinci yazım şekli kullanılır. Veriler değişkenine hisse ve 
+zaman periyodu belirtilerek okutulmuş bir veri listesi input olarak verilir. 
+ 
+ÖRNEK:  Son 1000 ve son 300 bar içindeki düşen trenleri bul ve çiz 
+ 
+var UZUN = 1000; 
+var KISA = 300; 
+var SON = 5;  
+var DusenUzun = Sistem.OtoTrendDusen(UZUN, SON); 
+var DusenKisa = Sistem.OtoTrendDusen(KISA, SON); 
+ 
+Sistem.Cizgiler[0].Deger = DusenUzun; 
+Sistem.Cizgiler[1].Deger = DusenKisa; 
+ 
+ 
+Yukarıdaki formülü kaydedip bir grafiğe uyguladığınızda, istediğiniz sembolün istediğiniz 
+zaman periyotlu grafiğine geçererek, eğer varsa belirtilen zaman dilimleri için düşen trenler 
+otomatik hesaplanıp çizilir. 
+ 
+
+--- PAGE 129 ---
+ 
+SEZAİ KILIÇ 
+122 
+ 
+ 
+ 
+ 
+- 
+OtoTrend Yükselen - Sistem.OtoTrendYukselen(TopmaBar, SonXbar) 
+ 
+Bir grafik üzerinde, kullanıcı tarafından girilmiş kadar bar dilimi içerisindeki YÜKSELEN  
+TRENDİ hesaplar. 2 parametre girilerek kullanılır. ToplamBar paramatresi grafikte SON KAÇ 
+BAR İÇİNDE yükselen bir trend aranacağını, SonXbar paramatresi ise, grafikte en sondaki kaç 
+barın bu trend hesabında devre dışı bırakılacağını belirtir.  
+Kullanım şekilleri aşağıdaki gibidir. 
+ 
+ Sistem.OtoTrendDusen(ToplamBar, SonBar); 
+ Sistem.OtoTrendDusen(Veriler, ToplamBar, SonBar); 
+ 
+İlk kullanım şekli, üzerine uygulandığı grafiğin sembol, periyot bilgilerini kendi algılar. Bu 
+komutları grafiğe uygulamadan (örneğin bir çok hissede düşen trend kırılımı arayan bir 
+robotta) kullanmak istersek o zaman ikinci yazım şekli kullanılır. Veriler değişkenine hisse ve 
+zaman periyodu belirtilerek okutulmuş bir veri listesi input olarak verilir. 
+ 
+ÖRNEK1:  Son 1000 ve son 300 bar içindeki yükselen trenleri bul ve çiz 
+ 
+var UZUN = 1000; 
+var KISA = 300; 
+var SON = 5;  
+var YukselenUzun = Sistem.OtoTrendYukselen(UZUN, SON); 
+var YukselenKisa = Sistem.OtoTrendYukselen(KISA, SON); 
+ 
+Sistem.Cizgiler[0].Deger = YukselenUzun; 
+Sistem.Cizgiler[1].Deger = YukselenKisa; 
+ 
+Yukarıdaki formülü kaydedip bir grafiğe uyguladığınızda, istediğiniz sembolün istediğiniz 
+zaman periyotlu grafiğine geçererek, eğer varsa belirtilen zaman dilimleri için yükselen 
+trendler otomatik hesaplanıp çizilir. 
+ 
+
+--- PAGE 130 ---
+ 
+SEZAİ KILIÇ 
+123 
+ 
+ 
+ 
+ÖRNEK2: Yükselen ve Düşen Trendi Kıran hisseleri SORGU modülünde taratıp bulmak: 
+ 
+Sistem.SorguBaslik[0] = "Fiyat"; 
+Sistem.SorguBaslik[1] = "Önc.Kap"; 
+ 
+var Trendperiyodu = 800; //son 800 bar içindeki trend 
+var SonXbar= 50; //son 50 barı dikkate alma 
+ 
+var Sembol = Sistem.Sembol; 
+var V = Sistem.GrafikVerileriniOku(Sembol, Sistem.Periyot); 
+var C = Sistem.GrafikFiyatOku(V,"Kapanis"); 
+var Yukselen = Sistem.OtoTrendYukselen(V, Trendperiyodu , SonXbar); 
+var Dusen = Sistem.OtoTrendDusen(V, Trendperiyodu , SonXbar); 
+ 
+if (V[V.Count - 1].Close < V[V.Count - Trendperiyodu].Close && V[V.Count - 1].High > 
+Dusen[Dusen.Count - 1] && Dusen[Dusen.Count - 1] != 0) 
+{ 
+   Sistem.SorguDeger[0] = C[C.Count - 1]; 
+   Sistem.SorguDeger[1] = C[C.Count - 2]; 
+   Sistem.SorguAciklama = "Düşen Trend Kırıldı"; 
+   Sistem.SorguEkle(); 
+} 
+else if (V[V.Count - 1].Close > V[V.Count - Trendperiyodu].Close && V[V.Count - 1].Low < 
+Yukselen[Yukselen.Count - 1] && Yukselen[Yukselen.Count - 1] != 0) 
+{ 
+   Sistem.SorguDeger[0] = C[C.Count - 1]; 
+   Sistem.SorguDeger[1] = C[C.Count - 2]; 
+   Sistem.SorguAciklama = "Yükselen Trend Kırıldı"; 
+   Sistem.SorguEkle(); 
+} 
+ 
+ 
+ 
+- 
+Özel Emirleri Oku  - Sistem.OzelEmirleriGetir()  
+ 
+Borsa İstanbul Pay Piyasasında özel emir olarak bazen hisse senetleri el değiştirir. Bu 
+emirler TÜM İŞLEMLER isimli pencereden akarken TİP alanında ÖZEL yazar ve buradaki işlemler 
+bazen o anki piyasa fiyatının çok dışında fiyatlarla hisselerin el değiştirdiği birer işlemdir. Bu 
+işlemlerin fiyatları grafiklerde çizilmez. O gün özel emir var mı, varsa hangi hisselerde hangi 
+kurumlar hangi fiyattan hisse alış verişi yaptı sorunuzun cevabı için BIST menüsündeki TÜM 
+
+--- PAGE 131 ---
+ 
+SEZAİ KILIÇ 
+124 
+ 
+İŞLEMLER penceresini açmak, FİLTRE satırına basıp ÖZEL kutusunu işaretleyip uygula demek 
+yeterlidir. 
+ 
+ 
+ 
+Örneğin bu klavuzun yazıldığı gün aşağıdaki özel emirler gerçekleşmiştir. 
+ 
+ 
+ 
+Bu özel emir bilgilerini SİSTEM üzerinden erişmek için ÖZEL EMİRLERİ OKU fonksiyonu vardır. 
+Fonksiyonun kullanımını içeren örnek bir kod aşağıda paylaşışmıştır; 
+ 
+Bu kod kaydedilip bir kez çalıştırıldığında (FORMÜL TEST butonuna basarak) ekrana o ana 
+kadar gerçekleşmiş özel emirlere ait detayları gösteren bir mesaj penceresi açılır.; 
+ 
+ 
+if (DateTime.Now.Hour < 19) 
+{ 
+   var OE = Sistem.OzelEmirleriGetir(); 
+   if (OE != null) 
+   { 
+      var Anahtar = Sistem.Name + "," + DateTime.Now.ToString("yyyyMMdd"); 
+      var Adet = Sistem.SayiTablosunuOku(Anahtar); 
+      if (OE.Count != Adet) 
+      { 
+        Adet = OE.Count; 
+        Sistem.SayiTablosunuGuncelle(Anahtar, Adet); 
+        var strlist = new List<string>(); 
+        foreach (var item in OE) 
+        { 
+           var str = item.Symbol + " , " + "Saat = " + item.Hour.ToString("") + ":" + 
+item.Minute.ToString("") + ":" + item.Second.ToString("") + "  , " + "Fiyat = " + 
+item.Price.ToString("0.00") + "  , " + "Lot = " + item.Size.ToString() + " Alan = " + item.BuyerCode 
++ " Satan= " + item.BuyerCode; 
+           strlist.Add(str); 
+        } 
+        var msg = string.Join("\r\n", strlist); 
+        Sistem.Mesaj(msg); 
+      } 
+   } 
+} 
+ 
+
+--- PAGE 132 ---
+ 
+SEZAİ KILIÇ 
+125 
+ 
+ 
+ 
+ 
+- 
+PSAR / PARABOLIC - Sistem.Parabolic(0.02 , 0.2) 
+ 
+PSAR, Parabolis SAR veya Parabolic olarak bilinen  indikatörü çağırır. 2 Adet parametre alır 
+(varsayılan olarak 0.02 ve 0.2 kullanılır) . Aşağıdaki gibi 3 yazım şekli vardır; 
+ 
+Sistem. Parabolic(0.02, 0.2); 
+Sistem. Parabolic(Liste,0.02 , 0.2); 
+Sistem. Momentum(Veriler,0.02 , 0.2); 
+ 
+Örnek:  Fiyat Parabolic indikatörünü yukarı keserse al, aşaüğı keserse SAT sistem formülü. 
+ 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var Parabolic = Sistem.Parabolic(0.02, 0.2); 
+ 
+var SonYon = ""; 
+ 
+for (int i = 1; i < Sistem.BarSayisi; i++) 
+{ 
+   if (C[i-1] < Parabolic[i-1] && C[i] > Parabolic[i] && SonYon != "A") 
+   { 
+      SonYon = "A"; 
+      Sistem.Yon[i] = SonYon; 
+   } 
+   if (C[i-1] > Parabolic[i-1] && C[i] < Parabolic[i] && SonYon != "S") 
+   { 
+      SonYon = "S"; 
+      Sistem.Yon[i] = SonYon; 
+   } 
+} 
+Sistem.Cizgiler[0].Deger = Parabolic;; 
+ 
+ 
+ 
+ 
+
+--- PAGE 133 ---
+ 
+SEZAİ KILIÇ 
+126 
+ 
+- 
+Parametreler - Sistem.Parametreler  
+ 
+ 
+ 
+Parametreler fonksiyonu, bazen kodu sadeleştirmek, bazen kod yazımını 
+kolaylaştırıp anlaşılır kılmak, bazen robot olarak çalıştırılan kodların bazı sonuçlar 
+üzerinden gözlem yapmak, bazen şifrelenmiş olarak sunulmuş/dağıtılmış 
+formüllere, dışardan müdahaleye izin ve imkân vermek için kullanılabilir. 
+  
+IDEAL sistem panelininin (kod yazılan pencere) sağ üst bölgesinde 20 satırlık bir 
+PARAMETRE bölgesi vardır. 
+Bu fonksiyonun işlevi, bu satırlara yazılan verileri koda aktarmak veya koddan elde 
+edilecek bazı bilgileri bu alanlara yazmaktır. 
+  
+Sistem.Parametreler[x] şeklinde kullanılır. X değeri parametre bölgesindeki 
+satırların numarasıdır. İLK SATIRIN NUMARASI SIFIRDIR. 
+  
+Parametreler kısmında bir satıra yazılmış bir veri bu fonksiyon ile okutulup, kod 
+içinde kullanılabilir. (aşağıdaki örnek) 
+ 
+ 
+ 
+ 
+Yukardaki işlemin tersi (kodun belli bir anında elimizde olan bir veri, parametreler kısmındaki 
+bir satıra yazılabilir.) yapılabilir. (aşağıdaki örnek: Aktif VIOP kontratının Son Fiyat değeri 
+okutulup Parametreler tablosunun 2 numaralı (3. Sıra) satırına yazdırılmıştır.) (Mesaj ve Debug 
+fonksiyonlarında anlatıldığı gibi, tipi ne olursa olsun, ekranda görsel olarak gösterilmek istene 
+bir veri, sonuna  .ToString() ibaresi eklenerek (metin/text) şekline çevrilir.) 
+ 
+Parametre fonksiyonu genelde iki önemli amaca hizmet eder. 
+  
+1-      Yazılan formüllerde kullanılan ve zaman zaman değiştirilmesi gereken (indikatör parametreleri, 
+kırılma noktaları için fiyat seviyeleri, sözleşme kodları gibi) bilgileri bu alandan okutarak, değişiklik 
+gerektiğinde kolayca yapmak. 
+2-       Çeşitli amaçlarda, yazdıkları formülleri bir başkasına ŞİFRELEYEREK veren kişilerin, kodu verdiği 
+kişiye bazı bilgileri değiştirebilme imkânı vermek istemesi. (Kodlar şifrelendiğinde bu alan açık kalır) 
+ 
+ÖRNEK: GARAN hisse senedinde, manuel olarak Pozisyon açan bir kullanıcının, kendi belirlediği ve zaman zaman 
+değiştirdiği yükseliş ve düşüş stop seviyelerini girdiği ve o seviyelere gelindiğinde otomatik olarak pozisyon kapatmasını 
+sağlayan ROBOT örneği. 
+İşlem adedi, pozisyona girilmiş fiyat ve yön ile stop seviyeleri parametre alanına girilir. Robot pozisyonu kapattığı zaman 
+(stop seviyeleri görüldüğünde) Parametreler bölgesindeki YÖN bilgisini kendisi değiştirir. 
+  
+
+--- PAGE 134 ---
+ 
+SEZAİ KILIÇ 
+127 
+ 
+string Sembol           = "IMKBH'GARAN"; 
+float IslemFiyati       = Convert.ToSingle(Sistem.Parametreler[1]); //Pozisyona girilmiş 
+olan fiyat 
+float KarMarj           = Convert.ToSingle(Sistem.Parametreler[3])/100; 
+//Stop 
+için 
+beklenecek artış puanı 
+float ZararMarj         = Convert.ToSingle(Sistem.Parametreler[5])/100; 
+//Stop 
+için 
+beklenecek düşüş puanı 
+float Miktar            = Convert.ToSingle(Sistem.Parametreler[7]); //Alış/Satış emri için 
+Lot Miktarı 
+string Pozisyon_Yonu    = Sistem.Parametreler[9]; // Girilen pozisyonun yönü belirlenir 
+Örnek: Long=L Short=S Flat= F 
+  
+var Islem = ""; 
+var SonFiyat = Sistem.SonFiyat(Sembol); 
+var Pozisyon = Sistem.PozisyonKontrolOku(Sembol); 
+  
+if (SonFiyat > 0 && (Sistem.SaatAraligi("09:35", "12:30") || Sistem.SaatAraligi("13:00", 
+"17:40"))) 
+{ 
+   if (Pozisyon_Yonu == "L" && (SonFiyat >= IslemFiyati + KarMarj) && Pozisyon > 0) 
+      Islem = "SATIS"; 
+  
+   else if (Pozisyon_Yonu == "S" && (SonFiyat <= IslemFiyati - ZararMarj) && Pozisyon < 0) 
+      Islem = "ALIS"; 
+} 
+  
+if (Islem != "" && Pozisyon_Yonu != "F") 
+{ 
+Sistem.Parametreler[9] = "F"; //Pozisyon Kapatıldığı için Parametre Değerine Flat ifadesi 
+atanır.   
+if (Islem == "ALIS") 
+      Sistem.PozisyonKontrolGuncelle(Sembol, 0); 
+   else if (Islem == "SATIS") 
+      Sistem.PozisyonKontrolGuncelle(Sembol, 0); 
+  
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = Islem;      
+   Sistem.EmirMiktari = Miktar; 
+   Sistem.EmirSuresi = "KIE";  
+   Sistem.EmirTipi = "Piyasa"; 
+   Sistem.EmirGonder(); 
+} 
+ 
+ 
+- 
+Periyot - Sistem.Periyot()  
+ 
+Üzerinde işlem yapılan veya yapılacak olan grafiğin periyodunu okumak veya belirtmek için 
+bu fonksiyon kullanılır. 
+  
+Yazılan bir kodun/sistemin periyodu sabit değilse ve diğer periyotlara geçince de çalışılması 
+isteniyorsa, bu fonksiyonu kullanmaya gerek yoktur. 
+  
+Ama grafik üzerinden değiştirilen bir periyoda göre bir başka işlem (mesela aynı periyot için 
+bir başka sembolün herhangi bir verisi de okutuluyorsa) o zaman periyodun ne olduğunu 
+anlamak ve diğer işlemlerimizde kullanmak için bu fonksiyon kullanılır. 
+  
+Grafik üzerinden çalışmayan bir kod yazılmış ise (Algo veya Robot) ve bir grafik verisi 
+kodlamada kullanılıyorsa, periyot mutlaka kodda belirtilmelidir. 
+ 
+ 
+IDEAL Teknik Analiz modülünde, bir kodun grafiği aşağıda gösterilen periyotlar için 
+
+--- PAGE 135 ---
+ 
+SEZAİ KILIÇ 
+128 
+ 
+görüntülenebilir. Sistem modülünde kod yazarken bu periyotların tamamı kullanılabilir. 
+Sistemde kullanılacak periyot değerleri, aşağıdaki fotoda SAĞ TARAFTA yer alan kısa kullanım 
+şeklinde olmalıdır. 
+ 
+ 
+ 
+ 
+ 
+Periyot kontrolünü grafik üzerine atılan kod içinde yaparak, örneğin çalışılması istenen grafik 
+periyodundan başka bir periyoda geçince kodun çalışmasına engel olabilir ve ekrana 
+bilgi/uyarı mesajı çıkarabilirsiniz. 
+ 
+ 
+ÖRNEK: 
+ 
+var periyot = (Sistem.Periyot == "60" || Sistem.Periyot == "120" || Sistem.Periyot == "S" 
+|| Sistem.Periyot == "240" || Sistem.Periyot == "G" || Sistem.Periyot == "H" || 
+Sistem.Periyot == "A" ) ? false : true; 
+if (periyot == true) 
+{ 
+   // yazılacak kod 
+
+--- PAGE 136 ---
+ 
+SEZAİ KILIÇ 
+129 
+ 
+} 
+else if (periyot == false) 
+   Sistem.Mesaj("Sistem 60 Dakikanın altındaki periyotlar için tasarlanmıştır. Lütfen 60 
+dk dan daha küçük bir periyot seçiniz"); 
+ 
+ 
+ 
+- 
+PH01 - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)  
+ 
+ Grafikler üzerine saatlik, günlük, haftalık, aylık gibi dönemlere EN YÜKSEK / EN DÜŞÜK fiyat 
+seviyelerini atmak için kullanılan PH01 indikatörünü kod üzerinden çağırıp kullanmak için var 
+olan ideal sistem fonksiyonudur. Sadece HIGH çizgisini getirir. Aşağıdaki PL01 ile birlikte 
+kullanıldığında HIGH/LOW bandı çizdirilebilir. 
+ 
+Aşağıda gibi 2 kullanım şekli vardır; 
+ 
+ 
+var PH = Sistem.PH01(Donem); 
+ 
+var PH = Sistem.PH01(Veriler , Donem); 
+ 
+Dönem ifadesi hangi zaman dilimimi HIGH seviyesini kullanmak istediğimizi seçmek için 
+kullanılır. Yukarıda anlatılan PERİYOT fonksiyonunda gösterilen zaman dilimleri kısa harf/kod 
+bilgileri burada dönem olarak girilen bilgidiriç. Örneğin HAFTALIK YÜKSEK seviyesi 
+kullanılacaksa dönem için “H” yazılır. 
+ 
+- 
+PL01 - Sistem.SembolTanimla(SembolAdı, OndalıkBasamakSayısı)  
+ 
+ Grafikler üzerine saatlik, günlük, haftalık, aylık gibi dönemlere EN YÜKSEK / EN DÜŞÜK fiyat 
+seviyelerini atmak için kullanılan PH01 indikatörünü kod üzerinden çağırıp kullanmak için var 
+olan ideal sistem fonksiyonudur. Sadece LOW seviyesini hesaplayıp getirir.  
+ 
+Aşağıda gibi 2 kullanım şekli vardır; 
+ 
+ 
+var PH = Sistem.PH01(Donem); 
+ 
+var PH = Sistem.PH01(Veriler , Donem); 
+ 
+Dönem ifadesi hangi zaman dilimimi HIGH seviyesini kullanmak istediğimizi seçmek için 
+kullanılır. Yukarıda anlatılan PERİYOT fonksiyonunda gösterilen zaman dilimleri kısa harf/kod 
+bilgileri burada dönem olarak girilen bilgidiriç. Örneğin AYLIK YÜKSEK seviyesi kullanılacaksa 
+dönem için “A” yazılır. 
+ 
+Örnek, haftalık ProHigh / ProLow değerlerini çağırıp çizdirmek; 
+ 
+var PH = Sistem.PH01("H"); 
+var PL = Sistem.PL01("H"); 
+ 
+Sistem.Cizgiler[0].Deger = PH; 
+Sistem.Cizgiler[1].Deger = PL; 
+ 
+ 
+
+--- PAGE 137 ---
+ 
+SEZAİ KILIÇ 
+130 
+ 
+ 
+ 
+ 
+- 
+Pivot Kanalı  Sistem.Pivot(SembolAdı, OndalıkBasamakSayısı)  
+ 
+ Hazır indikatörler listesinde yer alan alt/üst/orta ban şeklinde 3 çizgisi olan pivot isimli 
+indikatörü çağırıp hesaplayan Deal Sistem fonksiyonudur. 
+ Aşağıdaki şekilde 6 kullanım şekli vardır; 
+ 
+ Sistem.PivotUp(); 
+ Sistem.PivotUp(Veriler); 
+ Sistem.PivotMid(); 
+ Sistem.PivotMid(Veriler); 
+ Sistem.PivotDown(); 
+ Sistem.PivotDown(Verileri); 
+ 
+Grafik üzerine atılarak kullanılacaksa VERİLER bilgisi olan komutlara gerek yoktur. Grafik 
+üzerinde çalıştırılmayan bir fomülde kullanılacaksa hangi sembolün hangi zaman periyotlu 
+grafik verisi için hesaplanacağı fonksiyona söylenmelidir; 
+ 
+ÖRNEK:  YKBNK hissesinin GÜNLÜK barları için Pivot hesapla. 
+ 
+var Veriler = Sistem.GrafikFiyatOku("IMKBH'YKBNK", "G"); 
+ 
+var UstKanal = Sistem.PivotUp(Veriler); 
+var OrtaKanal = Sistem.PivotMid(Veriler); 
+var AltKanal = Sistem.PivotDoen(Veriler); 
+ 
+ 
+- 
+Polarized Fractal Efficiency - Sistem.PolarizedFractalEfficiency(14,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Polarized Fraactal Efficiency isimli indikatörü 
+çağırır. 2 Adet parametre alır (varsayılan 14 ve 3) . Aşağıdaki gibi 2 yazım şekli vardır; 
+
+--- PAGE 138 ---
+ 
+SEZAİ KILIÇ 
+131 
+ 
+ 
+Sistem.PolarizedFractalEfficiency(14, 3); 
+Sistem.PolarizedFractalEfficiency(Veriler, 14, 3); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var PFE = Sistem.PolarizedFractalEfficiency(14, 3); 
+Sistem.Cizgiler[0].Deger = PFE; 
+ 
+ 
+ 
+- 
+Positive Volume Index - Sistem.PositiveVolumeIndex() 
+ 
+iDeal indikatör kütüphanesinden yer alan Positive Volume Index isimli indikatörü çağırır. 
+Hiç paramatre almaz. Sorunsuz ve anlık çaşlışması için HACİM anlık verisi gerektirir. Aşağıdaki 
+gibi 2 yazım şekli vardır; 
+ 
+Sistem.PositiveVolumeIndex(); 
+Sistem.PositiveVolumeIndex(Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var PVI = Sistem.PositiveVolumeIndex(); 
+Sistem.Cizgiler[0].Deger = PVI; 
+ 
+- 
+Pozisyon Kontrol Oku/Güncelle - Sistem.PozisyonKontrolOku/Guncelle() 
+ 
+iDeal veri terminali üzerinde robotlar çalıştırıken çoğu zaman bazı bilgileri bir dosyada veya 
+bellekte saklamak ve gerektiğinde kullanmak gerekir. Kod yazılırken bilgi atanan (var x = 5; 
+şeklinde tanımlanan) değişkenler bazen bu ihtiyacı karşılamaz. 
+Çünkü kod içerisinde tanımlanan değişkenler, kodun her seferinde dafalarca çalışması 
+durumunda hep ilk tanımladığı değerine döner ve ilerleyen satırlarda hesaplamalar sonucu 
+yeni değeri bulunur. Ama bu döngü her seferinde yeniden olur. Oysa istenen şey, bir kez değeri 
+değiştirilen bir verinin, bir daha kullanıcının tanımladığı bir koşul olmadan hiç değişmemesidir. 
+Bu nedenle iDealde Pozisyon Kontrol, Sayı Tablosu, Sözcük Tablosu gibi veri saklama işlevi olan 
+komutlar kullanılır. 
+ 
+Pozisyon Kontrol genelde alım satım yapılan robotlarda kullanılır. Örneğin bir hissenin 
+fiyatı x olursa AL kurgusuyla çalışan bir robotta, hissenin fiyatı x olduğunda ALIM yapılınca, 
+hisse değeri düşüp sonra tekrar x olunca yeniden alım yapmaması için ilk alımda pozisyon 
+değeri mesela 1 yapılır. Bu sayede koşul tekrar sağlansa bile robot alım yapmaz, taa ki kullanıcı 
+pozisyon ismiyle saklanan değişkendeki değeri başka bir koşulla değiştirinceye kadar. 
+ 
+PozisyonKOntrolOku komutu saklanmış bilgiyi okumak için, PozisyonKontrolGuncelle 
+komutu ise buraya bir bilgiyi yazmak için kullanılır. 
+ 
+Robotlar aksi kodlanmadıkça PİYASA EMRİ ile emir iletirler. Bu sayede emrin gerçekleşmesi 
+(hisse tavan değilse, devre kesmemişse) kesindir. Emir iletilen işlem miktarı kadar pozisyona 
+girilmiş olur ve kendi pozisyonunu bu şekilde takip eder. (aracı kurumunuzdaki hesabınızda o 
+hisse için kaç adet pozisyonunun olduğuna değil kendi pozisyon değerine bakar). 
+ 
+
+--- PAGE 139 ---
+ 
+SEZAİ KILIÇ 
+132 
+ 
+ÖRNEK: Saat 11:01:00 olunca 1000 adet DOHOL alış  emri gönder.  Saat 15:01:00 olunca 
+aldığı (pozisyonu) kadar SATIŞ emri gönder robotu; 
+ 
+    var Sembol = "IMKBH'DOHOL"; 
+var Pozisyon = Sistem.PozisyonKontrolOku(Sembol); 
+ 
+var Miktar = 1000; 
+ 
+if (Sistem.Saat.CompareTo("11:01:00") >= 0 && Pozisyon == 0)    
+{ 
+   Sistem.PozisyonKontrolGuncelle(Sembol, Pozisyon + Miktar); 
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = "Alış"; 
+   Sistem.EmirTipi = "Piyasa";     
+   Sistem.EmirSuresi = "KIE";    
+   Sistem.EmirMiktari = Miktar; 
+   Sistem.EmirGonder(); 
+} 
+if (Sistem.Saat.CompareTo("15:01:00") >= 0 && Pozisyon == Miktar)    
+{ 
+   Sistem.PozisyonKontrolGuncelle(Sembol, 0); 
+   Sistem.EmirSembol = Sembol; 
+   Sistem.EmirIslem = "Satış"; 
+   Sistem.EmirTipi = "Piyasa";     
+   Sistem.EmirSuresi = "KIE";    
+   Sistem.EmirMiktari = Pozisyon; 
+   Sistem.EmirGonder(); 
+} 
+ 
+ÖRNEK2: Birden çok robot aynı hissede alış/satış yapıyor. Bütün robotların o hissedeki 
+pozisyon değerlerini okuyabiliriz. Bu sayede mesela  robotun o hissedeki (veya vadeli 
+kontrattaki) pozisyonu x adet değilse, pozisyonu x adete tamamlayacak kadar ALIŞ veya SATIŞ 
+emri gönderecek bir başka robot yazabiliriz. 
+ 
+Başka robotların bir VIOP Endeks Yakın vade kontratındaki pozisyonları aşağıdaki şekilde 
+okunabilir; 
+ 
+var Poz1 = Sistem.PozisyonKontrolOku("Robot1" + " , " + Sistem.AktifViopKontrat); 
+var Poz2 = Sistem.PozisyonKontrolOku("Robot2" + " , " + Sistem.AktifViopKontrat); 
+var Poz3 = Sistem.PozisyonKontrolOku("Robot3" + " , " + Sistem.AktifViopKontrat); 
+var Poz4 = Sistem.PozisyonKontrolOku("Robot4" + " , " + Sistem.AktifViopKontrat); 
+var Poz5 = Sistem.PozisyonKontrolOku("Robot5" + " , " + Sistem.AktifViopKontrat); 
+ 
+ 
+• Pozisyon Kontrol komutuyla yazılan/okunan bilgiler iDeal kapanıp açılsa bile silinmez. 
+Bu bilgiler \iDeal\Config klasörü altındaki dosyada kaydedilir ve saklanır. 
+• Pozisyon kontrol komutuyla istenirse işleme girildiği anın tarih saat bilgisi de 
+kaydedilebilir. 
+• Pozisyon kontrol komutuyla istenirse emir üretildiği anda o hissenin herhangi bir fiyat 
+bilgisinin ne olduğu da kaydedilebilir.  
+• Pozisyon kontrol komutuyla, emir iletildiği an için kullanıcı tarafından belirlenecek 
+herhangi bir not (örneğin KAR AL YAPILDI) yazdırılabilir. 
+ 
+Portföy penceresinin ROBOT sekmesinde yer alan POZİSYON KONTROL başlığında, çalışan her 
+bir robotun işlem yatığı hissede/kontratta kaç adet pozisyıonda olduğu, son pozisyoın değişim 
+zamanı ve o zamanda fiyatın ne olduğu gibi bilgiler takip edilebilir. 
+ 
+
+--- PAGE 140 ---
+ 
+SEZAİ KILIÇ 
+133 
+ 
+ 
+ 
+ 
+Bu ekstra bilgileri de yazma ve okuma işlevini yerine getiren POZİSYON KONTROL komutu 
+kullanımlarını içeren örnek bir ROBOT formülü aşağıdaki gibi yazılabilir. 
+ 
+var LotSize = 1; //işlem adedi 
+var SistemAdi = "MA500"; //sistemizin adı 
+var GrafikSembolu = "IMKBH'GARAN"; //sistemin sinyal ürettiği grafik sembolü 
+var GrafikPeriyodu = "1";  //grafiğin priyodu 
+var EmirSembol = "IMKBH'GARAN"; 
+ 
+var MySistem = Sistem.SistemGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin 
+adı, grafik sembolü, grafiğin periyodu 
+var SonFiyat = Sistem.SonFiyat(EmirSembol); 
+var Anahtar = Sistem.Name + "," + EmirSembol; 
+double IslemFiyat = 0; 
+DateTime IslemTarih; 
+var Miktar = 0.0; 
+var Rezerv = ""; 
+var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih); 
+ 
+var SonYon = Sistem.SonYonGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu ); //sistemin 
+adı, grafik sembolü, grafiğin periyodu 
+if (Sistem.Saat.CompareTo("10:00:00") <= 0 || Sistem.Saat.CompareTo("20:59:59") >= 0)  // 
+seans yok işlem yapma 
+{ 
+} 
+else  
+{ 
+   if (SonYon == "F" && Pozisyon != 0)  // Flata Geç 
+      Miktar = -Pozisyon; 
+   else if (SonYon == "A" && Pozisyon != LotSize)  // Al 
+      Miktar = LotSize - Pozisyon; 
+   else if (SonYon == "S" && Pozisyon != -LotSize)  // Sat 
+      Miktar = -LotSize - Pozisyon; 
+    // Emir Gönder 
+    var Islem = ""; 
+    if (Miktar > 0) {Islem = "ALIS"; Rezerv = "ALIŞ YAPILDI";} 
+    if (Miktar < 0) {Islem = "SATIS"; Rezerv = "SATIŞ YAPILDI";} 
+    if (Islem != "") 
+    { 
+        Sistem.PozisyonKontrolGuncelle(Anahtar, Miktar + Pozisyon, SonFiyat, Rezerv); 
+        Sistem.EmirSembol = EmirSembol ; 
+        Sistem.EmirIslem = Islem; 
+        Sistem.EmirSuresi = "KIE";  
+        Sistem.EmirTipi = "Piyasa"; 
+        Sistem.EmirMiktari = Math.Abs(Miktar); 
+        Sistem.EmirGonder(); 
+    } 
+} 
+- 
+Price Channel Up/Down - Sistem.PriceChannelDown/Up(10) 
+ 
+
+--- PAGE 141 ---
+ 
+SEZAİ KILIÇ 
+134 
+ 
+iDeal indikatör kütüphanesinde yer alan Price Channel (Fiyat Kanalı) isimli indikatörü 
+çağırır. Bir adet paramatre alır ve varsayılan değeri 10 olarak kullanılır. Aşağıdaki gibi yazım 
+şekilleri vardır; 
+ 
+   Sistem.PriceChannelDown(10); 
+   Sistem.PriceChannelDown(Veriler, 10); 
+   Sistem.PriceChannelUp(10) 
+   Sistem.PriceChannelUp(10); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var PC_DOWN = Sistem. PriceChannelDown(10); 
+var PC_UP = Sistem. PriceChannelUp(10); 
+ 
+Sistem.Cizgiler[0].Deger = PC_DOWN; 
+Sistem.Cizgiler[1].Deger = PC_UP; 
+ 
+- 
+Price Oscillator Percent - Sistem.PriceOscPercent(10, 30 , “Exp”) 
+ 
+iDeal indikatör kütüphanesinde yer alan Price Oscillator Percent isimli indikatörü çağırır. 
+Üç adet paramatre alır ve varsayılan değerleri 10/30 ve “Exp” olarak kullanılır. PERCENT 
+kelimesi, fiyat osilatörü indikatörünü YÜZDE değişim kullanarak çağırdığımızı belirtir. 
+Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.PriceOscPercent(10, 30,"Exp"); 
+Sistem.PriceOscPercent(Veriler, 10, 30,"Exp"); 
+ 
+- 
+Price Oscillator Point - Sistem.PriceOscPoint(10, 30 , “Exp”) 
+ 
+iDeal indikatör kütüphanesinden yer alan Price Oscillator Point isimli indikatörü çağırır. Üç 
+adet paramatre alır ve varsayılan değerleri 10/30 ve “Exp” olarak kullanılır. POINT kelimesi, 
+fiyat osilatörü indikatörünü fiyat değişimi kullanarak çağırdığımızı belirtir. 
+Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.PriceOscPoint(10, 30,"Exp"); 
+Sistem.PriceOscPoint(Veriler, 10, 30,"Exp"); 
+ 
+- 
+Price ROC Percent - Sistem.PriceRocPercent(12) 
+ 
+iDeal indikatör kütüphanesinde yer alan Price Roc Percent isimli indikatörü çağırır. Bir adet 
+paramatre alır ve varsayılan değerleri 12 olarak kullanılır. PERCENT kelimesi, fiyat YÜZDE 
+değişim kullanarak çağırdığımızı belirtir. Belirtilen kadar bar sayısı önceye göre yüzde değişim 
+hesaplar. 
+Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.PriceRocPercent(10); 
+Sistem.PriceRocPercent(Veriler, 10); 
+ 
+- 
+Price Oscilator Point - Sistem.PriceRocPoint(12) 
+ 
+iDeal indikatör kütüphanesinden yer alan Price Roc Percent isimli indikatörü çağırır. Bir 
+adet paramatre alır ve varsayılan değerleri 12 olarak kullanılır. POINT kelimesi, fiyattaki 
+
+--- PAGE 142 ---
+ 
+SEZAİ KILIÇ 
+135 
+ 
+nominal (para veya puan olarak)  değişim kullanarak çağırdığımızı belirtir. Belirtilen kadar bar 
+sayısı önceye göre parasal değişim hesaplar. 
+Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.PriceRocPoint(10); 
+Sistem.PriceRocPoint(Veriler, 10); 
+ 
+ 
+- 
+Price Volume Trend - Sistem.PriceVolumeTrend() 
+ 
+iDeal indikatör kütüphanesinde yer alan Price Volume Trend isimli indikatörü çağırır. Hiç 
+paramatre almaz. Sorunsuz ve anlık çalışması için HACİM anlık verisi gerektirir. Aşağıdaki gibi 
+2 yazım şekli vardır; 
+ 
+Sistem.PriceVolumeTrend(); 
+Sistem.PriceVolumeTrend (Veriler); 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var PVT = Sistem.PriceVolumeTrend (); 
+Sistem.Cizgiler[0].Deger = PVT; 
+ 
+- 
+Profit Factor - Sistem. ProfitFactor () 
+ 
+Bir algoritma geliştirildiği zaman, söz konusu algoritmanın portföyünüzü yönetmesi ve 
+otomatik olarak alım satıma bağlanması öncesi son ve en önemli adım geçmiş dönem 
+performansını ölçmektir. Sistemlerin, stratejilerinizin geçmişten günümüze kullanılıyor olması 
+durumunda ne kadar kazandırdığı/kaybettirdiği çok önemli bir veridir. 
+ 
+PERFORMANS 
+isimli 
+tabloda 
+iDeal 
+kullanıcıları 
+stratejilerinin 
+back-test 
+sonuçlarını/istatistiklerini detaylı olarak görebilir. Bu back test verileri arasında NET GETİRİ ve 
+İŞLEM SAYISI ile birlikte en önemli verilerden biri de PROFIT FACTOR verisidir. 
+ 
+Profit Factor: Kazandıran sinyallerin kazandırdığı paranın, kaybettiren sinyallerin kaybettirdiği 
+paraya oranıdır. Sistemlerin başarını değerlendirmede oldukça önemlidir. Çoğu yatırımcı bu 
+değerin 1.5 üzerinde olmasını istemekle birlikte, hangi oranın daha iyi olduğu elbette sistemin 
+frekansına, trade edilen enstrüman veya piyasanın karakterine ve elbette yatırımcının 
+yorumuna bağlıdır. 
+ 
+Geliştirilen sistemlerin geçmiş dönem getiri hesaplamalarının yapılarak, sistemin profit factor 
+oranının formül içerisinden okutulması ve hatta bu okutulan bilgiye göre stratejinin 
+koşullarının yeniden belirlenmesi mümkündür ve bu nedenle iDeal sistem kütüphanesinde 
+Profit Factor sonuçlarına erişmek mümkündür. 
+ 
+Sistem kütüphanesinden ProfitFactor isimli toplam 4 fonksiyon bulunmaktadır. Bu 
+fonksiyonların kullanım/yazım şekilleri aşağıdaki gibidir; 
+ 
+ 
+Sistem.ProfitFactor; //tek bir oran olarak tüm sistemin tüm dönem için Profit Factorü 
+Sistem.ProfitFactorBar(BarSayisi, Kayma); //Girilen bar sayısı kadar öncesine ait PF 
+
+--- PAGE 143 ---
+ 
+SEZAİ KILIÇ 
+136 
+ 
+Sistem.ProfitFactorIslem(IslemSayisi, Kayma); //Belli işlem sayısı için PF 
+Sistem.ProfitFactorList; //Her bir barda yeniden hesaplanan PF 
+ 
+Geliştirdiğiniz stratejinin getirisini hesaplatıp, örneğin profit factor değeri x’in altında inerse 
+sistemini nakişte geç şeklinde ayaralayabilirsiniz. 
+ 
+- 
+Projection Bands (Up/Down) - Sistem.ProjectionUp/Down(14) 
+ 
+iDeal indikatör kütüphanesinden yer alan Projection Band isimli indikatörü çağırır. Bir adet 
+paramatre alır ve varsayılan değeri 14 olarak kullanılır. Aşağıdaki gibi yazım şekilleri vardır; (üst 
+ve alt kanalı ayrı ayrı birer fonksiyon ile çağrılır) 
+ 
+Sistem.ProjectionDown(14); 
+Sistem.ProjectionDown(Veriler, 14); 
+    Sistem.ProjectionUp(14); 
+    Sistem.ProjectionUp(Veriler, 14); 
+ 
+ 
+Örnek: İndikatörü çağırıp çizdirmek 
+ 
+var Pro_DOWN = Sistem.ProjectionDown(14); 
+var Pro_UP = Sistem.ProjectionUp(14); 
+ 
+Sistem.Cizgiler[0].Deger = Pro_DOWN; 
+Sistem.Cizgiler[1].Deger = Pro_UP; 
+ 
+ 
+- 
+Projection Oscillator - Sistem.ProjectionOsc(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan Projection Oscillator  isimli indikatörü çağırır. Bir 
+adet paramatre alır ve varsayılan değeri 14 olarak kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.ProjectionOsc(14); 
+    Sistem.ProjectionOsc(Veriler, 14); 
+ 
+- 
+Projection Bandwith - Sistem.ProjectionBandWith(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan Projection Oscilator  isimli indikatörü çağırır. Bir 
+adet paramatre alır ve varsayılan değeri 14 olarak kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.ProjectionBandwidth(14); 
+    Sistem.ProjectionBandwidth(Veriler, 14); 
+ 
+- 
+PİVOT  - Sistem.PVT01() 
+ 
+iDeal indikatör kütüphanesinde yer alan Pivot İndikatörünü. Çağırır. Parametre olarak 
+pivot değeri hesaplatılmak istenen grafik zaman dilimi (periyodu/dönemi) girilir. Aşağıdaki gibi 
+yazım şekilleri vardır; 
+ 
+Sistem.PVT01(Dönem); 
+Sistem.PVT01(Veriler, Donem) 
+
+--- PAGE 144 ---
+ 
+SEZAİ KILIÇ 
+137 
+ 
+ 
+Örnek: Haftalık Pivot seviyesinin 5 dklık grafik üzerinde çizdirilmesi; 
+ 
+var Pivot  = Sistem.PVT01("H"); 
+Sistem.Cizgiler[0].Deger = Pivot; 
+ 
+ 
+ 
+ 
+ 
+- 
+Range Indicator - Sistem.RangeIndicator(10,3) 
+ 
+iDeal indikatör kütüphanesinde yer alan Range Indicator  isimli indikatörü çağırır. 2 adet 
+paramatre alır ve varsayılan değerler olarak 10/3 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+  Sistem.RangeIndicator(10, 3); 
+      Sistem.RangeIndicator(Veriler, 10, 3); 
+ 
+ 
+- 
+RAVI - Sistem.RAVI() 
+ 
+iDeal indikatör kütüphanesinde yer alan RAVI  isimli indikatörü çağırır. 3 adet paramatre 
+alır ve varsayılan değerler olarak 7/65/Simple kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.RAVI(7, 65,"Simple"); 
+    Sistem.RAVI(Verileri, 7, 65,"Simple"); 
+ 
+- 
+Relative Momentum Index - Sistem.RelativeMomIndex(20,5) 
+ 
+iDeal indikatör kütüphanesinde yer alan Relative Momentum Index  isimli indikatörü 
+çağırır. 2 adet paramatre alır ve varsayılan değerler olarak 20/5 kullanılır. Aşağıdaki gibi yazım 
+şekilleri vardır; 
+ 
+Sistem.RelativeMomIndex(20, 5); 
+    Sistem.RelativeMomIndex(Liste,20, 5); 
+    Sistem.RelativeMomIndex(Veriler,20, 5); 
+ 
+
+--- PAGE 145 ---
+ 
+SEZAİ KILIÇ 
+138 
+ 
+- 
+Relative Vigor Index - Sistem.RelativeVigorIndex(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan Relative Vigor Index  isimli indikatörü çağırır. 1 
+adet paramatre alır ve varsayılan değerler olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.RelativeVigorIndex(14); 
+  
+Sistem.RelativeVigorIndex(Veriler,14); 
+ 
+ 
+- 
+Relative Vigor Index Signal - Sistem.RelativeVigorIndexSignal(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan Relative Vigor Index Signal isimli indikatörü çağırır. 
+1 adet paramatre alır ve varsayılan değerler olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.RelativeVigorIndexSignal(14); 
+  
+Sistem.RelativeVigorIndexSignal(Veriler, 14); 
+ 
+- 
+Relative Volatility Index - Sistem.RelativeVolatilityIndex(14,10) 
+ 
+iDeal indikatör kütüphanesinde yer alan Relative Volatility Index Signal isimli indikatörü 
+çağırır. 2 adet paramatre alır ve varsayılan değerler olarak 14/10 kullanılır. Aşağıdaki gibi yazım 
+şekilleri vardır; 
+ 
+Sistem.RelativeVolatilityIndex(14, 10); 
+Sistem.RelativeVolatilityIndex(Veriler,20, 5); 
+ 
+- 
+RSI- Sistem.RSI(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan RSI isimli indikatörü çağırır. 1 adet paramatre alır 
+ve varsayılan değerler olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.RSI(14); 
+  
+Sistem.RSI(Liste,14); 
+Sistem.RSI(Veriler,14); 
+ 
+ÖRNEK: RSI indikatörünün kendi ortalamasının üstünde altında olmasıyla al/sat sinyalleri 
+üreten bir sistem; 
+ 
+var RSI = Sistem.RSI(40); 
+var AVR = Sistem.MA(RSI, "Simple", 10); 
+ 
+var SonYon = ""; 
+for (int i=1; i < Sistem.BarSayisi; i++) 
+{ 
+   if (RSI[i] > AVR[i] && SonYon != "A") 
+   { 
+      SonYon = "A"; 
+      Sistem.Yon[i] = "A"; 
+   } 
+   else if (RSI[i] < AVR[i] && SonYon != "S") 
+   { 
+      SonYon = "S"; 
+      Sistem.Yon[i] = "S"; 
+
+--- PAGE 146 ---
+ 
+SEZAİ KILIÇ 
+139 
+ 
+   } 
+} 
+ 
+ 
+- 
+RSI Denvelope Kanal - Sistem.RSIDenvelope Up/Mid/Down() 
+ 
+iDeal indikatör kütüphanesinde yer alan RSI Denvelope isimli indikatörü çağırır. 3 adet 
+paramatre alır ve varsayılan değerler olarak Simple/14/2 kullanılır. Üst, Alt ve Orta bandı olan 
+bir çeşit kanaldır ve her bir çizgisi ayrı ayrı birer komutla çağırılır. Aşağıdaki gibi yazım şekilleri 
+vardır; 
+ 
+Sistem.RSIDenvelopeDown(Veriler, "Simple", 14, 2); 
+Sistem.RSIDenvelopeMid(Veriler, "Simple", 14, 2); 
+Sistem.RSIDenvelopeUp(Veriler, "Simple", 14, 2); 
+ 
+ 
+- 
+R Squared - Sistem.RSquared(14) 
+ 
+iDeal indikatör kütüphanesinde yer alan R Squared isimli indikatörü çağırır. 1 adet 
+paramatre alır ve varsayılan değer olarak 14 kullanılır. Aşağıdaki gibi yazım şekilleri vardır; 
+ 
+Sistem.RSquared(14); 
+Sistem.RSquared(Veriler,14); 
+ 
+ 
+ 
+- 
+REF  - Sistem.Ref(Liste, Barsayısı) 
+ 
+Bir veri listesinin elemanlarını ileriye veya geriye (sağa veya sola) istenilen eleman (bar) 
+kadar kaydırmak için kullanılır. 
+ 
+ÖRNEK: Kapanış ve Açılış verilerini okuyup, bunları bir bar geriye kaydırmak 
+  
+var Veriler = Sistem.GrafikVerileri; 
+var C = Sistem.GrafikFiyatOku(Veriler,"Kapanis"); 
+var O = Sistem.GrafikFiyatOku(Veriler,"Acilis"); 
+  
+var RefC = Sistem.Ref(C,-1); 
+var RefO = Sistem.Ref(O,-1); 
+ 
+ 
+- 
+Renk  - Sistem.Renk(Opaklık Oranı, Kırmızı, Yeşil, Mavi) 
+ 
+iDea üzerinden formül, indikatör vs yazılırken, bazen yazı veya çizgiler için renk ataması 
+yapmak gereği doğar. Sistem.Renk fonksiyonu, kodlama içerisinde kullanılacak renkleri 
+belirlemek amacıyla kullanılır. 
+  
+Grafik üzerine çizdirilen çizgiler için bu fonksiyonu kullanmaya gerek yoktur (zorunlu değildir) 
+çünkü çizgi renkleri, panel üzerindeki renk simgelerine tıklayınca açılan renk seçim kutusundan 
+seçilebilir. 
+Ama grafik zemini veya bar/fiyat değerlerine bir yazı/şekil yazdırılacaksa bunun renginin de 
+belirtilmesi şarttır. 
+
+--- PAGE 147 ---
+ 
+SEZAİ KILIÇ 
+140 
+ 
+  
+NOT-1: Aslında bütün renkler Kırmızı, Yeşil ve Mavi renklerin çeşitli oranlarla karışımından 
+oluşur. IDEAL üzerinde renk tanımları bu mantık üzerine kurulmuştur ve istenen rengin RGB 
+(Kırmızı/Yeşil/Mavi) oranları belirtilmelidir. 
+NOT-2: Bir rengin oranı 0-255 değerleri arasında olabilir. Üç ana renk de sıfır ise SİYAH, 3 ana 
+renk de 255 ise BEYAZ, bu ana renklerden biri 255 diğer ikisi “0” ise, sonuç rengi değeri 255 
+olan renktir. 
+NOT-3: Windows ortamında renk seçimi yapılabilen herhangi bir pencerede (ideal paneldeki 
+renk kutularında da) renk paleti açılıp herhangi bir renk tonuna kliklendiğinde, ekranda o engin 
+RGB oranları görülebilir. 
+NOT-4: Bu sayfanın en altında bazı popüler renklerin RGB oranları verilmiştir 
+ 
+ 
+Sistem.Renk fonksiyonu belirtilmesi gereken 4 adet parametreye ihtiyaç duyar. Bunlar 
+aşağıdadır. 
+·         Opaklık Oranı (saydamlık oranı) 
+·         Kırmızı Renk Oranı 
+·         Yeşil Renk Oranı 
+·         Mavi Renk Oranı 
+  
+Sistem.Renk(Opaklık, Kırmızı,Yeşil,Mavi); şeklinde yazılan bu fonksiyonda tüm parametreler 
+girilmek zorundadır. 
+  
+ÖRNEK: Turkuaz renk (tam saydam): Sistem.Renk(255, 0, 255, 255); 
+ 
+Bazı çok kullanılan renkler; 
+ 
+SARI = Sistem.Renk(255,255,255,1);  
+BEYAZ = Sistem.Renk(255,250,250,250);  
+MAVİ = Sistem.Renk(255,50,100,200);  
+YEŞİL = Sistem.Renk(240,120,255,1); 
+KIRMIZI = Sistem.Renk(255,255,0,0);  
+SİYAH = Sistem.Renk(255,0,0,0);  
+TURUNCU = Sistem.Renk(255,255,128,0);  
+MOR = Sistem.Renk(255,128,0,128);  
+PEMBE = Sistem.Renk(255,255,0,128);  
+KAHVERENGİ = Sistem.Renk(255,128,0,0);  
+TURKUAZ = Sistem.Renk(255,0,255,255);  
+ 
+Bununla birlikte, renk ataması yapılacağı zaman Color.Red, Color.White şeklindei, renklerin 
+İngilizce isimlerini kullanarak doğrudan bu şekilde de renk ataması yapılabilir. 
+ 
+ 
+ 
+ 
+ 
+- 
+Renk Litesi  - Sistem.RenkListesi() 
+ 
+iDeal çizgileri, kendilerine bir renk listesi atanarak çizilebilirler. Bu, her bir barda istenen 
+herhangi bir koşulda çizgiye istediğimiz bir renk atayabilme özgürlüğü demektir. 
+
+--- PAGE 148 ---
+ 
+SEZAİ KILIÇ 
+141 
+ 
+Her bir bar için içinde renk atanmış bir liste olan Renk Listesini mesela aşağıdaki örmekteki gibi 
+kullanabilirsiniz; 
+ 
+ÖRNEK: Super Trend indikatörü fiyatın üstünde iken başka, altında iken başka renkle çizilsin. 
+ 
+ 
+var C = Sistem.GrafikFiyatSec("Kapanis"); 
+var ST = Sistem.SuperTrend(3, 10, 10); 
+ 
+var RenkListesi = new List<Color>(); 
+for (int i = 0; i < Sistem.BarSayisi; i++) 
+    RenkListesi.Add(Color.Gold); 
+ 
+for (int i = 1; i < C.Count; i++) 
+{ 
+    if (ST[i] > C[i]) 
+        RenkListesi[i] = Color.LightGreen; 
+    else if (ST[i] < C[i]) 
+        RenkListesi[i] = Color.Red; 
+ 
+} 
+Sistem.Cizgiler[0].Deger = ST; 
+Sistem.Cizgiler[0].RenkListesi = RenkListesi; 
+ 
+ 
+ 
+ 
+ 
+- 
+Resim Ekle - Sistem.ResimEkle(DosyaAdı, Panel, X, Y) 
+ 
+ 
+Grafikler üzerinde çalışırken, ister zevkinize ister sistemlerinizden üretilen sonuçlara göre 
+değişen isterseniz de abone/takipçi/müşteri grubunuza hitaben reklam amaçlı olarak, grafik 
+penceresine fotoğraf/fotoğraflar yerleştirebilirsiniz. 
+ 
+ 
+  
+
+--- PAGE 149 ---
+ 
+SEZAİ KILIÇ 
+142 
+ 
+Kodlamanızda Sistem.ResimEkle(DosyaAdi,Panel,X,Y); 
+satırını 
+ekleyerek 
+(bu 
+satırdan 
+istediğiniz kadar yazıp, grafiğin farklı bölgelerine farklı resimler de koyabilirsiniz) bu işlemi 
+yapabilirsiniz. 
+  
+•          DosyaAdi Parametresi: çift tırnak için grafiğe eklenecek fotoğrafın bilgisayarınızda 
+bulunduğu yer ve dosyanın uzantısı dahil tam adıdır (Örn: "D:\\manzara2.png") 
+•         Panel Parametresi: Fotoğraf, grafiğin hangi bölgesine (kaç numaralı panele) eklenecek 
+bilgisidir. 
+Grafik 
+barlarının 
+çizildiği 
+bölgenin 
+panel 
+numarası SIFIR’dır. Alat kısımdaki indikatör bölgelerine de fotoğraf yerleştirilebilir. Bu 
+bölgelerin panel numarası 1’den başlar ve artarak devam eder. 
+•         X Parametresi: Grafiğe yerleştirilecek fotoğrafın, grafiğin en sol bölgesinden (yatay 
+eksen) kaç pixel uzaktan itibaren başlaması istendiği bilgisidir. (sol kenardan 
+50 pixel uzakta olsun veya sola yapışık olsun (X=0) gibi) 
+• 
+         Y Parametresi: Grafiğe yerleştirilecek fotoğrafın, grafiğin en üst bölgesinden (dikey 
+eksen) kaç pixel uzaktan itibaren başlaması istendiği bilgisidir. (en üst kenardan 
+50 pixel uzakta olsun veya üste yapışık olsun (Y=0) gibi 
+ 
+IDEAL 
+üzerinden 
+yapıp 
+çeşitli 
+mecralarda 
+paylaştığınız 
+analiz 
+ve 
+görsellerinizi 
+kendi logonuzla da paylaşmanızı kolaylaştırır 
+ 
+ÖRNEK://SİSTEMİM AL pozisyonundaysa BOĞA fotosu, SAT pozisyonundaysa AYI resmi, diğer durumlarda (FLAT ise) 
+manzara  fotosu yerleştiren kod örneğği. 
+  
+if (SonYon == "A") 
+   Sistem.ResimEkle("D:\\boga.png",1,0,40); 
+else if ((SonYon == "S") 
+   Sistem.ResimEkle("D:\\ayi.png",1,0,40); 
+else 
+   Sistem.ResimEkle("D:\\manzara.png",1,0,40); 
+  
+NOT-1: Sistemin yönü değiştiği anda, arka plan fotoğrafı hemen değişir. 
+NOT-2: Fotoğraf grafik çizgilerinin arka planına gönderilir. Bu sayede grafik bir manzaranın/logonun üzerine çizilmiş gibi olur. 
+NOT-1: Sistem.ResimEkle satırından birden fazla yazılarak, grafiğe istenildiği kadar fotoğraf/logo eklenebilir. 
+ 
+ 
+
+--- PAGE 150 ---
+ 
+SEZAİ KILIÇ 
+143 
+ 
+ 
+ 
+ 
+- 
+Robot Fonksiyonları - Sistem.Robotxxxxx 
+ 
+iDealde en çok kullanılan fonksiyonlar arasında tek satırlık robot fonksiyonları yer alır. 
+Kullanıcılar tarafından yazılmış ve grafikler üzerinde çalıştırıldıklarında AL/SAT sinyallri üreten 
+sistemler/stratejiler bu tek satırlık komutlarla kolayca robota bağlabilirler. 
+Toplam 5 adet tek satırlık robot fonksiyonu bulunmaktadır. Bunlar aşağıdaki şekilde çağırılıp 
+kullanırlar; 
+Not: Aktif kelimesi, tüm emirlerin aktiften (PİYASA EMRİ) gönderdiğini vurgular. 
+ 
+Sistem.RobotHisseAktifAcigaVar(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+  
+Sistem.RobotHisseAktifAcigaYok(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopAktif(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopTumGun(SistemAdi, BazSembol, EmirSembol, Periyot, Miktar); 
+Sistem.RobotViopGunSonuKapat(SistemAdi, EmirSembol); 
+Sistem.RobotStop(); 
+ 
+Kural şudur; Komutların içindeki paramatreler girilir, ve tek bir satırdan oluşan bu kodlar 
+“Islem” isimli bir değişkene atanıp kaydedilir. Kaydedilen bu kod artık bir robottur ve sanal 
+veya gerçek aksiyonda çalıştırılabilir. Komutlar ve içlerindeki bilgi girişleri aşağıda açıklanmıştır; 
+ 
+RobotHisseAktifAcigaVar : Hisse senetlerinde çalışır ve Açığa Satış yapar 
+(stratejide açığa sat koşulu var ise) 
+SistemAdi = al/sat sinyalleri üreten stratejinizi kaydettiğiniz formülün ismi (örmek: MA1) 
+BazSembol = Sinyaller hangi sembolün grtafikleri üzerinden hesaplanıyor (Örnek: “IMKBH’GARAN) 
+EmirSembol: Al veya Sat sinyali gelince alınacak veya satılacak sembol (Örnek: “IMKBH’GARAN”) 
+Periyot: Sinyaller hangi zaman periyotlu grafiklerden geliyor (örnek 5 dk için “5”) 

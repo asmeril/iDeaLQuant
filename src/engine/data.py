@@ -223,7 +223,7 @@ class OHLCV:
         # We assume self.DT contains datetime objects
         # If not, convert once
         if len(self.DT) > 0 and not isinstance(self.DT[0], (datetime, pd.Timestamp)):
-             times = pd.to_datetime(self.df['datetime']).tolist()
+             times = pd.to_datetime(self.df['datetime'], dayfirst=True).tolist()
         else:
              times = self.DT
              
