@@ -17,8 +17,15 @@ import numpy as np
 import pandas as pd
 from time import time
 from typing import Dict, Any, List, Optional, Tuple, Callable
-import optuna
-from optuna.samplers import TPESampler
+
+try:
+    import optuna
+    from optuna.samplers import TPESampler
+    OPTUNA_AVAILABLE = True
+except Exception:
+    optuna = None
+    TPESampler = None
+    OPTUNA_AVAILABLE = False
 
 # Proje kök dizini
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
@@ -79,7 +86,10 @@ def load_data() -> pd.DataFrame:
 # ==============================================================================
 
 # Genetik optimizer'dan parametre tanımlarını import et
-from src.optimization.genetic_optimizer import STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS, STRATEGY5_PARAMS, STRATEGY6_PARAMS, STRATEGY7_PARAMS
+from src.optimization.genetic_optimizer import (
+    STRATEGY1_PARAMS, STRATEGY2_PARAMS, STRATEGY3_PARAMS, STRATEGY4_PARAMS,
+    STRATEGY5_PARAMS, STRATEGY6_PARAMS, STRATEGY7_PARAMS, STRATEGY8_PARAMS
+)
 
 
 class BayesianObjective:
@@ -110,8 +120,10 @@ class BayesianObjective:
             base_params = STRATEGY6_PARAMS
         elif strategy_index == 6:
             base_params = STRATEGY7_PARAMS
+        elif strategy_index == 7:
+            base_params = STRATEGY8_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5/6 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5/6/7 desteklenir.")
             
         self.param_defs = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -138,7 +150,7 @@ class BayesianObjective:
                     self.param_defs[param_name] = [final_min, final_max, step, is_int]
                     print(f"  [CASCADE-BAY] {param_name}: [{orig_min:.4g}-{orig_max:.4g}] => [{final_min:.4g}-{final_max:.4g}]")
     
-    def __call__(self, trial: optuna.Trial) -> float:
+    def __call__(self, trial: Any) -> float:
         """Optuna tarafından çağrılır"""
         
         # Strateji bazlı parametre önerileri
@@ -166,6 +178,8 @@ class BayesianObjective:
             result = self._evaluate_strategy6(params)
         elif self.strategy_index == 6:
             result = self._evaluate_strategy7(params)
+        elif self.strategy_index == 7:
+            result = self._evaluate_strategy8(params)
         else:
             raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         
@@ -517,18 +531,26 @@ class BayesianObjective:
             traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
             
-    def _evaluate_strategy7(self, params: Dict[str, Any]) -> Dict[str, float]:
+    def _evaluate_strategy7(self, params: Dict[str, float]) -> Dict[str, Any]:
         """Strateji 7 (DeepScalp) icin fitness hesapla."""
         try:
             from src.optimization.strategy7_optimizer import fast_backtest_strategy7, DeepScalpCache
             import numpy as np
+            import pandas as pd
             from src.optimization.fitness import quick_fitness
             
-            if 's7_cache' not in self.cache._cache:
-                self.cache._cache['s7_cache'] = DeepScalpCache(self.cache.df)
-            cache = self.cache._cache['s7_cache']
+            # Genetic/Bayesian cross-compatibility for cache structure
+            opt_cache = None
+            if hasattr(self, 'cache'):
+                if 's7_cache' not in self.cache._cache:
+                    self.cache._cache['s7_cache'] = DeepScalpCache(self.cache.df)
+                opt_cache = self.cache._cache['s7_cache']
+            else:
+                if 's7_cache' not in self._indicator_cache:
+                    self._indicator_cache['s7_cache'] = DeepScalpCache(self.df)
+                opt_cache = self._indicator_cache['s7_cache']
             
-            # Map params
+            # Params
             ars_k = float(params.get('ars_k', 1.23))
             ars_ema_per = int(params.get('ars_ema_period', 3))
             st_fac = float(params.get('st_factor', 3.0))
@@ -558,55 +580,93 @@ class BayesianObjective:
             
             vt = self.vade_tipi
             vt_code = 1
-            if vt == 'SPOT':
-                vt_code = 0
-            elif vt == 'VIOP_SPOT':
-                vt_code = 2
+            if vt == 'SPOT': vt_code = 0
+            elif vt == 'VIOP_SPOT': vt_code = 2
                 
-            # Get arrays from cache
-            ars_ema_arr = cache.get_ema(ars_ema_per)
-            st_val_arr = cache.get_st(st_fac, st_hh_p, st_atr_p)
-            ema_f_arr = cache.get_ema(ema_f)
-            ema_s_arr = cache.get_ema(ema_s)
-            toma_arr = cache.get_toma(toma1, toma2)
-            mfi_arr = cache.get_mfi(mfi_p)
-            atr_arr = cache.get_atr(atr_p)
+            # Get base arrays
+            ars_ema_arr = opt_cache.get_ema(ars_ema_per)
+            st_val_arr = opt_cache.get_st(st_fac, st_hh_p, st_atr_p)
+            ema_f_arr = opt_cache.get_ema(ema_f)
+            ema_s_arr = opt_cache.get_ema(ema_s)
+            toma_arr = opt_cache.get_toma(toma1, toma2)[1] # toma_val
+            mfi_arr = opt_cache.get_mfi(mfi_p)
+            atr_arr = opt_cache.get_atr(atr_p)
+            
+            # PRE-COMPUTE Rolling arrays using Pandas (Performance Boost fix)
+            hhv_shifted = pd.Series(opt_cache.highs).shift(1).rolling(hhv_p, min_periods=1).max().fillna(0).values.astype(np.float64)
+            llv_shifted = pd.Series(opt_cache.lows).shift(1).rolling(llv_p, min_periods=1).min().fillna(9999999).values.astype(np.float64)
+            mfi_hhv_shifted = pd.Series(mfi_arr).shift(1).rolling(mfi_hhv, min_periods=1).max().fillna(0).values.astype(np.float64)
+            mfi_llv_shifted = pd.Series(mfi_arr).shift(1).rolling(mfi_llv, min_periods=1).min().fillna(9999999).values.astype(np.float64)
+            vol_ma_shifted = pd.Series(opt_cache.volumes).shift(1).rolling(20, min_periods=1).mean().fillna(0).values.astype(np.float64)
             
             try:
                 from src.engine.data import OHLCV
-                mask_arr = OHLCV(self.cache.df).get_trading_mask(vt).astype(bool)
+                df_src = self.cache.df if hasattr(self, 'cache') else self.df
+                mask_arr = OHLCV(df_src).get_trading_mask(vt).astype(bool)
             except:
-                mask_arr = np.ones(len(self.cache.closes), dtype=bool)
+                mask_arr = np.ones(len(opt_cache.closes), dtype=bool)
                 
+            # RUN fast kernel (NEW SIGNATURE)
             result = fast_backtest_strategy7(
-                self.cache.closes, self.cache.highs, self.cache.lows, self.cache.volumes,
+                opt_cache.closes, opt_cache.highs, opt_cache.lows, opt_cache.volumes,
                 ars_ema_arr, st_val_arr, ema_f_arr, ema_s_arr, toma_arr,
-                mfi_arr, atr_arr, mask_arr, cache.times_arr,
-                ars_k, hhv_p, llv_p, mfi_hhv, mfi_llv, mfi_l, mfi_s,
+                mfi_arr, atr_arr, mask_arr, opt_cache.times_arr,
+                hhv_shifted, llv_shifted, mfi_hhv_shifted, mfi_llv_shifted, vol_ma_shifted,
+                ars_k, mfi_l, mfi_s,
                 v_rat, atr_sl_l, atr_sl_s, ka_l, ka_s, mh_b, mx_b, cd_b, vt_code
             )
             
             np_val, tr, pf_val, max_dd_val, sharpe_val, adays, tdays = result
-            
             if tr == 0 or np_val <= -999:
                 return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
             
             fitness = quick_fitness(
                 np_val, pf_val, max_dd_val, tr, sharpe=sharpe_val,
-                active_days=adays, total_days=tdays,
-                commission=0.0, slippage=0.0
+                active_days=adays, total_days=tdays, commission=0.0, slippage=0.0
             )
-            
-            return {
-                'net_profit': np_val,
-                'trades': tr,
-                'pf': pf_val,
-                'max_dd': max_dd_val,
-                'sharpe': sharpe_val,
-                'fitness': fitness
-            }
+            return {'net_profit': np_val,'trades': tr,'pf': pf_val,'max_dd': max_dd_val,'sharpe': sharpe_val,'fitness': fitness}
         except Exception as e:
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
+    def _evaluate_strategy8(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 8 (Gap Reversal) icin fitness hesapla."""
+        try:
+            from src.strategies.gap_reversal_strategy import GapReversalStrategy
+            from src.optimization.hybrid_group_optimizer import fast_backtest
+
+            strategy = GapReversalStrategy.from_config_dict(self.cache, params)
+            signals, exits_long, exits_short = strategy.generate_all_signals()
+
+            trading_days = 252.0
+            if self.cache.dates and len(self.cache.dates) > 1:
+                try:
+                    trading_days = (self.cache.dates[-1] - self.cache.dates[0]).days
+                except:
+                    pass
+
+            np_val, trades, pf, dd, sharpe = fast_backtest(
+                self.cache.closes, signals, exits_long, exits_short,
+                self.commission, self.slippage, trading_days=trading_days
+            )
+
+            fit = quick_fitness(
+                np_val, pf, dd, trades, sharpe=sharpe,
+                commission=0.0, slippage=0.0
+            )
+
+            return {
+                'net_profit': np_val,
+                'trades': trades,
+                'pf': pf,
+                'max_dd': dd,
+                'sharpe': sharpe,
+                'fitness': fit,
+            }
+        except Exception:
+            import traceback
+            traceback.print_exc()
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
     
     def _run_backtest(self, params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
         """Backtest çalıştır (Planlanmış Mimari v4.1)"""
@@ -879,6 +939,9 @@ class BayesianOptimizer:
         self.slippage = slippage
         self.vade_tipi = vade_tipi
         self.is_cancelled_callback = is_cancelled_callback
+
+        if not OPTUNA_AVAILABLE:
+            raise ImportError("Optuna bulunamadi. Lutfen ortama 'pip install optuna' yapip yeniden build alin.")
         
         self.cache = IndicatorCache(df)
         self.objective = BayesianObjective(

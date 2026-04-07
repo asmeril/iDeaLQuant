@@ -10,6 +10,7 @@ numba>=0.57.0
 tqdm>=4.65.0
 
 ## GUI / Visualization
+PySide6>=6.7.0
 streamlit>=1.28.0
 plotly>=5.18.0
 
@@ -17,6 +18,7 @@ plotly>=5.18.0
 joblib>=1.3.0
 
 ## Statistics & Machine Learning
+optuna>=3.6.0
 scipy>=1.11.0
 scikit-learn>=1.3.0
 

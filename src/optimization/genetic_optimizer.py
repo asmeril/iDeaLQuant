@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Genetic Algorithm Optimizer for Strategy 2 (ARS Trend v2)
-Hibrit yaklaşım: Grid Search + Genetic Algorithm
+Hibrit yaklaÅŸÄ±m: Grid Search + Genetic Algorithm
 
 Avantajlar:
 - Daha az kombinasyon denemesi
-- Yerel optimumlara takılmaz
-- Yüksek boyutlu parametre uzaylarında etkili
+- Yerel optimumlara takÄ±lmaz
+- YÃ¼ksek boyutlu parametre uzaylarÄ±nda etkili
 """
 
 import sys
@@ -19,7 +19,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Dict, Any, Optional, Callable
 import random
 
-# Proje kök dizini
+# Proje kÃ¶k dizini
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from src.indicators.core import EMA, ATR, Momentum, HHV, LLV, ARS_Dynamic, MoneyFlowIndex
@@ -30,24 +30,24 @@ from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 # ==============================================================================
 @dataclass
 class GeneticConfig:
-    """Genetik Algoritma Konfigürasyonu"""
-    population_size: int = 50          # Popülasyon boyutu
-    generations: int = 30              # Nesil sayısı
+    """Genetik Algoritma KonfigÃ¼rasyonu"""
+    population_size: int = 50          # PopÃ¼lasyon boyutu
+    generations: int = 30              # Nesil sayÄ±sÄ±
     elite_ratio: float = 0.1           # Elit oran (%10)
-    crossover_rate: float = 0.8        # Çaprazlama oranı
-    mutation_rate: float = 0.15        # Mutasyon oranı
+    crossover_rate: float = 0.8        # Ã‡aprazlama oranÄ±
+    mutation_rate: float = 0.15        # Mutasyon oranÄ±
     tournament_size: int = 5           # Turnuva boyutu
     
     # Erken durdurma
-    early_stop_generations: int = 8    # İyileşme olmadan bekleme
-    min_improvement: float = 0.01      # Minimum iyileşme oranı
+    early_stop_generations: int = 8    # Ä°yileÅŸme olmadan bekleme
+    min_improvement: float = 0.01      # Minimum iyileÅŸme oranÄ±
 
 
 # ==============================================================================
 # PARAMETER SPACE
 # ==============================================================================
 
-# Strateji 1 Parametre Uzayı (20 parametre)
+# Strateji 1 Parametre UzayÄ± (20 parametre)
 STRATEGY1_PARAMS = {
     # ARS
     'ars_period': (2, 15, 1, True),
@@ -59,7 +59,7 @@ STRATEGY1_PARAMS = {
     'macdv_short': (8, 18, 1, True),
     'macdv_long': (20, 40, 2, True),
     'macdv_signal': (5, 15, 1, True),
-    'macdv_threshold': (0.0, 5.0, 0.5, False),  # MACDV sinyal farkı eşiği (gerçekçi aralık)
+    'macdv_threshold': (0.0, 5.0, 0.5, False),  # MACDV sinyal farkÄ± eÅŸiÄŸi (gerÃ§ekÃ§i aralÄ±k)
     # NetLot
     'netlot_period': (3, 10, 1, True),
     'netlot_threshold': (10.0, 50.0, 5.0, False),
@@ -77,7 +77,7 @@ STRATEGY1_PARAMS = {
     'exit_score': (2, 4, 1, True),
 }
 
-# Strateji 2 Parametre Uzayı (20 parametre)
+# Strateji 2 Parametre UzayÄ± (20 parametre)
 STRATEGY2_PARAMS = {
     # ARS Dinamik
     'ars_ema_period': (2, 12, 1, True),
@@ -85,7 +85,7 @@ STRATEGY2_PARAMS = {
     'ars_atr_mult': (0.3, 1.5, 0.1, False),
     'ars_min_band': (0.001, 0.005, 0.001, False),
     'ars_max_band': (0.010, 0.025, 0.005, False),
-    # Giriş Filtreleri
+    # GiriÅŸ Filtreleri
     'momentum_period': (3, 10, 1, True),
     'momentum_threshold': (50.0, 200.0, 25.0, False),
     'breakout_period': (5, 30, 5, True),
@@ -93,14 +93,14 @@ STRATEGY2_PARAMS = {
     'mfi_hhv_period': (10, 21, 2, True),
     'mfi_llv_period': (10, 21, 2, True),
     'volume_hhv_period': (10, 21, 2, True),
-    # Çıkış/Risk
+    # Ã‡Ä±kÄ±ÅŸ/Risk
     'atr_exit_period': (10, 21, 2, True),
     'atr_sl_mult': (1.0, 4.0, 0.5, False),
     'atr_tp_mult': (3.0, 8.0, 1.0, False),
     'atr_trail_mult': (1.0, 4.0, 0.5, False),
     'exit_confirm_bars': (1, 5, 1, True),
     'exit_confirm_mult': (0.5, 2.0, 0.25, False),
-    # İnce Ayar
+    # Ä°nce Ayar
     'volume_mult': (0.5, 1.5, 0.1, False),
     'volume_llv_period': (10, 21, 2, True),
 }
@@ -129,13 +129,13 @@ STRATEGY3_PARAMS = {
 # NOT: Genetik/Bayesian icin genis aralik - Grid'den daha genis tutulmustur.
 # Grid (brute-force) dar aralik kullanir, Genetik/Bayesian akilli arama yapar.
 STRATEGY4_PARAMS = {
-    # TOMA (Layer 3 - Izleyen Stop) — fiziksel sinir, dar tutulmali
+    # TOMA (Layer 3 - Izleyen Stop) â€” fiziksel sinir, dar tutulmali
     'toma_period': (1, 3, 1, True),
     'toma_opt': (0.1, 5.0, 0.1, False),
     'hhv1_period': (10, 500, 5, True),
     'llv1_period': (10, 500, 5, True),
     
-    # Global Settings — genis aralik, akilli arama avantaji
+    # Global Settings â€” genis aralik, akilli arama avantaji
     'mom_period': (100, 3000, 50, True),
     'trix_period': (10, 300, 5, True),
     'trix_period2': (10, 300, 5, True),  # TRIX2 for Layer 2 (MOM < low)
@@ -173,7 +173,7 @@ STRATEGY5_PARAMS = {
     'trailing_stop_pct': (0.5, 5.0, 0.25, False),
 }
 
-# Strateji 6 (TOTT_HOTT) Parametre Uzayı (7 parametre)
+# Strateji 6 (TOTT_HOTT) Parametre UzayÄ± (7 parametre)
 STRATEGY6_PARAMS = {
     # Trend
     'ott_period': (20, 50, 5, True),
@@ -217,6 +217,22 @@ STRATEGY7_PARAMS = {
     'cooldown_bars': (1, 4, 1, True),
 }
 
+# Strateji 8 (Gap Reversal v1.0) Parametre Uzayi
+STRATEGY8_PARAMS = {
+    'min_gap_pct': (0.01, 0.50, 0.05, False),
+    'max_gap_pct': (0.50, 5.00, 0.50, False),
+    'or_bars': (5, 40, 5, True),
+    'rsi_period': (3, 14, 1, True),
+    'rsi_ob': (55.0, 75.0, 5.0, False),
+    'rsi_os': (25.0, 45.0, 5.0, False),
+    'hacim_ma_period': (10, 30, 5, True),
+    'hacim_oran': (0.3, 1.5, 0.1, False),
+    'atr_period': (7, 21, 3, True),
+    'atr_stop_mult': (0.2, 2.0, 0.25, False),
+    'gap_window_bars': (60, 360, 30, True),
+    'cooldown_bars': (1, 6, 1, True),
+}
+
 # Import S4 Optimizer components
 # Try/Except block to avoid circular import issues during initialization if imported at top
 try:
@@ -227,7 +243,7 @@ except ImportError:
 
 
 class ParameterSpace:
-    """Parametre uzayı tanımı - Her iki strateji için"""
+    """Parametre uzayÄ± tanÄ±mÄ± - Her iki strateji iÃ§in"""
     def __init__(self, strategy_index: int = 1, narrowed_ranges: dict = None):
         """
         Args:
@@ -250,8 +266,10 @@ class ParameterSpace:
             base_params = STRATEGY6_PARAMS
         elif strategy_index == 6:
             base_params = STRATEGY7_PARAMS
+        elif strategy_index == 7:
+            base_params = STRATEGY8_PARAMS
         else:
-            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5/6 desteklenir.")
+            raise ValueError(f"Gecersiz strategy_index: {strategy_index}. 0/1/2/3/4/5/6/7 desteklenir.")
             
         self.params = {k: list(v) for k, v in base_params.items()}  # Mutable copy
         
@@ -280,7 +298,7 @@ class ParameterSpace:
                     print(f"  [CASCADE] {param_name}: [{orig_min:.4g}-{orig_max:.4g}] => [{final_min:.4g}-{final_max:.4g}]")
         
     def random_individual(self) -> np.ndarray:
-        """Rastgele birey oluştur"""
+        """Rastgele birey oluÅŸtur"""
         genes = []
         for name in self.param_names:
             min_val, max_val, step, is_int = self.params[name]
@@ -293,7 +311,7 @@ class ParameterSpace:
         return np.array(genes)
     
     def decode(self, genes: np.ndarray) -> Dict[str, Any]:
-        """Genleri parametre sözlüğüne çevir (numpy tiplerini native Python'a çevir)"""
+        """Genleri parametre sÃ¶zlÃ¼ÄŸÃ¼ne Ã§evir (numpy tiplerini native Python'a Ã§evir)"""
         result = {}
         for i, name in enumerate(self.param_names):
             val = genes[i]
@@ -305,17 +323,17 @@ class ParameterSpace:
         """Mutasyon uygula"""
         new_genes = genes.copy()
         for i, name in enumerate(self.param_names):
-            if random.random() < 0.3:  # Her gen için %30 şans
+            if random.random() < 0.3:  # Her gen iÃ§in %30 ÅŸans
                 min_val, max_val, step, is_int = self.params[name]
-                # Rastgele yeni değer veya ±step
+                # Rastgele yeni deÄŸer veya Â±step
                 if random.random() < 0.5:
-                    # Küçük mutasyon
+                    # KÃ¼Ã§Ã¼k mutasyon
                     delta = step * random.choice([-1, 1])
                     new_val = np.clip(new_genes[i] + delta, min_val, max_val)
-                    # Period parametreleri için integer zorunluluğu
+                    # Period parametreleri iÃ§in integer zorunluluÄŸu
                     new_genes[i] = int(round(new_val)) if is_int else new_val
                 else:
-                    # Tamamen yeni değer
+                    # Tamamen yeni deÄŸer
                     if is_int:
                         new_genes[i] = random.choice(range(int(min_val), int(max_val) + 1, int(step)))
                     else:
@@ -325,12 +343,12 @@ class ParameterSpace:
 
     
     def crossover(self, parent1: np.ndarray, parent2: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-        """İki noktalı çaprazlama"""
+        """Ä°ki noktalÄ± Ã§aprazlama"""
         n = len(parent1)
         if n < 3:
             return parent1.copy(), parent2.copy()
         
-        # İki nokta seç
+        # Ä°ki nokta seÃ§
         points = sorted(random.sample(range(1, n), 2))
         p1, p2 = points
         
@@ -344,15 +362,15 @@ class ParameterSpace:
 # FITNESS FUNCTION (Strategy-based Backtest wrapper)
 # ==============================================================================
 class FitnessEvaluator:
-    """Fitness değerlendirici - Her iki strateji için backtest wrapper"""
+    """Fitness deÄŸerlendirici - Her iki strateji iÃ§in backtest wrapper"""
     
     def __init__(self, df: pd.DataFrame, strategy_index: int = 1, commission: float = 0.0, slippage: float = 0.0, vade_tipi: str = "ENDEKS"):
         """
         Args:
             df: Veri DataFrame'i
             strategy_index: 0 = Strateji 1 (Gatekeeper), 1 = Strateji 2 (ARS Trend v2)
-            commission: İşlem başı komisyon
-            slippage: İşlem başı kayma
+            commission: Ä°ÅŸlem baÅŸÄ± komisyon
+            slippage: Ä°ÅŸlem baÅŸÄ± kayma
         """
         self.df = df
         self.strategy_index = strategy_index
@@ -360,7 +378,7 @@ class FitnessEvaluator:
         self.slippage = slippage
         self.vade_tipi = vade_tipi
         
-        # Hem İngilizce hem Türkçe kolon isimlerini destekle
+        # Hem Ä°ngilizce hem TÃ¼rkÃ§e kolon isimlerini destekle
         open_col = 'Acilis' if 'Acilis' in df.columns else 'Open'
         high_col = 'Yuksek' if 'Yuksek' in df.columns else 'High'
         low_col = 'Dusuk' if 'Dusuk' in df.columns else 'Low'
@@ -393,7 +411,7 @@ class FitnessEvaluator:
         return self._indicator_cache[key]
     
     def evaluate(self, params: Dict[str, Any]) -> Dict[str, float]:
-        """Birey fitness'ını hesapla - strateji bazlı"""
+        """Birey fitness'Ä±nÄ± hesapla - strateji bazlÄ±"""
         params['vade_tipi'] = self.vade_tipi
         try:
             if self.strategy_index == 0:
@@ -411,6 +429,8 @@ class FitnessEvaluator:
                 return self._evaluate_strategy6(params)
             elif self.strategy_index == 6:
                 return self._evaluate_strategy7(params)
+            elif self.strategy_index == 7:
+                return self._evaluate_strategy8(params)
             else:
                 raise ValueError(f"Gecersiz strategy_index: {self.strategy_index}")
         except Exception as e:
@@ -421,12 +441,12 @@ class FitnessEvaluator:
 
 
     def _evaluate_strategy1(self, params: Dict[str, Any]) -> Dict[str, float]:
-        """Strateji 1 (Gatekeeper) için fitness hesapla"""
+        """Strateji 1 (Gatekeeper) iÃ§in fitness hesapla"""
         from src.strategies.score_based import ScoreBasedStrategy
         from src.optimization.hybrid_group_optimizer import fast_backtest
         from src.optimization.fitness import quick_fitness
         
-        # Kendi cache'imizi oluştur (from_config_dict için)
+        # Kendi cache'imizi oluÅŸtur (from_config_dict iÃ§in)
         class SimpleCache:
             def __init__(self, evaluator):
                 self.opens = evaluator.opens
@@ -443,7 +463,7 @@ class FitnessEvaluator:
         
         cache = SimpleCache(self)
         
-        # Strateji oluştur ve sinyal üret
+        # Strateji oluÅŸtur ve sinyal Ã¼ret
         strategy = ScoreBasedStrategy.from_config_dict(cache, params)
         signals, exits_long, exits_short = strategy.generate_all_signals()
         
@@ -476,7 +496,7 @@ class FitnessEvaluator:
         }
     
     def _evaluate_strategy2(self, params: Dict[str, Any]) -> Dict[str, float]:
-        """Strateji 2 (ARS Trend v2) için fitness hesapla"""
+        """Strateji 2 (ARS Trend v2) iÃ§in fitness hesapla"""
         try:
             from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
             from src.optimization.hybrid_group_optimizer import fast_backtest
@@ -807,6 +827,158 @@ class FitnessEvaluator:
             import traceback
             traceback.print_exc()
             return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+    def _evaluate_strategy7(self, params: dict) -> dict:
+        """Strateji 7 (DeepScalp) icin fitness hesapla."""
+        try:
+            from src.optimization.strategy7_optimizer import fast_backtest_strategy7, DeepScalpCache
+            import numpy as np
+            import pandas as pd
+            from src.optimization.fitness import quick_fitness
+            
+            # Genetic/Bayesian cross-compatibility for cache structure
+            opt_cache = None
+            if hasattr(self, 'cache'):
+                if 's7_cache' not in self.cache._cache:
+                    self.cache._cache['s7_cache'] = DeepScalpCache(self.cache.df)
+                opt_cache = self.cache._cache['s7_cache']
+            else:
+                if 's7_cache' not in self._indicator_cache:
+                    self._indicator_cache['s7_cache'] = DeepScalpCache(self.df)
+                opt_cache = self._indicator_cache['s7_cache']
+            
+            # Params
+            ars_k = float(params.get('ars_k', 1.23))
+            ars_ema_per = int(params.get('ars_ema_period', 3))
+            st_fac = float(params.get('st_factor', 3.0))
+            st_hh_p = int(params.get('st_hhv_period', 10))
+            st_atr_p = int(params.get('st_atr_period', 14))
+            ema_f = int(params.get('ema_fast_period', 9))
+            ema_s = int(params.get('ema_slow_period', 21))
+            toma1 = int(params.get('toma_period1', 1))
+            toma2 = float(params.get('toma_period2', 2.1))
+            mfi_p = int(params.get('mfi_period', 14))
+            atr_p = int(params.get('atr_period', 14))
+            
+            hhv_p = int(params.get('hhv_period', 12))
+            llv_p = int(params.get('llv_period', 12))
+            mfi_hhv = int(params.get('mfi_hhv_period', 5))
+            mfi_llv = int(params.get('mfi_llv_period', 5))
+            mfi_l = float(params.get('mfi_long', 55.0))
+            mfi_s = float(params.get('mfi_short', 45.0))
+            v_rat = float(params.get('vol_ratio', 0.8))
+            atr_sl_l = float(params.get('atr_stop_mult_long', 1.5))
+            atr_sl_s = float(params.get('atr_stop_mult_short', 1.5))
+            ka_l = float(params.get('kar_al_yuzde_long', 2.0))
+            ka_s = float(params.get('kar_al_yuzde_short', 2.0))
+            mh_b = int(params.get('min_hold_bars', 2))
+            mx_b = int(params.get('max_hold_bars', 20))
+            cd_b = int(params.get('cooldown_bars', 2))
+            
+            vt = self.vade_tipi
+            vt_code = 1
+            if vt == 'SPOT': vt_code = 0
+            elif vt == 'VIOP_SPOT': vt_code = 2
+                
+            # Get base arrays
+            ars_ema_arr = opt_cache.get_ema(ars_ema_per)
+            st_val_arr = opt_cache.get_st(st_fac, st_hh_p, st_atr_p)
+            ema_f_arr = opt_cache.get_ema(ema_f)
+            ema_s_arr = opt_cache.get_ema(ema_s)
+            toma_arr = opt_cache.get_toma(toma1, toma2)[1] # toma_val
+            mfi_arr = opt_cache.get_mfi(mfi_p)
+            atr_arr = opt_cache.get_atr(atr_p)
+            
+            # PRE-COMPUTE Rolling arrays using Pandas (Performance Boost fix)
+            hhv_shifted = pd.Series(opt_cache.highs).shift(1).rolling(hhv_p, min_periods=1).max().fillna(0).values.astype(np.float64)
+            llv_shifted = pd.Series(opt_cache.lows).shift(1).rolling(llv_p, min_periods=1).min().fillna(9999999).values.astype(np.float64)
+            mfi_hhv_shifted = pd.Series(mfi_arr).shift(1).rolling(mfi_hhv, min_periods=1).max().fillna(0).values.astype(np.float64)
+            mfi_llv_shifted = pd.Series(mfi_arr).shift(1).rolling(mfi_llv, min_periods=1).min().fillna(9999999).values.astype(np.float64)
+            vol_ma_shifted = pd.Series(opt_cache.volumes).shift(1).rolling(20, min_periods=1).mean().fillna(0).values.astype(np.float64)
+            
+            try:
+                from src.engine.data import OHLCV
+                df_src = self.cache.df if hasattr(self, 'cache') else self.df
+                mask_arr = OHLCV(df_src).get_trading_mask(vt).astype(bool)
+            except:
+                mask_arr = np.ones(len(opt_cache.closes), dtype=bool)
+                
+            # RUN fast kernel (NEW SIGNATURE)
+            result = fast_backtest_strategy7(
+                opt_cache.closes, opt_cache.highs, opt_cache.lows, opt_cache.volumes,
+                ars_ema_arr, st_val_arr, ema_f_arr, ema_s_arr, toma_arr,
+                mfi_arr, atr_arr, mask_arr, opt_cache.times_arr,
+                hhv_shifted, llv_shifted, mfi_hhv_shifted, mfi_llv_shifted, vol_ma_shifted,
+                ars_k, mfi_l, mfi_s,
+                v_rat, atr_sl_l, atr_sl_s, ka_l, ka_s, mh_b, mx_b, cd_b, vt_code
+            )
+            
+            np_val, tr, pf_val, max_dd_val, sharpe_val, adays, tdays = result
+            if tr == 0 or np_val <= -999:
+                return {'net_profit': -999, 'trades': 0, 'pf': 0, 'max_dd': 999, 'fitness': -999}
+            
+            fitness = quick_fitness(
+                np_val, pf_val, max_dd_val, tr, sharpe=sharpe_val,
+                active_days=adays, total_days=tdays, commission=0.0, slippage=0.0
+            )
+            return {'net_profit': np_val,'trades': tr,'pf': pf_val,'max_dd': max_dd_val,'sharpe': sharpe_val,'fitness': fitness}
+        except Exception as e:
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
+    def _evaluate_strategy8(self, params: Dict[str, Any]) -> Dict[str, float]:
+        """Strateji 8 (Gap Reversal) icin fitness hesapla."""
+        try:
+            from src.strategies.gap_reversal_strategy import GapReversalStrategy
+            from src.optimization.hybrid_group_optimizer import fast_backtest
+            from src.optimization.fitness import quick_fitness
+
+            class SimpleCache:
+                def __init__(self, evaluator):
+                    self.opens = evaluator.opens
+                    self.highs = evaluator.highs
+                    self.lows = evaluator.lows
+                    self.closes = evaluator.closes
+                    self.typical = evaluator.typical
+                    self.lots = evaluator.volumes
+                    self.volumes = evaluator.volumes
+                    self.dates = evaluator.dates
+                    self.times = evaluator.dates
+                    self.n = evaluator.n
+                    self.df = evaluator.df
+
+            cache = SimpleCache(self)
+            strategy = GapReversalStrategy.from_config_dict(cache, params)
+            signals, exits_long, exits_short = strategy.generate_all_signals()
+
+            trading_days = 252.0
+            if self.dates and len(self.dates) > 1:
+                try:
+                    trading_days = (self.dates[-1] - self.dates[0]).days
+                except:
+                    pass
+
+            np_val, trades, pf, dd, sharpe = fast_backtest(
+                self.closes, signals, exits_long, exits_short,
+                self.commission, self.slippage, trading_days=trading_days
+            )
+
+            fitness = quick_fitness(
+                np_val, pf, dd, trades, sharpe=sharpe,
+                commission=0.0, slippage=0.0
+            )
+
+            return {
+                'net_profit': np_val,
+                'trades': trades,
+                'pf': pf,
+                'max_dd': dd,
+                'sharpe': sharpe,
+                'fitness': fitness
+            }
+        except Exception:
+            import traceback
+            traceback.print_exc()
+            return {'net_profit': -999999, 'trades': 0, 'pf': 0, 'max_dd': 999999, 'fitness': -999999}
+
 
 
 # ==============================================================================
@@ -826,7 +998,7 @@ def _evaluate_individual(individual_and_param_space):
     return individual, result
 
 class GeneticOptimizer:
-    """Genetik Algoritma Optimizasyon Motoru - Her iki strateji için"""
+    """Genetik Algoritma Optimizasyon Motoru - Her iki strateji iÃ§in"""
     
     def __init__(self, df: pd.DataFrame, config: Optional[GeneticConfig] = None, 
                  strategy_index: int = 1, n_parallel: int = 4,
@@ -836,10 +1008,10 @@ class GeneticOptimizer:
         """
         Args:
             df: Veri DataFrame'i
-            config: Genetik algoritma konfigürasyonu
+            config: Genetik algoritma konfigÃ¼rasyonu
             strategy_index: 0 = Strateji 1, 1 = Strateji 2
-            n_parallel: Paralel işlem sayısı
-            narrowed_ranges: Cascade modu için dar parametre aralıkları
+            n_parallel: Paralel iÅŸlem sayÄ±sÄ±
+            narrowed_ranges: Cascade modu iÃ§in dar parametre aralÄ±klarÄ±
         """
         self.df = df
         self.config = config or GeneticConfig()
@@ -863,14 +1035,14 @@ class GeneticOptimizer:
         self.on_generation_complete = None # Callback function(gen, max_gen, best_fitness)
         
     def initialize_population(self):
-        """İlk popülasyonu oluştur"""
+        """Ä°lk popÃ¼lasyonu oluÅŸtur"""
         self.population = [
             self.param_space.random_individual() 
             for _ in range(self.config.population_size)
         ]
         
     def evaluate_population(self, pool: Optional[Pool] = None):
-        """Tüm popülasyonu değerlendir"""
+        """TÃ¼m popÃ¼lasyonu deÄŸerlendir"""
         self.fitness_scores = [0] * len(self.population)
         
         if self.n_parallel > 1:
@@ -904,13 +1076,13 @@ class GeneticOptimizer:
                     self.best_result = result.copy()
                 
     def tournament_selection(self) -> np.ndarray:
-        """Turnuva seçimi"""
+        """Turnuva seÃ§imi"""
         indices = random.sample(range(len(self.population)), self.config.tournament_size)
         best_idx = max(indices, key=lambda i: self.fitness_scores[i])
         return self.population[best_idx].copy()
     
     def evolve(self):
-        """Bir nesil evrimleştir"""
+        """Bir nesil evrimleÅŸtir"""
         new_population = []
         
         # Elitizm
@@ -919,7 +1091,7 @@ class GeneticOptimizer:
         for idx in elite_indices:
             new_population.append(self.population[idx].copy())
         
-        # Yeni bireyler oluştur
+        # Yeni bireyler oluÅŸtur
         while len(new_population) < self.config.population_size:
             parent1 = self.tournament_selection()
             parent2 = self.tournament_selection()
@@ -941,7 +1113,7 @@ class GeneticOptimizer:
         self.population = new_population[:self.config.population_size]
         
     def run(self, verbose: bool = True) -> Dict:
-        """Optimizasyonu çalıştır"""
+        """Optimizasyonu Ã§alÄ±ÅŸtÄ±r"""
         start_time = time()
         
         if verbose:
@@ -950,13 +1122,13 @@ class GeneticOptimizer:
             print(f"  Nesil: {self.config.generations}")
             print(f"  Paralel: {self.n_parallel}")
         
-        # Pool'u bir kez oluştur ve tüm run boyunca kullan
+        # Pool'u bir kez oluÅŸtur ve tÃ¼m run boyunca kullan
         pool = None
         if self.n_parallel > 1:
             pool = Pool(processes=self.n_parallel, initializer=_init_pool, initargs=(self.df, self.strategy_index, self.commission, self.slippage, self.vade_tipi))
             
         try:
-            # İlk popülasyon
+            # Ä°lk popÃ¼lasyon
             self.initialize_population()
             self.evaluate_population(pool=pool)
             
@@ -964,7 +1136,7 @@ class GeneticOptimizer:
             prev_best = self.best_fitness
             
             for gen in range(self.config.generations):
-                # İptal kontrolü
+                # Ä°ptal kontrolÃ¼
                 if self.is_cancelled_callback and self.is_cancelled_callback():
                     if verbose: print("Optimizasyon kullanici tarafindan durduruldu.")
                     break
@@ -980,7 +1152,7 @@ class GeneticOptimizer:
                 if verbose and (gen + 1) % 5 == 0:
                     print(f"  Nesil {gen+1:3d}: Best={self.best_fitness:,.0f}")
                 
-                # Erken durdurma kontrolü
+                # Erken durdurma kontrolÃ¼
                 improvement = (self.best_fitness - prev_best) / max(abs(prev_best), 1)
                 if improvement < self.config.min_improvement:
                     no_improve_count += 1
@@ -998,7 +1170,7 @@ class GeneticOptimizer:
         elapsed = time() - start_time
         
         # === ROBUST RE-RANKING ===
-        # Son popülasyondan tüm sonuçları topla ve küme yoğunluğuna göre yeniden sırala
+        # Son popÃ¼lasyondan tÃ¼m sonuÃ§larÄ± topla ve kÃ¼me yoÄŸunluÄŸuna gÃ¶re yeniden sÄ±rala
         try:
             from src.optimization.fitness import calculate_robust_fitness
             all_evaluated = []
@@ -1012,11 +1184,11 @@ class GeneticOptimizer:
                 calculate_robust_fitness(all_evaluated)
                 all_evaluated.sort(key=lambda x: x.get('robust_fitness', 0), reverse=True)
                 
-                # En iyi robust sonucu seç
+                # En iyi robust sonucu seÃ§
                 best_robust = all_evaluated[0]
                 old_fitness = self.best_fitness
                 
-                # Parametre anahtarlarını ayır
+                # Parametre anahtarlarÄ±nÄ± ayÄ±r
                 param_names = set(self.param_space.param_names)
                 self.best_params = {k: v for k, v in best_robust.items() if k in param_names}
                 self.best_result = {k: v for k, v in best_robust.items() if k not in param_names}
@@ -1054,7 +1226,7 @@ class GeneticOptimizer:
 # MAIN
 # ==============================================================================
 def load_data() -> pd.DataFrame:
-    # Hardcoded path kaldırıldı
+    # Hardcoded path kaldÄ±rÄ±ldÄ±
     return None
 
 
@@ -1075,7 +1247,7 @@ def run_genetic_optimization():
     optimizer = GeneticOptimizer(df, config)
     result = optimizer.run(verbose=True)
     
-    # Sonuçları kaydet
+    # SonuÃ§larÄ± kaydet
     result_df = pd.DataFrame([{
         **result['best_params'],
         **result['best_result']
