@@ -231,7 +231,7 @@ Sistem.GradientYaziEkle(Labelsx, 1, 15, ilksatirYy, Color.White, Color.White, "T
 Sistem.GradientYaziEkle(Resultsx, 1, 60, ilksatirYy, Color.Yellow, Color.DarkOrange, "Tahoma", 8);
 //-----------------------------------------------
 
-if (Sistem.Parametreler[3] == "X")
+if (Sistem.Parametreler.Count > 3 && Sistem.Parametreler[3] == "X")
 {
     int ilksatirY = 33;
     var Sure = ((DateTime.Now - dateBaslangicTarih).TotalDays / 30.4);
@@ -243,7 +243,8 @@ if (Sistem.Parametreler[3] == "X")
     var kzSure_yuzde = "  %" + yuzde_kz.ToString("0.0");
 
     string ToplamIslem = Sistem.GetiriToplamIslem.ToString("0");
-    string OrtalamaIslem = (((double)Sistem.GetiriToplamIslem) / Sure).ToString("0");
+    double safeSure = Sure <= 0 ? 0.001 : Sure;
+    string OrtalamaIslem = (((double)Sistem.GetiriToplamIslem) / safeSure).ToString("0");
     var KarliIslemOran = Sistem.GetiriKarIslemOran.ToString("0.00");
     var MutluGun = Sistem.GetiriMutluGun.ToString();
     var MutsuzGun = Sistem.GetiriMutsuzGun.ToString();
@@ -2322,79 +2323,93 @@ Sistem.Cizgiler[7].Renk = Color.Green;
         
         return str(filepath)
     
+
+
     def _generate_strategy7_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
-        """Strateji 7 (DeepScalp) IdealData kodu oluşturur."""
+        """Strateji 7 (DeepScalp v1.2) IdealData kodu oluşturur."""
         
-        ars_k = float(params.get('ars_k', 0.005))
-        atr_stop_mult_l = float(params.get('atr_stop_mult_long', 2.0))
-        atr_stop_mult_s = float(params.get('atr_stop_mult_short', 2.0))
-        kar_al_yuzde_l = float(params.get('kar_al_yuzde_long', 1.0))
-        kar_al_yuzde_s = float(params.get('kar_al_yuzde_short', 1.0))
-        
-        hhv_p = int(params.get('hhv_period', 5))
-        llv_p = int(params.get('llv_period', 5))
-        vol_ratio = float(params.get('vol_ratio', 1.5))
-        st_factor = float(params.get('st_factor', 0.5))
-        ema_fast_p = int(params.get('ema_fast_period', 9))
-        ema_slow_p = int(params.get('ema_slow_period', 21))
-        
-        mfi_hhv_p = int(params.get('mfi_hhv_period', 14))
-        mfi_llv_p = int(params.get('mfi_llv_period', 14))
-        toma_p2 = int(params.get('toma_period2', 20))
-        
-        mfi_l = float(params.get('mfi_long', 60.0))
-        mfi_s = float(params.get('mfi_short', 40.0))
-        
-        min_hold = int(params.get('min_hold_bars', 1))
-        max_hold = int(params.get('max_hold_bars', 20))
-        cooldown = int(params.get('cooldown_bars', 2))
-        
-        is_spot = (vade_tipi == "SPOT")
-        if is_spot:
-            yon_code = '// SPOT Hisse: Sadece AL / FLAT\nstring YON_MODU = "SADECE_AL";'
-            mode_label = "SPOT Hisse — Tek Yön (AL/FLAT)"
-        else:
-            yon_code = '// Vadeli: Çift Yönlü\nstring YON_MODU = "CIFT";'
-            mode_label = f"VIOP — Çift Yön ({vade_tipi})"
+        p = {
+            'ars_k': params.get('ars_k', 1.23),
+            'ars_ema_period': int(params.get('ars_ema_period', 3)),
+            
+            'st_factor': params.get('st_factor', 3.0),
+            'st_hhv_period': int(params.get('st_hhv_period', 10)),
+            'st_atr_period': int(params.get('st_atr_period', 14)),
+            'ema_fast_period': int(params.get('ema_fast_period', 9)),
+            'ema_slow_period': int(params.get('ema_slow_period', 21)),
+            
+            'toma_period1': int(params.get('toma_period1', 1)),
+            'toma_period2': params.get('toma_period2', 2.1),
+            'hhv_period': int(params.get('hhv_period', 12)),
+            'llv_period': int(params.get('llv_period', 12)),
+            
+            'mfi_period': int(params.get('mfi_period', 14)),
+            'mfi_hhv_period': int(params.get('mfi_hhv_period', 5)),
+            'mfi_llv_period': int(params.get('mfi_llv_period', 5)),
+            'mfi_long': params.get('mfi_long', 55.0),
+            'mfi_short': params.get('mfi_short', 45.0),
+            'vol_ratio': params.get('vol_ratio', 0.80),
+            
+            'atr_period': int(params.get('atr_period', 14)),
+            'atr_stop_mult_long': params.get('atr_stop_mult_long', 1.5),
+            'atr_stop_mult_short': params.get('atr_stop_mult_short', 1.5),
+            'kar_al_yuzde_long': params.get('kar_al_yuzde_long', 2.0),
+            'kar_al_yuzde_short': params.get('kar_al_yuzde_short', 2.0),
+            
+            'min_hold_bars': int(params.get('min_hold_bars', 2)),
+            'max_hold_bars': int(params.get('max_hold_bars', 20)),
+            'cooldown_bars': int(params.get('cooldown_bars', 2)),
+            
+            'vade_type': params.get('vade_type', vade_tipi),
+            'yon_modu': params.get('yon_modu', 'CIFT')
+        }
 
+        # For the template, we'll write the complete DeepScalp C# script
         code = f'''// ===============================================================================================
-// STRATEJI 7: DeepScalp v1.2 — Gelişmiş Scalping Algoritması
-// Mod: {mode_label}
-// Otomatik: IdealQuant Export | Tarih: {datetime.now().strftime('%Y-%m-%d %H:%M')}
+// STRATEJI 7: DEEPSCALP v1.2 SİSTEMİ
 // ===============================================================================================
-{yon_code}
+// Sembol: {self.symbol}
+// Periyot: {self.period} dakika
+// Vade Tipi: {vade_tipi}
+// Oluşturma: {datetime.now().strftime("%Y-%m-%d %H:%M")}
+// ===============================================================================================
 
-// === PARAMETRELER ===
-float ARS_K = {ars_k}f;
-float ATR_Stop_Mult_Long = {atr_stop_mult_l}f;
-float ATR_Stop_Mult_Short = {atr_stop_mult_s}f;
-float Kar_Al_Yuzde_Long = {kar_al_yuzde_l}f;
-float Kar_Al_Yuzde_Short = {kar_al_yuzde_s}f;
-int HHV_Period = {hhv_p};
-int LLV_Period = {llv_p};
-float Vol_Ratio = {vol_ratio}f;
-float ST_Factor = {st_factor}f;
-int EMA_Fast_Period = {ema_fast_p};
-int EMA_Slow_Period = {ema_slow_p};
-int MFI_HHV_Period = {mfi_hhv_p};
-int MFI_LLV_Period = {mfi_llv_p};
-int Toma_Period2 = {toma_p2};
-float MFI_Long = {mfi_l}f;
-float MFI_Short = {mfi_s}f;
-int Min_Hold_Bars = {min_hold};
-int Max_Hold_Bars = {max_hold};
-int Cooldown_Bars = {cooldown};
-
-// === GRAFİK BİLGİSİ ===
-var Veriler = Sistem.GrafikVerileri;
-var O = Sistem.GrafikFiyatSec("Acilis");
-var H = Sistem.GrafikFiyatSec("Yuksek");
-var L = Sistem.GrafikFiyatSec("Dusuk");
-var C = Sistem.GrafikFiyatSec("Kapanis");
-var T = Sistem.GrafikFiyatSec("Tipik");
-var Vol = Sistem.GrafikFiyatSec("Lot");
-
+// --- VADE TİPİ & YÖN MODU ---
 string VadeTipi = "{vade_tipi}";
+string YON_MODU = "{p['yon_modu']}";
+
+// --- PARAMETRELER ---
+// Layer 1
+float ARS_K = {p['ars_k']}f;
+int ARS_EMA_PERIOD = {p['ars_ema_period']};
+// Layer 2
+float ST_FACTOR = {p['st_factor']}f;
+int ST_HHV_PERIOD = {p['st_hhv_period']}; // ATR Period in Python 
+int ST_ATR_PERIOD = {p['st_atr_period']};
+int EMA_FAST_PERIOD = {p['ema_fast_period']};
+int EMA_SLOW_PERIOD = {p['ema_slow_period']};
+// Layer 3
+int TOMA_PERIOD = {p['toma_period1']};
+float TOMA_OPT = {p['toma_period2']}f;
+int HHV_TETIK_PERIOD = {p['hhv_period']};
+int LLV_TETIK_PERIOD = {p['llv_period']};
+// Layer 4
+int MFI_PERIOD = {p['mfi_period']};
+int MFI_HHV_PERIOD = {p['mfi_hhv_period']};
+int MFI_LLV_PERIOD = {p['mfi_llv_period']};
+float MFI_LONG = {p['mfi_long']}f;
+float MFI_SHORT = {p['mfi_short']}f;
+float VOL_RATIO = {p['vol_ratio']}f;
+// Layer 5
+int ATR_PERIOD = {p['atr_period']};
+float ATR_STOP_MULT_LONG = {p['atr_stop_mult_long']}f;
+float ATR_STOP_MULT_SHORT = {p['atr_stop_mult_short']}f;
+float KAR_AL_YUZDE_LONG = {p['kar_al_yuzde_long']}f;
+float KAR_AL_YUZDE_SHORT = {p['kar_al_yuzde_short']}f;
+// Layer 6
+int MIN_HOLD_BARS = {p['min_hold_bars']};
+int MAX_HOLD_BARS = {p['max_hold_bars']};
+int COOLDOWN_BARS = {p['cooldown_bars']};
 
 // ===============================================================================================
 // DİNAMİK BAYRAM TARİHLERİ (2024-2030)
@@ -2420,6 +2435,13 @@ DateTime R2026 = new DateTime(2026, 3, 20); DateTime K2026 = new DateTime(2026, 
 DateTime R2027 = new DateTime(2027, 3, 9); DateTime K2027 = new DateTime(2027, 5, 16);
 
 string[] resmiTatiller = new string[] {{ "01.01","04.23","05.01","05.19","07.15","08.30","10.29" }};
+
+var V = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+var H = Sistem.GrafikFiyatSec("Yuksek");
+var L = Sistem.GrafikFiyatSec("Dusuk");
+var LotData = Sistem.GrafikFiyatSec("Hacim");
 
 // ===============================================================================================
 // VADE SONU İŞ GÜNÜ HESAPLAMA
@@ -2452,78 +2474,116 @@ Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
 }};
 
 // ===============================================================================================
-// İNDİKATÖR HESAPLAMALARI
+// LAYER 1: ARS Regime
 // ===============================================================================================
-var ATR = Sistem.AverageTrueRange(6);
-var VolMA = Sistem.MA(Vol, "Simple", 20);
-
-// ARS Step
-var ARS_EMA = Sistem.MA(C, "Exp", 3);
-var ARS = Sistem.Liste(0);
-for (int i = 1; i < Veriler.Count; i++)
-{{
-    float altBand = ARS_EMA[i] * (1 - ARS_K);
-    float ustBand = ARS_EMA[i] * (1 + ARS_K);
-    if (altBand > ARS[i - 1]) ARS[i] = altBand;
-    else if (ustBand < ARS[i - 1]) ARS[i] = ustBand;
-    else ARS[i] = ARS[i - 1];
+var ARS_EMA = Sistem.MA(C, "Exp", ARS_EMA_PERIOD);
+var ARS_Band = Sistem.Liste(0);
+for (int i = 0; i < V.Count; i++) {{
+    ARS_Band[i] = ARS_EMA[i] * ARS_K;
+    ARS_Band[i] = (float)Sistem.SayiYuvarla(ARS_Band[i], 0.01f);
 }}
 
-// TOMA
-var EMA20 = Sistem.MA(C, "Exp", Toma_Period2);
-var TOMA = Sistem.Liste(0);
-var TOMATrend = Sistem.Liste(0);
-TOMA[0] = EMA20[0];
-for (int i = 1; i < Veriler.Count; i++)
+// ===============================================================================================
+// LAYER 2: SuperTrend + EMA
+// ===============================================================================================
+var ST = Sistem.SuperTrend(ST_FACTOR, ST_HHV_PERIOD, ST_ATR_PERIOD);
+
+var EMA_FAST = Sistem.MA(C, "Exp", EMA_FAST_PERIOD);
+var EMA_SLOW = Sistem.MA(C, "Exp", EMA_SLOW_PERIOD);
+
+
+// ===============================================================================================
+// LAYER 3: TOMA + HHV/LLV
+// ===============================================================================================
+var MA_TOMA = Sistem.MA(C, "Exp", TOMA_PERIOD);
+var TOMA_Line = Sistem.Liste(0);
+var TOMA_Trend = Sistem.Liste(0);
+
+TOMA_Line[0] = MA_TOMA[0];
+TOMA_Trend[0] = 1; 
+
+for (int j = 1; j < V.Count; j++)
 {{
-    float optYuzde = ST_Factor;
-    float lBand = EMA20[i] * (1 - optYuzde / 100f);
-    float uBand = EMA20[i] * (1 + optYuzde / 100f);
-    if (TOMATrend[i-1] == 1) {{
-        TOMA[i] = Math.Max(TOMA[i-1], lBand);
-        if (EMA20[i] < TOMA[i]) {{ TOMATrend[i] = -1; TOMA[i] = uBand; }}
-        else TOMATrend[i] = 1;
-    }} else {{
-        TOMA[i] = Math.Min(TOMA[i-1], uBand);
-        if (EMA20[i] > TOMA[i]) {{ TOMATrend[i] = 1; TOMA[i] = lBand; }}
-        else TOMATrend[i] = -1;
+    double yuzdeCarpan = TOMA_OPT / 100.0;
+    float altBant = (float)(MA_TOMA[j] * (1 - yuzdeCarpan));
+    float ustBant = (float)(MA_TOMA[j] * (1 + yuzdeCarpan));
+
+    if (TOMA_Trend[j-1] == 1)
+    {{
+        TOMA_Line[j] = Math.Max(TOMA_Line[j-1], altBant);
+        if (MA_TOMA[j] < TOMA_Line[j])
+        {{
+            TOMA_Trend[j] = -1;
+            TOMA_Line[j] = ustBant;
+        }}
+        else
+        {{
+            TOMA_Trend[j] = 1;
+        }}
+    }}
+    else
+    {{
+        TOMA_Line[j] = Math.Min(TOMA_Line[j-1], ustBant);
+        if (MA_TOMA[j] > TOMA_Line[j])
+        {{
+            TOMA_Trend[j] = 1;
+            TOMA_Line[j] = altBant;
+        }}
+        else
+        {{
+            TOMA_Trend[j] = -1;
+        }}
     }}
 }}
 
-// Other Filters
-var EMA_Fast = Sistem.MA(C, "Exp", EMA_Fast_Period);
-var EMA_Slow = Sistem.MA(C, "Exp", EMA_Slow_Period);
-var MFI = Sistem.MoneyFlowIndex(14);
-var MFI_HHV = Sistem.HHV(MFI_HHV_Period, MFI);
-var MFI_LLV = Sistem.LLV(MFI_LLV_Period, MFI);
-var F_HHV = Sistem.HHV(HHV_Period, "Yuksek");
-var F_LLV = Sistem.LLV(LLV_Period, "Dusuk");
+var TETIK_HHV = Sistem.HHV(HHV_TETIK_PERIOD, "Yuksek");
+var TETIK_LLV = Sistem.LLV(LLV_TETIK_PERIOD, "Dusuk");
 
 // ===============================================================================================
-// SİNYAL ÜRETME
+// LAYER 4: MFI + VOLUME
 // ===============================================================================================
-for (int i = 1; i < Veriler.Count; i++) Sistem.Yon[i] = "";
+var MFI = Sistem.MoneyFlowIndex(MFI_PERIOD);
+var MFI_HHV = Sistem.HHV(MFI_HHV_PERIOD, MFI);
+var MFI_LLV = Sistem.LLV(MFI_LLV_PERIOD, MFI);
+var VOL_MA = Sistem.MA(LotData, "Simple", 20);
+
+// ===============================================================================================
+// LAYER 5: ATR Stops
+// ===============================================================================================
+var ATR = Sistem.AverageTrueRange(ATR_PERIOD);
+
+// ===============================================================================================
+// SİNYAL DÖNGÜSÜ
+// ===============================================================================================
+
 var SonYon = "";
+var Sinyal = "";
+bool inLong = false;
+bool inShort = false;
+float entryPrice = 0f;
+float extremeVal = 0f;
+float stopLevel = 0f;
+int barsInPos = 0;
+int cooldownCt = 0;
 
-int warmupBars = Math.Max(100, Toma_Period2 + 50);
+for (int i = 1; i < V.Count; i++) Sistem.Yon[i] = "";
+
+int warmBars = Math.Max(MFI_PERIOD, Math.Max(ST_ATR_PERIOD, Math.Max(EMA_SLOW_PERIOD, TOMA_PERIOD))) + 50;
 int warmupBaslangicBar = -999;
 bool warmupAktif = false;
 bool arefeFlat = false;
 
-float entryPrice = 0f;
-int entryBar = 0;
-float extremePrice = 0f;
-
-for (int i = warmupBars; i < Veriler.Count; i++)
+for (int i = warmBars; i < V.Count; i++)
 {{
-    string Sinyal = "";
-    var dt = Veriler[i].Date;
+    Sinyal = "";
+    var dt = V[i].Date;
     var t = dt.TimeOfDay;
     
+    // --- VADE/TATİL KONTROLLERİ ---
     bool gunSeansi = t >= new TimeSpan(9,30,0) && t < new TimeSpan(18,15,0);
     bool aksamSeansi = t >= new TimeSpan(19,0,0) && t < new TimeSpan(23,0,0);
     if (!(gunSeansi || aksamSeansi)) continue;
-    
+
     bool vadeAyi = (VadeTipi == "SPOT") || (dt.Month % 2 == 0);
     bool vadeSonuGun = vadeAyi && (dt.Date == VadeSonuIsGunu(dt));
     
@@ -2531,8 +2591,7 @@ for (int i = warmupBars; i < Veriler.Count; i++)
                  dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
                  dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
                  dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
-    
-    // Vade/Arefe Flat
+                  
     if (arefe && vadeSonuGun && t > new TimeSpan(11,30,0))
     {{
         if (SonYon != "F") Sinyal = "F";
@@ -2550,101 +2609,169 @@ for (int i = warmupBars; i < Veriler.Count; i++)
     }}
     
     if (Sinyal == "F") {{
-        if (SonYon != Sinyal) {{ Sistem.Yon[i] = Sinyal; SonYon = Sinyal; entryBar = 0; }}
+        if (SonYon != Sinyal) {{ 
+            Sistem.Yon[i] = Sinyal; 
+            SonYon = Sinyal; 
+            inLong = false; inShort = false; cooldownCt=COOLDOWN_BARS; barsInPos=0; 
+        }}
         continue;
     }}
-    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0))) continue;
     
-    // Warmup
+    if ((arefe && t > new TimeSpan(11,30,0)) || (vadeSonuGun && !arefe && t > new TimeSpan(17,40,0))) continue;
+
     if (warmupAktif && warmupBaslangicBar == -999) {{
         bool yeniSeans = false;
-        if (aksamSeansi && i>0 && Veriler[i-1].Date.TimeOfDay < new TimeSpan(19,0,0)) yeniSeans = true;
-        if (gunSeansi && i>0 && dt.Date != Veriler[i-1].Date.Date) yeniSeans = true;
+        if (aksamSeansi && i>0 && V[i-1].Date.TimeOfDay < new TimeSpan(19,0,0)) yeniSeans = true;
+        if (gunSeansi && i>0 && dt.Date != V[i-1].Date.Date) yeniSeans = true;
         if (yeniSeans) warmupBaslangicBar = i;
     }}
     if (warmupAktif && warmupBaslangicBar > 0) {{
-        if ((i - warmupBaslangicBar) < 60) continue; 
+        if ((i - warmupBaslangicBar) < 100) continue; // Min 100 bar cooldown
         else warmupAktif = false;
     }}
-    if (arefeFlat && i>0 && dt.Date != Veriler[i-1].Date.Date) arefeFlat = false;
+    if (arefeFlat && i>0 && dt.Date != V[i-1].Date.Date) arefeFlat = false;
 
-    // === DeepScalp SİNYAL MANTIĞI ===
-    int barsHeld = (SonYon != "" && entryBar > 0) ? (i - entryBar) : 0;
+    // --- COOLDOWN ---
+    if (cooldownCt > 0) cooldownCt--;
+
+    // --- CONDITIONS ---
+    bool rejim_long = (C[i] > ARS_EMA[i]) && (C[i] < ARS_EMA[i] + ARS_Band[i]);
+    bool rejim_short = (C[i] < ARS_EMA[i]) && (C[i] > ARS_EMA[i] - ARS_Band[i]);
     
-    // ÇIKIŞ
-    if (SonYon == "A")
+    bool st_long = (ST[i] < C[i]);
+    bool st_short = (ST[i] > C[i]);
+    bool ema_long = (EMA_FAST[i] > EMA_SLOW[i]);
+    bool ema_short = (EMA_FAST[i] < EMA_SLOW[i]);
+    
+    bool trend_long = st_long && ema_long;
+    bool trend_short = st_short && ema_short;
+
+    bool toma_kros_up = (TOMA_Trend[i] > 0) && (TOMA_Trend[i - 1] <= 0);
+    bool toma_kros_down = (TOMA_Trend[i] < 0) && (TOMA_Trend[i - 1] >= 0);
+    
+    bool hhv_break = C[i] > TETIK_HHV[i-1];
+    bool llv_break = C[i] < TETIK_LLV[i-1];
+    
+    bool tetik_long = toma_kros_up || hhv_break;
+    bool tetik_short = toma_kros_down || llv_break;
+    
+    bool mfi_long_ok = (MFI[i] > MFI_LONG) && (MFI[i] > MFI_HHV[i-1]);
+    bool mfi_short_ok = (MFI[i] < MFI_SHORT) && (MFI[i] < MFI_LLV[i-1]);
+    
+    bool vol_ok = (LotData[i] >= VOL_MA[i-1] * VOL_RATIO);
+    
+    bool onay_long = mfi_long_ok && vol_ok;
+    bool onay_short = mfi_short_ok && vol_ok;
+    bool cooldown_ok = (cooldownCt == 0);
+    
+    // --- GİRİŞ MANTIĞI ---
+    bool giris_long = (!inLong) && (!inShort) && rejim_long && trend_long && tetik_long && onay_long && cooldown_ok && YON_MODU != "SADECE_SAT";
+    bool giris_short = (!inLong) && (!inShort) && rejim_short && trend_short && tetik_short && onay_short && cooldown_ok && YON_MODU != "SADECE_AL" && VadeTipi != "SPOT";
+
+    if (Sinyal == "")
     {{
-        if (H[i] > extremePrice) extremePrice = H[i];
-        if (barsHeld >= Min_Hold_Bars)
+        if (giris_long)
         {{
-            float stopLevel = entryPrice - (float)(ATR[i] * ATR_Stop_Mult_Long);
-            float tpLevel = entryPrice * (1 + Kar_Al_Yuzde_Long/100f);
-            if (C[i] < stopLevel || C[i] > tpLevel || barsHeld >= Max_Hold_Bars || C[i] < ARS[i])
-                Sinyal = "F";
+            Sinyal = "A";
+            inLong = true;
+            entryPrice = C[i];
+            extremeVal = C[i];
+            stopLevel = entryPrice - ATR[i] * ATR_STOP_MULT_LONG;
+            barsInPos = 0;
+        }}
+        else if (giris_short)
+        {{
+            Sinyal = "S";
+            inShort = true;
+            entryPrice = C[i];
+            extremeVal = C[i];
+            stopLevel = entryPrice + ATR[i] * ATR_STOP_MULT_SHORT;
+            barsInPos = 0;
         }}
     }}
-    else if (SonYon == "S")
+
+    // --- LONG ÇIKIŞ MANTIĞI ---
+    if (inLong && Sinyal == "")
     {{
-        if (L[i] < extremePrice) extremePrice = L[i];
-        if (barsHeld >= Min_Hold_Bars)
-        {{
-            float stopLevel = entryPrice + (float)(ATR[i] * ATR_Stop_Mult_Short);
-            float tpLevel = entryPrice * (1 - Kar_Al_Yuzde_Short/100f);
-            if (C[i] > stopLevel || C[i] < tpLevel || barsHeld >= Max_Hold_Bars || C[i] > ARS[i])
-                Sinyal = "F";
+        barsInPos++;
+        if (C[i] > extremeVal) {{
+            extremeVal = C[i];
+            stopLevel = extremeVal - ATR[i] * ATR_STOP_MULT_LONG;
         }}
-    }}
-    
-    // GİRİŞ
-    if (Sinyal == "" && SonYon == "" && (i - entryBar >= Cooldown_Bars || entryBar == 0))
-    {{
-        bool volOk = Vol[i] > VolMA[i] * Vol_Ratio;
         
-        bool longCond = (C[i] > ARS[i]) && (C[i] > EMA_Fast[i]) && 
-                        (EMA_Fast[i] > EMA_Slow[i]) && (MFI[i] > MFI_Long) && 
-                        (H[i] > F_HHV[i-1]) && volOk && (C[i] > TOMA[i]);
-                        
-        bool shortCond = (C[i] < ARS[i]) && (C[i] < EMA_Fast[i]) && 
-                         (EMA_Fast[i] < EMA_Slow[i]) && (MFI[i] < MFI_Short) && 
-                         (L[i] < F_LLV[i-1]) && volOk && (C[i] < TOMA[i]);
-
-        if (longCond && YON_MODU != "SADECE_SAT") Sinyal = "A";
-        else if (shortCond && YON_MODU != "SADECE_AL") Sinyal = "S";
+        float kar_al_fiyat = entryPrice * (1.0f + KAR_AL_YUZDE_LONG / 100.0f);
+        bool stop_hit = (C[i] <= stopLevel);
+        bool kar_al_hit = (C[i] >= kar_al_fiyat);
+        bool rejim_kirildi = !rejim_long;
+        bool trend_kirildi = !trend_long;
+        bool min_hold_ok = (barsInPos >= MIN_HOLD_BARS);
+        bool max_hold_hit = (barsInPos >= MAX_HOLD_BARS);
+        
+        if (stop_hit || kar_al_hit || rejim_kirildi || (trend_kirildi && min_hold_ok) || max_hold_hit)
+        {{
+            Sinyal = "F";
+            inLong = false;
+            cooldownCt = COOLDOWN_BARS;
+            barsInPos = 0;
+            entryPrice = 0f;
+            extremeVal = 0f;
+            stopLevel = 0f;
+        }}
     }}
-    
-    // Yön Modu Kontrolü (Ekstra Güvenlik)
-    if (YON_MODU == "SADECE_AL" && Sinyal == "S") Sinyal = "F";
-    if (YON_MODU == "SADECE_SAT" && Sinyal == "A") Sinyal = "F";
 
-    // Pozisyon güncelle
+    // --- SHORT ÇIKIŞ MANTIĞI ---
+    if (inShort && Sinyal == "")
+    {{
+        barsInPos++;
+        if (C[i] < extremeVal) {{
+            extremeVal = C[i];
+            stopLevel = extremeVal + ATR[i] * ATR_STOP_MULT_SHORT;
+        }}
+        
+        float kar_al_fiyat = entryPrice * (1.0f - KAR_AL_YUZDE_SHORT / 100.0f);
+        bool stop_hit = (C[i] >= stopLevel);
+        bool kar_al_hit = (C[i] <= kar_al_fiyat);
+        bool rejim_kirildi = !rejim_short;
+        bool trend_kirildi = !trend_short;
+        bool min_hold_ok = (barsInPos >= MIN_HOLD_BARS);
+        bool max_hold_hit = (barsInPos >= MAX_HOLD_BARS);
+        
+        if (stop_hit || kar_al_hit || rejim_kirildi || (trend_kirildi && min_hold_ok) || max_hold_hit)
+        {{
+            Sinyal = "F";
+            inShort = false;
+            cooldownCt = COOLDOWN_BARS;
+            barsInPos = 0;
+            entryPrice = 0f;
+            extremeVal = 0f;
+            stopLevel = 0f;
+        }}
+    }}
+
+    // --- YÖN GÜNCELLEME ---
     if (Sinyal != "" && SonYon != Sinyal)
     {{
-        Sistem.Yon[i] = Sinyal;
         SonYon = Sinyal;
-        if (Sinyal == "A" || Sinyal == "S") {{
-            entryPrice = C[i];
-            entryBar = i;
-            extremePrice = C[i];
-        }}
+        Sistem.Yon[i] = SonYon;
     }}
 }}
 
-// === ÇİZİMLER ===
-Sistem.Cizgiler[0].Deger = ARS;
-Sistem.Cizgiler[0].Aciklama = "ARS(" + ARS_K + ")";
+// --- ÇİZİMLER ---
+Sistem.Cizgiler[0].Deger = ST;
+Sistem.Cizgiler[0].Aciklama = "SuperTrend";
 Sistem.Cizgiler[0].ActiveBool = true;
-Sistem.Cizgiler[0].Renk = Color.Gold;
-
-Sistem.Cizgiler[1].Deger = TOMA;
-Sistem.Cizgiler[1].Aciklama = "TOMA(" + Toma_Period2 + ")";
-Sistem.Cizgiler[1].ActiveBool = true;
-Sistem.Cizgiler[1].Renk = Color.Green;
+Sistem.Cizgiler[0].Renk = Color.Yellow;
+Sistem.Cizgiler[1].Deger = TOMA_Line;
+Sistem.Cizgiler[1].Aciklama = "TOMA";
+Sistem.Cizgiler[2].Deger = ARS_EMA;
+Sistem.Cizgiler[2].Aciklama = "ARS EMA";
 
 {self._get_performance_panel_code()}
 '''
         return code
 
     def export_strategy7(
+
         self, 
         params: Dict[str, Any], 
         vade_tipi: str = "ENDEKS"
@@ -2663,6 +2790,429 @@ Sistem.Cizgiler[1].Renk = Color.Green;
         params_path = self.output_dir / f"{filename}_params.json"
         params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
         
+        return str(filepath)
+
+    def _generate_strategy8_code(self, params: Dict[str, Any], vade_tipi: str) -> str:
+        """Strateji 8 (Gap Reversal v1.0) IdealData kodu oluşturur."""
+
+        p = {
+            'min_gap_pct':      params.get('min_gap_pct', 0.05),
+            'max_gap_pct':      params.get('max_gap_pct', 2.00),
+            'cuma_aktif':       params.get('cuma_aktif', False),
+            'or_bars':          int(params.get('or_bars', 15)),
+            'rsi_filtre_aktif': params.get('rsi_filtre_aktif', True),
+            'rsi_period':       int(params.get('rsi_period', 5)),
+            'rsi_ob':           params.get('rsi_ob', 62.0),
+            'rsi_os':           params.get('rsi_os', 38.0),
+            'hacim_filtre_aktif': params.get('hacim_filtre_aktif', True),
+            'hacim_ma_period':  int(params.get('hacim_ma_period', 20)),
+            'hacim_oran':       params.get('hacim_oran', 0.8),
+            'atr_period':       int(params.get('atr_period', 14)),
+            'atr_stop_mult':    params.get('atr_stop_mult', 0.5),
+            'gap_window_bars':  int(params.get('gap_window_bars', 210)),
+            'cooldown_bars':    int(params.get('cooldown_bars', 3)),
+            'yon_modu':         params.get('yon_modu', 'CIFT'),
+        }
+        boolstr = lambda b: 'true' if b else 'false'
+
+        code = f'''// ===============================================================================================
+// STRATEJİ 8: VIP_X030-T 1DK GAP REVERSAL v1.0
+// ===============================================================================================
+// Sembol   : {self.symbol}
+// Periyot  : {self.period}
+// Vade Tipi: {vade_tipi}
+// Oluşturma: {datetime.now().strftime("%Y-%m-%d %H:%M")}
+// ===============================================================================================
+//
+// [MANTIK]
+//   BIST30 vadeli piyasasında gece gap'lerinin %92'si aynı gün içinde kapanmaktadır.
+//   TEMEL FİKİR: Gap = Yay. Ne kadar gerilirse, o kadar geri döner.
+//   Strateji gap yönünün TERSİNE girer. Hedef = önceki günün kapanışı (gap fill seviyesi).
+// ===============================================================================================
+
+string VadeTipi = "{vade_tipi}";
+string YON_MODU = "{p['yon_modu']}";               // "SADECE_AL" | "SADECE_SAT" | "CIFT"
+
+// ─── KATMAN 1: GAP FİLTRE ─────────────────────────────────────────────────────
+float MIN_GAP_PCT       = {p['min_gap_pct']}f;
+float MAX_GAP_PCT       = {p['max_gap_pct']}f;
+bool  CUMA_AKTIF        = {boolstr(p['cuma_aktif'])};
+
+// ─── KATMAN 2: AÇILIŞ ARIĞI ───────────────────────────────────────────────────
+int   OR_BARS           = {p['or_bars']};
+
+// ─── KATMAN 4: RSI ────────────────────────────────────────────────────────────
+bool  RSI_FILTRE_AKTIF  = {boolstr(p['rsi_filtre_aktif'])};
+int   RSI_PERIOD        = {p['rsi_period']};
+float RSI_OB            = {p['rsi_ob']}f;
+float RSI_OS            = {p['rsi_os']}f;
+
+// ─── KATMAN 5: HACİM ──────────────────────────────────────────────────────────
+bool  HACIM_FILTRE_AKTIF = {boolstr(p['hacim_filtre_aktif'])};
+int   HACIM_MA_PERIOD   = {p['hacim_ma_period']};
+float HACIM_ORAN        = {p['hacim_oran']}f;
+
+// ─── KATMAN 6: ATR STOPU ──────────────────────────────────────────────────────
+int   ATR_PERIOD        = {p['atr_period']};
+float ATR_STOP_MULT     = {p['atr_stop_mult']}f;
+
+// ─── KATMAN 8: ZAMAN STOPU ────────────────────────────────────────────────────
+int   GAP_WINDOW_BARS   = {p['gap_window_bars']};
+
+// ─── GENEL ────────────────────────────────────────────────────────────────────
+int   COOLDOWN_BARS     = {p['cooldown_bars']};
+
+// ===============================================================================================
+// TATİL VE VADE SONU
+// ===============================================================================================
+int yil = DateTime.Now.Year;
+DateTime R2024 = new DateTime(2024, 4, 10); DateTime K2024 = new DateTime(2024, 6, 16);
+DateTime R2025 = new DateTime(2025, 3, 30); DateTime K2025 = new DateTime(2025, 6, 6);
+DateTime R2026 = new DateTime(2026, 3, 20); DateTime K2026 = new DateTime(2026, 5, 27);
+DateTime R2027 = new DateTime(2027, 3, 9);  DateTime K2027 = new DateTime(2027, 5, 16);
+string[] resmiTatiller = new string[] {{ "01.01","04.23","05.01","05.19","07.15","08.30","10.29" }};
+
+Func<DateTime, DateTime> VadeSonuIsGunu = (dt) =>
+{{
+    var d = new DateTime(dt.Year, dt.Month, DateTime.DaysInMonth(dt.Year, dt.Month));
+    for (int k = 0; k < 15; k++)
+    {{
+        if (d.DayOfWeek == DayOfWeek.Saturday || d.DayOfWeek == DayOfWeek.Sunday)
+            {{ d = d.AddDays(-1); continue; }}
+        string mmdd = d.ToString("MM.dd");
+        bool tatil = false;
+        for (int tx = 0; tx < resmiTatiller.Length; tx++)
+            if (resmiTatiller[tx] == mmdd) {{ tatil = true; break; }}
+        if (tatil) {{ d = d.AddDays(-1); continue; }}
+        if ((d >= R2024 && d <= R2024.AddDays(3)) || (d >= K2024 && d <= K2024.AddDays(4)) ||
+            (d >= R2025 && d <= R2025.AddDays(3)) || (d >= K2025 && d <= K2025.AddDays(4)) ||
+            (d >= R2026 && d <= R2026.AddDays(3)) || (d >= K2026 && d <= K2026.AddDays(4)) ||
+            (d >= R2027 && d <= R2027.AddDays(3)) || (d >= K2027 && d <= K2027.AddDays(4)))
+            {{ d = d.AddDays(-1); continue; }}
+        break;
+    }}
+    return d.Date;
+}};
+
+// ===============================================================================================
+// VERİ & GÖSTERGELER
+// ===============================================================================================
+var V       = Sistem.GrafikVerileri;
+var O       = Sistem.GrafikFiyatSec("Acilis");
+var C       = Sistem.GrafikFiyatSec("Kapanis");
+var H       = Sistem.GrafikFiyatSec("Yuksek");
+var L       = Sistem.GrafikFiyatSec("Dusuk");
+var LotData = Sistem.GrafikFiyatSec("Hacim");
+
+var ATR      = Sistem.AverageTrueRange(ATR_PERIOD);
+var EMA50    = Sistem.MA(C, "Exp", 50);
+var HacimMA  = Sistem.MA(LotData, "Simple", HACIM_MA_PERIOD);
+
+// ─── RSI Manuel Hesaplama (Wilder's Smoothing) ────────────────────────────────
+var RSI_Ser = Sistem.Liste(50f);
+{{
+    float ag = 0f, al = 0f;
+    for (int j = 1; j < V.Count; j++)
+    {{
+        float delta = C[j] - C[j - 1];
+        float gain  = delta > 0f ? delta : 0f;
+        float loss  = delta < 0f ? -delta : 0f;
+
+        if (j < RSI_PERIOD)
+        {{
+            ag += gain; al += loss;
+            RSI_Ser[j] = 50f;
+        }}
+        else if (j == RSI_PERIOD)
+        {{
+            ag = (ag + gain) / RSI_PERIOD;
+            al = (al + loss) / RSI_PERIOD;
+            RSI_Ser[j] = al == 0f ? 100f : 100f - (100f / (1f + ag / al));
+        }}
+        else
+        {{
+            ag = (ag * (RSI_PERIOD - 1) + gain) / RSI_PERIOD;
+            al = (al * (RSI_PERIOD - 1) + loss) / RSI_PERIOD;
+            RSI_Ser[j] = al == 0f ? 100f : 100f - (100f / (1f + ag / al));
+        }}
+    }}
+}}
+
+// ─── Görselleştirme Serileri ──────────────────────────────────────────────────
+var _ORHigh  = Sistem.Liste(0f);
+var _ORLow   = Sistem.Liste(0f);
+var _FillLvl = Sistem.Liste(0f);
+var _StopLvl = Sistem.Liste(0f);
+
+// ===============================================================================================
+// DURUM DEĞİŞKENLERİ
+// ===============================================================================================
+string SonYon = "", Sinyal = "";
+bool  inLong  = false, inShort = false;
+float entryPrice = 0f, stopLevel = 0f;
+int   barsInPos  = 0,  cooldownCt = 0;
+
+bool  gapActive  = false;
+float gapFillLvl = 0f;
+float gapPctAbs  = 0f;
+int   gapDir     = 0;
+
+bool  orComplete = false;
+float orHigh     = 0f;
+float orLow      = float.MaxValue;
+int   orStartBar = -1;
+int   posStartBar = -1;
+
+for (int i = 1; i < V.Count; i++) Sistem.Yon[i] = "";
+int warmBars = Math.Max(ATR_PERIOD, Math.Max(50, HACIM_MA_PERIOD)) + RSI_PERIOD + 30;
+
+// ===============================================================================================
+// SINYAL DÖNGÜSÜ
+// ===============================================================================================
+for (int i = warmBars; i < V.Count; i++)
+{{
+    Sinyal = "";
+    var dt = V[i].Date;
+    var t  = dt.TimeOfDay;
+
+    bool emirToplama = t >= new TimeSpan(9, 25, 0)  && t < new TimeSpan(9, 30, 0);
+    bool gunSeansi   = t >= new TimeSpan(9, 30, 0)  && t <= new TimeSpan(18, 9, 59);
+    bool aksamSeansi = t >= new TimeSpan(19, 0, 0)  && t <= new TimeSpan(22, 59, 59);
+    if (!(emirToplama || gunSeansi || aksamSeansi)) continue;
+
+    bool vadeAyi  = (dt.Month % 2 == 0);
+    bool vadeSonu = vadeAyi && (dt.Date == VadeSonuIsGunu(dt));
+    bool arefe    = dt.Date == R2024.AddDays(-1).Date || dt.Date == K2024.AddDays(-1).Date ||
+                    dt.Date == R2025.AddDays(-1).Date || dt.Date == K2025.AddDays(-1).Date ||
+                    dt.Date == R2026.AddDays(-1).Date || dt.Date == K2026.AddDays(-1).Date ||
+                    dt.Date == R2027.AddDays(-1).Date || dt.Date == K2027.AddDays(-1).Date;
+
+    if ((arefe || vadeSonu) && t > new TimeSpan(11, 30, 0))
+    {{
+        if (SonYon != "F") Sinyal = "F";
+        inLong = false; inShort = false; gapActive = false;
+        orComplete = false; posStartBar = -1;
+        if (Sinyal != "" && SonYon != Sinyal) {{ SonYon = Sinyal; Sistem.Yon[i] = SonYon; }}
+        continue;
+    }}
+
+    if (i > warmBars)
+    {{
+        double saatFark = (V[i].Date - V[i - 1].Date).TotalHours;
+        bool geceSonrasi = (saatFark > 6.0 && saatFark < 15.0) && emirToplama;
+
+        if (geceSonrasi)
+        {{
+            if ((inLong || inShort) && SonYon != "F")
+            {{
+                Sinyal     = "F";
+                inLong     = false; inShort = false;
+                barsInPos  = 0;    cooldownCt = COOLDOWN_BARS;
+                entryPrice = 0f;   stopLevel  = 0f;
+                posStartBar = -1;
+            }}
+
+            float prevClose = C[i - 1];
+            float todayOpen = O[i];
+            float rawGap    = todayOpen - prevClose;
+            float rawGapPct = prevClose > 0f ? (rawGap / prevClose) * 100f : 0f;
+
+            bool buyukYeterli = Math.Abs(rawGapPct) >= MIN_GAP_PCT;
+            bool asiriDegil   = Math.Abs(rawGapPct) <= MAX_GAP_PCT;
+            bool cumaOk       = (dt.DayOfWeek != DayOfWeek.Friday) || CUMA_AKTIF;
+
+            gapActive  = buyukYeterli && asiriDegil && cumaOk;
+            gapFillLvl = prevClose;
+            gapPctAbs  = Math.Abs(rawGapPct);
+            gapDir     = rawGap > 0f ? 1 : -1;
+
+            orComplete = false;
+            orStartBar = gapActive ? i : -1;
+            orHigh     = H[i];
+            orLow      = L[i];
+            posStartBar = -1;
+        }}
+    }}
+
+    if (gapActive && !orComplete && orStartBar >= 0)
+    {{
+        if (!gunSeansi)
+        {{
+        }}
+        else
+        {{
+            int elapsed = i - orStartBar;
+            if (elapsed < OR_BARS)
+            {{
+                orHigh = Math.Max(orHigh, H[i]);
+                orLow  = Math.Min(orLow,  L[i]);
+            }}
+            else
+            {{
+                orComplete = true;
+            }}
+        }}
+    }}
+
+    if (gapActive)
+    {{
+        _ORHigh[i]  = orHigh;
+        _ORLow[i]   = orLow;
+        _FillLvl[i] = gapFillLvl;
+    }}
+    if (inLong || inShort)
+    {{
+        _StopLvl[i] = stopLevel;
+    }}
+
+    if (cooldownCt > 0) cooldownCt--;
+
+    bool yeniGirisIzni = gunSeansi;
+
+    bool girisOnKosul = yeniGirisIzni && gapActive && orComplete &&
+                        !inLong && !inShort && cooldownCt == 0 && posStartBar < 0;
+
+    if (girisOnKosul && Sinyal == "")
+    {{
+        int orEndBar = orStartBar + OR_BARS;
+        bool zamanOk = (i - orEndBar) < GAP_WINDOW_BARS;
+        bool hacimOk = !HACIM_FILTRE_AKTIF || (LotData[i] >= HacimMA[i] * HACIM_ORAN);
+
+        if (gapDir == 1 && YON_MODU != "SADECE_AL" && VadeTipi != "SPOT")
+        {{
+            bool orKirildi  = C[i] < orLow;
+            bool fillOlmadi = C[i] > gapFillLvl;
+            bool rsiOk      = !RSI_FILTRE_AKTIF || RSI_Ser[i] > RSI_OB;
+
+            if (zamanOk && orKirildi && fillOlmadi && hacimOk && rsiOk)
+            {{
+                Sinyal      = "S";
+                inShort     = true;
+                entryPrice  = C[i];
+                stopLevel   = orHigh + ATR[i] * ATR_STOP_MULT;
+                barsInPos   = 0;
+                posStartBar = i;
+            }}
+        }}
+
+        if (gapDir == -1 && YON_MODU != "SADECE_SAT")
+        {{
+            bool orKirildi  = C[i] > orHigh;
+            bool fillOlmadi = C[i] < gapFillLvl;
+            bool rsiOk      = !RSI_FILTRE_AKTIF || RSI_Ser[i] < RSI_OS;
+
+            if (zamanOk && orKirildi && fillOlmadi && hacimOk && rsiOk)
+            {{
+                Sinyal      = "A";
+                inLong      = true;
+                entryPrice  = C[i];
+                stopLevel   = orLow - ATR[i] * ATR_STOP_MULT;
+                barsInPos   = 0;
+                posStartBar = i;
+            }}
+        }}
+    }}
+
+    if (inLong && Sinyal == "")
+    {{
+        barsInPos++;
+
+        bool stopHit    = L[i] <= stopLevel;
+        bool targetHit  = H[i] >= gapFillLvl || C[i] >= gapFillLvl;
+        bool zamanDoldu = posStartBar > 0 && (i - posStartBar) >= GAP_WINDOW_BARS;
+        bool aksamKapa  = aksamSeansi && t >= new TimeSpan(22, 50, 0);
+        bool ters       = C[i] < orLow && barsInPos > 3;
+
+        if (stopHit || targetHit || zamanDoldu || aksamKapa || ters)
+        {{
+            Sinyal      = "F";
+            inLong      = false;
+            gapActive   = false;
+            cooldownCt  = COOLDOWN_BARS;
+            barsInPos   = 0;
+            entryPrice  = 0f; stopLevel = 0f; posStartBar = -1;
+        }}
+    }}
+
+    if (inShort && Sinyal == "")
+    {{
+        barsInPos++;
+
+        bool stopHit    = H[i] >= stopLevel;
+        bool targetHit  = L[i] <= gapFillLvl || C[i] <= gapFillLvl;
+        bool zamanDoldu = posStartBar > 0 && (i - posStartBar) >= GAP_WINDOW_BARS;
+        bool aksamKapa  = aksamSeansi && t >= new TimeSpan(22, 50, 0);
+        bool ters       = C[i] > orHigh && barsInPos > 3;
+
+        if (stopHit || targetHit || zamanDoldu || aksamKapa || ters)
+        {{
+            Sinyal      = "F";
+            inShort     = false;
+            gapActive   = false;
+            cooldownCt  = COOLDOWN_BARS;
+            barsInPos   = 0;
+            entryPrice  = 0f; stopLevel = 0f; posStartBar = -1;
+        }}
+    }}
+
+    if (Sinyal != "" && SonYon != Sinyal)
+    {{
+        SonYon = Sinyal;
+        Sistem.Yon[i] = SonYon;
+    }}
+}}
+
+// ===============================================================================================
+// ÇİZİMLER
+// ===============================================================================================
+Sistem.Cizgiler[0].Deger      = _ORHigh;
+Sistem.Cizgiler[0].Aciklama   = "OR High (Açılış Aralığı Üst)";
+Sistem.Cizgiler[0].Renk       = Color.DodgerBlue;
+Sistem.Cizgiler[0].ActiveBool = true;
+
+Sistem.Cizgiler[1].Deger      = _ORLow;
+Sistem.Cizgiler[1].Aciklama   = "OR Low (Açılış Aralığı Alt)";
+Sistem.Cizgiler[1].Renk       = Color.OrangeRed;
+Sistem.Cizgiler[1].ActiveBool = true;
+
+Sistem.Cizgiler[2].Deger      = _FillLvl;
+Sistem.Cizgiler[2].Aciklama   = "Gap Fill Hedefi (Önceki Kapanış)";
+Sistem.Cizgiler[2].Renk       = Color.Gold;
+Sistem.Cizgiler[2].ActiveBool = true;
+
+Sistem.Cizgiler[3].Deger      = _StopLvl;
+Sistem.Cizgiler[3].Aciklama   = "Stop Seviyesi";
+Sistem.Cizgiler[3].Renk       = Color.Tomato;
+Sistem.Cizgiler[3].ActiveBool = true;
+
+Sistem.Cizgiler[4].Deger      = EMA50;
+Sistem.Cizgiler[4].Aciklama   = "EMA(50) — Bağlam";
+Sistem.Cizgiler[4].Renk       = Color.DimGray;
+Sistem.Cizgiler[4].ActiveBool = true;
+
+{self._get_performance_panel_code()}'''
+
+        return code
+
+    def export_strategy8(
+        self,
+        params: Dict[str, Any],
+        vade_tipi: str = "ENDEKS"
+    ) -> str:
+        """
+        Strateji 8 (Gap Reversal v1.0) Kodunu Export Eder
+        """
+        filename = self._generate_filename(8, vade_tipi)
+
+        code = self._generate_strategy8_code(params, vade_tipi)
+
+        filepath = self.output_dir / f"{filename}.cs"
+        filepath.write_text(code, encoding='utf-8')
+
+        # Parametreleri JSON olarak da kaydet
+        params_path = self.output_dir / f"{filename}_params.json"
+        params_path.write_text(json.dumps(params, indent=2, default=str), encoding='utf-8')
+
         return str(filepath)
 
     def export_strategy5(

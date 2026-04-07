@@ -6,9 +6,10 @@ description: Build and Publish IdealQuant (PyInstaller)
 ## 0. Pre-Flight Check (CRITICAL)
 **Yayınlamadan önce KESİNLİKLE kontrol et:**
 1.  **Yeni Parametre/Özellik Var mı?**
-    - Eğer yeni bir strateji (S7 gibi) eklediysen, bunun `ROADMAP.md` ve `DEVLOG.md` içindeki durumunun güncel olduğundan emin ol.
+    - Eğer yeni bir strateji (S7, S8 gibi) eklediysen, bunun `ROADMAP.md` ve `DEVLOG.md` içindeki durumunun güncel olduğundan emin ol.
 2.  **Sinyal Doğrulaması:**
     - `verify_s7_precompute.py` gibi testlerin başarılı geçtiğinden emin ol.
+    - S8 (Gap Reversal) eklendiyse: `strategy8_optimizer.py` import + Numba JIT derleme kontrol edilmeli.
 
 ## 1. Update Version & Documentation (Single Command)
 
@@ -28,5 +29,5 @@ python build_idealquant.py
 ```
 
 ## 3. Verify
-`dist/IdealQuant_v{VERSION}/IdealQuant_v{VERSION}.exe` dosyasını kontrol et ve bir kez çalıştırarak arayüzün (S6/S7 sekmeleriyle birlikte) açıldığını doğrula. 
+`dist/IdealQuant_v{VERSION}/IdealQuant_v{VERSION}.exe` dosyasını kontrol et ve bir kez çalıştırarak arayüzün (S6/S7/S8 sekmeleriyle birlikte) açıldığını doğrula. 
 **(Opsiyonel)**: `dist/` klasörünü bir `.zip` haline getirip dağıtabilirsin.

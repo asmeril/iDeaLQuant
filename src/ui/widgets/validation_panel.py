@@ -28,6 +28,7 @@ from src.strategies.toma_strategy import TomaStrategy
 from src.strategies.oliver_kell_s5 import OliverKellStrategy
 from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 from src.strategies.deepscalp_strategy import DeepScalpStrategy
+from src.strategies.gap_reversal_strategy import GapReversalStrategy
 import pandas as pd
 
 
@@ -129,6 +130,8 @@ class WFAWorker(QThread):
             return TOTT_HOTTStrategy.from_config_dict(cache, self.params)
         elif self.strategy_idx == 6:
             return DeepScalpStrategy.from_config_dict(cache, self.params)
+        elif self.strategy_idx == 7:
+            return GapReversalStrategy.from_config_dict(cache, self.params)
         else:
             return ARSTrendStrategyV2.from_config_dict(cache, self.params)
         
@@ -373,6 +376,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 4: return OliverKellStrategy.from_config_dict(cache, params)
         elif idx == 5: return TOTT_HOTTStrategy.from_config_dict(cache, params)
         elif idx == 6: return DeepScalpStrategy.from_config_dict(cache, params)
+        elif idx == 7: return GapReversalStrategy.from_config_dict(cache, params)
         else: return ARSTrendStrategyV2.from_config_dict(cache, params)
 
     def _s4_backtest_net(self, df_slice, params) -> float:
@@ -527,6 +531,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
         elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
         elif idx == 6: s = DeepScalpStrategy.from_config_dict(self.cache, params)
+        elif idx == 7: s = GapReversalStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         sig, ex_l, ex_s = s.generate_all_signals()
         return backtest_with_summary(self.cache.closes, sig, ex_l, ex_s, 
@@ -543,6 +548,7 @@ class BatchAnalysisWorker(QThread):
         elif idx == 4: s = OliverKellStrategy.from_config_dict(self.cache, params)
         elif idx == 5: s = TOTT_HOTTStrategy.from_config_dict(self.cache, params)
         elif idx == 6: s = DeepScalpStrategy.from_config_dict(self.cache, params)
+        elif idx == 7: s = GapReversalStrategy.from_config_dict(self.cache, params)
         else: s = ARSTrendStrategyV2.from_config_dict(self.cache, params)
         
         # Basit backtest - işlem listesi (pnl'ler) döndüren versiyon lazım

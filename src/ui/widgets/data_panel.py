@@ -92,7 +92,9 @@ class DataPanel(QWidget):
             "3: Paradise (Trend+Breakout)", 
             "4: TOMA + Momentum",
             "5: Oliver Kell",
-            "6: TOTT HOTT"
+            "6: TOTT HOTT",
+            "7: DeepScalp v1.2",
+            "8: Gap Reversal v1.0"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_data)
         layout.addWidget(self.strategy_combo)
@@ -120,12 +122,14 @@ class DataPanel(QWidget):
         return group
         
     def _on_strategy_changed_data(self, index: int):
-        """Strateji değiştiğinde vade_combo'yu güncelle (S5 = 3 mod)"""
+        """Strateji değiştiğinde vade_combo'yu güncelle (S5, S7 = 3 mod; S8 = sadece ENDEKS)"""
         self.vade_combo.blockSignals(True)
         prev = self.vade_combo.currentText()
         self.vade_combo.clear()
-        if index == 4:  # S5 Oliver Kell
+        if index in [4, 6]:  # S5 Oliver Kell veya S7 DeepScalp
             self.vade_combo.addItems(["VIOP_ENDEKS", "VIOP_SPOT", "SPOT"])
+        elif index == 7:  # S8 Gap Reversal — sadece ENDEKS
+            self.vade_combo.addItems(["ENDEKS"])
         else:
             self.vade_combo.addItems(["ENDEKS", "SPOT"])
         idx = self.vade_combo.findText(prev)
@@ -170,7 +174,9 @@ class DataPanel(QWidget):
             fname = Path(csv_path).stem
             parts = fname.split('_')
             full_symbol = parts[0] if parts else 'UNKNOWN'
-            per_str = parts[1] if len(parts) > 1 else '1dk'
+            # Period parse: case-insensitive normalize et (1Dk, 5dk, 1DK hepsini '1dk' formatina getir)
+            raw_per = parts[1] if len(parts) > 1 else '1dk'
+            per_str = raw_per.lower()  # '1Dk' -> '1dk', '5Dk' -> '5dk'
             data_file_path = str(Path(csv_path).resolve())
             
         # Tarih filtresi bilgilerini kaydet

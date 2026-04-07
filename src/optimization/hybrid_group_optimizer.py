@@ -26,6 +26,11 @@ from src.strategies.paradise_strategy import ParadiseStrategy
 from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
 from src.optimization.fitness import quick_fitness, calculate_sharpe
 from src.strategies.holidays import vade_sonu_is_gunu
+from src.optimization.strategy7_optimizer import fast_backtest_strategy7, DeepScalpCache
+from src.optimization.strategy8_optimizer import (
+    fast_backtest_strategy8, precompute_wilder_rsi,
+    precompute_atr_wilder, precompute_sma_shifted
+)
 
 # Opsiyonel: Veritabanı entegrasyonu
 try:
@@ -54,10 +59,32 @@ PARAM_TYPE_CONFIG = {
     'period_short_wide': (5, 20, 2, 1),                 # Kısa-orta arası periyotlar
     'ott_percent': (0.2, 9.0, 1.0, 0.5),                # OTT yüzdeleri
     'ott_mult': (0.0005, 0.0020, 0.0003, 0.0001),       # Bölge çarpanı
+    'vol_ratio': (0.1, 2.0, 0.2, 0.1),                  # Hacim oranı
+    'st_factor': (0.5, 5.0, 0.5, 0.1),                  # SuperTrend çarpanı
 }
 
 # Hangi parametrenin hangi tipte olduğunu belirler
 PARAM_TYPES = {
+    # Strategy 7 specific
+    'ars_k': 'k_factor',
+    'atr_stop_mult_long': 'multiplier',
+    'atr_stop_mult_short': 'multiplier',
+    'kar_al_yuzde_long': 'threshold_float',
+    'kar_al_yuzde_short': 'threshold_float',
+    'hhv_period': 'period_short',
+    'llv_period': 'period_short',
+    'vol_ratio': 'vol_ratio',
+    'st_factor': 'st_factor',
+    'ema_fast_period': 'period_short',
+    'ema_slow_period': 'period_medium',
+    'mfi_hhv_period': 'period_short',
+    'mfi_llv_period': 'period_short',
+    'toma_period2': 'multiplier',
+    'mfi_long': 'threshold_float',
+    'mfi_short': 'threshold_float',
+    'min_hold_bars': 'threshold_int',
+    'max_hold_bars': 'period_medium',
+    'cooldown_bars': 'threshold_int',
     # Strateji 1
     'ars_period': 'period_short', 'ars_k': 'k_factor',
     'adx_period': 'period_medium', 'adx_threshold': 'threshold_float',
@@ -233,6 +260,66 @@ STRATEGY1_GROUPS = [
     ),
 ]
 
+# Strateji 1 Grup Tanimlari — 1 dk (Teorik default degerler, coarse scan icin)
+# NOT: Actual ranges _run_hybrid icinde UI param_ranges'den sync edilir.
+# Bu listedeki 'params' degerleri, **diger gruplar sabitken** kullanilan coarse scan noktalaridir.
+STRATEGY1_GROUPS_1DK = [
+    ParameterGroup(
+        name="ARS",
+        params={'ars_period': [3, 5, 7, 10], 'ars_k': [0.010, 0.020, 0.040, 0.060, 0.080]},
+        is_independent=True,
+        default_values={'ars_period': 5, 'ars_k': 0.020}
+    ),
+    ParameterGroup(
+        name="ADX",
+        params={'adx_period': [10, 12, 14, 18, 22, 26, 30], 'adx_threshold': [20.0, 25.0, 30.0]},
+        is_independent=True,
+        default_values={'adx_period': 14, 'adx_threshold': 25.0}
+    ),
+    ParameterGroup(
+        name="MACDV",
+        params={'macdv_short': [8, 9, 11, 13], 'macdv_long': [18, 21, 24, 28], 'macdv_signal': [5, 6, 7, 9], 'macdv_threshold': [0.0, 1.0, 2.0, 3.0, 5.0]},
+        is_independent=True,
+        default_values={'macdv_short': 9, 'macdv_long': 21, 'macdv_signal': 6, 'macdv_threshold': 0.0}
+    ),
+    ParameterGroup(
+        name="NetLot",
+        params={'netlot_period': [5, 8, 10, 12, 15], 'netlot_threshold': [10, 20, 30, 40]},
+        is_independent=True,
+        default_values={'netlot_period': 8, 'netlot_threshold': 20.0}
+    ),
+    ParameterGroup(
+        name="Yatay_BB",
+        params={
+            'bb_period': [15, 20, 25], 'bb_std': [1.5, 2.0, 2.5],
+            'bb_width_multiplier': [0.6, 0.8, 1.0], 'bb_avg_period': [30, 50, 70],
+        },
+        is_independent=True,
+        default_values={
+            'bb_period': 20, 'bb_std': 2.0,
+            'bb_width_multiplier': 0.8, 'bb_avg_period': 50
+        }
+    ),
+    ParameterGroup(
+        name="Skor_Ayarlari",
+        params={'min_score': [2, 3, 4], 'exit_score': [2, 3, 4], 'contrary_score_max': [1, 2, 3]},
+        is_independent=True,
+        default_values={'min_score': 3, 'exit_score': 3, 'contrary_score_max': 2}
+    ),
+    ParameterGroup(
+        name="Yatay_Onay",
+        params={
+            'ars_mesafe_threshold': [0.05, 0.10, 0.15, 0.20, 0.30], 'yatay_ars_bars': [3, 5, 7, 10],
+            'yatay_adx_threshold': [15.0, 20.0, 25.0], 'filter_score_threshold': [1, 2, 3],
+        },
+        is_independent=False,
+        default_values={
+            'ars_mesafe_threshold': 0.15, 'yatay_ars_bars': 5,
+            'yatay_adx_threshold': 20.0, 'filter_score_threshold': 2
+        }
+    ),
+]
+
 # Strateji 2 Grup Tanımları
 STRATEGY2_GROUPS = [
     ParameterGroup(
@@ -401,6 +488,117 @@ STRATEGY6_GROUPS = [
     ),
 ]
 
+# Strateji 7 (DeepScalp v1.2) Grup Tanimlari
+# Satellite scan degerleri: Coarse aramada kullanilir, Drone fazinda UI aralik/adim degerlerine donerek darin tarar
+# Ref: reference/Optimizasyon_DeepScalp_Rehberi.txt, S4 TOMA tutarliligi
+STRATEGY7_GROUPS = [
+    ParameterGroup(
+        name="Regime_Layer1",
+        params={
+            'ars_k': [0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0],
+            'hhv_period': [6, 8, 10, 12, 16, 20],
+            'llv_period': [6, 8, 10, 12, 16, 20],
+            'vol_ratio': [0.5, 0.7, 0.8, 1.0, 1.2],
+        },
+        is_independent=True,
+        default_values={'ars_k': 1.23, 'hhv_period': 12, 'llv_period': 12, 'vol_ratio': 0.8}
+    ),
+    ParameterGroup(
+        name="Trend_Layer2",
+        params={
+            'st_factor': [2.0, 2.5, 3.0, 3.5, 4.0],
+            'ema_fast_period': [5, 7, 9, 11, 13, 15],
+            'ema_slow_period': [15, 18, 21, 24, 27, 30],
+        },
+        is_independent=True,
+        default_values={'st_factor': 3.0, 'ema_fast_period': 9, 'ema_slow_period': 21}
+    ),
+    ParameterGroup(
+        name="Timing_Layer3",
+        params={
+            'toma_period2': [0.5, 0.8, 1.0, 1.3, 1.5, 1.8, 2.1, 2.5, 3.0],
+            'mfi_period': [10, 14, 18],
+            'mfi_hhv_period': [3, 5, 7, 9],
+            'mfi_llv_period': [3, 5, 7, 9],
+            'mfi_long': [45.0, 50.0, 55.0, 60.0, 65.0],
+            'mfi_short': [35.0, 40.0, 45.0, 50.0, 55.0],
+        },
+        is_independent=True,
+        default_values={
+            'toma_period2': 2.1, 'mfi_period': 14,
+            'mfi_hhv_period': 5, 'mfi_llv_period': 5,
+            'mfi_long': 55.0, 'mfi_short': 45.0
+        }
+    ),
+    ParameterGroup(
+        name="Risk_Time_Layer4_5",
+        params={
+            'atr_stop_mult_long': [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5],
+            'atr_stop_mult_short': [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5],
+            'kar_al_yuzde_long': [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+            'kar_al_yuzde_short': [1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0],
+            'min_hold_bars': [1, 2, 3, 4],
+            'max_hold_bars': [8, 12, 16, 20, 25, 30],
+            'cooldown_bars': [1, 2, 3, 4],
+        },
+        is_independent=False,
+        default_values={
+            'atr_stop_mult_long': 1.5, 'atr_stop_mult_short': 1.5,
+            'kar_al_yuzde_long': 2.0, 'kar_al_yuzde_short': 2.0,
+            'min_hold_bars': 2, 'max_hold_bars': 20, 'cooldown_bars': 2
+        }
+    ),
+]
+
+STRATEGY8_GROUPS = [
+    ParameterGroup(
+        name="Gap_Filter_L1",
+        params={
+            'min_gap_pct': [0.01, 0.03, 0.05, 0.08, 0.10, 0.15, 0.20],
+            'max_gap_pct': [0.5, 1.0, 1.5, 2.0, 2.5, 3.0],
+        },
+        is_independent=True,
+        default_values={'min_gap_pct': 0.05, 'max_gap_pct': 2.0}
+    ),
+    ParameterGroup(
+        name="OpeningRange_L2",
+        params={
+            'or_bars': [5, 10, 15, 20, 25, 30],
+        },
+        is_independent=True,
+        default_values={'or_bars': 15}
+    ),
+    ParameterGroup(
+        name="RSI_Hacim_L3",
+        params={
+            'rsi_period':      [3, 5, 7, 9, 11, 14],
+            'rsi_ob':          [55.0, 60.0, 62.0, 65.0, 70.0],
+            'rsi_os':          [30.0, 35.0, 38.0, 40.0, 45.0],
+            'hacim_ma_period': [10, 15, 20, 25, 30],
+            'hacim_oran':      [0.3, 0.5, 0.7, 0.8, 1.0, 1.2],
+        },
+        is_independent=True,
+        default_values={
+            'rsi_period': 5, 'rsi_ob': 62.0, 'rsi_os': 38.0,
+            'hacim_ma_period': 20, 'hacim_oran': 0.8
+        }
+    ),
+    ParameterGroup(
+        name="Risk_Timing_L4",
+        params={
+            'atr_period':      [7, 10, 13, 16, 19],
+            'atr_stop_mult':   [0.2, 0.35, 0.5, 0.75, 1.0, 1.25, 1.5, 2.0],
+            'gap_window_bars': [60, 90, 120, 150, 180, 210, 270, 360],
+            'cooldown_bars':   [1, 2, 3, 4, 5, 6],
+        },
+        is_independent=False,
+        default_values={
+            'atr_period': 14, 'atr_stop_mult': 0.5,
+            'gap_window_bars': 210, 'cooldown_bars': 3
+        }
+    ),
+]
+
 # ==============================================================================
 # DATA & CACHE
 # ==============================================================================
@@ -557,6 +755,19 @@ class IndicatorCache:
             return (np.array(toma_val), np.array(trend))
         return self._get(key, calc)
 
+    # === DeepScalp (S7) Indicators ===
+    def get_st(self, factor: float, hh_p: int, atr_p: int) -> np.ndarray:
+        key = f'st_{factor:.1f}_{hh_p}_{atr_p}'
+        from src.indicators.trend import get_supertrend
+        # FIX: get_supertrend imzası (highs, lows, closes, hhv_p, atr_p, factor)
+        #      Sadece ST değerini döndür (tuple[0]), upper/lower gereksiz
+        return self._get(key, lambda: np.array(get_supertrend(self.highs, self.lows, self.closes, hh_p, atr_p, factor)[0]))
+
+    def get_mfi(self, period: int) -> np.ndarray:
+        key = f'mfi_{period}'
+        from src.indicators.core import get_mfi
+        return self._get(key, lambda: get_mfi(self.highs, self.lows, self.closes, self.volumes, period))
+
     # === Volume HHV ===
     def get_vol_hhv(self, period: int) -> np.ndarray:
         key = f'vol_hhv_{period}'
@@ -586,7 +797,7 @@ class IndicatorCache:
             # Guvenlik icin pd.to_datetime kullanabiliriz ama maliyetli olabilir. 
             # Eger df['DateTime'] zaten datetimelike ise gerek yok.
             # Ancak process safe olmasi icin array'i Series'e cevirip dt accessor kullanmak en iyisi.
-            dates = pd.to_datetime(self.times)
+            dates = pd.to_datetime(self.times, dayfirst=True)
             months = dates.to_period('M').unique()
             
             for m in months:
@@ -602,7 +813,7 @@ class IndicatorCache:
         key = f'vade_trans_{vade_tipi}'
         def calc():
             transitions = set()
-            dates = pd.to_datetime(self.times)
+            dates = pd.to_datetime(self.times, dayfirst=True)
             # Vectorized approach is faster than loop
             # Pandas shift ile onceki ayi karsilastir
             months = dates.month
@@ -635,12 +846,18 @@ class IndicatorCache:
 # GLOBAL HELPERS
 # ==============================================================================
 def _init_group_pool(strategy_index, df_received=None, vade_tipi="ENDEKS"):
-    global g_cache, g_mask
+    global g_cache, g_mask, _s7_arrays, _s7_rolling_cache, _s8_arrays, _s8_rolling_cache
     if g_cache is None:
         if df_received is not None:
             g_cache = IndicatorCache(df_received)
             from src.engine.data import OHLCV
             g_mask = OHLCV(df_received).get_trading_mask(vade_tipi)
+            # Yeni veri yuklendikten sonra S7 array cache'lerini sifirla
+            _s7_arrays = None
+            _s7_rolling_cache = {}
+            # S8 cache'lerini de sifirla
+            _s8_arrays = None
+            _s8_rolling_cache = {}
         else:
             # GUI disi kullanimda buraya veri paslanmali.
             # Hata firlatmak sessiz basarisizliktan daha iyidir.
@@ -720,6 +937,236 @@ def _evaluate_s5_params(params: Dict[str, Any], commission: float = 0.0, slippag
 
 _s5_arrays = None  # Module-level cache for S5 arrays
 
+# ---------------------------------------------------------------------------
+# Pre-compute helpers for S7 (avoid per-bar loops in Numba kernel)
+# ---------------------------------------------------------------------------
+
+def _get_hhv_shifted(arr: np.ndarray, period: int) -> np.ndarray:
+    """arr'ın period-bar rolling max'i, 1 bar shift'li (önceki bar'ın max'i)."""
+    return pd.Series(arr).shift(1).rolling(period, min_periods=1).max().fillna(0.0).values.astype(np.float64)
+
+def _get_llv_shifted(arr: np.ndarray, period: int) -> np.ndarray:
+    """arr'ın period-bar rolling min'i, 1 bar shift'li."""
+    return pd.Series(arr).shift(1).rolling(period, min_periods=1).min().fillna(9999999.0).values.astype(np.float64)
+
+def _get_rolling_max_shifted(arr: np.ndarray, period: int) -> np.ndarray:
+    """Genel rolling max, 1 bar shift'li."""
+    return pd.Series(arr).shift(1).rolling(period, min_periods=1).max().fillna(0.0).values.astype(np.float64)
+
+def _get_rolling_min_shifted(arr: np.ndarray, period: int) -> np.ndarray:
+    """Genel rolling min, 1 bar shift'li."""
+    return pd.Series(arr).shift(1).rolling(period, min_periods=1).min().fillna(9999999.0).values.astype(np.float64)
+
+def _get_rolling_mean_shifted(arr: np.ndarray, period: int) -> np.ndarray:
+    """arr'ın period-bar rolling mean'i, 1 bar shift'li."""
+    return pd.Series(arr).shift(1).rolling(period, min_periods=1).mean().fillna(0.0).values.astype(np.float64)
+
+# Module-level rolling array cache: (hash_key -> np.ndarray)
+# Aynı worker'da aynı parametreler tekrar hesaplanmaz.
+_s7_rolling_cache: Dict[tuple, np.ndarray] = {}
+
+
+def _evaluate_s7_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
+    """S7 DeepScalp parametrelerini Numba kernel ile degerlendir.
+    
+    v1.3: HHV/LLV/MFI-HHV/MFI-LLV/VolMA hesaplamalari kernel disinda bir kez yapilip
+    pre-computed numpy array olarak geciliyor. Her kombinasyon icin sadece basit
+    karsilastirmalar kaliyor => ~50-100x hizlanma.
+    """
+    global g_cache, _s7_arrays, g_mask, _s7_rolling_cache
+    zero_result = {'net_profit': 0.0, 'trades': 0, 'pf': 0.0, 'max_dd': 0.0, 'sharpe': 0.0, 'fitness': 0.0}
+    if g_cache is None: return zero_result
+
+    try:
+        n = len(g_cache.closes)
+        if '_s7_arrays' not in dir() or _s7_arrays is None or len(_s7_arrays[0]) != n:
+            closes = np.ascontiguousarray(g_cache.closes, dtype=np.float64)
+            highs  = np.ascontiguousarray(g_cache.highs, dtype=np.float64)
+            lows   = np.ascontiguousarray(g_cache.lows, dtype=np.float64)
+            vols   = np.ascontiguousarray(g_cache.volumes, dtype=np.float64)
+            mask_arr  = np.array(g_mask, dtype=np.bool_)
+            times_arr = np.zeros(n, dtype=np.int64)
+            if hasattr(g_cache, 'times') and g_cache.times:
+                times_arr = np.array([int(t.timestamp()) for t in g_cache.times], dtype=np.int64)
+            _s7_arrays = (closes, highs, lows, vols, mask_arr, times_arr)
+
+        closes, highs, lows, vols, mask_arr, times_arr = _s7_arrays
+
+        # --- Parametre mapping ---
+        ars_k   = float(params.get('ars_k', 1.23))
+        hhv_p   = int(params.get('hhv_period', 12))
+        llv_p   = int(params.get('llv_period', 12))
+        mfi_p   = int(params.get('mfi_period', 14))
+        mfi_hhv = int(params.get('mfi_hhv_period', 5))
+        mfi_llv = int(params.get('mfi_llv_period', 5))
+        mfi_l   = float(params.get('mfi_long', 55.0))
+        mfi_s   = float(params.get('mfi_short', 45.0))
+        v_rat   = float(params.get('vol_ratio', 0.8))
+        atr_sl_l = float(params.get('atr_stop_mult_long', 1.5))
+        atr_sl_s = float(params.get('atr_stop_mult_short', 1.5))
+        ka_l    = float(params.get('kar_al_yuzde_long', 2.0))
+        ka_s    = float(params.get('kar_al_yuzde_short', 2.0))
+        mh_b    = int(params.get('min_hold_bars', 2))
+        mx_b    = int(params.get('max_hold_bars', 20))
+        cd_b    = int(params.get('cooldown_bars', 2))
+
+        vt = params.get('vade_tipi', 'ENDEKS')
+        vt_code = 1
+        if vt == 'SPOT': vt_code = 0
+        elif vt == 'VIOP_SPOT': vt_code = 2
+
+        # --- Cached indicator arrays ---
+        ars_ema_arr = np.ascontiguousarray(g_cache.get_ema(int(params.get('ars_ema_period', 3))), dtype=np.float64)
+        st_val_arr  = np.ascontiguousarray(g_cache.get_st(float(params.get('st_factor', 3.0)), int(params.get('st_hhv_period', 10)), int(params.get('st_atr_period', 14))), dtype=np.float64)
+        ema_f_arr   = np.ascontiguousarray(g_cache.get_ema(int(params.get('ema_fast_period', 9))), dtype=np.float64)
+        ema_s_arr   = np.ascontiguousarray(g_cache.get_ema(int(params.get('ema_slow_period', 21))), dtype=np.float64)
+        _, toma_raw = g_cache.get_toma(1, float(params.get('toma_period2', 2.1)))
+        toma_arr    = np.ascontiguousarray(toma_raw, dtype=np.float64)
+        mfi_arr     = np.ascontiguousarray(g_cache.get_mfi(mfi_p), dtype=np.float64)
+        atr_arr     = np.ascontiguousarray(g_cache.get_atr(int(params.get('atr_period', 14))), dtype=np.float64)
+
+        # --- Pre-computed rolling arrays (worker-level cache ile) ---
+        def _cached_roll(key, fn):
+            if key not in _s7_rolling_cache:
+                _s7_rolling_cache[key] = fn()
+            return _s7_rolling_cache[key]
+
+        hhv_shifted     = _cached_roll(('hhv', hhv_p),          lambda: _get_hhv_shifted(g_cache.highs, hhv_p))
+        llv_shifted     = _cached_roll(('llv', llv_p),          lambda: _get_llv_shifted(g_cache.lows, llv_p))
+        mfi_hhv_shifted = _cached_roll(('mfi_hhv', mfi_p, mfi_hhv), lambda: _get_rolling_max_shifted(mfi_arr, mfi_hhv))
+        mfi_llv_shifted = _cached_roll(('mfi_llv', mfi_p, mfi_llv), lambda: _get_rolling_min_shifted(mfi_arr, mfi_llv))
+        vol_ma_shifted  = _cached_roll(('vol_ma', 20),          lambda: _get_rolling_mean_shifted(g_cache.volumes, 20))
+
+        res = fast_backtest_strategy7(
+            closes, highs, lows, vols,
+            ars_ema_arr, st_val_arr, ema_f_arr, ema_s_arr, toma_arr,
+            mfi_arr, atr_arr, mask_arr, times_arr,
+            hhv_shifted, llv_shifted, mfi_hhv_shifted, mfi_llv_shifted, vol_ma_shifted,
+            ars_k, mfi_l, mfi_s,
+            v_rat, atr_sl_l, atr_sl_s, ka_l, ka_s, mh_b, mx_b, cd_b, vt_code
+        )
+
+        np_val, tr, pf, dd, sh, adays, tdays = res
+        fit = quick_fitness(np_val, pf, dd, tr, sharpe=sh, active_days=adays, total_days=tdays)
+        return {'net_profit': np_val, 'trades': tr, 'pf': pf, 'max_dd': dd, 'sharpe': sh, 'fitness': fit}
+
+    except Exception as e:
+        import traceback
+        print(f"[S7_EVAL ERROR] {e}")
+        traceback.print_exc()
+        return zero_result
+
+_s7_arrays = None
+_s7_rolling_cache = {}
+_s8_arrays = None
+_s8_rolling_cache: Dict[tuple, np.ndarray] = {}
+
+
+# ---------------------------------------------------------------------------
+# Pre-compute helpers for S8 (dataset-level sabit diziler)
+# ---------------------------------------------------------------------------
+
+def _build_s8_arrays(cache: 'IndicatorCache', mask) -> tuple:
+    """
+    S8 için dataset-level sabit dizileri hesaplar. Worker başına bir kez çağrılır.
+    Döner: (opens, closes, highs, lows, vols,
+             session_arr, time_gap_arr, day_of_week_arr, mask_arr, late_aksam_arr)
+    """
+    times = cache.times
+    n = len(cache.closes)
+    session_arr     = np.zeros(n, dtype=np.int8)
+    time_gap_arr    = np.zeros(n, dtype=np.float64)
+    day_of_week_arr = np.zeros(n, dtype=np.int8)
+    late_aksam_arr  = np.zeros(n, dtype=np.bool_)
+
+    for i, dt in enumerate(times):
+        if dt is None:
+            continue
+        h, m = dt.hour, dt.minute
+        t_sec = h * 3600 + m * 60
+        if 9 * 3600 + 25 * 60 <= t_sec < 9 * 3600 + 30 * 60:
+            session_arr[i] = 1   # emirToplama
+        elif 9 * 3600 + 30 * 60 <= t_sec <= 18 * 3600 + 9 * 60 + 59:
+            session_arr[i] = 2   # gunSeansi
+        elif 19 * 3600 <= t_sec <= 22 * 3600 + 59 * 60 + 59:
+            session_arr[i] = 3   # aksamSeansi
+        # else: 0 = seans disi
+        day_of_week_arr[i] = dt.weekday()   # 0=Pzt, 4=Cum
+        late_aksam_arr[i]  = bool(h == 22 and m >= 50)
+        if i > 0 and times[i - 1] is not None:
+            time_gap_arr[i] = (dt - times[i - 1]).total_seconds() / 3600.0
+
+    opens    = np.ascontiguousarray(cache.opens,   dtype=np.float64)
+    closes   = np.ascontiguousarray(cache.closes,  dtype=np.float64)
+    highs    = np.ascontiguousarray(cache.highs,   dtype=np.float64)
+    lows     = np.ascontiguousarray(cache.lows,    dtype=np.float64)
+    vols     = np.ascontiguousarray(cache.volumes, dtype=np.float64)
+    mask_arr = np.ascontiguousarray(mask, dtype=np.bool_) if mask is not None else np.ones(n, dtype=np.bool_)
+
+    return (opens, closes, highs, lows, vols,
+            session_arr, time_gap_arr, day_of_week_arr, mask_arr, late_aksam_arr)
+
+
+def _evaluate_s8_params(params: Dict[str, Any], commission: float = 0.0, slippage: float = 0.0) -> Dict[str, float]:
+    """S8 Gap Reversal parametrelerini Numba kernel ile değerlendir."""
+    global g_cache, g_mask, _s8_arrays, _s8_rolling_cache
+    zero_result = {'net_profit': 0.0, 'trades': 0, 'pf': 0.0, 'max_dd': 0.0, 'sharpe': 0.0, 'fitness': 0.0}
+    if g_cache is None:
+        return zero_result
+
+    try:
+        # Worker başına bir kez: sabit dizileri oluştur
+        if _s8_arrays is None:
+            _s8_arrays = _build_s8_arrays(g_cache, g_mask)
+
+        opens, closes, highs, lows, vols, session_arr, time_gap_arr, dow_arr, mask_arr, late_aksam_arr = _s8_arrays
+
+        # Parametre bazlı diziler (worker-level rolling cache)
+        rsi_p   = int(params.get('rsi_period',      5))
+        hacim_p = int(params.get('hacim_ma_period', 20))
+        atr_p   = int(params.get('atr_period',      14))
+
+        def _c(key, fn):
+            if key not in _s8_rolling_cache:
+                _s8_rolling_cache[key] = fn()
+            return _s8_rolling_cache[key]
+
+        rsi_arr    = _c(('rsi', rsi_p),        lambda: precompute_wilder_rsi(closes, rsi_p))
+        vol_ma_arr = _c(('vol_ma', hacim_p),   lambda: precompute_sma_shifted(vols, hacim_p))
+        atr_arr    = _c(('atr', atr_p),        lambda: precompute_atr_wilder(closes, highs, lows, atr_p))
+
+        yon = params.get('yon_modu', 'CIFT')
+        yon_code = 0 if yon == 'CIFT' else (1 if yon == 'SADECE_AL' else 2)
+
+        res = fast_backtest_strategy8(
+            opens, closes, highs, lows, vols,
+            session_arr, time_gap_arr, dow_arr, mask_arr, late_aksam_arr,
+            rsi_arr, vol_ma_arr, atr_arr,
+            float(params.get('min_gap_pct',        0.05)),
+            float(params.get('max_gap_pct',        2.0)),
+            1 if params.get('cuma_aktif',          False) else 0,
+            int(params.get('or_bars',              15)),
+            1 if params.get('rsi_filtre_aktif',    True) else 0,
+            float(params.get('rsi_ob',             62.0)),
+            float(params.get('rsi_os',             38.0)),
+            1 if params.get('hacim_filtre_aktif',  True) else 0,
+            float(params.get('hacim_oran',         0.8)),
+            float(params.get('atr_stop_mult',      0.5)),
+            int(params.get('gap_window_bars',      210)),
+            int(params.get('cooldown_bars',        3)),
+            yon_code,
+        )
+
+        np_val, tr, pf, dd, sh, adays, tdays = res
+        fit = quick_fitness(np_val, pf, dd, tr, sharpe=sh, active_days=adays, total_days=tdays)
+        return {'net_profit': np_val, 'trades': tr, 'pf': pf, 'max_dd': dd, 'sharpe': sh, 'fitness': fit}
+
+    except Exception as e:
+        import traceback
+        print(f"[S8_EVAL ERROR] {e}")
+        traceback.print_exc()
+        return zero_result
+
 
 def _eval_combo_wrapper(params_and_strategy_and_costs):
     params, strategy_index, commission, slippage = params_and_strategy_and_costs
@@ -749,6 +1196,12 @@ def _evaluate_params_static(params: Dict[str, Any], strategy_index: int, commiss
             mask=getattr(g_cache, 'mask', None),
             yon_modu=params.get('yon_modu', 'CIFT')
         )
+    elif strategy_index == 6:
+        # S7 DeepScalp — Numba kernels can handle backtest
+        return _evaluate_s7_params(params, commission, slippage)
+    elif strategy_index == 7:
+        # S8 Gap Reversal — Numba kernel
+        return _evaluate_s8_params(params, commission, slippage)
     else:
         strategy = ARSTrendStrategyV2.from_config_dict(g_cache, params)
         signals, exits_long, exits_short = strategy.generate_all_signals()

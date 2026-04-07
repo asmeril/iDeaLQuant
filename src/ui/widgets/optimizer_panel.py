@@ -538,6 +538,47 @@ SCALABLE_PARAMS = {
     # Strateji 7 (DeepScalp)
     'hhv_period', 'llv_period', 'ema_fast_period', 'ema_slow_period', 'mfi_hhv_period', 'mfi_llv_period',
     'st_hhv_period', 'st_atr_period',
+    # Strateji 8 (Gap Reversal)
+    'or_bars', 'hacim_ma_period', 'atr_period', 'gap_window_bars',
+}
+
+
+# Strateji 8 Parametre Grupları (Gap Reversal v1.0)
+STRATEGY8_PARAM_GROUPS = {
+    'Gap_Filter': {
+        'label': 'Katman 1: Gap Filtre',
+        'params': {
+            'min_gap_pct': {'label': 'Min Gap %',  'type': 'float', 'default': 0.05, 'min': 0.01, 'max': 0.5,  'step': 0.05},
+            'max_gap_pct': {'label': 'Max Gap %',  'type': 'float', 'default': 2.00, 'min': 0.5,  'max': 5.0,  'step': 0.5},
+        }
+    },
+    'Opening_Range': {
+        'label': 'Katman 2: Opening Range',
+        'params': {
+            'or_bars': {'label': 'OR Bar Sayisi', 'type': 'int', 'default': 15, 'min': 5,  'max': 40,  'step': 5},
+        }
+    },
+    'RSI_Hacim': {
+        'label': 'Katman 4-5: RSI & Hacim Onay',
+        'params': {
+            'rsi_period': {'label': 'RSI Periyot',          'type': 'int',   'default': 5,    'min': 3,    'max': 14,   'step': 1},
+            'rsi_ob':     {'label': 'RSI OB (Short esigi)', 'type': 'float', 'default': 62.0, 'min': 55.0, 'max': 75.0, 'step': 5.0},
+            'rsi_os':     {'label': 'RSI OS (Long esigi)',  'type': 'float', 'default': 38.0, 'min': 25.0, 'max': 45.0, 'step': 5.0},
+            'hacim_ma_period': {'label': 'Hacim MA Periyot', 'type': 'int',  'default': 20,   'min': 10,   'max': 30,   'step': 5},
+            'hacim_oran': {'label': 'Hacim Orani',          'type': 'float', 'default': 0.8,  'min': 0.3,  'max': 1.5,  'step': 0.1},
+        }
+    },
+    'Risk_Timing': {
+        'label': 'Katman 6-8: ATR Stop & Zaman',
+        'note': 'ATR stop kucuk tutulursa (0.3-0.5) erken stop riski; buyuk (1.5+) risk/odul bozulur.',
+        'params': {
+            'atr_period':       {'label': 'ATR Periyot',       'type': 'int',   'default': 14,   'min': 7,    'max': 21,   'step': 3},
+            'atr_stop_mult':    {'label': 'ATR Stop Carpan',   'type': 'float', 'default': 0.5,  'min': 0.2,  'max': 2.0,  'step': 0.25},
+            'gap_window_bars':  {'label': 'Zaman Stopu (Bar)', 'type': 'int',   'default': 210,  'min': 60,   'max': 360,  'step': 30},
+            'cooldown_bars':    {'label': 'Cooldown Bar',      'type': 'int',   'default': 3,    'min': 1,    'max': 6,    'step': 1},
+        },
+        'is_cascaded': True
+    }
 }
 
 REFERENCE_PERIOD = 5  # dk - Stratejilerin orijinal tasarim periyodu
@@ -1567,7 +1608,7 @@ class OptimizationWorker(QThread):
             HybridGroupOptimizer, IndicatorCache, 
             STRATEGY1_GROUPS, STRATEGY1_GROUPS_1DK,
             STRATEGY2_GROUPS, STRATEGY3_GROUPS, 
-            STRATEGY5_GROUPS, STRATEGY6_GROUPS, STRATEGY7_GROUPS, 
+            STRATEGY5_GROUPS, STRATEGY6_GROUPS, STRATEGY7_GROUPS, STRATEGY8_GROUPS,
             ParameterGroup
         )
         
@@ -1582,11 +1623,12 @@ class OptimizationWorker(QThread):
         # Strateji seçiminden orijinal grupları al
         original_groups = {
             0: _s1_groups, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 
-            4: STRATEGY5_GROUPS, 5: STRATEGY6_GROUPS, 6: STRATEGY7_GROUPS
+            4: STRATEGY5_GROUPS, 5: STRATEGY6_GROUPS, 6: STRATEGY7_GROUPS, 7: STRATEGY8_GROUPS
         }.get(self.strategy_index, _s1_groups)
         strategy_name = {
             0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 
-            4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)"
+            4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)",
+            7: "Strateji 8 (Gap Reversal)"
         }.get(self.strategy_index, "Strateji 1")
         
         # UI'dan gelen range'leri gruplara uyarla (Dynamic Sync)
@@ -1696,7 +1738,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Genetik', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp", 7: "Gap Reversal"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1828,7 +1870,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Bayesian', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp", 7: "Gap Reversal"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1985,6 +2027,9 @@ class OptimizationWorker(QThread):
             elif self.strategy_index == 6:
                 from src.strategies.deepscalp_strategy import DeepScalpStrategy
                 strategy = DeepScalpStrategy.from_config_dict(test_cache, params)
+            elif self.strategy_index == 7:
+                from src.strategies.gap_reversal_strategy import GapReversalStrategy
+                strategy = GapReversalStrategy.from_config_dict(test_cache, params)
             else:
                 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
                 strategy = ARSTrendStrategyV2.from_config_dict(test_cache, params)
@@ -2024,18 +2069,16 @@ class OptimizationWorker(QThread):
             test_cache = S4IndicatorCache(self.test_data)
             closes = test_cache.closes
             
-            # TOMA — get_toma returns (toma_val_arr, trend_arr)
+            # TOMA
             tp = int(params.get('toma_period', 97))
             to = float(params.get('toma_opt', 1.5))
-            toma_val_arr, toma_trend_arr = test_cache.get_toma(tp, to)
+            toma_val, toma_trend = test_cache.get_toma(tp, to)
             
-            # HHV/LLV — hhv1/llv1 key alias desteği ('hhv1' veya 'hhv1_period')
-            hhv1_p = int(params.get('hhv1_period', params.get('hhv1', 20)))
-            llv1_p = int(params.get('llv1_period', params.get('llv1', 20)))
-            hhv1 = test_cache.get_hhv(hhv1_p)
-            llv1 = test_cache.get_llv(llv1_p)
-            hhv2 = test_cache.get_hhv(int(params.get('hhv2_period', params.get('hhv2', 150))))
-            llv2 = test_cache.get_llv(int(params.get('llv2_period', params.get('llv2', 190))))
+            # HHV/LLV
+            hhv1 = test_cache.get_hhv(int(params.get('hhv1_period', 20)))
+            llv1 = test_cache.get_llv(int(params.get('llv1_period', 20)))
+            hhv2 = test_cache.get_hhv(int(params.get('hhv2_period', 150)))
+            llv2 = test_cache.get_llv(int(params.get('llv2_period', 190)))
             hhv3 = test_cache.get_hhv(int(params.get('hhv3_period', 150)))
             llv3 = test_cache.get_llv(int(params.get('llv3_period', 190)))
             
@@ -2054,10 +2097,8 @@ class OptimizationWorker(QThread):
             ka = float(params.get('kar_al', 0.0))
             iz = float(params.get('iz_stop', 0.0))
             
-            # fast_backtest_strategy4: (closes, toma_trend, toma_val, ...)
-            # NOT: toma_trend=trend array, toma_val=toma stop level array
             np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy4(
-                closes, toma_trend_arr, toma_val_arr,
+                closes, toma_trend, toma_val,
                 hhv1, llv1, hhv2, llv2, hhv3, llv3,
                 mom_arr, trix1_arr, trix2_arr, mask_arr, test_cache.times_arr,
                 ml, mh, lb1, lb2, ka / 100.0, iz / 100.0,
@@ -2205,7 +2246,8 @@ class OptimizerPanel(QWidget):
             "Strateji 4 - TOMA + Momentum", 
             "Strateji 5 - Oliver Kell", 
             "Strateji 6 - TOTT HOTT",
-            "Strateji 7 - DeepScalp v1.2"
+            "Strateji 7 - DeepScalp v1.2",
+            "Strateji 8 - Gap Reversal v1.0"
         ])
         self.strategy_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
@@ -2564,6 +2606,7 @@ class OptimizerPanel(QWidget):
         elif strategy_idx == 3: group_defs = STRATEGY4_PARAM_GROUPS
         elif strategy_idx == 4: group_defs = STRATEGY5_PARAM_GROUPS
         elif strategy_idx == 6: group_defs = STRATEGY7_PARAM_GROUPS
+        elif strategy_idx == 7: group_defs = STRATEGY8_PARAM_GROUPS
         elif strategy_idx == 5:
             from src.optimization.hybrid_group_optimizer import STRATEGY6_GROUPS
             # STRATEGY6_GROUPS -> PARAM_GROUPS formatina cevir (list of ParameterGroup -> dict)
@@ -2753,6 +2796,9 @@ class OptimizerPanel(QWidget):
             param_groups = scale_param_groups(base_groups, period_dk)
         elif index == 6:
             base_groups = STRATEGY7_PARAM_GROUPS
+            param_groups = scale_param_groups(base_groups, period_dk)
+        elif index == 7:
+            base_groups = STRATEGY8_PARAM_GROUPS
             param_groups = scale_param_groups(base_groups, period_dk)
         else:
             # Bilinmeyen strateji indeksi — S1 grubunu fallback olarak kullan

@@ -108,6 +108,7 @@ class ExportPanel(QWidget):
             "Strateji 5 - Oliver Kell",
             "Strateji 6 - TOTT HOTT",
             "Strateji 7 - DeepScalp v1.2",
+            "Strateji 8 - Gap Reversal v1.0",
             "Birleşik Robot"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_export)
@@ -160,6 +161,8 @@ class ExportPanel(QWidget):
         self.vade_combo.clear()
         if index == 4:  # S5 Oliver Kell
             self.vade_combo.addItems(["VIOP_ENDEKS", "VIOP_SPOT", "SPOT"])
+        elif index == 7:  # S8 Gap Reversal — sadece ENDEKS
+            self.vade_combo.addItems(["ENDEKS"])
         else:
             self.vade_combo.addItems(["ENDEKS", "SPOT"])
         # Önceki seçimi koru (eşleşirse)
@@ -234,7 +237,7 @@ class ExportPanel(QWidget):
         params_text = f"✓ Süreç: {self.current_process_id}\n\n"
         
         for strategy_idx, params in self.final_params.items():
-            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
+            strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 3: "Strateji 4 (TOMA)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)", 7: "Strateji 8 (Gap Reversal)"}.get(strategy_idx, f"Strateji {strategy_idx+1}")
             params_text += f"━━━ {strategy_name} ━━━\n"
             
             # İlk 5 parametre
@@ -263,7 +266,7 @@ class ExportPanel(QWidget):
             
             # Strateji combo'yu ayarla (DB'deki strategy_index)
             strategy_idx = proc.get('strategy_index', 0)
-            if 0 <= strategy_idx <= 5:
+            if 0 <= strategy_idx <= 7:
                 self.strategy_combo.setCurrentIndex(strategy_idx)
             
             # Vade Tipi combo'yu ayarla
@@ -328,6 +331,12 @@ class ExportPanel(QWidget):
                     QMessageBox.warning(self, "Uyarı", "Strateji 7 (DeepScalp) için final parametre bulunamadı.")
                     return
                 code = exporter._generate_strategy7_code(s7_params, vade_tipi)
+            elif strategy_idx == 7:
+                s8_params = self.final_params.get(7, {})
+                if not s8_params:
+                    QMessageBox.warning(self, "Uyardı", "Strateji 8 (Gap Reversal) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy8_code(s8_params, vade_tipi)
             else:
                 if not s1_params or not s2_params:
                     QMessageBox.warning(self, "Uyarı", "Birleşik robot için S1 ve S2 final parametreleri gerekli.")
@@ -360,7 +369,7 @@ class ExportPanel(QWidget):
             s2_params = self.final_params.get(1, {})
             
             # Dosya adı
-            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "TOTT_HOTT", "Combined"]
+            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "TOTT_HOTT", "DeepScalp", "GapReversal", "Combined"]
             filename = f"{symbol}_{period}DK_{strategy_names[strategy_idx]}.cs"
             filepath = output_dir / filename
             
@@ -402,6 +411,18 @@ class ExportPanel(QWidget):
                     QMessageBox.warning(self, "Uyarı", "Strateji 6 (TOTT HOTT) için final parametre bulunamadı.")
                     return
                 code = exporter._generate_strategy6_code(s6_params, vade_tipi)
+            elif strategy_idx == 6:
+                s7_params = self.final_params.get(6, {})
+                if not s7_params:
+                    QMessageBox.warning(self, "Uyarı", "Strateji 7 (DeepScalp) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy7_code(s7_params, vade_tipi)
+            elif strategy_idx == 7:
+                s8_params = self.final_params.get(7, {})
+                if not s8_params:
+                    QMessageBox.warning(self, "Uyardı", "Strateji 8 (Gap Reversal) için final parametre bulunamadı.")
+                    return
+                code = exporter._generate_strategy8_code(s8_params, vade_tipi)
             else:
                 if not s1_params or not s2_params:
                     QMessageBox.warning(self, "Uyarı", "Birleşik robot için S1 ve S2 final parametreleri gerekli.")

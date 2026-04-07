@@ -45,7 +45,7 @@ def main():
     
     app = QApplication(sys.argv)
     app.setApplicationName("IdealQuant")
-    app.setApplicationVersion("4.8")
+    app.setApplicationVersion("4.9")
     app.setOrganizationName("IdealQuant")
     
     # Varsayılan font

@@ -30,7 +30,7 @@ def main():
     
     pyinstaller_args = [
         sys.executable, "-m", "PyInstaller",
-        "--name=IdealQuant_v4.8",
+        "--name=IdealQuant_v4.9",
         "--onefile",           # Tek bir EXE haline getir
         "--noconfirm",         # Sormadan uzerine yaz
         "--clean",
@@ -57,7 +57,7 @@ def main():
     
     if result.returncode == 0:
         print("\n=== DERLEME BASARILI! ===")
-        print(f"Execute edin: {os.path.join(project_root, 'dist', 'IdealQuant_v4.8.exe')}")
+        print(f"Execute edin: {os.path.join(project_root, 'dist', 'IdealQuant_v4.9.exe')}")
     else:
         print("\n=== DERLEME BASARISIZ! ===")
         

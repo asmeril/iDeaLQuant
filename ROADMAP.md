@@ -1,4 +1,4 @@
-# 🗺️ IdealQuant - Yol Haritası v4.8
+# 🗺️ IdealQuant - Yol Haritası v4.9
 
 ## 🎯 Ana Hedef
 IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyon + robust parametre seçim sistemi.
@@ -16,7 +16,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 2 | ✅ | Optimizasyon Motoru | - |
 | Faz 3 | ✅ | Robust Parametre | - |
 | Faz 4 | ✅ | IdealData Entegrasyonu | - |
-| Faz 5 | ✅ | **v4.8 Sistem Hizalaması** | 🔴 Kritik |
+| Faz 5 | ✅ | **v4.9 Sistem Hizalaması** | 🔴 Kritik |
 | Faz 6 | ✅ | Desktop UI (PySide6) | - |
 | Faz 7 | ✅ | Veritabanı Entegrasyonu | - |
 | Faz 8 | 🔄 | Agent Dokümantasyonu | 🔴 Sürekli |

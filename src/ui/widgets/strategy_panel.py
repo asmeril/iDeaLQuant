@@ -112,6 +112,24 @@ class StrategyPanel(QWidget):
         'gate_pct': 0.5,
     }
     
+    STRATEGY8_DEFAULTS = {
+        'min_gap_pct': 0.05,
+        'max_gap_pct': 2.00,
+        'cuma_aktif': False,
+        'or_bars': 15,
+        'rsi_filtre_aktif': True,
+        'rsi_period': 5,
+        'rsi_ob': 62.0,
+        'rsi_os': 38.0,
+        'hacim_filtre_aktif': True,
+        'hacim_ma_period': 20,
+        'hacim_oran': 0.8,
+        'atr_period': 14,
+        'atr_stop_mult': 0.5,
+        'gap_window_bars': 210,
+        'cooldown_bars': 3,
+    }
+
     STRATEGY7_DEFAULTS = {
         # Layer 1
         'ars_k': 1.23,
@@ -130,6 +148,7 @@ class StrategyPanel(QWidget):
         'mfi_llv_period': 5,
         # Layer 3
         'toma_period2': 2.1,
+        'mfi_period': 14,
         'mfi_long': 55.0,
         'mfi_short': 45.0,
         # Layer 4-5
@@ -222,7 +241,8 @@ class StrategyPanel(QWidget):
             "Strateji 4 - TOMA + Momentum",
             "Strateji 5 - Oliver Kell",
             "Strateji 6 - TOTT HOTT",
-            "Strateji 7 - DeepScalp v1.2"
+            "Strateji 7 - DeepScalp v1.2",
+            "Strateji 8 - Gap Reversal v1.0"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         layout.addWidget(self.strategy_combo, 1)
@@ -262,6 +282,8 @@ class StrategyPanel(QWidget):
             self._create_strategy6_params()
         elif index == 6:
             self._create_strategy7_params()
+        elif index == 7:
+            self._create_strategy8_params()
     
     def _create_strategy1_params(self):
         """Strateji 1 parametrelerini oluştur"""
@@ -543,7 +565,50 @@ class StrategyPanel(QWidget):
         self.params_layout.addWidget(l4_group)
         
         self.params_layout.addStretch()
-    
+
+    def _create_strategy8_params(self):
+        """Strateji 8 (Gap Reversal) parametrelerini olustur"""
+        defaults = self.STRATEGY8_DEFAULTS
+
+        # Gap Filtre
+        gap_group = QGroupBox("Katman 1: Gap Filtre")
+        gap_layout = QFormLayout(gap_group)
+        self._add_double_spin('min_gap_pct', "Min Gap %:", 0.01, 1.0, defaults['min_gap_pct'], gap_layout, decimals=2)
+        self._add_double_spin('max_gap_pct', "Max Gap %:", 0.5, 5.0, defaults['max_gap_pct'], gap_layout, decimals=2)
+        self.params_layout.addWidget(gap_group)
+
+        # Opening Range
+        or_group = QGroupBox("Katman 2: Opening Range")
+        or_layout = QFormLayout(or_group)
+        self._add_spin('or_bars', "OR Bar Sayisi:", 5, 60, defaults['or_bars'], or_layout)
+        self.params_layout.addWidget(or_group)
+
+        # RSI
+        rsi_group = QGroupBox("Katman 4: RSI Onay")
+        rsi_layout = QFormLayout(rsi_group)
+        self._add_spin('rsi_period', "RSI Periyot:", 3, 20, defaults['rsi_period'], rsi_layout)
+        self._add_double_spin('rsi_ob', "RSI Overbought (Short):", 50.0, 90.0, defaults['rsi_ob'], rsi_layout)
+        self._add_double_spin('rsi_os', "RSI Oversold (Long):", 10.0, 50.0, defaults['rsi_os'], rsi_layout)
+        self.params_layout.addWidget(rsi_group)
+
+        # Hacim
+        vol_group = QGroupBox("Katman 5: Hacim Onay")
+        vol_layout = QFormLayout(vol_group)
+        self._add_spin('hacim_ma_period', "Hacim MA Periyot:", 5, 50, defaults['hacim_ma_period'], vol_layout)
+        self._add_double_spin('hacim_oran', "Hacim Orani:", 0.1, 2.0, defaults['hacim_oran'], vol_layout)
+        self.params_layout.addWidget(vol_group)
+
+        # ATR & Zaman
+        risk_group = QGroupBox("Katman 6-8: ATR Stop & Zaman")
+        risk_layout = QFormLayout(risk_group)
+        self._add_spin('atr_period', "ATR Periyot:", 5, 30, defaults['atr_period'], risk_layout)
+        self._add_double_spin('atr_stop_mult', "ATR Stop Carpan:", 0.1, 3.0, defaults['atr_stop_mult'], risk_layout)
+        self._add_spin('gap_window_bars', "Zaman Stopu (Bar):", 30, 420, defaults['gap_window_bars'], risk_layout)
+        self._add_spin('cooldown_bars', "Cooldown Bar:", 1, 10, defaults['cooldown_bars'], risk_layout)
+        self.params_layout.addWidget(risk_group)
+
+        self.params_layout.addStretch()
+
     def _add_spin(self, name: str, label: str, min_val: int, max_val: int, default: int, layout: QFormLayout):
         """Integer SpinBox ekle"""
         spin = QSpinBox()
@@ -579,6 +644,8 @@ class StrategyPanel(QWidget):
             defaults = self.STRATEGY6_DEFAULTS
         elif index == 6:
             defaults = self.STRATEGY7_DEFAULTS
+        elif index == 7:
+            defaults = self.STRATEGY8_DEFAULTS
         else:
             defaults = self.STRATEGY1_DEFAULTS
         
@@ -644,6 +711,8 @@ class StrategyPanel(QWidget):
             strategy_name = "tott_hott"
         elif idx == 6:
             strategy_name = "deepscalp"
+        elif idx == 7:
+            strategy_name = "gap_reversal"
         else:
             strategy_name = "unknown"
         default_name = f"{strategy_name}_preset.json"
@@ -744,6 +813,13 @@ class StrategyPanel(QWidget):
             elif strategy_idx == 7:
                 from src.strategies.deepscalp_strategy import DeepScalpStrategy
                 strategy = DeepScalpStrategy.from_config_dict(
+                    {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
+                    config,
+                    dates
+                )
+            elif strategy_idx == 8:
+                from src.strategies.gap_reversal_strategy import GapReversalStrategy
+                strategy = GapReversalStrategy.from_config_dict(
                     {'opens': opens, 'highs': highs, 'lows': lows, 'closes': closes, 'typical': typical, 'volumes': df['Lot'].tolist() if 'Lot' in df.columns else df['Volume'].tolist(), 'dates': dates},
                     config,
                     dates
