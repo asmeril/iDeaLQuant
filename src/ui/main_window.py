@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
         title.setObjectName("titleLabel")
         layout.addWidget(title)
         
-        subtitle = QLabel("Algorithmic Trading Optimizer v4.1")
+        subtitle = QLabel("Algorithmic Trading Optimizer v4.8")
         subtitle.setObjectName("subtitleLabel")
         layout.addWidget(subtitle)
         
@@ -220,7 +220,7 @@ class MainWindow(QMainWindow):
             self,
             "IdealQuant Hakkında",
             """<h2>IdealQuant</h2>
-            <p>Algorithmic Trading Optimizer v4.1</p>
+            <p>Algorithmic Trading Optimizer v4.8</p>
             <p>VIOP piyasası için optimize edilmiş alım-satım stratejileri.</p>
             <hr>
             <p><b>Özellikler:</b></p>

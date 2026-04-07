@@ -375,11 +375,61 @@ class BatchAnalysisWorker(QThread):
         elif idx == 6: return DeepScalpStrategy.from_config_dict(cache, params)
         else: return ARSTrendStrategyV2.from_config_dict(cache, params)
 
+    def _s4_backtest_net(self, df_slice, params) -> float:
+        """S4 (TOMA) icin fast_backtest_strategy4 ile net kar hesapla."""
+        try:
+            import numpy as np
+            from src.optimization.strategy4_optimizer import fast_backtest_strategy4, IndicatorCache as S4Cache
+            s4c = S4Cache(df_slice)
+            toma_val_arr, toma_trend_arr = s4c.get_toma(
+                int(params.get('toma_period', 97)), float(params.get('toma_opt', 1.5)))
+            hhv1 = s4c.get_hhv(int(params.get('hhv1_period', params.get('hhv1', 20))))
+            llv1 = s4c.get_llv(int(params.get('llv1_period', params.get('llv1', 20))))
+            hhv2 = s4c.get_hhv(int(params.get('hhv2_period', params.get('hhv2', 150))))
+            llv2 = s4c.get_llv(int(params.get('llv2_period', params.get('llv2', 190))))
+            hhv3 = s4c.get_hhv(int(params.get('hhv3_period', 150)))
+            llv3 = s4c.get_llv(int(params.get('llv3_period', 190)))
+            mom  = s4c.get_mom(int(params.get('mom_period', 500)))
+            trix1 = s4c.get_trix(int(params.get('trix_period', 50)))
+            trix2 = s4c.get_trix(int(params.get('trix_period2', 40)))
+            mask  = np.ones(len(s4c.closes), dtype=bool)
+            res = fast_backtest_strategy4(
+                s4c.closes, toma_trend_arr, toma_val_arr,
+                hhv1, llv1, hhv2, llv2, hhv3, llv3,
+                mom, trix1, trix2, mask, s4c.times_arr,
+                float(params.get('mom_limit_low', 99.0)),
+                float(params.get('mom_limit_high', 101.5)),
+                int(params.get('trix_lb1', 145)),
+                int(params.get('trix_lb2', 160)),
+                float(params.get('kar_al', 0.0)) / 100.0,
+                float(params.get('iz_stop', 0.0)) / 100.0,
+                3
+            )
+            return float(res[0])  # net_profit
+        except Exception as e:
+            print(f"[S4_BT] {e}")
+            return 0.0
+
     def _calc_wfa(self, idx, params):
         if not self.cache: return 0
         n = len(self.cache.closes)
         split = int(n * 0.7)
-        
+
+        # S4 (TOMA) için doğrudan fast_backtest_strategy4 kullan
+        if idx == 3:
+            original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
+            if original_df is None:
+                return 0
+            is_df  = original_df.iloc[:split].reset_index(drop=True)
+            oos_df = original_df.iloc[split:].reset_index(drop=True)
+            is_pnl  = self._s4_backtest_net(is_df,  params)
+            oos_pnl = self._s4_backtest_net(oos_df, params)
+            if is_pnl <= 0:
+                return 0
+            is_days  = max(1, split / 500)
+            oos_days = max(1, (n - split) / 500)
+            return max(0, ((oos_pnl / oos_days) / (is_pnl / is_days)) * 100)
+
         # [FIX] Look-ahead bias: IS ve OOS için izole cache kullan
         original_df = getattr(self.cache, 'df', None)
         if original_df is None:
@@ -407,13 +457,13 @@ class BatchAnalysisWorker(QThread):
                                           self.process_costs['commission'], self.process_costs['slippage'])[0]
             oos_pnl = backtest_with_summary(self.cache.closes[split:], sig[split:], ex_l[split:], ex_s[split:],
                                            self.process_costs['commission'], self.process_costs['slippage'])[0]
-                                       
+
         if is_pnl <= 0: return 0
-        
+
         # Time adjusts
         is_days = max(1, split/500)
         oos_days = max(1, (n-split)/500)
-        
+
         eff = ((oos_pnl/oos_days) / (is_pnl/is_days)) * 100
         return max(0, eff)
         
@@ -466,6 +516,11 @@ class BatchAnalysisWorker(QThread):
         return max(0, 100 - (avg_dev * 500)) # %10 sapma -> %50 puan kırma
         
     def _run_bt(self, idx, params):
+        # S4 (TOMA) için doğrudan fast_backtest_strategy4 kullan
+        if idx == 3:
+            original_df = getattr(self.cache, 'df', None) or getattr(self.cache, 'data', None)
+            if original_df is not None:
+                return self._s4_backtest_net(original_df, params)
         if idx == 0: s = ScoreBasedStrategy.from_config_dict(self.cache, params)
         elif idx == 2: s = ParadiseStrategy.from_config_dict(self.cache, params)
         elif idx == 3: s = TomaStrategy.from_config_dict(self.cache, params)

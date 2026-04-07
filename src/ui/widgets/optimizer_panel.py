@@ -20,57 +20,58 @@ import os
 from src.core.database import db
 
 
-# Strateji 1 Parametre Grupları (20 parametre)
+# Strateji 1 Parametre Grupları — 5 dk (Teorik referans periyot)
+# Tüm periyot parametreleri 5dk intraday VIOP davranışı baz alınarak kalibre edildi.
+# Ref: implementation_plan.md (S1 Kalibrasyonu)
 STRATEGY1_PARAM_GROUPS = {
     'ARS': {
         'label': 'ARS Parametreleri',
         'params': {
-            'ars_period': {'label': 'ARS Periyot', 'type': 'int', 'default': 3, 'min': 1, 'max': 15, 'step': 2},
-            'ars_k': {'label': 'ARS K', 'type': 'float', 'default': 0.01, 'min': 0.005, 'max': 0.100, 'step': 0.010},
+            'ars_period': {'label': 'ARS Periyot', 'type': 'int', 'default': 3, 'min': 3, 'max': 10, 'step': 1},
+            'ars_k': {'label': 'ARS K', 'type': 'float', 'default': 0.010, 'min': 0.005, 'max': 0.050, 'step': 0.005},
         }
     },
     'ADX': {
         'label': 'ADX Parametreleri',
         'params': {
-            'adx_period': {'label': 'ADX Periyot', 'type': 'int', 'default': 17, 'min': 10, 'max': 30, 'step': 5},
-            'adx_threshold': {'label': 'ADX Esik', 'type': 'float', 'default': 25.0, 'min': 15.0, 'max': 50.0, 'step': 5.0},
+            'adx_period': {'label': 'ADX Periyot', 'type': 'int', 'default': 17, 'min': 14, 'max': 25, 'step': 3},
+            'adx_threshold': {'label': 'ADX Esik', 'type': 'float', 'default': 25.0, 'min': 15.0, 'max': 40.0, 'step': 5.0},
         }
     },
     'MACDV': {
         'label': 'MACD-V Parametreleri',
         'params': {
-            'macdv_short': {'label': 'Kisa Periyot', 'type': 'int', 'default': 13, 'min': 8, 'max': 20, 'step': 2},
-            'macdv_long': {'label': 'Uzun Periyot', 'type': 'int', 'default': 28, 'min': 20, 'max': 40, 'step': 5},
-            'macdv_signal': {'label': 'Sinyal Periyot', 'type': 'int', 'default': 8, 'min': 5, 'max': 15, 'step': 2},
-            'macdv_threshold': {'label': 'MACDV Esik', 'type': 'float', 'default': 0.0, 'min': 0.001, 'max': 50.0, 'step': 10.0},
+            'macdv_short': {'label': 'Kisa Periyot', 'type': 'int', 'default': 13, 'min': 10, 'max': 15, 'step': 1},
+            'macdv_long': {'label': 'Uzun Periyot', 'type': 'int', 'default': 28, 'min': 22, 'max': 34, 'step': 2},
+            'macdv_signal': {'label': 'Sinyal Periyot', 'type': 'int', 'default': 8, 'min': 6, 'max': 10, 'step': 1},
+            'macdv_threshold': {'label': 'MACDV Esik', 'type': 'float', 'default': 0.0, 'min': 0.0, 'max': 5.0, 'step': 1.0},
         }
     },
     'NetLot': {
         'label': 'NetLot Parametreleri',
         'params': {
-            'netlot_period': {'label': 'Periyot', 'type': 'int', 'default': 5, 'min': 3, 'max': 15, 'step': 2},
-            'netlot_threshold': {'label': 'Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 50.0, 'step': 5.0},
+            'netlot_period': {'label': 'Periyot', 'type': 'int', 'default': 5, 'min': 3, 'max': 10, 'step': 1},
+            'netlot_threshold': {'label': 'Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 40.0, 'step': 5.0},
         }
     },
     'Yatay_BB': {
         'label': 'Yatay Filtre - Bollinger',
         'params': {
-            'bb_period': {'label': 'BB Periyot', 'type': 'int', 'default': 20, 'min': 10, 'max': 100, 'step': 5},
-            'bb_std': {'label': 'BB StdDev', 'type': 'float', 'default': 2.0, 'min': 1.5, 'max': 3.0, 'step': 0.25},
+            'bb_period': {'label': 'BB Periyot', 'type': 'int', 'default': 20, 'min': 15, 'max': 30, 'step': 5},
+            'bb_std': {'label': 'BB StdDev', 'type': 'float', 'default': 2.0, 'min': 1.5, 'max': 2.5, 'step': 0.25},
             'bb_width_multiplier': {'label': 'BB Width Mult', 'type': 'float', 'default': 0.8, 'min': 0.5, 'max': 1.5, 'step': 0.1},
-            'bb_avg_period': {'label': 'BB Avg Periyot', 'type': 'int', 'default': 50, 'min': 30, 'max': 100, 'step': 10},
+            'bb_avg_period': {'label': 'BB Avg Periyot', 'type': 'int', 'default': 50, 'min': 30, 'max': 70, 'step': 10},
         }
     },
     'Yatay_Onay': {
         'label': 'Yatay Filtre - Onay',
         'params': {
             'ars_mesafe_threshold': {'label': 'ARS Mesafe', 'type': 'float', 'default': 0.25, 'min': 0.10, 'max': 0.50, 'step': 0.05},
-            'yatay_ars_bars': {'label': 'ARS Bar', 'type': 'int', 'default': 10, 'min': 5, 'max': 20, 'step': 5},
-            'yatay_adx_threshold': {'label': 'Yatay ADX Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 40.0, 'step': 5.0},
+            'yatay_ars_bars': {'label': 'ARS Bar', 'type': 'int', 'default': 10, 'min': 5, 'max': 15, 'step': 2},
+            'yatay_adx_threshold': {'label': 'Yatay ADX Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 30.0, 'step': 5.0},
             'filter_score_threshold': {'label': 'Filtre Skor', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
         }
     },
-
     'Skor': {
         'label': 'Skor Ayarlari (Kademeli)',
         'params': {
@@ -82,6 +83,140 @@ STRATEGY1_PARAM_GROUPS = {
     }
 }
 
+# Strateji 1 Parametre Grupları — 1 dk (Teorik olarak kalibre edilmiş, ölçeklenmez)
+# Wilder ADX=14 referans, MACDV daha hızlı (9,21,6), NetLot 8 bar=8dk smooth.
+# Ref: implementation_plan.md (S1 Kalibrasyonu — 1dk)
+STRATEGY1_PARAM_GROUPS_1DK = {
+    'ARS': {
+        'label': 'ARS Parametreleri',
+        'params': {
+            'ars_period': {'label': 'ARS Periyot', 'type': 'int', 'default': 5, 'min': 3, 'max': 10, 'step': 1},
+            'ars_k': {'label': 'ARS K', 'type': 'float', 'default': 0.020, 'min': 0.010, 'max': 0.080, 'step': 0.010},
+        }
+    },
+    'ADX': {
+        'label': 'ADX Parametreleri',
+        'params': {
+            'adx_period': {'label': 'ADX Periyot', 'type': 'int', 'default': 14, 'min': 10, 'max': 30, 'step': 2},
+            'adx_threshold': {'label': 'ADX Esik', 'type': 'float', 'default': 25.0, 'min': 15.0, 'max': 40.0, 'step': 5.0},
+        }
+    },
+    'MACDV': {
+        'label': 'MACD-V Parametreleri',
+        'params': {
+            'macdv_short': {'label': 'Kisa Periyot', 'type': 'int', 'default': 9, 'min': 8, 'max': 13, 'step': 1},
+            'macdv_long': {'label': 'Uzun Periyot', 'type': 'int', 'default': 21, 'min': 18, 'max': 28, 'step': 2},
+            'macdv_signal': {'label': 'Sinyal Periyot', 'type': 'int', 'default': 6, 'min': 5, 'max': 9, 'step': 1},
+            'macdv_threshold': {'label': 'MACDV Esik', 'type': 'float', 'default': 0.0, 'min': 0.0, 'max': 5.0, 'step': 1.0},
+        }
+    },
+    'NetLot': {
+        'label': 'NetLot Parametreleri',
+        'params': {
+            'netlot_period': {'label': 'Periyot', 'type': 'int', 'default': 8, 'min': 5, 'max': 15, 'step': 2},
+            'netlot_threshold': {'label': 'Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 40.0, 'step': 5.0},
+        }
+    },
+    'Yatay_BB': {
+        'label': 'Yatay Filtre - Bollinger',
+        'params': {
+            'bb_period': {'label': 'BB Periyot', 'type': 'int', 'default': 20, 'min': 15, 'max': 30, 'step': 5},
+            'bb_std': {'label': 'BB StdDev', 'type': 'float', 'default': 2.0, 'min': 1.5, 'max': 2.5, 'step': 0.25},
+            'bb_width_multiplier': {'label': 'BB Width Mult', 'type': 'float', 'default': 0.8, 'min': 0.5, 'max': 1.5, 'step': 0.1},
+            'bb_avg_period': {'label': 'BB Avg Periyot', 'type': 'int', 'default': 50, 'min': 30, 'max': 70, 'step': 10},
+        }
+    },
+    'Yatay_Onay': {
+        'label': 'Yatay Filtre - Onay',
+        'params': {
+            'ars_mesafe_threshold': {'label': 'ARS Mesafe', 'type': 'float', 'default': 0.15, 'min': 0.05, 'max': 0.30, 'step': 0.05},
+            'yatay_ars_bars': {'label': 'ARS Bar', 'type': 'int', 'default': 5, 'min': 3, 'max': 10, 'step': 1},
+            'yatay_adx_threshold': {'label': 'Yatay ADX Esik', 'type': 'float', 'default': 20.0, 'min': 10.0, 'max': 30.0, 'step': 5.0},
+            'filter_score_threshold': {'label': 'Filtre Skor', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
+        }
+    },
+    'Skor': {
+        'label': 'Skor Ayarlari (Kademeli)',
+        'params': {
+            'min_score': {'label': 'Min Skor', 'type': 'int', 'default': 3, 'min': 2, 'max': 4, 'step': 1},
+            'exit_score': {'label': 'Cikis Skor', 'type': 'int', 'default': 3, 'min': 2, 'max': 4, 'step': 1},
+            'contrary_score_max': {'label': 'Karşıt Skor Max', 'type': 'int', 'default': 2, 'min': 1, 'max': 3, 'step': 1},
+        },
+        'is_cascaded': True
+    }
+}
+
+
+# Strateji 2 Parametre Grupları — 1dk (Sabit, ölçeklemesiz)
+# Referans: Strateji_ARS_Trend_v2.txt + VIP_TUPRS_5dk preset analizi
+#
+# Bu strateji SCALP değil, INTRADAY TREND TAKİP stratejisidir.
+# Giriş: 4 koşul aynı anda (HHV breakout + Momentum + MFI + Volume) → yüksek bekleme, düşük frekans
+# Çıkış: ATR tabanlı TP (5 ATR default ≈ 150-250 VIOP puanı) + trailing stop
+# 1dk'da anlamlı intraday trend: 30-120 bar = 30-120 dakika
+# Kıyaslama: TUPRS 5dk preseti breakout=6-96(x6), 5dk×96bar=480dk → gün boyu trend takip
+STRATEGY2_PARAM_GROUPS_1DK = {
+    'ARS': {
+        'label': 'ARS Parametreleri',
+        'params': {
+            # EMA(Typical): trailing stop tabanı; 1dk trend için 3-20 bar = 3-20 dk yumuşatma
+            'ars_ema_period': {'label': 'EMA Periyot', 'type': 'int', 'default': 3, 'min': 2, 'max': 20, 'step': 1},
+            # ATR: volatilite normalizasyonu; 1dk trend için 10-40 bar = 10-40 dk pencere
+            'ars_atr_period': {'label': 'ATR Periyot', 'type': 'int', 'default': 10, 'min': 8, 'max': 40, 'step': 2},
+            # ATR çarpanı: trend takipte bant geniş olmalı (scalp'ten farklı)
+            'ars_atr_mult': {'label': 'ATR Carpan', 'type': 'float', 'default': 0.5, 'min': 0.3, 'max': 1.5, 'step': 0.1},
+            # Min bant: düşük vol günlerde minimum koruma; 0.002=30pt VIOP
+            'ars_min_band': {'label': 'Min Band', 'type': 'float', 'default': 0.002, 'min': 0.001, 'max': 0.010, 'step': 0.001},
+            # Max bant: yüksek vol günlerde kap; üst sınır geniş tutuldu
+            'ars_max_band': {'label': 'Max Band', 'type': 'float', 'default': 0.015, 'min': 0.008, 'max': 0.035, 'step': 0.002},
+        }
+    },
+    'Giris_Filtreleri': {
+        'label': 'Giris Filtreleri',
+        'params': {
+            # ROC(n): trend teyidi için 5-30 bar = 5-30 dk momentum; ref: 5 bar (başlangıç noktası)
+            'momentum_period': {'label': 'Momentum Periyot', 'type': 'int', 'default': 5, 'min': 5, 'max': 30, 'step': 1},
+            # Momentum eşiği: boyutsuz; 100-merkezli, adım 10 ile arama
+            'momentum_threshold': {'label': 'Momentum Esik', 'type': 'float', 'default': 100.0, 'min': 50.0, 'max': 180.0, 'step': 10.0},
+            # Donchian kanalı: 1dk intraday trend için 10-60 bar = 10-60 dk pencere
+            # TUPRS 5dk preseti: 6-96 bar (30dk-8saat); 1dk eşdeğeri gün içi anlamlı pencere
+            'breakout_period': {'label': 'Breakout Periyot', 'type': 'int', 'default': 15, 'min': 10, 'max': 60, 'step': 5},
+            # MFI: standart 14; 1dk'da 10-30 bar anlamlı para akışı ölçümü
+            'mfi_period': {'label': 'MFI Periyot', 'type': 'int', 'default': 14, 'min': 10, 'max': 30, 'step': 2},
+            # MFI HHV/LLV: MFI'nın zirve/dip referans penceresi; daha geniş = daha sıkı filtre
+            'mfi_hhv_period': {'label': 'MFI HHV', 'type': 'int', 'default': 14, 'min': 10, 'max': 40, 'step': 2},
+            'mfi_llv_period': {'label': 'MFI LLV', 'type': 'int', 'default': 14, 'min': 10, 'max': 40, 'step': 2},
+            # Hacim referans penceresi: anlamlı hacim kırılımı için 10-40 bar
+            'volume_hhv_period': {'label': 'Hacim HHV', 'type': 'int', 'default': 14, 'min': 10, 'max': 40, 'step': 2},
+        }
+    },
+    'Cikis_Risk': {
+        'label': 'Cikis / Risk Yonetimi',
+        'params': {
+            # ATR çıkış periyodu: volatilite ölçümü; 10-30 bar = 10-30 dk
+            'atr_exit_period': {'label': 'ATR Exit Periyot', 'type': 'int', 'default': 14, 'min': 10, 'max': 30, 'step': 2},
+            # SL çarpanı: trend takipte scalp'ten DAHA GENİŞ stop; 1.0-4.0
+            'atr_sl_mult': {'label': 'SL Carpan', 'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
+            # TP çarpanı: trend takipte BÜYÜK hedef; 3.0-12.0 (default 5.0 = 150-250 VIOP puan)
+            'atr_tp_mult': {'label': 'TP Carpan', 'type': 'float', 'default': 5.0, 'min': 3.0, 'max': 12.0, 'step': 0.5},
+            # Trail çarpanı: kazanan trende UZUN SÜRE kalma; SL'den geniş
+            'atr_trail_mult': {'label': 'Trail Carpan', 'type': 'float', 'default': 2.0, 'min': 1.5, 'max': 5.0, 'step': 0.25},
+            # Onay bar: 1dk trend takipte 2-5 bar gürültüden korur; scalp değil
+            'exit_confirm_bars': {'label': 'Onay Bar', 'type': 'int', 'default': 2, 'min': 1, 'max': 5, 'step': 1},
+            'exit_confirm_mult': {'label': 'Onay Carpan', 'type': 'float', 'default': 1.0, 'min': 0.5, 'max': 2.0, 'step': 0.25},
+        },
+        'is_cascaded': True
+    },
+    'Ince_Ayar': {
+        'label': 'Ince Ayar (Kademeli)',
+        'params': {
+            # Hacim filtresi çarpanı: 0.5'ten küçük=çok gevşek, 1.5'ten büyük=çok sıkı
+            'volume_mult': {'label': 'Hacim Carpan', 'type': 'float', 'default': 0.8, 'min': 0.3, 'max': 1.5, 'step': 0.1},
+            'volume_llv_period': {'label': 'Hacim LLV', 'type': 'int', 'default': 14, 'min': 10, 'max': 40, 'step': 2},
+        },
+        'is_cascaded': True
+    }
+}
 
 # Strateji 2 Parametre Grupları (21 parametre)
 STRATEGY2_PARAM_GROUPS = {
@@ -130,6 +265,65 @@ STRATEGY2_PARAM_GROUPS = {
     }
 }
 
+
+# Strateji 3 Parametre Grupları — 1dk (Sabit, ölçeklemesiz)
+# Referans: reference/Paradise.txt
+#
+# Paradise = "Konsolidasyon → Kırılma" stratejisi (Turtle/Donchian Breakout + DSMA trend filtresi)
+# Giriş ön koşulu: MOM(n) bandı [alt, üst] → "fiyat son n barda sakin", sonra 4 koşul aynı anda kırılıyor
+# DSMA = SMA(SMA(C,N), N) → 2×N bar ısınma; 5dk'da DSMA(50)=250dk≈4 saat gün boyu trend
+# scale×5 YANLIŞ: DSMA(750) için 1500 bar ısınma = 25 saat → imkânsız
+#
+# 1dk'da amaç: aynı zihniyet, anlamlı pencereler
+# EMA < DSMA periyot kısıtı: EMA hep daha hızlı olmalı (EMA_period < DSMA_period)
+STRATEGY3_PARAM_GROUPS_1DK = {
+    'Trend': {
+        'label': 'Trend Parametreleri',
+        'params': {
+            # Hızlı trend çizgisi; ref: EMA(21)=5dk×21=105dk; 1dk'da 10-60 bar = 10-60 dk
+            'ema_period': {'label': 'EMA Periyot', 'type': 'int', 'default': 21, 'min': 10, 'max': 60, 'step': 5},
+            # DSMA yavaş trend (gün boyu referans); ref: DSMA(50)=5dk×50=250dk≈4 saat
+            # 1dk'da 40-150 bar = 40-150 dk; 2×N bar warmup → max(150)*2=300 bar tamam
+            'dsma_period': {'label': 'DSMA Periyot', 'type': 'int', 'default': 50, 'min': 40, 'max': 150, 'step': 10},
+            # Kısa dönem fiyat filtresi; ref: MA(20)=100dk; 1dk'da 10-60 bar
+            'ma_period': {'label': 'MA Periyot', 'type': 'int', 'default': 20, 'min': 10, 'max': 60, 'step': 5},
+        }
+    },
+    'Breakout': {
+        'label': 'Breakout Parametreleri',
+        'params': {
+            # Donchian kanalı: ref HH(25)=5dk×25=125dk≈2 saat; 1dk'da 15-60 bar
+            'hh_period': {'label': 'HH/LL Periyot', 'type': 'int', 'default': 25, 'min': 15, 'max': 60, 'step': 5},
+            # Hacim referans penceresi; boyutsuz zaman açısından; 1dk'da 10-40 bar
+            'vol_hhv_period': {'label': 'Hacim HHV Periyot', 'type': 'int', 'default': 14, 'min': 10, 'max': 40, 'step': 5},
+        }
+    },
+    'Momentum': {
+        'label': 'Momentum Parametreleri',
+        'params': {
+            # Konsolidasyon filtresi: ref MOM(60)=5dk×60=300dk=5 saat; 1dk'da 30-120 bar = 30-120 dk
+            # Geniş tut: strateji bu bant içinde bekliyor, kırılma zamanı değişken
+            'mom_period': {'label': 'Momentum Periyot', 'type': 'int', 'default': 60, 'min': 30, 'max': 120, 'step': 10},
+            # Bandın alt/üst sınırı: boyutsuz, timeframe-bağımsız; ref: 98.0 / 102.0
+            # Dar bant (99/101) = nadir giriş; geniş bant (90/110) = her zaman giriş (filtre işlevsiz)
+            'mom_alt': {'label': 'MOM Alt Bant', 'type': 'float', 'default': 98.0, 'min': 90.0, 'max': 99.5, 'step': 0.5},
+            'mom_ust': {'label': 'MOM Ust Bant', 'type': 'float', 'default': 102.0, 'min': 100.5, 'max': 110.0, 'step': 0.5},
+        }
+    },
+    'Cikis_Risk': {
+        'label': 'Cikis / Risk Yonetimi',
+        'params': {
+            # ATR volatilite ölçümü; 1dk'da 10-30 bar = 10-30 dk
+            'atr_period': {'label': 'ATR Periyot', 'type': 'int', 'default': 14, 'min': 10, 'max': 30, 'step': 2},
+            # Boyutsuz çarpanlar; konsolidasyon kırılması → büyük hareket hedefi
+            # 1dk'da 1 ATR daha küçük (~10-20 pt) → daha büyük çarpan aranabilir
+            'atr_sl': {'label': 'ATR Stop Loss', 'type': 'float', 'default': 2.0, 'min': 0.5, 'max': 5.0, 'step': 0.25},
+            'atr_tp': {'label': 'ATR Take Profit', 'type': 'float', 'default': 4.0, 'min': 2.0, 'max': 12.0, 'step': 0.5},
+            'atr_trail': {'label': 'ATR Trailing', 'type': 'float', 'default': 2.5, 'min': 1.0, 'max': 6.0, 'step': 0.25},
+        },
+        'is_cascaded': True
+    }
+}
 
 # Strateji 3 Parametre Gruplari (Paradise - 12 parametre)
 STRATEGY3_PARAM_GROUPS = {
@@ -268,48 +462,56 @@ STRATEGY6_PARAM_GROUPS = {
     }
 }
 
-# Strateji 7 Parametre Gruplari (DeepScalp v1.2 — 12 parametre, 4 grup)
+
+# Strateji 7 Parametre Grupları (DeepScalp v1.2 - 20 parametre, 4 grup)
+# Aralıklar: Optimizasyon_DeepScalp_Rehberi.txt + S1-S6 karşılaştırması + Scalp kısıtları ile kalibre edildi
+# Ref: reference/Optimizasyon_DeepScalp_Rehberi.txt, S4 TOMA tutarlılığı, periyot-duyarlı preset'ler
 STRATEGY7_PARAM_GROUPS = {
-    'Layer1_RiskRegime': {
-        'label': 'Layer 1: Risk & Regime',
+    'Regime_Layer1': {
+        'label': 'Layer 1: Piyasa Rejimi (ARS & Vol)',
         'params': {
-            'ars_k': {'label': 'ARS Bant Carpan', 'type': 'float', 'default': 1.23, 'min': 0.8, 'max': 2.0, 'step': 0.2},
-            'atr_stop_mult_long': {'label': 'ATR SL Long', 'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
-            'atr_stop_mult_short': {'label': 'ATR SL Short', 'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
-            'kar_al_yuzde_long': {'label': 'Kar Al % Long', 'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
-            'kar_al_yuzde_short': {'label': 'Kar Al % Short', 'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
-            'hhv_period': {'label': 'Tekil Kirici HHV', 'type': 'int', 'default': 12, 'min': 8, 'max': 20, 'step': 2},
-            'llv_period': {'label': 'Tekil Kirici LLV', 'type': 'int', 'default': 12, 'min': 8, 'max': 20, 'step': 2},
-            'vol_ratio': {'label': 'Hacim Orani', 'type': 'float', 'default': 0.8, 'min': 0.60, 'max': 1.00, 'step': 0.10},
+            'ars_k':      {'label': 'ARS K Çarpanı', 'type': 'float', 'default': 1.23, 'min': 0.8, 'max': 2.0,  'step': 0.1},
+            'hhv_period': {'label': 'HHV Periyot',   'type': 'int',   'default': 12,   'min': 6,   'max': 20,   'step': 2},
+            'llv_period': {'label': 'LLV Periyot',   'type': 'int',   'default': 12,   'min': 6,   'max': 20,   'step': 2},
+            'vol_ratio':  {'label': 'Hacim Oranı',   'type': 'float', 'default': 0.8,  'min': 0.5, 'max': 1.2,  'step': 0.1},
         }
     },
-    'Layer2_Trend': {
-        'label': 'Layer 2: Trend & MFI Limit',
+    'Trend_Layer2': {
+        'label': 'Layer 2: Trend Filtreleri (ST & EMA)',
         'params': {
-            'st_factor': {'label': 'SuperTrend Factor', 'type': 'float', 'default': 3.0, 'min': 2.0, 'max': 4.0, 'step': 0.5},
-            'ema_fast_period': {'label': 'EMA Hizli', 'type': 'int', 'default': 9, 'min': 5, 'max': 13, 'step': 2},
-            'ema_slow_period': {'label': 'EMA Yavas', 'type': 'int', 'default': 21, 'min': 15, 'max': 30, 'step': 3},
-            'mfi_hhv_period': {'label': 'MFI HHV', 'type': 'int', 'default': 5, 'min': 3, 'max': 9, 'step': 2},
-            'mfi_llv_period': {'label': 'MFI LLV', 'type': 'int', 'default': 5, 'min': 3, 'max': 9, 'step': 2},
+            'st_factor':        {'label': 'ST Çarpan',      'type': 'float', 'default': 3.0, 'min': 2.0, 'max': 4.0, 'step': 0.5},
+            'ema_fast_period':  {'label': 'EMA Hızlı',      'type': 'int',   'default': 9,   'min': 5,   'max': 15,  'step': 2},
+            'ema_slow_period':  {'label': 'EMA Yavaş',      'type': 'int',   'default': 21,  'min': 15,  'max': 30,  'step': 3},
         }
     },
-    'Layer3_Timing': {
-        'label': 'Layer 3: Zamanlama & Tetikleme',
+    'Timing_Layer3': {
+        'label': 'Layer 3: Zamanlama (TOMA & MFI)',
+        'note': 'TOMA Opt % aralığı S4 ile tutarlı (0.1 adım). toma_period1=1 sabit (scalp reaktifliği).',
         'params': {
-            'toma_period2': {'label': 'TOMA Yuzde', 'type': 'float', 'default': 2.1, 'min': 1.5, 'max': 3.0, 'step': 0.2},
-            'mfi_long': {'label': 'MFI Long Limit', 'type': 'float', 'default': 55.0, 'min': 45.0, 'max': 65.0, 'step': 5.0},
-            'mfi_short': {'label': 'MFI Short Limit', 'type': 'float', 'default': 45.0, 'min': 35.0, 'max': 55.0, 'step': 5.0},
+            'toma_period2':   {'label': 'TOMA Opt %',     'type': 'float', 'default': 2.1,  'min': 0.5,  'max': 3.0,  'step': 0.1},
+            'mfi_period':     {'label': 'MFI Periyot',    'type': 'int',   'default': 14,   'min': 10,   'max': 18,   'step': 2},
+            'mfi_hhv_period': {'label': 'MFI HHV',        'type': 'int',   'default': 5,    'min': 3,    'max': 9,    'step': 2},
+            'mfi_llv_period': {'label': 'MFI LLV',        'type': 'int',   'default': 5,    'min': 3,    'max': 9,    'step': 2},
+            'mfi_long':       {'label': 'MFI Long Eşik',  'type': 'float', 'default': 55.0, 'min': 45.0, 'max': 65.0, 'step': 5.0},
+            'mfi_short':      {'label': 'MFI Short Eşik', 'type': 'float', 'default': 45.0, 'min': 35.0, 'max': 55.0, 'step': 5.0},
         }
     },
-    'Layer5_TimeFilters': {
-        'label': 'Layer 4: Min/Max/Cooldown Sınırları',
+    'Risk_Layer4_5': {
+        'label': 'Layer 4-5: Risk & Zaman Yönetimi (Cascade)',
+        'note': 'Scalp kısıtı: max_hold ≤30 bar (5dk×30=150dk), atr_stop ≤2.5×ATR.',
         'params': {
-            'min_hold_bars': {'label': 'Min Hold Bar', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
-            'max_hold_bars': {'label': 'Max Hold Bar', 'type': 'int', 'default': 20, 'min': 10, 'max': 30, 'step': 5},
-            'cooldown_bars': {'label': 'Cooldown Bar', 'type': 'int', 'default': 2, 'min': 1, 'max': 4, 'step': 1},
-        }
+            'atr_stop_mult_long':  {'label': 'SL Long Mult',  'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
+            'atr_stop_mult_short': {'label': 'SL Short Mult', 'type': 'float', 'default': 1.5, 'min': 1.0, 'max': 2.5, 'step': 0.25},
+            'kar_al_yuzde_long':   {'label': 'TP Long %',     'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
+            'kar_al_yuzde_short':  {'label': 'TP Short %',    'type': 'float', 'default': 2.0, 'min': 1.0, 'max': 4.0, 'step': 0.5},
+            'min_hold_bars':       {'label': 'Min Bar Tut',   'type': 'int',   'default': 2,   'min': 1,   'max': 4,   'step': 1},
+            'max_hold_bars':       {'label': 'Max Bar Tut',   'type': 'int',   'default': 20,  'min': 8,   'max': 30,  'step': 5},
+            'cooldown_bars':       {'label': 'Bekleme Bar',   'type': 'int',   'default': 2,   'min': 1,   'max': 4,   'step': 1},
+        },
+        'is_cascaded': True
     }
 }
+
 
 # ==============================================================================
 # TIMEFRAME-ADAPTIVE PARAMETER SCALING
@@ -327,15 +529,15 @@ SCALABLE_PARAMS = {
     'atr_exit_period', 'volume_llv_period',
     # Strateji 3 (Paradise)
     'ema_period', 'dsma_period', 'ma_period', 'hh_period', 'vol_hhv_period',
-    'atr_period', # mom_period removed to fix S4 scaling
+    'atr_period', 
     # Strateji 4 (TOMA) - Intraday icin sabitlendi, olceklenmesin
-    # 'toma_period', 'trix_lb1', 'trix_lb2', 'mom_period', etc. removed from here
     # Strateji 5 (Oliver Kell)
     'ema_fast', 'ema_slow', 'breakout_period', 'adx_period', 'vol_ma_period',
     # Strateji 6 (TOTT_HOTT)
     'ott_period', 'gate_period',
     # Strateji 7 (DeepScalp)
     'hhv_period', 'llv_period', 'ema_fast_period', 'ema_slow_period', 'mfi_hhv_period', 'mfi_llv_period',
+    'st_hhv_period', 'st_atr_period',
 }
 
 REFERENCE_PERIOD = 5  # dk - Stratejilerin orijinal tasarim periyodu
@@ -630,8 +832,6 @@ class OptimizationWorker(QThread):
                 self._run_genetic()
             elif self.method == "Bayesian":
                 self._run_bayesian()
-            elif self.strategy_index == 6 and self.method == "Hibrit Grup":
-                self.error.emit(f"Strateji 7 (DeepScalp) icin Numba Tabanli Grid Search desteklenmiyor, lutfen Genetik / Bayesian seciniz.")
             else:
                 self.error.emit(f"Bilinmeyen yöntem: {self.method}")
                 
@@ -1364,15 +1564,30 @@ class OptimizationWorker(QThread):
     def _run_hybrid(self):
         """Hibrit Grup optimizasyonu"""
         from src.optimization.hybrid_group_optimizer import (
-            HybridGroupOptimizer, IndicatorCache, STRATEGY1_GROUPS, STRATEGY2_GROUPS, STRATEGY3_GROUPS, STRATEGY5_GROUPS, STRATEGY6_GROUPS, ParameterGroup
+            HybridGroupOptimizer, IndicatorCache, 
+            STRATEGY1_GROUPS, STRATEGY1_GROUPS_1DK,
+            STRATEGY2_GROUPS, STRATEGY3_GROUPS, 
+            STRATEGY5_GROUPS, STRATEGY6_GROUPS, STRATEGY7_GROUPS, 
+            ParameterGroup
         )
         
         self._emit_progress(5, "Cache olusturuluyor...")
         cache = IndicatorCache(self.data)
         
+        # S1 icin: timeframe'e gore dogru coarse-scan grubunu sec (1dk vs diger)
+        # period_dk, worker baslatilirken self.config['period_dk'] olarak aktarilir
+        _period_dk = self.config.get('period_dk', 5)
+        _s1_groups = STRATEGY1_GROUPS_1DK if _period_dk == 1 else STRATEGY1_GROUPS
+        
         # Strateji seçiminden orijinal grupları al
-        original_groups = {0: STRATEGY1_GROUPS, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 4: STRATEGY5_GROUPS, 5: STRATEGY6_GROUPS}.get(self.strategy_index, STRATEGY1_GROUPS)
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)"}.get(self.strategy_index, "Strateji 1")
+        original_groups = {
+            0: _s1_groups, 1: STRATEGY2_GROUPS, 2: STRATEGY3_GROUPS, 
+            4: STRATEGY5_GROUPS, 5: STRATEGY6_GROUPS, 6: STRATEGY7_GROUPS
+        }.get(self.strategy_index, _s1_groups)
+        strategy_name = {
+            0: "Strateji 1", 1: "Strateji 2", 2: "Strateji 3 (Paradise)", 
+            4: "Strateji 5 (Oliver Kell)", 5: "Strateji 6 (TOTT HOTT)", 6: "Strateji 7 (DeepScalp)"
+        }.get(self.strategy_index, "Strateji 1")
         
         # UI'dan gelen range'leri gruplara uyarla (Dynamic Sync)
         synced_groups = []
@@ -1481,7 +1696,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Genetik', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1613,7 +1828,7 @@ class OptimizationWorker(QThread):
         ckpt = CheckpointManager()
         job_id = CheckpointManager.make_job_id(self.strategy_index, 'Bayesian', self.process_id)
         
-        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT"}.get(self.strategy_index, "Strateji")
+        strategy_name = {0: "Strateji 1", 1: "Strateji 2", 2: "Paradise", 3: "TOMA", 4: "Oliver Kell", 5: "TOTT HOTT", 6: "DeepScalp"}.get(self.strategy_index, "Strateji")
         
         # Cascade modu kontrolu
         if self.narrowed_ranges:
@@ -1767,6 +1982,9 @@ class OptimizationWorker(QThread):
             elif self.strategy_index == 5:
                 from src.strategies.tott_hott_strategy import TOTT_HOTTStrategy
                 strategy = TOTT_HOTTStrategy.from_config_dict(test_cache, params)
+            elif self.strategy_index == 6:
+                from src.strategies.deepscalp_strategy import DeepScalpStrategy
+                strategy = DeepScalpStrategy.from_config_dict(test_cache, params)
             else:
                 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
                 strategy = ARSTrendStrategyV2.from_config_dict(test_cache, params)
@@ -1806,16 +2024,18 @@ class OptimizationWorker(QThread):
             test_cache = S4IndicatorCache(self.test_data)
             closes = test_cache.closes
             
-            # TOMA
+            # TOMA — get_toma returns (toma_val_arr, trend_arr)
             tp = int(params.get('toma_period', 97))
             to = float(params.get('toma_opt', 1.5))
-            toma_val, toma_trend = test_cache.get_toma(tp, to)
+            toma_val_arr, toma_trend_arr = test_cache.get_toma(tp, to)
             
-            # HHV/LLV
-            hhv1 = test_cache.get_hhv(int(params.get('hhv1_period', 20)))
-            llv1 = test_cache.get_llv(int(params.get('llv1_period', 20)))
-            hhv2 = test_cache.get_hhv(int(params.get('hhv2_period', 150)))
-            llv2 = test_cache.get_llv(int(params.get('llv2_period', 190)))
+            # HHV/LLV — hhv1/llv1 key alias desteği ('hhv1' veya 'hhv1_period')
+            hhv1_p = int(params.get('hhv1_period', params.get('hhv1', 20)))
+            llv1_p = int(params.get('llv1_period', params.get('llv1', 20)))
+            hhv1 = test_cache.get_hhv(hhv1_p)
+            llv1 = test_cache.get_llv(llv1_p)
+            hhv2 = test_cache.get_hhv(int(params.get('hhv2_period', params.get('hhv2', 150))))
+            llv2 = test_cache.get_llv(int(params.get('llv2_period', params.get('llv2', 190))))
             hhv3 = test_cache.get_hhv(int(params.get('hhv3_period', 150)))
             llv3 = test_cache.get_llv(int(params.get('llv3_period', 190)))
             
@@ -1834,8 +2054,10 @@ class OptimizationWorker(QThread):
             ka = float(params.get('kar_al', 0.0))
             iz = float(params.get('iz_stop', 0.0))
             
+            # fast_backtest_strategy4: (closes, toma_trend, toma_val, ...)
+            # NOT: toma_trend=trend array, toma_val=toma stop level array
             np_val, tr, pf, dd, sh, adays, tdays = fast_backtest_strategy4(
-                closes, toma_trend, toma_val,
+                closes, toma_trend_arr, toma_val_arr,
                 hhv1, llv1, hhv2, llv2, hhv3, llv3,
                 mom_arr, trix1_arr, trix2_arr, mask_arr, test_cache.times_arr,
                 ml, mh, lb1, lb2, ka / 100.0, iz / 100.0,
@@ -1976,7 +2198,15 @@ class OptimizerPanel(QWidget):
         # Strateji seçimi (Sadece gösterim, süreçten gelecek)
         top_row.addWidget(QLabel("Strateji:"))
         self.strategy_combo = QComboBox()
-        self.strategy_combo.addItems(["Strateji 1 - Gatekeeper", "Strateji 2 - ARS Trend v2", "Strateji 3 - Paradise", "Strateji 4 - TOMA + Momentum", "Strateji 5 - Oliver Kell", "Strateji 6 - TOTT HOTT"])
+        self.strategy_combo.addItems([
+            "Strateji 1 - Gatekeeper", 
+            "Strateji 2 - ARS Trend v2", 
+            "Strateji 3 - Paradise", 
+            "Strateji 4 - TOMA + Momentum", 
+            "Strateji 5 - Oliver Kell", 
+            "Strateji 6 - TOTT HOTT",
+            "Strateji 7 - DeepScalp v1.2"
+        ])
         self.strategy_combo.setEnabled(False)  # KİLİTLİ (Süreçten gelecek)
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed)
         top_row.addWidget(self.strategy_combo)
@@ -2333,6 +2563,7 @@ class OptimizerPanel(QWidget):
         elif strategy_idx == 2: group_defs = STRATEGY3_PARAM_GROUPS
         elif strategy_idx == 3: group_defs = STRATEGY4_PARAM_GROUPS
         elif strategy_idx == 4: group_defs = STRATEGY5_PARAM_GROUPS
+        elif strategy_idx == 6: group_defs = STRATEGY7_PARAM_GROUPS
         elif strategy_idx == 5:
             from src.optimization.hybrid_group_optimizer import STRATEGY6_GROUPS
             # STRATEGY6_GROUPS -> PARAM_GROUPS formatina cevir (list of ParameterGroup -> dict)
@@ -2483,24 +2714,49 @@ class OptimizerPanel(QWidget):
                 item.widget().deleteLater()
         self.group_widgets.clear()
         
-        # Yeni gruplari ekle (timeframe'e gore olceklenmis)
+        # Yeni gruplari ekle
+        # S1 icin: timeframe'e gore sabit preset (scale_param_groups KULLANILMAZ)
+        # Diger stratejiler icin: scale_param_groups ile olceklenir
+        period_dk = self._get_current_period_dk()
         if index == 0:
-            base_groups = STRATEGY1_PARAM_GROUPS
+            # S1 (Gatekeeper): 1dk ve 5dk icin ayri teorik preset
+            if period_dk == 1:
+                param_groups = STRATEGY1_PARAM_GROUPS_1DK
+            else:
+                param_groups = STRATEGY1_PARAM_GROUPS
+        elif index == 1:
+            # S2 (ARS Trend v2): 1dk icin ayri sabit preset (scaling yanlistir, ref. Strateji_ARS_Trend_v2.txt)
+            if period_dk == 1:
+                param_groups = STRATEGY2_PARAM_GROUPS_1DK
+            else:
+                base_groups = STRATEGY2_PARAM_GROUPS
+                param_groups = scale_param_groups(base_groups, period_dk)
         elif index == 2:
-            base_groups = STRATEGY3_PARAM_GROUPS
+            # S3 (Paradise): 1dk icin ayri sabit preset
+            # scale×5 ile DSMA(750) → 1500 bar isinma = imkansiz
+            if period_dk == 1:
+                param_groups = STRATEGY3_PARAM_GROUPS_1DK
+            else:
+                base_groups = STRATEGY3_PARAM_GROUPS
+                param_groups = scale_param_groups(base_groups, period_dk)
         elif index == 3:
             base_groups = STRATEGY4_PARAM_GROUPS
             print(f"[DEBUG S4] Loaded S4 Groups: {list(base_groups.keys())}")
             for k, v in base_groups.items():
                 print(f"  - {k}: {len(v.get('params', {}))} params")
+            param_groups = scale_param_groups(base_groups, period_dk)
         elif index == 4:
             base_groups = STRATEGY5_PARAM_GROUPS
+            param_groups = scale_param_groups(base_groups, period_dk)
         elif index == 5:
             base_groups = STRATEGY6_PARAM_GROUPS
+            param_groups = scale_param_groups(base_groups, period_dk)
+        elif index == 6:
+            base_groups = STRATEGY7_PARAM_GROUPS
+            param_groups = scale_param_groups(base_groups, period_dk)
         else:
-            base_groups = STRATEGY2_PARAM_GROUPS
-        period_dk = self._get_current_period_dk()
-        param_groups = scale_param_groups(base_groups, period_dk)
+            # Bilinmeyen strateji indeksi — S1 grubunu fallback olarak kullan
+            param_groups = STRATEGY1_PARAM_GROUPS
         
         for group_name, group_config in param_groups.items():
             group_widget = ParameterGroupWidget(group_name, group_config)
@@ -2549,9 +2805,14 @@ class OptimizerPanel(QWidget):
             if 'strategy_index' in proc:
                 self.strategy_combo.setCurrentIndex(int(proc['strategy_index']))
             
-            per_str = proc.get('period', '5dk')
-            per_formatted = per_str.replace("dk", " dk")
-            idx = self.period_combo.findText(per_formatted)
+            per_str = proc.get('period', '5dk').lower()  # Normalize: '1Dk' -> '1dk'
+            per_formatted = per_str.replace("dk", " dk")  # '1dk' -> '1 dk'
+            # Case-insensitive search
+            from PySide6.QtCore import Qt
+            idx = self.period_combo.findText(per_formatted, Qt.MatchFixedString | Qt.MatchCaseSensitive)
+            if idx < 0:
+                # Case-insensitive fallback
+                idx = self.period_combo.findText(per_formatted, Qt.MatchContains)
             if idx >= 0:
                 self.period_combo.setCurrentIndex(idx)
                 
@@ -2636,10 +2897,13 @@ class OptimizerPanel(QWidget):
             if 'strategy_index' in proc:
                 self.strategy_combo.setCurrentIndex(int(proc['strategy_index']))
             
-            # Periyot
-            per_str = proc.get('period', '5dk')
-            per_formatted = per_str.replace("dk", " dk")
-            idx = self.period_combo.findText(per_formatted)
+            # Periyot - case-insensitive normalize et ve ara
+            per_str = proc.get('period', '5dk').lower()  # '1Dk' -> '1dk'
+            per_formatted = per_str.replace("dk", " dk")  # '1dk' -> '1 dk'
+            from PySide6.QtCore import Qt
+            idx = self.period_combo.findText(per_formatted, Qt.MatchFixedString | Qt.MatchCaseSensitive)
+            if idx < 0:
+                idx = self.period_combo.findText(per_formatted, Qt.MatchContains)
             if idx >= 0:
                 self.period_combo.setCurrentIndex(idx)
                 
@@ -2792,6 +3056,9 @@ class OptimizerPanel(QWidget):
         # Auto-Validation ayarlari
         do_oos = self.validation_check.isChecked()
         train_pct = self.split_spin.value()
+        
+        # Periyot bilgisini config'e ekle (Worker'dan panel metoduna erişilemez)
+        self.config['period_dk'] = self._get_current_period_dk()
         
         self.worker = OptimizationWorker(
             self.config, self.data, param_ranges, method, strategy_index,

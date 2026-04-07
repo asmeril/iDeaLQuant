@@ -1,3 +1,35 @@
+## 2026-04-04 (Kritik Bug Fix: IdealData BASE_DATE & CSV Period Normalizasyonu)
+
+### ✅ Yapılanlar
+
+#### BUG-1: IdealData Binary Parser BASE_DATE Yanlışlığı (KRİTİK)
+- **Sorun:** `src/data/ideal_parser.py` içindeki `BASE_DATE = datetime(1988, 2, 24)` yanlıştı.  
+  Son bar (03.04.2026 23:59) için binary'deki `time_minutes = 20,050,499` değeri yanlış base date ile hesaplanınca **2026-04-08 22:59** gibi imkânsız bir tarih üretiyordu (borsanın kapandığı Cumartesi günü için).
+- **Kök Neden:** `BASE_DATE` daha önce de düzeltilmiş (`1988-02-28` → `1988-02-24`) ancak hâlâ 5 gün ileri kalındığı tespit edilmedi.
+- **Çözüm:** Ters mühendislik ile doğru BASE_DATE hesaplandı:
+  `datetime(2026, 4, 3, 23, 59) - timedelta(minutes=20_050_499) = datetime(1988, 2, 19, 1, 0)`
+- **Düzeltme:** `BASE_DATE = datetime(1988, 2, 19, 1, 0)` olarak güncellendi.
+- **Doğrulama:** `datetime(1988,2,19,1,0) + timedelta(minutes=20_050_499) == datetime(2026,4,3,23,59)` ✅
+- **Dosya:** `src/data/ideal_parser.py`
+
+#### BUG-2: CSV Veri Kaynağında Optimizer Periyot Sabit Kalıyordu
+- **Sorun:** `VIPX030T_1Dk_BarData.csv` dosyasından süreç oluşturulduğunda dosya adı parse edilince periyot `"1Dk"` (büyük D) olarak saklanıyordu. Optimizer panelinde `"1Dk".replace("dk", " dk")` → `"1Dk"` eşleşmiyor → `findText("1 dk")` başarısız → period_combo varsayılan `"5 dk"` olarak kalıyordu.
+- **Kök Neden:** `data_panel.py` içinde CSV dosya adından period parse edilirken case normalizasyonu yapılmıyordu.
+- **Düzeltme 1:** `data_panel.py` — `per_str = raw_per.lower()` ile `"1Dk"` → `"1dk"` normalize edildi.
+- **Düzeltme 2:** `optimizer_panel.py` — `_on_process_changed` ve `set_process` metodlarında `.lower()` normalize + `Qt.MatchContains` fallback eklendi.
+- **Dosyalar:** `src/ui/widgets/data_panel.py`, `src/ui/widgets/optimizer_panel.py`
+
+### 🔑 Önemli Kararlar
+- IdealData binary formatında `time_minutes` değeri epoch `1988-02-19 01:00` baz alınarak dakika sayısı olarak saklanıyor.
+- Eski hata tarihten beri birikiyordu: `1988-02-28` → `1988-02-24` → **`1988-02-19 01:00`** (son ve kesin).
+- CSV dosya adlandırma standardı: `{MARKET}{SEMBOL}_{PERIYOT}Dk_{AÇIKLAMA}.csv` — `PERIYOT` her zaman lowercase kontrol edilecek.
+
+### 📌 Mevcut Durum
+- **Aktif Faz:** Faz 12 (Strateji 7 DeepScalp) — Optimizasyon & Veri Doğruluğu Stabil ✅
+- **Sıradaki Adım:** S7 DeepScalp 1dk optimizasyonu (doğru tarihlerle).
+
+---
+
 ## 2026-03-27 (S7 SuperTrend Kalibrasyon Analizi)
 
 ### ✅ Yapılanlar
@@ -16,7 +48,7 @@
 
 ### 📌 Mevcut Durum
 - **Aktif Faz:** Faz 12 (Strateji 7 DeepScalp)
-- **Sıradaki Adım (Öncelik 1):** S7 SuperTrend C# exporter şablonuna eklenmesi (`idealdata_exporter.py`)
+- **Sıradaki Adım (Öncelik 1):** S7 SuperTrend C# exporter şablonuna eklendi ✅
 - **Sıradaki Adım (Öncelik 2):** DeepScalp stratejisini gerçek veri ile uçtan uca test etmek.
 
 ---
