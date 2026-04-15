@@ -25,6 +25,7 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 | Faz 11| ✅ | **Strateji 6 (TOTT_HOTT)** | - |
 | Faz 12 | ✅ | **Strateji 7 (DeepScalp v1.2)** | - |
 | Faz 13 | ✅ | **Strateji 8 (Gap Reversal v1.0)** | - |
+| Faz 14 | 🔄 | **Strateji 9 (PreMove Intraday)** | 🔴 Aktif |
 
 ---
 
@@ -240,6 +241,30 @@ IdealData backtest sonuçları ile **%100 uyumlu** harici backtest + optimizasyo
 - [x] C# Exporter Şablonu (`_generate_strategy8_code`)
 
 ---
+
+## 🔄 FAZ 14: Strateji 9 (PreMove Intraday) [AKTİF]
+
+> [!NOTE]
+> PreMove Scanner v3.0'ın puan sistemini VIOP 1dk/5dk intraday barlarına uygulayan sıkışma + kırılım stratejisi.
+
+### 14.1 Python Altyapısı ✅
+- [x] `src/strategies/premove_intraday_strategy.py` — %100 iDeal uyumlu
+  - EMA Stack (0-20p), UpVol Ratio (0-45p), VCP+NR7 (0-30p)
+  - Pocket Pivot Cezası (-10/-5p), BB Squeeze (0-6p), Pozisyon Bonus (0-2p)
+  - Şımarık Tuzağı (-20p), ATR Trailing Stop çıkışı
+- [x] `src/strategies/__init__.py` — Paket kaydı
+- [x] `tests/test_s9_premove_intraday.py` — 13 unit test (tümü geçti)
+- [x] `D:\Projects\Robots\Robot_PreMove_Intraday_S9.txt` — iDeal Sorgu dosyası
+  - Gerçek export API'leri ile yeniden yazıldı (GrafikFiyatSec, AverageTrueRange, HHV/LLV)
+  - Tam performans paneli (PayoffR, Expectancy, Recovery Factor, WinRate)
+
+### 14.2 UI Entegrasyonu [ ]
+- [ ] `strategy9_optimizer.py` — Numba JIT + IndicatorCache
+- [ ] Genetik & Bayesian optimizer dispatch
+- [ ] OptimizerPanel, StrategyPanel, ExportPanel entegrasyonu
+- [ ] `export_strategy9` — C# kod üretimi (export kalıbı zaten hazır)
+
+
 
 
 

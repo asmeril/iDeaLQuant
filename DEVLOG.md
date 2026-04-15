@@ -1,3 +1,51 @@
+## 2026-04-16 — S9: PreMove Intraday Strategy (Full-Stack)
+
+### ✅ Yapılanlar
+
+#### S9: PreMove Intraday Strategy (YENİ)
+- **Python Stratejisi:** `src/strategies/premove_intraday_strategy.py` oluşturuldu.
+  - `PreMoveIntradayConfig` dataclass (optimizer uyumlu, from_config_dict fabrika metodu)
+  - 7 puan bileşeni ayrı fonksiyona ayrıldı (EMA/UpVol/VCP/PP/BB/Pos/Şımarık)
+  - `generate_all_signals()` → backtest uyumlu sinyal üretimi (ATR trailing stop dahil)
+- **%100 iDeal Uyumu:**
+  - **BB Squeeze:** SMA-bazlı ATR% (Wilder RMA DEĞİL) — C# `sum/bbLen/C[bi]` formülü birebir
+  - **VCP:** `scanner/patterns.py` kullanılmadı — PreMove Scanner C#'ın pivot algoritması doğrudan port edildi
+  - **EMA/SMA/ATR/HHV/LLV:** `core.py` indikatörleri (IdealData ile önceden kalibre edilmiş)
+  - **PP Ceza medyanı:** Python `list.sort() + mid index` = C# `List.Sort() + mid` ile aynı
+- **Test Dosyası:** `tests/test_s9_premove_intraday.py` — 13 unit test:
+  - Import, warmup guard, sinyal güvenliği, puan aralık kontrolleri, C# formül uyumu
+  - 350 bar × 6 fonksiyon → tüm testler geçti (hata: 0)
+- **Paket Kaydı:** `src/strategies/__init__.py` güncellendi
+
+#### iDeal Sorgu/Strateji Export (Robot_PreMove_Intraday_S9.txt)
+- İlk versiyon hatalı API kullandı — `IDEAL_EXE_AI_KILAVUZU.md` + gerçek export dosyaları incelendi
+- **Doğru API kalıbı belirlendi** (GapReversal.cs + Oliver_Kell.cs export'larından):
+  - `Sistem.GrafikFiyatSec("Kapanis")` — (bars.Acilis/Yuksek değil!)
+  - `Sistem.AverageTrueRange(N)` — (Sistem.ATR(bars,N) değil!)
+  - `Sistem.HHV(N, "Yuksek")` — (HHV(N, H, bi) değil!)
+  - `Func<int, float>` lambdalar + null predeclare — (local function declaration değil!)
+  - `Sistem.Yon[i] = "A"/"F"` — (Sistem.EmirGonder() değil — bu bir Sorgu/Backtest!)
+- **BB Squeeze önhesabı:** `var atrPctBb = Sistem.Liste(0f)` + SMA loop — O(n) precompute
+- **VCP + tüm skorlar:** `Func<int, float>` closure lambdalar olarak implement edildi
+- **Performans paneli:** Oliver_Kell.cs kalıbı — Sistem.GetiriHesapla + 2 panel
+
+### 🔑 Önemli Kararlar
+- **Dosya Tipi:** S9 iDeal exportunun Robot DEĞİL **Sorgu/Strateji** olduğu tespit edildi.
+  Robot = EmirGonder (canlı trading), Sorgu = Sistem.Yon[i] (backtest). Kritik ayrım.
+- **VCP port stratejisi:** `scanner/patterns.py:pat_vcp_full()` farklı ağırlık/eşik kullandığı için
+  kullanılmadı. Doğrudan PreMove Scanner C# kodu Python'a port edildi.
+- **BB Squeeze:** core.py's `ATR()` (Wilder) yerine SMA-bazlı TR hesabı tercih edildi.
+  İki yaklaşım backtest sonuçlarında %2-3 sapma yaratır; kalibrasyon öncelikli.
+
+### 📌 Mevcut Durum
+- **S9** Python stratejisi + iDeal Sorgu dosyası tamamlandı ✅
+- **Sıradaki Adım (S9):** IdealQuant UI'a S9 eksporter + optimizer entegrasyonu
+  - `strategy9_optimizer.py` (Numba JIT)
+  - UI panelleri (OptimizerPanel, ExportPanel, StrategyPanel)
+  - `export_strategy9` C# kod üretimi
+
+---
+
 ## 2026-04-08 — S8 Bug Fix Turu & v5.0 Release
 
 ### ✅ Yapılanlar

@@ -1,0 +1,10 @@
+﻿robot,short_name,tp,fn,fp,precision,recall,f1,avg_signals_per_day,active_days
+R1_PreMove,PreMove,18,106,10,64.3,14.5,0.237,10.5,20
+R2_SNIPER,SNIPER,18,107,0,100.0,14.4,0.252,8.6,20
+R3_ANKA,ANKA,86,39,6,93.5,68.8,0.793,51.5,20
+R4_King,King,0,124,0,0.0,0.0,0.0,0.2,3
+R4_Bomba,Bomba,0,124,0,0.0,0.0,0.0,0.8,10
+R5_ARS_Long,ARS+,5,119,1,83.3,4.0,0.077,0.9,12
+R5_ARS_Short,ARS-,2,122,1,66.7,1.6,0.031,2.4,13
+R6_Dip_Al,Dip,12,112,1,92.3,9.7,0.175,18.4,20
+R6_Zirve_Sat,Zirve,9,115,6,60.0,7.3,0.129,2.1,19

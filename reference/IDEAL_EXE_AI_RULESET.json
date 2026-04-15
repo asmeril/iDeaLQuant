@@ -1,0 +1,101 @@
+{
+  "name": "ideal-exe-ai-ruleset",
+  "version": "1.0.0",
+  "platform": {
+    "host": "ideal.exe",
+    "os": "Windows",
+    "runtime": "embedded C#-like script host",
+    "ui": "WinForms supported"
+  },
+  "core_principles": [
+    "Treat ViopHesapOku as real account state",
+    "Treat PozisyonKontrolOku as robot-local software state",
+    "Use fallback chains for price and UI-derived values",
+    "Always normalize Turkish numeric formats before parsing",
+    "Prefer logging and defensive try/catch blocks"
+  ],
+  "data_sources": {
+    "bar_history": [
+      "Sistem.GrafikVerileri",
+      "Sistem.GrafikVerileriniOku",
+      "Sistem.GrafikFiyatOku"
+    ],
+    "live_quote": [
+      "Sistem.YuzeyselVeriOku",
+      "Sistem.SonFiyat"
+    ],
+    "real_account": [
+      "Sistem.ViopHesapOku",
+      "Sistem.BistHesapOku"
+    ],
+    "robot_state": [
+      "Sistem.PozisyonKontrolOku",
+      "Sistem.PozisyonKontrolGuncelle",
+      "Sistem.NesneKaydet",
+      "Sistem.NesneGetir"
+    ],
+    "order_flow": [
+      "Sistem.EmirSembol",
+      "Sistem.EmirIslem",
+      "Sistem.EmirTipi",
+      "Sistem.EmirMiktari",
+      "Sistem.EmirFiyati",
+      "Sistem.EmirGonder"
+    ]
+  },
+  "fallback_policy": {
+    "last_price": [
+      "YuzeyselVeriOku.LastPrice",
+      "SonFiyat",
+      "portfolio grid last-price column"
+    ],
+    "entry_price": [
+      "PozisyonKontrolOku(out islemFiyat)",
+      "robot grid entry cell",
+      "manual fallback"
+    ],
+    "total_pnl": [
+      "ViopHesap summary fields",
+      "portfolio summary grid",
+      "sum of position rows"
+    ]
+  },
+  "symbol_rules": {
+    "known_prefixes": ["IMKBH'", "IMKBX'", "VIP'VIP-", "FX'"],
+    "normalization": [
+      "uppercase",
+      "remove separators like -, _, ., / when matching",
+      "strip trailing expiry digits when needed",
+      "map X030 and X030T style aliases to XU030 when comparing"
+    ]
+  },
+  "numeric_rules": {
+    "locale": "tr-TR",
+    "thousands_separator": ".",
+    "decimal_separator": ",",
+    "parse_strategy": "normalize by treating the last separator as decimal when mixed or ambiguous",
+    "display_strategy": "format output explicitly as 1.234,56",
+    "position_strategy": "treat position sizes as whole numbers unless clearly fractional"
+  },
+  "ui_rules": {
+    "forms": "can inspect Application.OpenForms",
+    "controls": ["Form", "Panel", "Label", "Button", "CheckBox", "Timer", "DataGridView"],
+    "grid_matching": "match by Name and HeaderText aliases instead of one exact string"
+  },
+  "safety_rules": [
+    "Do not assume external processes can reliably read internal iDeal state",
+    "Keep a dry-run mode for trade logic",
+    "Log all critical branches and failures to file",
+    "Use null checks and try/catch around broker and UI calls",
+    "Do not mix real-account K/Z with software position counter without naming the source"
+  ],
+  "output_preferences": {
+    "style": "short, defensive, fallback-aware",
+    "code_requirements": [
+      "try/catch blocks",
+      "null guards",
+      "source labeling in logs",
+      "Turkish number handling"
+    ]
+  }
+}

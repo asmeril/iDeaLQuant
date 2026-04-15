@@ -1,0 +1,11 @@
+{
+  "max_pnl": 0.0,
+  "current_pnl": 0.0,
+  "trailing_stop": 0.0,
+  "target_reached": false,
+  "stop_triggered": false,
+  "stop_reason": "",
+  "last_bist_trade_id": 0,
+  "last_viop_trade_id": 0,
+  "last_update": "2026-04-12 10:15:42"
+}

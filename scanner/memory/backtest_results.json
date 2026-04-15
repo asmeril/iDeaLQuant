@@ -1,0 +1,229 @@
+{
+  "threshold": 0.05,
+  "total_symbols": 66,
+  "total_events": 12194,
+  "feature_stats": {
+    "vcp_score": {
+      "hit": 2018,
+      "total": 13177,
+      "hit_rate": 0.1531
+    },
+    "bb_squeeze": {
+      "hit": 741,
+      "total": 12588,
+      "hit_rate": 0.0589
+    },
+    "nr7": {
+      "hit": 2315,
+      "total": 13459,
+      "hit_rate": 0.172
+    },
+    "nr4": {
+      "hit": 3542,
+      "total": 14155,
+      "hit_rate": 0.2502
+    },
+    "inside_day_streak": {
+      "hit": 2976,
+      "total": 13694,
+      "hit_rate": 0.2173
+    },
+    "atr_pct_rank": {
+      "hit": 4839,
+      "total": 15228,
+      "hit_rate": 0.3178
+    },
+    "range_contraction": {
+      "hit": 7078,
+      "total": 16092,
+      "hit_rate": 0.4398
+    },
+    "pocket_pivot": {
+      "hit": 6051,
+      "total": 14370,
+      "hit_rate": 0.4211
+    },
+    "vol_dryup": {
+      "hit": 790,
+      "total": 12332,
+      "hit_rate": 0.0641
+    },
+    "obv_slope": {
+      "hit": 12,
+      "total": 11918,
+      "hit_rate": 0.001
+    },
+    "cmf_positive": {
+      "hit": 308,
+      "total": 11957,
+      "hit_rate": 0.0258
+    },
+    "up_vol_ratio": {
+      "hit": 11485,
+      "total": 17893,
+      "hit_rate": 0.6419
+    },
+    "ema_stack_score": {
+      "hit": 7447,
+      "total": 15135,
+      "hit_rate": 0.492
+    },
+    "ema50_slope_up": {
+      "hit": 6901,
+      "total": 14816,
+      "hit_rate": 0.4658
+    },
+    "below_52w_high": {
+      "hit": 1821,
+      "total": 12425,
+      "hit_rate": 0.1466
+    },
+    "rs_vs_xu100": {
+      "hit": 1042,
+      "total": 12014,
+      "hit_rate": 0.0867
+    },
+    "base_position_ok": {
+      "hit": 6826,
+      "total": 14771,
+      "hit_rate": 0.4621
+    },
+    "near_support": {
+      "hit": 1346,
+      "total": 13069,
+      "hit_rate": 0.103
+    },
+    "rsi_zone": {
+      "hit": 5697,
+      "total": 14966,
+      "hit_rate": 0.3807
+    },
+    "rsi_slope_up": {
+      "hit": 7049,
+      "total": 15344,
+      "hit_rate": 0.4594
+    },
+    "macd_hist_rising": {
+      "hit": 3591,
+      "total": 13676,
+      "hit_rate": 0.2626
+    },
+    "macd_crossing": {
+      "hit": 560,
+      "total": 12083,
+      "hit_rate": 0.0463
+    },
+    "stoch_turning": {
+      "hit": 0,
+      "total": 11909,
+      "hit_rate": 0.0
+    },
+    "adx_rising_low": {
+      "hit": 1788,
+      "total": 12732,
+      "hit_rate": 0.1404
+    },
+    "hammer": {
+      "hit": 1260,
+      "total": 12508,
+      "hit_rate": 0.1007
+    },
+    "pin_bar": {
+      "hit": 783,
+      "total": 12386,
+      "hit_rate": 0.0632
+    },
+    "bullish_engulfing": {
+      "hit": 616,
+      "total": 12118,
+      "hit_rate": 0.0508
+    },
+    "morning_star": {
+      "hit": 638,
+      "total": 12163,
+      "hit_rate": 0.0525
+    },
+    "dragonfly_doji": {
+      "hit": 425,
+      "total": 12170,
+      "hit_rate": 0.0349
+    },
+    "three_white_soldiers": {
+      "hit": 528,
+      "total": 11998,
+      "hit_rate": 0.044
+    },
+    "bullish_harami": {
+      "hit": 334,
+      "total": 12177,
+      "hit_rate": 0.0274
+    },
+    "doji": {
+      "hit": 2524,
+      "total": 13120,
+      "hit_rate": 0.1924
+    },
+    "vcp_full": {
+      "hit": 10927,
+      "total": 17636,
+      "hit_rate": 0.6196
+    },
+    "flag_pennant": {
+      "hit": 6265,
+      "total": 15428,
+      "hit_rate": 0.4061
+    },
+    "double_bottom": {
+      "hit": 1772,
+      "total": 13245,
+      "hit_rate": 0.1338
+    },
+    "ascending_triangle": {
+      "hit": 807,
+      "total": 12489,
+      "hit_rate": 0.0646
+    }
+  },
+  "top_symbols": [
+    [
+      "ICUGS",
+      493
+    ],
+    [
+      "RALYH",
+      482
+    ],
+    [
+      "BRMEN",
+      430
+    ],
+    [
+      "TRHOL",
+      427
+    ],
+    [
+      "DOGUB",
+      418
+    ],
+    [
+      "DURDO",
+      410
+    ],
+    [
+      "EMKEL",
+      410
+    ],
+    [
+      "KERVN",
+      368
+    ],
+    [
+      "TEKTU",
+      355
+    ],
+    [
+      "AYCES",
+      353
+    ]
+  ]
+}

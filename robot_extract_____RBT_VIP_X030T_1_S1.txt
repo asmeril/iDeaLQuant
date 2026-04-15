@@ -1,0 +1,186 @@
+﻿_____RBT_VIP_X030T_1_S1
+@var LotSize = 1; //
+lem adedi
+var SistemAdi = "VIP_X030_T_1DK_S1_05042026"; // G
+ncel strateji ismi
+var GrafikSembolu = "VIP'VIP-X030-T";
+var GrafikPeriyodu = "1";
+
+// Telegram Bilgileri (Ayn
+in
+Action<string> LogStr = (msg) => {
+    try { System.IO.File.AppendAllText("C:\\iDeal\\Telegram_Debug_Robot.txt", DateTime.Now + " " + msg + "\r\n"); } catch {}
+};
+
+var MySistem = Sistem.SistemGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu); 
+
+if (MySistem == null) 
+{
+    Sistem.Mesaj(Sistem.Name + " Hatal
+yor! (" + SistemAdi + " bulunamad
+)");
+}
+else
+{
+    var EmirSembol = "VIP'VIP-X030-T";
+    var SonFiyat = Sistem.SonFiyat(EmirSembol);
+    var Anahtar = Sistem.Name + "," + EmirSembol;
+    double IslemFiyat = 0;
+    DateTime IslemTarih;
+    var Miktar = 0.0;
+    var Rezerv = "";
+    var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih);
+
+    var SonYon = Sistem.SonYonGetir(SistemAdi, GrafikSembolu , GrafikPeriyodu); 
+
+    // Seans kontrol
+lem yapma
+    if (Sistem.Saat.CompareTo("09:31:00") <= 0 || Sistem.Saat.CompareTo("22:59:59") >= 0)  
+    {
+        // Seans yok / kapal
+}
+    else 
+    {
+        if (SonYon == "F" && Pozisyon != 0)  // Flata Ge
+Miktar = -Pozisyon;
+        else if (SonYon == "A" && Pozisyon != LotSize)  // Al (Long)
+            Miktar = LotSize - Pozisyon;
+        else if (SonYon == "S" && Pozisyon != -LotSize)  // Sat (Short)
+            Miktar = -LotSize - Pozisyon;
+
+        // ==========================================================
+        // YEN
+R/ZARAR PUAN VE % HESAPLAMASI
+        // ==========================================================
+        double KarZararPuan = 0;
+        double KarZararYuzde = 0;
+        string KzRezervMetin = "";
+        string KzTelegramMetin = "";
+
+        // E
+lem oluyorsa) ve eski bir pozisyonumuz varsa (kapat
+yorsa)
+        if (Miktar != 0 && Pozisyon != 0) 
+        {
+            if (Pozisyon > 0) // Long'dan d
+yorsa
+            {
+                KarZararPuan = SonFiyat - IslemFiyat;
+            }
+            else if (Pozisyon < 0) // Short'tan d
+RME)
+            KzRezervMetin = " [
+nceki KZ: " + isaret + KarZararPuan.ToString("0.00") + " Puan (" + isaret + "%" + KarZararYuzde.ToString("0.00") + ")]";
+            
+            // Telegram paneline yak
+";
+            KzTelegramMetin = "Kapanan KZ: " + emoji + " <b>" + isaret + KarZararPuan.ToString("0.00") + " Puan</b> (" + isaret + "%" + KarZararYuzde.ToString("0.00") + ")\n";
+        }
+        // ==========================================================
+
+        var Islem = "";
+        string telegramYon = "";
+        
+        if (Miktar > 0) {
+            Islem = "ALIS"; 
+            Rezerv = ((SonYon == "A") ? "LONG A
+ILDI" : "SHORT KAPATILDI (FLAT)") + KzRezervMetin;
+            telegramYon = (SonYon == "A") ? "ALIS (LONG)" : "FLAT (KAPAT)";
+        }
+        else if (Miktar < 0) {
+            Islem = "SATIS"; 
+            Rezerv = ((SonYon == "S") ? "SHORT A
+ILDI" : "LONG KAPATILDI (FLAT)") + KzRezervMetin;
+            telegramYon = (SonYon == "S") ? "SATIS (SHORT)" : "FLAT (KAPAT)";
+        }
+
+        if (Islem != "")
+        {
+            Sistem.EmirAksamSeansi = 1; 
+            Sistem.EmirSembol = EmirSembol;
+            Sistem.EmirIslem = Islem;
+            Sistem.EmirSuresi = "KIE";
+            Sistem.EmirTipi = "Piyasa";
+            Sistem.EmirMiktari = Math.Abs(Miktar);
+            Sistem.EmirHesapAdi = "102645, Meksa Yat
+m"; 
+            Sistem.EmirAltHesap = "1"; 
+            Sistem.EmirAciklama = Rezerv;
+            Sistem.EmirFiyati = SonFiyat;
+            
+Sistem.EmirGonder();
+Sistem.PozisyonKontrolGuncelle(Anahtar, Miktar + Pozisyon, SonFiyat, Rezerv);
+//
+EK SLIPAJ HESAPLAMALI
+try {
+    string zaman  = DateTime.Now.ToString("o");
+    string miktar = Math.Abs(Miktar).ToString();
+    string fiyat  = SonFiyat.ToString("0.00"); // Robot'un g
+bid'den dolar (AlisFiyat)
+    double gercekFiyat = (Islem == "ALIS")
+        ? Sistem.SatisFiyat(EmirSembol)   //
+: Sistem.AlisFiyat(EmirSembol);   //
+kmez)
+    if (gercekFiyat <= 0) gercekFiyat = SonFiyat;
+    string gercekFiyatStr = gercekFiyat.ToString("0.00");
+    // Robot emri: sinyal an
+ndaki SON fiyat
+    string robSatir = string.Format("ROBOT|{0}|{1}|{2}|{3}|{4}|{5}",
+        zaman, SistemAdi, EmirSembol, Islem, miktar, fiyat);
+    // Broker emri: ger
+(bid/ask)
+    string brkSatir = string.Format("BROKER|{0}|{1}|{2}|{3}|{4}|{5}",
+        zaman, SistemAdi, EmirSembol, Islem, miktar, gercekFiyatStr);
+    string[] dosyalar = {
+        "C:\\iDeal\\Robot_Piyasa_Emirleri.csv",
+        "C:\\iDeal\\Broker_Gerceklesen_Emirler.csv"
+    };
+    string[] satirlar = { robSatir, brkSatir };
+    for (int d = 0; d < 2; d++) {
+        for (int deneme = 0; deneme < 5; deneme++) {
+            try {
+                System.IO.File.AppendAllText(dosyalar[d], satirlar[d] + "\r\n");
+                break;
+            } catch { System.Threading.Thread.Sleep(50); }
+        }
+    }
+} catch {}
+//
+// ==========================================================
+            // TELEGRAM B
+(Sadece emir iletildi
+r)
+            // ==========================================================
+            try 
+            {
+                string icon = (SonYon == "A") ? "
+" : (SonYon == "S") ? "
+";
+                string netPozisyon = (Pozisyon + Miktar).ToString();
+                
+                string mesaj = icon + " <b>ROBOT EM
+(" + EmirSembol + ")</b>\n\n";
+                mesaj += "Strateji: " + SistemAdi + "\n";
+                mesaj += "Sembol: " + EmirSembol + "\n";
+                mesaj += "Periyot: " + GrafikPeriyodu + " DK\n";
+                mesaj += "Durum: <b>" + telegramYon + "</b>\n";
+                mesaj += "
+lem Lot: " + Math.Abs(Miktar).ToString() + "\n";
+                mesaj += "Net Pozisyon: " + netPozisyon + " Lot\n";
+                mesaj += "Fiyat: " + SonFiyat.ToString("0.00") + "\n";
+                
+                if (KzTelegramMetin != "") {
+                    mesaj += KzTelegramMetin;
+                }
+                
+                mesaj += "Tarih: " + DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+
+                string url = "https://api.telegram.org/bot" + ApiToken + "/sendMessage?chat_id=" + ChatId + "&text=" + System.Uri.EscapeDataString(mesaj) + "&parse_mode=HTML";
+                
+                System.Net.WebRequest.Create(url).GetResponse().Close();
+                LogStr("Telegram Ba
+: " + telegramYon + " - Fiyat: " + SonFiyat.ToString());
+            }
+            catch (Exception ex) 
+            {
+                LogStr("Telegram Hatas

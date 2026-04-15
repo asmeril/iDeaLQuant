@@ -1,0 +1,194 @@
+{
+  "vcp_score": {
+    "base": 3.0,
+    "category": "compression",
+    "desc": "VCP (3+ pivot, daralma)",
+    "hit_rate_ema": 0.1473,
+    "total_count": 95,
+    "hit_count": 9
+  },
+  "bb_squeeze": {
+    "base": 2.0,
+    "category": "compression",
+    "desc": "BB Width persentil < %15",
+    "hit_rate_ema": 0.0664,
+    "total_count": 67,
+    "hit_count": 9
+  },
+  "nr7": {
+    "base": 2.5,
+    "category": "compression",
+    "desc": "Son 7 günün en dar TrueRange'i",
+    "hit_rate_ema": 0.1605,
+    "total_count": 105,
+    "hit_count": 6
+  },
+  "nr4": {
+    "base": 2.5,
+    "category": "compression",
+    "desc": "Son 4 günün en dar TrueRange'i",
+    "hit_rate_ema": 0.2328,
+    "total_count": 196,
+    "hit_count": 15
+  },
+  "inside_day_streak": {
+    "base": 2.5,
+    "category": "compression",
+    "desc": "Ard arda iç mum sayısı",
+    "hit_rate_ema": 0.2032,
+    "total_count": 92,
+    "hit_count": 7
+  },
+  "atr_pct_rank": {
+    "base": 3.5,
+    "category": "compression",
+    "desc": "ATR% 126 günlük persentil (düşük=sıkışma)",
+    "hit_rate_ema": 0.2968,
+    "total_count": 185,
+    "hit_count": 20
+  },
+  "range_contraction": {
+    "base": 5.0,
+    "category": "compression",
+    "desc": "Son 5 günlük ortalama range küçülüyor",
+    "hit_rate_ema": 0.4058,
+    "total_count": 331,
+    "hit_count": 33
+  },
+  "pocket_pivot": {
+    "base": 7.0,
+    "category": "volume",
+    "desc": "Pocket Pivot (Gil Morales)",
+    "hit_rate_ema": 0.3937,
+    "total_count": 184,
+    "hit_count": 27
+  },
+  "vol_dryup": {
+    "base": 2.0,
+    "category": "volume",
+    "desc": "Hacim Dry-Up (< ort×0.6)",
+    "hit_rate_ema": 0.0577,
+    "total_count": 3,
+    "hit_count": 0
+  },
+  "obv_slope": {
+    "base": 0.5,
+    "category": "volume",
+    "desc": "OBV eğimi yukarı (normalize)",
+    "hit_rate_ema": 0.001,
+    "total_count": 0,
+    "hit_count": 0
+  },
+  "cmf_positive": {
+    "base": 0.5,
+    "category": "volume",
+    "desc": "CMF > 0",
+    "hit_rate_ema": 0.0732,
+    "total_count": 2,
+    "hit_count": 1
+  },
+  "up_vol_ratio": {
+    "base": 9.0,
+    "category": "volume",
+    "desc": "Up/Down hacim oranı — son 20g yükselen+güçlü hacimli gün",
+    "hit_rate_ema": 0.5881,
+    "total_count": 414,
+    "hit_count": 43
+  },
+  "ema_stack_score": {
+    "base": 7.0,
+    "category": "structure",
+    "desc": "EMA9>EMA20>EMA50 dizilimi",
+    "hit_rate_ema": 0.4544,
+    "total_count": 250,
+    "hit_count": 29
+  },
+  "ema50_slope_up": {
+    "base": 4.0,
+    "category": "structure",
+    "desc": "EMA50 yukarı",
+    "hit_rate_ema": 0.4332,
+    "total_count": 164,
+    "hit_count": 23
+  },
+  "below_52w_high": {
+    "base": 2.0,
+    "category": "structure",
+    "desc": "52 haftalık zirvenin %0-15 altında",
+    "hit_rate_ema": 0.1497,
+    "total_count": 45,
+    "hit_count": 8
+  },
+  "rs_vs_xu100": {
+    "base": 2.0,
+    "category": "structure",
+    "desc": "XU100'e karşı relatif güç > 0",
+    "hit_rate_ema": 0.118,
+    "total_count": 10,
+    "hit_count": 4
+  },
+  "base_position_ok": {
+    "base": 4.0,
+    "category": "structure",
+    "desc": "Taban üst %50'sinde",
+    "hit_rate_ema": 0.4282,
+    "total_count": 252,
+    "hit_count": 31
+  },
+  "near_support": {
+    "base": 1.5,
+    "category": "structure",
+    "desc": "EMA20/EMA50 yakınında destek",
+    "hit_rate_ema": 0.0973,
+    "total_count": 109,
+    "hit_count": 5
+  },
+  "rsi_zone": {
+    "base": 4.5,
+    "category": "momentum",
+    "desc": "RSI 45-65 birikme bandı",
+    "hit_rate_ema": 0.352,
+    "total_count": 278,
+    "hit_count": 26
+  },
+  "rsi_slope_up": {
+    "base": 4.5,
+    "category": "momentum",
+    "desc": "RSI son 5 barda yukarı",
+    "hit_rate_ema": 0.4244,
+    "total_count": 365,
+    "hit_count": 40
+  },
+  "macd_hist_rising": {
+    "base": 3.0,
+    "category": "momentum",
+    "desc": "MACD hist 3+ bar artıyor",
+    "hit_rate_ema": 0.2494,
+    "total_count": 107,
+    "hit_count": 14
+  },
+  "macd_crossing": {
+    "base": 1.0,
+    "category": "momentum",
+    "desc": "MACD sinyal üstüne geçiyor",
+    "hit_rate_ema": 0.0575,
+    "total_count": 19,
+    "hit_count": 3
+  },
+  "stoch_turning": {
+    "base": 0.5,
+    "category": "momentum",
+    "desc": "Stoch oversold'dan dönüyor",
+    "hit_rate_ema": 0.5,
+    "total_count": 0,
+    "hit_count": 0
+  },
+  "adx_rising_low": {
+    "base": 1.5,
+    "category": "momentum",
+    "desc": "ADX < 25'ten yükseliyor",
+    "hit_rate_ema": 0.1416,
+    "total_count": 46,
+    "hit_count": 7
+  }
+}

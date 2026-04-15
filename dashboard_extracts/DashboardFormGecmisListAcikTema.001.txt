@@ -1,0 +1,680 @@
+﻿QSystem.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a
+PozKapatSaat
+SaatOncesiSinyalYokBool
+SaatOncesiSinyalYokSaat
+IkiAyKapat_BoolCumaKapatSaat
+HerAyKapatSaat
+IkiAyKapatSaat
+GunKarBool
+|System.Collections.Generic.List`1[[ideal.cxSistemLineRecord, ideal, Version=0.10.8.3, Culture=neutral, PublicKeyToken=null]]
+System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+System.Drawing.Font
+System.Collections.Generic.List`1[[System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]
+System.Collections.Generic.List`1[[ideal.cxSistem+HisseAnalizIndicatorClass, ideal, Version=0.10.8.3, Culture=neutral, PublicKeyToken=null]]
+DashboardFormGecmisListAcikTema
+Form pozisyonFormu = null;
+System.Windows.Forms.Timer yenilemeTimer = null;
+ComboBox cmbSistemAdi = null;
+ComboBox cmbSembolListesi = null;
+Panel panelPozisyonlar = null;
+Panel panelGecmis = null;
+Label lblOzet = null;
+Label lblGecmisOzet = null;
+Label lblSistemDetay = null;
+TabControl tabControl = null;
+string idealKlasoru = "";
+bool idealBulundu = false;
+
+if (pozisyonFormu != null && !pozisyonFormu.IsDisposed)
+{
+    pozisyonFormu.Close();
+    pozisyonFormu.Dispose();
+}
+
+Action idealDiziniBul = () =>
+{
+    try
+    {
+        string registryYolu = @"SOFTWARE\WOW6432Node\iDeal Borsac
+Dizinler = new string[] { @"C:\iDeal\", @"D:\iDeal\", @"Y:\iDeal\",
+            @"C:\Program Files (x86)\iDeal\", @"C:\Program Files\iDeal\",
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "iDeal") };
+        
+        foreach (var dizin in olas
+Dizinler)
+        {
+            if (Directory.Exists(dizin) && Directory.Exists(Path.Combine(dizin, "ChartSistem")))
+            {
+                idealKlasoru = dizin;
+                idealBulundu = true;
+                return;
+            }
+        }
+        
+        if (!idealBulundu)
+        {
+            FolderBrowserDialog folderDialog = new FolderBrowserDialog { Description = "L
+in" };
+            if (folderDialog.ShowDialog() == DialogResult.OK && Directory.Exists(Path.Combine(folderDialog.SelectedPath, "ChartSistem")))
+            {
+                idealKlasoru = folderDialog.SelectedPath;
+                idealBulundu = true;
+            }
+        }
+    }
+    catch { }
+};
+
+idealDiziniBul();
+
+if (!idealBulundu)
+{
+    MessageBox.Show("iDeal dizini bulunamad
+!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+else
+{
+    pozisyonFormu = new Form { Width = 1200, Height = 700, Text = "Canl
+Pozisyon Takip Paneli",
+        ShowInTaskbar = true, BackColor = Color.FromArgb(245, 245, 245), StartPosition = FormStartPosition.CenterScreen,
+        FormBorderStyle = FormBorderStyle.Sizable, MinimumSize = new Size(1000, 600) };
+
+    Panel baslikPanel = new Panel { Dock = DockStyle.Top, Height = 100, BackColor = Color.White };
+
+    baslikPanel.Controls.AddRange(new Control[] {
+        new Label { Text = "CANLI POZ
+", Font = new Font("Segoe UI", 16, FontStyle.Bold),
+            ForeColor = Color.FromArgb(0, 120, 215), Location = new Point(20, 10), AutoSize = true },
+        new Label { Text = "Sistem Ad
+:", Font = new Font("Segoe UI", 9, FontStyle.Bold),
+            ForeColor = Color.FromArgb(60, 60, 60), Location = new Point(20, 50), AutoSize = true }
+    });
+
+    cmbSistemAdi = new ComboBox { Font = new Font("Consolas", 9), Location = new Point(100, 47), Width = 300,
+        BackColor = Color.White, ForeColor = Color.Black, DropDownStyle = ComboBoxStyle.DropDownList };
+    cmbSistemAdi.Items.Add("-- Sistem Se
+in --");
+    cmbSistemAdi.SelectedIndex = 0;
+
+    try
+    {
+        var sistemAdlari = Directory.GetFiles(Path.Combine(idealKlasoru, "ChartSistem"), "*.001")
+            .Select(f => Path.GetFileNameWithoutExtension(f)).Where(n => !string.IsNullOrEmpty(n))
+            .Distinct().OrderBy(x => x).ToList();
+        cmbSistemAdi.Items.AddRange(sistemAdlari.ToArray());
+    }
+    catch { }
+
+    lblSistemDetay = new Label { Text = "", Font = new Font("Consolas", 8), ForeColor = Color.FromArgb(0, 120, 215),
+        Location = new Point(20, 72), AutoSize = true, MaximumSize = new Size(700, 0) };
+
+    Label lblSembolLabel = new Label { Text = "Sembol Listesi:", Font = new Font("Segoe UI", 9, FontStyle.Bold),
+        ForeColor = Color.FromArgb(60, 60, 60), Location = new Point(420, 50), AutoSize = true };
+
+    cmbSembolListesi = new ComboBox { Font = new Font("Consolas", 9), Location = new Point(530, 47), Width = 150,
+        BackColor = Color.White, ForeColor = Color.Black, DropDownStyle = ComboBoxStyle.DropDownList };
+    cmbSembolListesi.Items.Add("-- Sembol Listesi Se
+in --");
+    cmbSembolListesi.SelectedIndex = 0;
+
+    try
+    {
+        var sembolListeleri = Directory.GetFiles(Path.Combine(idealKlasoru, "SembolListeleri"))
+            .Select(f => Path.GetFileName(f)).OrderBy(x => x).ToList();
+        cmbSembolListesi.Items.AddRange(sembolListeleri.ToArray());
+    }
+    catch { }
+
+    Button btnYenile = new Button { Text = "
+Yenile", Font = new Font("Segoe UI", 9, FontStyle.Bold),
+        Location = new Point(700, 45), Size = new Size(80, 25), BackColor = Color.FromArgb(0, 120, 215),
+        ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand };
+
+    CheckBox chkOtomatik = new CheckBox { Text = "Otomatik Yenile (15sn)", Font = new Font("Segoe UI", 8),
+        ForeColor = Color.FromArgb(60, 60, 60), Location = new Point(790, 48), Size = new Size(150, 20), Checked = true };
+
+    Button btnKapat = new Button { Text = "
+", Font = new Font("Segoe UI", 12, FontStyle.Bold),
+        Location = new Point(1140, 10), Size = new Size(30, 25), BackColor = Color.FromArgb(220, 53, 69),
+        ForeColor = Color.White, FlatStyle = FlatStyle.Flat, Cursor = Cursors.Hand };
+
+    baslikPanel.Controls.AddRange(new Control[] { cmbSistemAdi, lblSistemDetay, lblSembolLabel, cmbSembolListesi, 
+        btnYenile, chkOtomatik, btnKapat });
+
+    Panel ozetPanel = new Panel { Dock = DockStyle.Bottom, Height = 50, BackColor = Color.White };
+    lblOzet = new Label { Font = new Font("Segoe UI", 11, FontStyle.Bold), ForeColor = Color.FromArgb(60, 60, 60),
+        Location = new Point(20, 15), AutoSize = true };
+    ozetPanel.Controls.Add(lblOzet);
+
+    tabControl = new TabControl { Dock = DockStyle.Fill, Font = new Font("Segoe UI", 10, FontStyle.Bold),
+        Appearance = TabAppearance.FlatButtons };
+
+    TabPage tabCanli = new TabPage("
+Pozisyonlar") { BackColor = Color.FromArgb(245, 245, 245) };
+    panelPozisyonlar = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(245, 245, 245),
+        AutoScroll = true, Padding = new Padding(10) };
+    tabCanli.Controls.Add(panelPozisyonlar);
+
+    TabPage tabGecmis = new TabPage("
+i") { BackColor = Color.FromArgb(245, 245, 245) };
+    Panel gecmisUstPanel = new Panel { Dock = DockStyle.Top, Height = 80, BackColor = Color.White };
+
+    ComboBox cmbFiltre = new ComboBox { Location = new Point(15, 45), Width = 150,
+        DropDownStyle = ComboBoxStyle.DropDownList, BackColor = Color.White,
+        ForeColor = Color.Black, Font = new Font("Segoe UI", 9) };
+    cmbFiltre.Items.AddRange(new object[] { "T
+lemler" });
+    cmbFiltre.SelectedIndex = 0;
+
+    DateTimePicker dtpBaslangic = new DateTimePicker { 
+        Location = new Point(180, 45), Width = 150,
+        Format = DateTimePickerFormat.Short, Font = new Font("Segoe UI", 9)
+    };
+    dtpBaslangic.Value = DateTime.Now.AddMonths(-1);
+
+    Label lblTire = new Label { 
+        Text = "
+", Location = new Point(340, 47), Size = new Size(20, 20),
+        ForeColor = Color.FromArgb(60, 60, 60), Font = new Font("Segoe UI", 10, FontStyle.Bold) 
+    };
+
+    DateTimePicker dtpBitis = new DateTimePicker { 
+        Location = new Point(365, 45), Width = 150,
+        Format = DateTimePickerFormat.Short, Font = new Font("Segoe UI", 9)
+    };
+
+    Button btnGecmisYenile = new Button { Text = "
+Filtrele", Location = new Point(530, 43), Size = new Size(90, 25),
+        BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat,
+        Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9, FontStyle.Bold) };
+
+    Button btnExport = new Button { Text = "
+Excel'e Aktar", Location = new Point(635, 43), Size = new Size(120, 25),
+        BackColor = Color.FromArgb(40, 167, 69), ForeColor = Color.White, FlatStyle = FlatStyle.Flat,
+        Cursor = Cursors.Hand, Font = new Font("Segoe UI", 9, FontStyle.Bold) };
+
+    lblGecmisOzet = new Label { Font = new Font("Segoe UI", 9, FontStyle.Bold), ForeColor = Color.FromArgb(60, 60, 60),
+        Location = new Point(780, 47), AutoSize = true };
+
+    gecmisUstPanel.Controls.AddRange(new Control[] { 
+        new Label { Text = "Kapat
+Pozisyonlar", Font = new Font("Segoe UI", 12, FontStyle.Bold),
+            ForeColor = Color.FromArgb(0, 120, 215), Location = new Point(15, 10), AutoSize = true },
+        cmbFiltre, dtpBaslangic, lblTire, dtpBitis, btnGecmisYenile, btnExport, lblGecmisOzet 
+    });
+
+    panelGecmis = new Panel { Dock = DockStyle.Fill, BackColor = Color.FromArgb(245, 245, 245),
+        AutoScroll = true, Padding = new Padding(10) };
+
+    tabGecmis.Controls.Add(panelGecmis);
+    tabGecmis.Controls.Add(gecmisUstPanel);
+
+    tabControl.TabPages.Add(tabCanli);
+    tabControl.TabPages.Add(tabGecmis);
+
+    pozisyonFormu.Controls.Add(tabControl);
+    pozisyonFormu.Controls.Add(baslikPanel);
+    pozisyonFormu.Controls.Add(ozetPanel);
+
+    Action pozisyonlariYukle = () =>
+    {
+        try
+        {
+            panelPozisyonlar.Controls.Clear();
+            
+            if (cmbSistemAdi.SelectedIndex == 0 || cmbSembolListesi.SelectedIndex == 0)
+            {
+                panelPozisyonlar.Controls.Add(new Label {
+                    Text = "
+ve sembol listesi se
+in!",
+                    Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(255, 140, 0), Location = new Point(20, 20), AutoSize = true
+                });
+                lblOzet.Text = "Sistem ve sembol listesi se
+in";
+                lblOzet.ForeColor = Color.FromArgb(255, 140, 0);
+                return;
+            }
+
+            string robotAdi = cmbSistemAdi.SelectedItem.ToString();
+            string dosyaYolu = Path.Combine(idealKlasoru, "SembolListeleri", cmbSembolListesi.SelectedItem.ToString());
+            
+            if (!File.Exists(dosyaYolu)) return;
+
+            var Semboller = File.ReadAllLines(dosyaYolu).Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).ToList();
+            int y = 10, satirSayisi = 0;
+            double toplamMaliyet = 0, toplamDeger = 0, toplamKZ = 0;
+
+            foreach (var sembol in Semboller)
+            {
+                string Anahtar = "Z_" + sembol + "_" + robotAdi;
+                double PozFiyat = 0.0;
+                DateTime PozTarih = DateTime.Now;
+                string PozRezerv = "";
+                double Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out PozFiyat, out PozTarih, out PozRezerv);
+                
+                if (Pozisyon > 0)
+                {
+                    float guncelFiyat = Sistem.SonFiyat(sembol);
+                    double maliyet = PozFiyat * Pozisyon;
+                    double guncelDeger = guncelFiyat * Pozisyon;
+                    double karZarar = guncelDeger - maliyet;
+                    double kzYuzde = (maliyet > 0) ? (karZarar / maliyet) * 100 : 0;
+                    
+                    toplamMaliyet += maliyet;
+                    toplamDeger += guncelDeger;
+                    toplamKZ += karZarar;
+                    
+                    Panel kart = new Panel {
+                        Location = new Point(10, y), Size = new Size(1150, 60),
+                        BackColor = karZarar > 0 ? Color.FromArgb(212, 237, 218) : 
+                                   (karZarar < 0 ? Color.FromArgb(248, 215, 218) : Color.White),
+                        BorderStyle = BorderStyle.FixedSingle
+                    };
+
+                    kart.Controls.AddRange(new Control[] {
+                        new Label { Text = sembol, Font = new Font("Consolas", 11, FontStyle.Bold),
+                            ForeColor = Color.FromArgb(0, 120, 215), Location = new Point(10, 5), Size = new Size(100, 20) },
+                        new Label { Text = string.Format("Miktar: {0:0.##} | Al
+ncel: {2:0.0000}",
+                            Pozisyon, PozFiyat, guncelFiyat), Font = new Font("Consolas", 9),
+                            ForeColor = Color.FromArgb(100, 100, 100), Location = new Point(130, 5), Size = new Size(400, 20) },
+                        new Label { Text = string.Format("De
+er: {0:0.00}", guncelDeger),
+                            Font = new Font("Consolas", 10, FontStyle.Bold), ForeColor = Color.FromArgb(40, 40, 40),
+                            Location = new Point(850, 5), Size = new Size(150, 20) },
+                        new Label { Text = string.Format("{0}{1:0.00} ({2}{3:0.00}%)",
+                            (karZarar > 0 ? "+" : ""), karZarar, (kzYuzde > 0 ? "+" : ""), kzYuzde),
+                            Font = new Font("Consolas", 10, FontStyle.Bold),
+                            ForeColor = karZarar > 0 ? Color.FromArgb(40, 167, 69) : (karZarar < 0 ? Color.FromArgb(220, 53, 69) : Color.Gray),
+                            Location = new Point(1020, 5), Size = new Size(120, 20), TextAlign = ContentAlignment.MiddleRight },
+                        new Label { Text = string.Format("Al
+: {0:dd.MM.yyyy HH:mm}", PozTarih),
+                            Font = new Font("Consolas", 8), ForeColor = Color.FromArgb(0, 120, 215),
+                            Location = new Point(10, 35), Size = new Size(200, 15) },
+                        new Label { Text = string.Format("G
+n: {0}", (DateTime.Now - PozTarih).Days),
+                            Font = new Font("Consolas", 8),
+                            ForeColor = (DateTime.Now - PozTarih).Days > 30 ? Color.FromArgb(255, 140, 0) : Color.FromArgb(0, 120, 215),
+                            Location = new Point(230, 35), Size = new Size(60, 15) },
+                        new Label { Text = string.Format("Maliyet: {0:0.00}", maliyet),
+                            Font = new Font("Consolas", 9), ForeColor = Color.FromArgb(100, 100, 100),
+                            Location = new Point(850, 35), Size = new Size(150, 15) },
+                        new Label { Text = karZarar > 0 ? "
+"),
+                            Font = new Font("Segoe UI", 14), Location = new Point(1110, 25),
+                            Size = new Size(30, 25), TextAlign = ContentAlignment.MiddleCenter }
+                    });
+
+                    panelPozisyonlar.Controls.Add(kart);
+                    y += 70;
+                    satirSayisi++;
+                }
+            }
+            
+            if (satirSayisi == 0)
+            {
+                panelPozisyonlar.Controls.Add(new Label {
+                    Text = "
+k pozisyon bulunmuyor.",
+                    Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(255, 140, 0), Location = new Point(20, 50), AutoSize = true
+                });
+                lblOzet.Text = "Aktif pozisyon yok";
+            }
+            else
+            {
+                double kzYuzde = (toplamMaliyet > 0) ? (toplamKZ / toplamMaliyet) * 100 : 0;
+                lblOzet.Text = string.Format("
+{0} pozisyon |
+{6}",
+                    satirSayisi, toplamDeger, (toplamKZ > 0 ? "+" : ""), toplamKZ,
+                    (kzYuzde > 0 ? "+" : ""), kzYuzde, DateTime.Now.ToString("HH:mm:ss"));
+                lblOzet.ForeColor = toplamKZ > 0 ? Color.FromArgb(40, 167, 69) : (toplamKZ < 0 ? Color.FromArgb(220, 53, 69) : Color.Gray);
+            }
+        }
+        catch (Exception ex)
+        {
+            panelPozisyonlar.Controls.Add(new Label {
+                Text = "
+Hata: " + ex.Message, Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.FromArgb(220, 53, 69), Location = new Point(20, 20), AutoSize = true
+            });
+        }
+    };
+
+    Action<DateTime, DateTime, string> gecmisYukle = (baslangic, bitis, filtre) =>
+    {
+        try
+        {
+            panelGecmis.Controls.Clear();
+            if (cmbSistemAdi.SelectedIndex == 0) return;
+
+            string logDosyasi = Path.Combine(idealKlasoru, "TradeLogs", "TradeHistory_" + cmbSistemAdi.SelectedItem.ToString() + ".txt");
+            if (!File.Exists(logDosyasi))
+            {
+                panelGecmis.Controls.Add(new Label {
+                    Text = "
+bulunmuyor.",
+                    Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(255, 140, 0), Location = new Point(20, 50), AutoSize = true
+                });
+                return;
+            }
+
+            var islemler = File.ReadAllLines(logDosyasi).Where(s => !string.IsNullOrWhiteSpace(s))
+                .Select(s => s.Split('|')).Where(p => p.Length >= 9)
+                .Select(p => new { Tarih = p[0].Trim(), Sembol = p[1].Trim(), Miktar = p[2].Trim(),
+                    AlisFiyat = p[3].Trim(), SatisFiyat = p[4].Trim(), KZ = p[5].Trim(),
+                    KZYuzde = p[6].Trim(), Gun = p[7].Trim(), Maliyet = p[8].Trim() }).ToList();
+
+            var filtreliIslemler = islemler.Where(i => {
+                DateTime tarih;
+                if (!DateTime.TryParse(i.Tarih, out tarih)) return false;
+                bool tarihOk = tarih >= baslangic && tarih <= bitis.AddDays(1);
+                double kz = 0;
+                double.TryParse(i.KZ, out kz);
+                
+                if (filtre == "Karl
+n") return tarih.Date == DateTime.Now.Date;
+                if (filtre == "Bu Hafta") return tarih >= DateTime.Now.AddDays(-7);
+                if (filtre == "Bu Ay") return tarih >= DateTime.Now.AddMonths(-1);
+                return tarihOk;
+            }).OrderByDescending(i => i.Tarih).ToList();
+
+            if (filtreliIslemler.Count == 0)
+            {
+                panelGecmis.Controls.Add(new Label {
+                    Text = "
+.",
+                    Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                    ForeColor = Color.FromArgb(255, 140, 0), Location = new Point(20, 50), AutoSize = true
+                });
+                return;
+            }
+
+            int toplamIslem = filtreliIslemler.Count, karli = 0, zararli = 0;
+            double toplamKZ = 0, toplamMaliyet = 0;
+
+            foreach (var i in filtreliIslemler)
+            {
+                double kz = 0, maliyet = 0;
+                double.TryParse(i.KZ, out kz);
+                double.TryParse(i.Maliyet, out maliyet);
+                toplamKZ += kz;
+                toplamMaliyet += maliyet;
+                if (kz > 0) karli++; else if (kz < 0) zararli++;
+            }
+
+            double basari = (toplamIslem > 0) ? (karli * 100.0 / toplamIslem) : 0;
+            double toplamKZYuzde = (toplamMaliyet > 0) ? (toplamKZ / toplamMaliyet) * 100 : 0;
+
+            lblGecmisOzet.Text = string.Format("{0} i
+",
+                toplamIslem, karli, zararli, basari);
+            lblGecmisOzet.ForeColor = toplamKZ > 0 ? Color.FromArgb(40, 167, 69) : (toplamKZ < 0 ? Color.FromArgb(220, 53, 69) : Color.Gray);
+
+            Panel ozet = new Panel { Location = new Point(10, 10), Size = new Size(1150, 70),
+                BackColor = Color.White, BorderStyle = BorderStyle.FixedSingle };
+            ozet.Controls.AddRange(new Control[] {
+                new Label {
+                    Text = string.Format("
+Toplam K/Z: {0}{1:0.00} ({2}{3:0.00}%)",
+                        (toplamKZ > 0 ? "+" : ""), toplamKZ, (toplamKZYuzde > 0 ? "+" : ""), toplamKZYuzde),
+                    Font = new Font("Segoe UI", 13, FontStyle.Bold),
+                    ForeColor = toplamKZ > 0 ? Color.FromArgb(40, 167, 69) : (toplamKZ < 0 ? Color.FromArgb(220, 53, 69) : Color.Gray),
+                    Location = new Point(20, 12), AutoSize = true
+                },
+                new Label {
+                    Text = string.Format("
+(%{4:0.0})",
+                        toplamIslem, karli, basari, zararli, (100 - basari)),
+                    Font = new Font("Segoe UI", 10), ForeColor = Color.FromArgb(60, 60, 60),
+                    Location = new Point(20, 42), AutoSize = true
+                }
+            });
+            panelGecmis.Controls.Add(ozet);
+
+            int y = 90;
+            foreach (var islem in filtreliIslemler.Take(100))
+            {
+                double kz = 0, kzYuzde = 0, alisFiyat = 0, satisFiyat = 0, miktar = 0, maliyet = 0;
+                int gun = 0;
+                double.TryParse(islem.KZ, out kz);
+                double.TryParse(islem.KZYuzde, out kzYuzde);
+                double.TryParse(islem.AlisFiyat, out alisFiyat);
+                double.TryParse(islem.SatisFiyat, out satisFiyat);
+                double.TryParse(islem.Miktar, out miktar);
+                double.TryParse(islem.Maliyet, out maliyet);
+                int.TryParse(islem.Gun, out gun);
+
+                Panel kart = new Panel {
+                    Location = new Point(10, y), Size = new Size(1150, 55),
+                    BackColor = kz > 0 ? Color.FromArgb(212, 237, 218) : 
+                               (kz < 0 ? Color.FromArgb(248, 215, 218) : Color.White),
+                    BorderStyle = BorderStyle.FixedSingle
+                };
+
+                kart.Controls.AddRange(new Control[] {
+                    new Label { Text = islem.Sembol, Font = new Font("Consolas", 10, FontStyle.Bold),
+                        ForeColor = Color.FromArgb(0, 120, 215), Location = new Point(10, 5), Size = new Size(120, 20) },
+                    new Label { Text = string.Format("Miktar: {0:0} | Al
+n",
+                        miktar, alisFiyat, satisFiyat, gun), Font = new Font("Consolas", 8),
+                        ForeColor = Color.FromArgb(100, 100, 100), Location = new Point(10, 28), Size = new Size(450, 20) },
+                    new Label { Text = islem.Tarih, Font = new Font("Consolas", 9),
+                        ForeColor = Color.FromArgb(0, 120, 215), Location = new Point(470, 5), Size = new Size(180, 20) },
+                    new Label { Text = string.Format("Maliyet: {0:0.00}", maliyet),
+                        Font = new Font("Consolas", 9), ForeColor = Color.FromArgb(100, 100, 100),
+                        Location = new Point(670, 5), Size = new Size(150, 20) },
+                    new Label { Text = string.Format("{0}{1:0.00} ({2}{3:0.00}%)",
+                        (kz > 0 ? "+" : ""), kz, (kzYuzde > 0 ? "+" : ""), kzYuzde),
+                        Font = new Font("Consolas", 11, FontStyle.Bold),
+                        ForeColor = kz > 0 ? Color.FromArgb(40, 167, 69) : (kz < 0 ? Color.FromArgb(220, 53, 69) : Color.Gray),
+                        Location = new Point(840, 15), Size = new Size(180, 25), TextAlign = ContentAlignment.MiddleRight },
+                    new Label { Text = kz > 0 ? "
+"),
+                        Font = new Font("Segoe UI", 16), Location = new Point(1100, 15),
+                        Size = new Size(35, 30), TextAlign = ContentAlignment.MiddleCenter }
+                });
+
+                panelGecmis.Controls.Add(kart);
+                y += 65;
+            }
+        }
+        catch (Exception ex)
+        {
+            panelGecmis.Controls.Add(new Label {
+                Text = "
+Hata: " + ex.Message, Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                ForeColor = Color.FromArgb(220, 53, 69), Location = new Point(20, 20), AutoSize = true
+            });
+        }
+    };
+
+    cmbSistemAdi.SelectedIndexChanged += (s, e) =>
+    {
+        if (cmbSistemAdi.SelectedIndex > 0)
+        {
+            try
+            {
+                string sistemAdi = cmbSistemAdi.SelectedItem.ToString();
+                string sistemDosyasi = Path.Combine(idealKlasoru, "ChartSistem", sistemAdi + ".001");
+                
+                if (File.Exists(sistemDosyasi))
+                {
+                    string[] satirlar = File.ReadAllLines(sistemDosyasi);
+                    string alSatKodu = "";
+                    string periyot = "";
+                    
+                    foreach (var satir in satirlar)
+                    {
+                        string temizSatir = satir.Trim();
+                        
+                        if (temizSatir.Contains("var SistemAdi") || temizSatir.Contains("var MySistemAdi"))
+                        {
+                            int baslangic = temizSatir.IndexOf('"');
+                            int bitis = temizSatir.LastIndexOf('"');
+                            if (baslangic >= 0 && bitis > baslangic)
+                            {
+                                alSatKodu = temizSatir.Substring(baslangic + 1, bitis - baslangic - 1);
+                            }
+                        }
+                        
+                        if (temizSatir.Contains("var Periyot"))
+                        {
+                            int baslangic = temizSatir.IndexOf('"');
+                            int bitis = temizSatir.LastIndexOf('"');
+                            if (baslangic >= 0 && bitis > baslangic)
+                            {
+                                periyot = temizSatir.Substring(baslangic + 1, bitis - baslangic - 1);
+                            }
+                        }
+                        
+                        if (!string.IsNullOrEmpty(alSatKodu) && !string.IsNullOrEmpty(periyot))
+                            break;
+                    }
+                    
+                    if (!string.IsNullOrEmpty(alSatKodu))
+                    {
+                        lblSistemDetay.Text = string.Format("
+Periyot: {1}dk", alSatKodu, periyot);
+                        lblSistemDetay.ForeColor = Color.FromArgb(0, 120, 215);
+                    }
+                    else
+                    {
+                        lblSistemDetay.Text = "
+";
+                        lblSistemDetay.ForeColor = Color.FromArgb(255, 140, 0);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                lblSistemDetay.Text = "
+Hata: " + ex.Message;
+                lblSistemDetay.ForeColor = Color.FromArgb(220, 53, 69);
+            }
+        }
+        else
+        {
+            lblSistemDetay.Text = "";
+        }
+        
+        if (tabControl.SelectedIndex == 0 && cmbSistemAdi.SelectedIndex > 0)
+            pozisyonlariYukle();
+    };
+
+    cmbSembolListesi.SelectedIndexChanged += (s, e) =>
+    {
+        if (tabControl.SelectedIndex == 0 && cmbSembolListesi.SelectedIndex > 0)
+            pozisyonlariYukle();
+    };
+
+    btnYenile.Click += (s, e) => pozisyonlariYukle();
+    btnGecmisYenile.Click += (s, e) => gecmisYukle(dtpBaslangic.Value, dtpBitis.Value, cmbFiltre.SelectedItem.ToString());
+    cmbFiltre.SelectedIndexChanged += (s, e) => {
+        if (cmbFiltre.SelectedIndex > 0)
+            gecmisYukle(dtpBaslangic.Value, dtpBitis.Value, cmbFiltre.SelectedItem.ToString());
+    };
+
+    btnExport.Click += (s, e) =>
+    {
+        try
+        {
+            if (cmbSistemAdi.SelectedIndex == 0)
+            {
+                MessageBox.Show("L
+", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string logDosyasi = Path.Combine(idealKlasoru, "TradeLogs", "TradeHistory_" + cmbSistemAdi.SelectedItem.ToString() + ".txt");
+            if (!File.Exists(logDosyasi))
+            {
+                MessageBox.Show("Excel'e aktar
+", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            SaveFileDialog saveDialog = new SaveFileDialog
+            {
+                Filter = "CSV Dosyas
+|*.txt",
+                FileName = "TradeHistory_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".csv",
+                Title = "
+ini Kaydet"
+            };
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                var satirlar = File.ReadAllLines(logDosyasi);
+                using (StreamWriter sw = new StreamWriter(saveDialog.FileName, false, System.Text.Encoding.UTF8))
+                {
+                    sw.WriteLine("Tarih;Sembol;Miktar;Al
+yla kaydedildi!\n" + saveDialog.FileName, 
+                              "Ba
+", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Hata: " + ex.Message, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    };
+
+    btnKapat.Click += (s, e) => 
+    {
+        if (yenilemeTimer != null)
+        {
+            yenilemeTimer.Stop();
+            yenilemeTimer.Dispose();
+        }
+        pozisyonFormu.Close();
+    };
+
+    yenilemeTimer = new System.Windows.Forms.Timer();
+    yenilemeTimer.Interval = 15000;
+    yenilemeTimer.Tick += (s, e) => 
+    {
+        if (chkOtomatik.Checked && tabControl.SelectedIndex == 0)
+            pozisyonlariYukle();
+    };
+
+    chkOtomatik.CheckedChanged += (s, e) =>
+    {
+        if (chkOtomatik.Checked)
+            yenilemeTimer.Start();
+        else
+            yenilemeTimer.Stop();
+    };
+
+    tabControl.SelectedIndexChanged += (s, e) =>
+    {
+        if (tabControl.SelectedIndex == 1 && cmbSistemAdi.SelectedIndex > 0)
+            gecmisYukle(dtpBaslangic.Value, dtpBitis.Value, cmbFiltre.SelectedItem.ToString());
+    };
+
+    pozisyonFormu.FormClosed += (s, e) =>
+    {
+        if (yenilemeTimer != null)
+        {
+            yenilemeTimer.Stop();
+            yenilemeTimer.Dispose();
+        }
+    };
+
+    lblOzet.Text = "L
+tfen sistem ve sembol listesi se
+in";
+    lblOzet.ForeColor = Color.FromArgb(255, 140, 0);
+
+    yenilemeTimer.Start();
+    pozisyonFormu.Show();
+}
+System.Drawing.FontStyle
+System.Drawing.GraphicsUnit
+System.Drawing.Color
+value
+knownColor

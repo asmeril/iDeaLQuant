@@ -1,0 +1,1807 @@
+22:54:16  ====================================================
+22:54:16  EXPORT BAÞLIYOR — 09.04.2026 22:54:16
+22:54:16  Hedef: D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export\
+22:54:16  WARN: Veri yok › ANELE 1dk
+22:54:16  WARN: Veri yok › ANELE 15dk
+22:54:16  WARN: Veri yok › ANELE 60dk
+22:54:16  WARN: Veri yok › ANELE Gunluk
+22:54:16  WARN: Veri yok › BORLS 1dk
+22:54:16  WARN: Veri yok › BORLS 15dk
+22:54:16  WARN: Veri yok › BORLS 60dk
+22:54:16  WARN: Veri yok › BORLS Gunluk
+22:54:16  WARN: Veri yok › KONTR 1dk
+22:54:16  WARN: Veri yok › KONTR 15dk
+22:54:16  WARN: Veri yok › KONTR 60dk
+22:54:16  WARN: Veri yok › KONTR Gunluk
+22:54:16  WARN: Veri yok › SMRVA 1dk
+22:54:16  WARN: Veri yok › SMRVA 15dk
+22:54:16  WARN: Veri yok › SMRVA 60dk
+22:54:16  WARN: Veri yok › SMRVA Gunluk
+22:54:16  WARN: Veri yok › SVGYO 1dk
+22:54:16  WARN: Veri yok › SVGYO 15dk
+22:54:16  WARN: Veri yok › SVGYO 60dk
+22:54:16  WARN: Veri yok › SVGYO Gunluk
+22:54:16  WARN: Veri yok › ADEL 1dk
+22:54:16  WARN: Veri yok › ADEL 15dk
+22:54:16  WARN: Veri yok › ADEL 60dk
+22:54:16  WARN: Veri yok › ADEL Gunluk
+22:54:16  WARN: Veri yok › AAGYO 1dk
+22:54:16  WARN: Veri yok › AAGYO 15dk
+22:54:16  WARN: Veri yok › AAGYO 60dk
+22:54:16  WARN: Veri yok › AAGYO Gunluk
+22:54:16  WARN: Veri yok › TKFEN 1dk
+22:54:16  WARN: Veri yok › TKFEN 15dk
+22:54:16  WARN: Veri yok › TKFEN 60dk
+22:54:16  WARN: Veri yok › TKFEN Gunluk
+22:54:16  WARN: Veri yok › CEOEM 1dk
+22:54:16  WARN: Veri yok › CEOEM 15dk
+22:54:16  WARN: Veri yok › CEOEM 60dk
+22:54:16  WARN: Veri yok › CEOEM Gunluk
+22:54:16  WARN: Veri yok › DMRGD 1dk
+22:54:16  WARN: Veri yok › DMRGD 15dk
+22:54:16  WARN: Veri yok › DMRGD 60dk
+22:54:16  WARN: Veri yok › DMRGD Gunluk
+22:54:16  WARN: Veri yok › GLRMK 1dk
+22:54:16  WARN: Veri yok › GLRMK 15dk
+22:54:16  WARN: Veri yok › GLRMK 60dk
+22:54:16  WARN: Veri yok › GLRMK Gunluk
+22:54:16  WARN: Veri yok › DGNMO 1dk
+22:54:16  WARN: Veri yok › DGNMO 15dk
+22:54:16  WARN: Veri yok › DGNMO 60dk
+22:54:16  WARN: Veri yok › DGNMO Gunluk
+22:54:16  WARN: Veri yok › VRGYO 1dk
+22:54:16  WARN: Veri yok › VRGYO 15dk
+22:54:16  WARN: Veri yok › VRGYO 60dk
+22:54:16  WARN: Veri yok › VRGYO Gunluk
+22:54:16  WARN: Veri yok › ALVES 1dk
+22:54:16  WARN: Veri yok › ALVES 15dk
+22:54:16  WARN: Veri yok › ALVES 60dk
+22:54:16  WARN: Veri yok › ALVES Gunluk
+22:54:16  WARN: Veri yok › BRMEN 1dk
+22:54:16  WARN: Veri yok › BRMEN 15dk
+22:54:16  WARN: Veri yok › BRMEN 60dk
+22:54:16  WARN: Veri yok › BRMEN Gunluk
+22:54:16  WARN: Veri yok › KLMDE 1dk
+22:54:16  WARN: Veri yok › KLMDE 15dk
+22:54:16  WARN: Veri yok › KLMDE 60dk
+22:54:16  WARN: Veri yok › KLMDE Gunluk
+22:54:16  WARN: Veri yok › DOGUB 1dk
+22:54:16  WARN: Veri yok › DOGUB 15dk
+22:54:16  WARN: Veri yok › DOGUB 60dk
+22:54:16  WARN: Veri yok › DOGUB Gunluk
+22:54:16  WARN: Veri yok › SANFM 1dk
+22:54:16  WARN: Veri yok › SANFM 15dk
+22:54:16  WARN: Veri yok › SANFM 60dk
+22:54:16  WARN: Veri yok › SANFM Gunluk
+22:54:16  WARN: Veri yok › OBASE 1dk
+22:54:16  WARN: Veri yok › OBASE 15dk
+22:54:16  WARN: Veri yok › OBASE 60dk
+22:54:16  WARN: Veri yok › OBASE Gunluk
+22:54:16  WARN: Veri yok › BRKO 1dk
+22:54:16  WARN: Veri yok › BRKO 15dk
+22:54:16  WARN: Veri yok › BRKO 60dk
+22:54:16  WARN: Veri yok › BRKO Gunluk
+22:54:16  WARN: Veri yok › TRHOL 1dk
+22:54:16  WARN: Veri yok › TRHOL 15dk
+22:54:16  WARN: Veri yok › TRHOL 60dk
+22:54:16  WARN: Veri yok › TRHOL Gunluk
+22:54:16  WARN: Veri yok › ULUSE 1dk
+22:54:16  WARN: Veri yok › ULUSE 15dk
+22:54:16  WARN: Veri yok › ULUSE 60dk
+22:54:16  WARN: Veri yok › ULUSE Gunluk
+22:54:16  WARN: Veri yok › KTSKR 1dk
+22:54:16  WARN: Veri yok › KTSKR 15dk
+22:54:16  WARN: Veri yok › KTSKR 60dk
+22:54:16  WARN: Veri yok › KTSKR Gunluk
+22:54:16  WARN: Veri yok › LIDER 1dk
+22:54:16  WARN: Veri yok › LIDER 15dk
+22:54:16  WARN: Veri yok › LIDER 60dk
+22:54:16  WARN: Veri yok › LIDER Gunluk
+22:54:16  WARN: Veri yok › CVKMD 1dk
+22:54:16  WARN: Veri yok › CVKMD 15dk
+22:54:16  WARN: Veri yok › CVKMD 60dk
+22:54:16  WARN: Veri yok › CVKMD Gunluk
+22:54:16  WARN: Veri yok › KRDMD 1dk
+22:54:16  WARN: Veri yok › KRDMD 15dk
+22:54:16  WARN: Veri yok › KRDMD 60dk
+22:54:16  WARN: Veri yok › KRDMD Gunluk
+22:54:16  WARN: Veri yok › RNPOL 1dk
+22:54:16  WARN: Veri yok › RNPOL 15dk
+22:54:16  WARN: Veri yok › RNPOL 60dk
+22:54:16  WARN: Veri yok › RNPOL Gunluk
+22:54:16  WARN: Veri yok › DCTTR 1dk
+22:54:16  WARN: Veri yok › DCTTR 15dk
+22:54:16  WARN: Veri yok › DCTTR 60dk
+22:54:16  WARN: Veri yok › DCTTR Gunluk
+22:54:16  WARN: Veri yok › AYCES 1dk
+22:54:16  WARN: Veri yok › AYCES 15dk
+22:54:16  WARN: Veri yok › AYCES 60dk
+22:54:16  WARN: Veri yok › AYCES Gunluk
+22:54:16  WARN: Veri yok › BASSO 1dk
+22:54:16  WARN: Veri yok › BASSO 15dk
+22:54:16  WARN: Veri yok › BASSO 60dk
+22:54:16  WARN: Veri yok › BASSO Gunluk
+22:54:16  WARN: Veri yok › GATEG 1dk
+22:54:16  WARN: Veri yok › GATEG 15dk
+22:54:16  WARN: Veri yok › GATEG 60dk
+22:54:16  WARN: Veri yok › GATEG Gunluk
+22:54:16  WARN: Veri yok › KLMSN 1dk
+22:54:16  WARN: Veri yok › KLMSN 15dk
+22:54:16  WARN: Veri yok › KLMSN 60dk
+22:54:16  WARN: Veri yok › KLMSN Gunluk
+22:54:16  WARN: Veri yok › SEKUR 1dk
+22:54:16  WARN: Veri yok › SEKUR 15dk
+22:54:16  WARN: Veri yok › SEKUR 60dk
+22:54:16  WARN: Veri yok › SEKUR Gunluk
+22:54:16  WARN: Veri yok › ASUZU 1dk
+22:54:16  WARN: Veri yok › ASUZU 15dk
+22:54:16  WARN: Veri yok › ASUZU 60dk
+22:54:16  WARN: Veri yok › ASUZU Gunluk
+22:54:16  WARN: Veri yok › KRDMA 1dk
+22:54:16  WARN: Veri yok › KRDMA 15dk
+22:54:16  WARN: Veri yok › KRDMA 60dk
+22:54:16  WARN: Veri yok › KRDMA Gunluk
+22:54:16  WARN: Veri yok › KERVN 1dk
+22:54:16  WARN: Veri yok › KERVN 15dk
+22:54:16  WARN: Veri yok › KERVN 60dk
+22:54:16  WARN: Veri yok › KERVN Gunluk
+22:54:16  WARN: Veri yok › ERSU 1dk
+22:54:16  WARN: Veri yok › ERSU 15dk
+22:54:16  WARN: Veri yok › ERSU 60dk
+22:54:16  WARN: Veri yok › ERSU Gunluk
+22:54:16  WARN: Veri yok › EMKEL 1dk
+22:54:16  WARN: Veri yok › EMKEL 15dk
+22:54:16  WARN: Veri yok › EMKEL 60dk
+22:54:16  WARN: Veri yok › EMKEL Gunluk
+22:54:16  WARN: Veri yok › ALCTL 1dk
+22:54:16  WARN: Veri yok › ALCTL 15dk
+22:54:16  WARN: Veri yok › ALCTL 60dk
+22:54:16  WARN: Veri yok › ALCTL Gunluk
+22:54:16  WARN: Veri yok › RYGYO 1dk
+22:54:16  WARN: Veri yok › RYGYO 15dk
+22:54:16  WARN: Veri yok › RYGYO 60dk
+22:54:16  WARN: Veri yok › RYGYO Gunluk
+22:54:16  WARN: Veri yok › GZNMI 1dk
+22:54:16  WARN: Veri yok › GZNMI 15dk
+22:54:16  WARN: Veri yok › GZNMI 60dk
+22:54:16  WARN: Veri yok › GZNMI Gunluk
+22:54:16  WARN: Veri yok › SMRTG 1dk
+22:54:16  WARN: Veri yok › SMRTG 15dk
+22:54:16  WARN: Veri yok › SMRTG 60dk
+22:54:16  WARN: Veri yok › SMRTG Gunluk
+22:54:16  WARN: Veri yok › OZRDN 1dk
+22:54:16  WARN: Veri yok › OZRDN 15dk
+22:54:16  WARN: Veri yok › OZRDN 60dk
+22:54:16  WARN: Veri yok › OZRDN Gunluk
+22:54:16  WARN: Veri yok › KRABB 1dk
+22:54:16  WARN: Veri yok › KRABB 15dk
+22:54:16  WARN: Veri yok › KRABB 60dk
+22:54:16  WARN: Veri yok › KRABB Gunluk
+22:54:16  WARN: Veri yok › TERA 1dk
+22:54:16  WARN: Veri yok › TERA 15dk
+22:54:16  WARN: Veri yok › TERA 60dk
+22:54:16  WARN: Veri yok › TERA Gunluk
+22:54:16  WARN: Veri yok › ARMGD 1dk
+22:54:16  WARN: Veri yok › ARMGD 15dk
+22:54:16  WARN: Veri yok › ARMGD 60dk
+22:54:16  WARN: Veri yok › ARMGD Gunluk
+22:54:16  WARN: Veri yok › YGGYO 1dk
+22:54:16  WARN: Veri yok › YGGYO 15dk
+22:54:16  WARN: Veri yok › YGGYO 60dk
+22:54:16  WARN: Veri yok › YGGYO Gunluk
+22:54:16  WARN: Veri yok › MOBTL 1dk
+22:54:16  WARN: Veri yok › MOBTL 15dk
+22:54:16  WARN: Veri yok › MOBTL 60dk
+22:54:16  WARN: Veri yok › MOBTL Gunluk
+22:54:16  WARN: Veri yok › EDATA 1dk
+22:54:16  WARN: Veri yok › EDATA 15dk
+22:54:16  WARN: Veri yok › EDATA 60dk
+22:54:16  WARN: Veri yok › EDATA Gunluk
+22:54:16  WARN: Veri yok › SEGYO 1dk
+22:54:16  WARN: Veri yok › SEGYO 15dk
+22:54:16  WARN: Veri yok › SEGYO 60dk
+22:54:16  WARN: Veri yok › SEGYO Gunluk
+22:54:16  WARN: Veri yok › MAGEN 1dk
+22:54:16  WARN: Veri yok › MAGEN 15dk
+22:54:16  WARN: Veri yok › MAGEN 60dk
+22:54:16  WARN: Veri yok › MAGEN Gunluk
+22:54:16  WARN: Veri yok › ICUGS 1dk
+22:54:16  WARN: Veri yok › ICUGS 15dk
+22:54:16  WARN: Veri yok › ICUGS 60dk
+22:54:16  WARN: Veri yok › ICUGS Gunluk
+22:54:16  WARN: Veri yok › CWENE 1dk
+22:54:16  WARN: Veri yok › CWENE 15dk
+22:54:16  WARN: Veri yok › CWENE 60dk
+22:54:16  WARN: Veri yok › CWENE Gunluk
+22:54:16  WARN: Veri yok › ASELS 1dk
+22:54:16  WARN: Veri yok › ASELS 15dk
+22:54:16  WARN: Veri yok › ASELS 60dk
+22:54:16  WARN: Veri yok › ASELS Gunluk
+22:54:16  WARN: Veri yok › ARZUM 1dk
+22:54:16  WARN: Veri yok › ARZUM 15dk
+22:54:16  WARN: Veri yok › ARZUM 60dk
+22:54:16  WARN: Veri yok › ARZUM Gunluk
+22:54:16  WARN: Veri yok › DEVA 1dk
+22:54:16  WARN: Veri yok › DEVA 15dk
+22:54:16  WARN: Veri yok › DEVA 60dk
+22:54:16  WARN: Veri yok › DEVA Gunluk
+22:54:16  WARN: Veri yok › TUNGE 1dk
+22:54:16  WARN: Veri yok › TUNGE 15dk
+22:54:16  WARN: Veri yok › TUNGE 60dk
+22:54:16  WARN: Veri yok › TUNGE Gunluk
+22:54:16  WARN: Veri yok › TEKTU 1dk
+22:54:16  WARN: Veri yok › TEKTU 15dk
+22:54:16  WARN: Veri yok › TEKTU 60dk
+22:54:16  WARN: Veri yok › TEKTU Gunluk
+22:54:16  WARN: Veri yok › RALYH 1dk
+22:54:16  WARN: Veri yok › RALYH 15dk
+22:54:16  WARN: Veri yok › RALYH 60dk
+22:54:16  WARN: Veri yok › RALYH Gunluk
+22:54:16  WARN: Veri yok › DURDO 1dk
+22:54:16  WARN: Veri yok › DURDO 15dk
+22:54:16  WARN: Veri yok › DURDO 60dk
+22:54:16  WARN: Veri yok › DURDO Gunluk
+22:54:16  WARN: Veri yok › GOKNR 1dk
+22:54:16  WARN: Veri yok › GOKNR 15dk
+22:54:16  WARN: Veri yok › GOKNR 60dk
+22:54:16  WARN: Veri yok › GOKNR Gunluk
+22:54:16  WARN: Veri yok › BIOEN 1dk
+22:54:16  WARN: Veri yok › BIOEN 15dk
+22:54:16  WARN: Veri yok › BIOEN 60dk
+22:54:16  WARN: Veri yok › BIOEN Gunluk
+22:54:16  WARN: Veri yok › TEZOL 1dk
+22:54:16  WARN: Veri yok › TEZOL 15dk
+22:54:16  WARN: Veri yok › TEZOL 60dk
+22:54:16  WARN: Veri yok › TEZOL Gunluk
+22:54:16  WARN: Veri yok › OYAYO 1dk
+22:54:16  WARN: Veri yok › OYAYO 15dk
+22:54:16  WARN: Veri yok › OYAYO 60dk
+22:54:16  WARN: Veri yok › OYAYO Gunluk
+22:54:16  WARN: Veri yok › MOGAN 1dk
+22:54:16  WARN: Veri yok › MOGAN 15dk
+22:54:16  WARN: Veri yok › MOGAN 60dk
+22:54:16  WARN: Veri yok › MOGAN Gunluk
+22:54:16  WARN: Veri yok › ODAS 1dk
+22:54:16  WARN: Veri yok › ODAS 15dk
+22:54:16  WARN: Veri yok › ODAS 60dk
+22:54:16  WARN: Veri yok › ODAS Gunluk
+22:54:16  WARN: Veri yok › BYDNR 1dk
+22:54:16  WARN: Veri yok › BYDNR 15dk
+22:54:16  WARN: Veri yok › BYDNR 60dk
+22:54:16  WARN: Veri yok › BYDNR Gunluk
+22:54:16  WARN: Veri yok › SOKM 1dk
+22:54:16  WARN: Veri yok › SOKM 15dk
+22:54:16  WARN: Veri yok › SOKM 60dk
+22:54:16  WARN: Veri yok › SOKM Gunluk
+22:54:16  WARN: Veri yok › YAYLA 1dk
+22:54:16  WARN: Veri yok › YAYLA 15dk
+22:54:16  WARN: Veri yok › YAYLA 60dk
+22:54:16  WARN: Veri yok › YAYLA Gunluk
+22:54:16  WARN: Veri yok › ENTRA 1dk
+22:54:16  WARN: Veri yok › ENTRA 15dk
+22:54:16  WARN: Veri yok › ENTRA 60dk
+22:54:16  WARN: Veri yok › ENTRA Gunluk
+22:54:16  ====================================================
+22:54:16  TAMAMLANDI: 0 dosya yazýldý  |  0 atlandý (mevcut)  |  280 hata
+22:54:16  Sembol baþýna dosya: 4 periyot × 70 hisse = 280 toplam
+22:54:16  ====================================================
+23:06:43  UYARI: Piyasa dýþý saatte çalýþtýrýldý (23:06). GrafikVerileriniOku boþ döner. 09:55-18:20 arasýnda tekrar çalýþtýrýn.
+23:08:10  WARN: Veri yok › ANELE 1dk
+23:08:10  WARN: Veri yok › ANELE 15dk
+23:08:10  WARN: Veri yok › ANELE 60dk
+23:08:10  WARN: Veri yok › ANELE Gunluk
+23:08:10  WARN: Veri yok › BORLS 1dk
+23:08:10  WARN: Veri yok › BORLS 15dk
+23:08:10  WARN: Veri yok › BORLS 60dk
+23:08:10  WARN: Veri yok › BORLS Gunluk
+23:08:10  WARN: Veri yok › KONTR 1dk
+23:08:10  WARN: Veri yok › KONTR 15dk
+23:08:10  WARN: Veri yok › KONTR 60dk
+23:08:10  WARN: Veri yok › KONTR Gunluk
+23:08:10  WARN: Veri yok › SMRVA 1dk
+23:08:10  WARN: Veri yok › SMRVA 15dk
+23:08:10  WARN: Veri yok › SMRVA 60dk
+23:08:10  WARN: Veri yok › SMRVA Gunluk
+23:08:10  WARN: Veri yok › SVGYO 1dk
+23:08:10  WARN: Veri yok › SVGYO 15dk
+23:08:10  WARN: Veri yok › SVGYO 60dk
+23:08:10  WARN: Veri yok › SVGYO Gunluk
+23:08:10  WARN: Veri yok › ADEL 1dk
+23:08:10  WARN: Veri yok › ADEL 15dk
+23:08:10  WARN: Veri yok › ADEL 60dk
+23:08:10  WARN: Veri yok › ADEL Gunluk
+23:08:10  WARN: Veri yok › AAGYO 1dk
+23:08:10  WARN: Veri yok › AAGYO 15dk
+23:08:10  WARN: Veri yok › AAGYO 60dk
+23:08:10  WARN: Veri yok › AAGYO Gunluk
+23:08:10  WARN: Veri yok › TKFEN 1dk
+23:08:10  WARN: Veri yok › TKFEN 15dk
+23:08:10  WARN: Veri yok › TKFEN 60dk
+23:08:10  WARN: Veri yok › TKFEN Gunluk
+23:08:10  WARN: Veri yok › CEOEM 1dk
+23:08:10  WARN: Veri yok › CEOEM 15dk
+23:08:10  WARN: Veri yok › CEOEM 60dk
+23:08:10  WARN: Veri yok › CEOEM Gunluk
+23:08:10  WARN: Veri yok › DMRGD 1dk
+23:08:10  WARN: Veri yok › DMRGD 15dk
+23:08:10  WARN: Veri yok › DMRGD 60dk
+23:08:10  WARN: Veri yok › DMRGD Gunluk
+23:08:10  WARN: Veri yok › GLRMK 1dk
+23:08:10  WARN: Veri yok › GLRMK 15dk
+23:08:10  WARN: Veri yok › GLRMK 60dk
+23:08:10  WARN: Veri yok › GLRMK Gunluk
+23:08:10  WARN: Veri yok › DGNMO 1dk
+23:08:10  WARN: Veri yok › DGNMO 15dk
+23:08:10  WARN: Veri yok › DGNMO 60dk
+23:08:10  WARN: Veri yok › DGNMO Gunluk
+23:08:10  WARN: Veri yok › VRGYO 1dk
+23:08:10  WARN: Veri yok › VRGYO 15dk
+23:08:10  WARN: Veri yok › VRGYO 60dk
+23:08:10  WARN: Veri yok › VRGYO Gunluk
+23:08:10  WARN: Veri yok › ALVES 1dk
+23:08:10  WARN: Veri yok › ALVES 15dk
+23:08:10  WARN: Veri yok › ALVES 60dk
+23:08:10  WARN: Veri yok › ALVES Gunluk
+23:08:10  WARN: Veri yok › BRMEN 1dk
+23:08:10  WARN: Veri yok › BRMEN 15dk
+23:08:10  WARN: Veri yok › BRMEN 60dk
+23:08:10  WARN: Veri yok › BRMEN Gunluk
+23:08:10  WARN: Veri yok › KLMDE 1dk
+23:08:10  WARN: Veri yok › KLMDE 15dk
+23:08:10  WARN: Veri yok › KLMDE 60dk
+23:08:10  WARN: Veri yok › KLMDE Gunluk
+23:08:10  WARN: Veri yok › DOGUB 1dk
+23:08:10  WARN: Veri yok › DOGUB 15dk
+23:08:10  WARN: Veri yok › DOGUB 60dk
+23:08:10  WARN: Veri yok › DOGUB Gunluk
+23:08:10  WARN: Veri yok › SANFM 1dk
+23:08:10  WARN: Veri yok › SANFM 15dk
+23:08:10  WARN: Veri yok › SANFM 60dk
+23:08:10  WARN: Veri yok › SANFM Gunluk
+23:08:10  WARN: Veri yok › OBASE 1dk
+23:08:10  WARN: Veri yok › OBASE 15dk
+23:08:10  WARN: Veri yok › OBASE 60dk
+23:08:10  WARN: Veri yok › OBASE Gunluk
+23:08:10  WARN: Veri yok › BRKO 1dk
+23:08:10  WARN: Veri yok › BRKO 15dk
+23:08:10  WARN: Veri yok › BRKO 60dk
+23:08:10  WARN: Veri yok › BRKO Gunluk
+23:08:10  WARN: Veri yok › TRHOL 1dk
+23:08:10  WARN: Veri yok › TRHOL 15dk
+23:08:10  WARN: Veri yok › TRHOL 60dk
+23:08:10  WARN: Veri yok › TRHOL Gunluk
+23:08:10  WARN: Veri yok › ULUSE 1dk
+23:08:10  WARN: Veri yok › ULUSE 15dk
+23:08:10  WARN: Veri yok › ULUSE 60dk
+23:08:10  WARN: Veri yok › ULUSE Gunluk
+23:08:10  WARN: Veri yok › KTSKR 1dk
+23:08:10  WARN: Veri yok › KTSKR 15dk
+23:08:10  WARN: Veri yok › KTSKR 60dk
+23:08:10  WARN: Veri yok › KTSKR Gunluk
+23:08:10  WARN: Veri yok › LIDER 1dk
+23:08:10  WARN: Veri yok › LIDER 15dk
+23:08:10  WARN: Veri yok › LIDER 60dk
+23:08:10  WARN: Veri yok › LIDER Gunluk
+23:08:10  WARN: Veri yok › CVKMD 1dk
+23:08:10  WARN: Veri yok › CVKMD 15dk
+23:08:10  WARN: Veri yok › CVKMD 60dk
+23:08:10  WARN: Veri yok › CVKMD Gunluk
+23:08:10  WARN: Veri yok › KRDMD 1dk
+23:08:10  WARN: Veri yok › KRDMD 15dk
+23:08:10  WARN: Veri yok › KRDMD 60dk
+23:08:10  WARN: Veri yok › KRDMD Gunluk
+23:08:10  WARN: Veri yok › RNPOL 1dk
+23:08:10  WARN: Veri yok › RNPOL 15dk
+23:08:10  WARN: Veri yok › RNPOL 60dk
+23:08:10  WARN: Veri yok › RNPOL Gunluk
+23:08:10  WARN: Veri yok › DCTTR 1dk
+23:08:10  WARN: Veri yok › DCTTR 15dk
+23:08:10  WARN: Veri yok › DCTTR 60dk
+23:08:10  WARN: Veri yok › DCTTR Gunluk
+23:08:10  WARN: Veri yok › AYCES 1dk
+23:08:10  WARN: Veri yok › AYCES 15dk
+23:08:10  WARN: Veri yok › AYCES 60dk
+23:08:10  WARN: Veri yok › AYCES Gunluk
+23:08:10  WARN: Veri yok › BASSO 1dk
+23:08:10  WARN: Veri yok › BASSO 15dk
+23:08:10  WARN: Veri yok › BASSO 60dk
+23:08:10  WARN: Veri yok › BASSO Gunluk
+23:08:10  WARN: Veri yok › GATEG 1dk
+23:08:10  WARN: Veri yok › GATEG 15dk
+23:08:10  WARN: Veri yok › GATEG 60dk
+23:08:10  WARN: Veri yok › GATEG Gunluk
+23:08:10  WARN: Veri yok › KLMSN 1dk
+23:08:10  WARN: Veri yok › KLMSN 15dk
+23:08:10  WARN: Veri yok › KLMSN 60dk
+23:08:10  WARN: Veri yok › KLMSN Gunluk
+23:08:10  WARN: Veri yok › SEKUR 1dk
+23:08:10  WARN: Veri yok › SEKUR 15dk
+23:08:10  WARN: Veri yok › SEKUR 60dk
+23:08:10  WARN: Veri yok › SEKUR Gunluk
+23:08:10  WARN: Veri yok › ASUZU 1dk
+23:08:10  WARN: Veri yok › ASUZU 15dk
+23:08:10  WARN: Veri yok › ASUZU 60dk
+23:08:10  WARN: Veri yok › ASUZU Gunluk
+23:08:10  WARN: Veri yok › KRDMA 1dk
+23:08:10  WARN: Veri yok › KRDMA 15dk
+23:08:10  WARN: Veri yok › KRDMA 60dk
+23:08:10  WARN: Veri yok › KRDMA Gunluk
+23:08:10  WARN: Veri yok › KERVN 1dk
+23:08:10  WARN: Veri yok › KERVN 15dk
+23:08:10  WARN: Veri yok › KERVN 60dk
+23:08:10  WARN: Veri yok › KERVN Gunluk
+23:08:10  WARN: Veri yok › ERSU 1dk
+23:08:10  WARN: Veri yok › ERSU 15dk
+23:08:10  WARN: Veri yok › ERSU 60dk
+23:08:10  WARN: Veri yok › ERSU Gunluk
+23:08:10  WARN: Veri yok › EMKEL 1dk
+23:08:10  WARN: Veri yok › EMKEL 15dk
+23:08:10  WARN: Veri yok › EMKEL 60dk
+23:08:10  WARN: Veri yok › EMKEL Gunluk
+23:08:10  WARN: Veri yok › ALCTL 1dk
+23:08:10  WARN: Veri yok › ALCTL 15dk
+23:08:10  WARN: Veri yok › ALCTL 60dk
+23:08:10  WARN: Veri yok › ALCTL Gunluk
+23:08:10  WARN: Veri yok › RYGYO 1dk
+23:08:10  WARN: Veri yok › RYGYO 15dk
+23:08:10  WARN: Veri yok › RYGYO 60dk
+23:08:10  WARN: Veri yok › RYGYO Gunluk
+23:08:10  WARN: Veri yok › GZNMI 1dk
+23:08:10  WARN: Veri yok › GZNMI 15dk
+23:08:10  WARN: Veri yok › GZNMI 60dk
+23:08:10  WARN: Veri yok › GZNMI Gunluk
+23:08:10  WARN: Veri yok › SMRTG 1dk
+23:08:10  WARN: Veri yok › SMRTG 15dk
+23:08:10  WARN: Veri yok › SMRTG 60dk
+23:08:10  WARN: Veri yok › SMRTG Gunluk
+23:08:10  WARN: Veri yok › OZRDN 1dk
+23:08:10  WARN: Veri yok › OZRDN 15dk
+23:08:10  WARN: Veri yok › OZRDN 60dk
+23:08:10  WARN: Veri yok › OZRDN Gunluk
+23:08:10  WARN: Veri yok › KRABB 1dk
+23:08:10  WARN: Veri yok › KRABB 15dk
+23:08:10  WARN: Veri yok › KRABB 60dk
+23:08:10  WARN: Veri yok › KRABB Gunluk
+23:08:10  WARN: Veri yok › TERA 1dk
+23:08:10  WARN: Veri yok › TERA 15dk
+23:08:10  WARN: Veri yok › TERA 60dk
+23:08:10  WARN: Veri yok › TERA Gunluk
+23:08:10  WARN: Veri yok › ARMGD 1dk
+23:08:10  WARN: Veri yok › ARMGD 15dk
+23:08:10  WARN: Veri yok › ARMGD 60dk
+23:08:10  WARN: Veri yok › ARMGD Gunluk
+23:08:10  WARN: Veri yok › YGGYO 1dk
+23:08:10  WARN: Veri yok › YGGYO 15dk
+23:08:10  WARN: Veri yok › YGGYO 60dk
+23:08:10  WARN: Veri yok › YGGYO Gunluk
+23:08:10  WARN: Veri yok › MOBTL 1dk
+23:08:10  WARN: Veri yok › MOBTL 15dk
+23:08:10  WARN: Veri yok › MOBTL 60dk
+23:08:10  WARN: Veri yok › MOBTL Gunluk
+23:08:10  WARN: Veri yok › EDATA 1dk
+23:08:10  WARN: Veri yok › EDATA 15dk
+23:08:10  WARN: Veri yok › EDATA 60dk
+23:08:10  WARN: Veri yok › EDATA Gunluk
+23:08:10  WARN: Veri yok › SEGYO 1dk
+23:08:10  WARN: Veri yok › SEGYO 15dk
+23:08:10  WARN: Veri yok › SEGYO 60dk
+23:08:10  WARN: Veri yok › SEGYO Gunluk
+23:08:10  WARN: Veri yok › MAGEN 1dk
+23:08:10  WARN: Veri yok › MAGEN 15dk
+23:08:10  WARN: Veri yok › MAGEN 60dk
+23:08:10  WARN: Veri yok › MAGEN Gunluk
+23:08:10  WARN: Veri yok › ICUGS 1dk
+23:08:10  WARN: Veri yok › ICUGS 15dk
+23:08:10  WARN: Veri yok › ICUGS 60dk
+23:08:10  WARN: Veri yok › ICUGS Gunluk
+23:08:10  WARN: Veri yok › CWENE 1dk
+23:08:10  WARN: Veri yok › CWENE 15dk
+23:08:10  WARN: Veri yok › CWENE 60dk
+23:08:10  WARN: Veri yok › CWENE Gunluk
+23:08:10  WARN: Veri yok › ASELS 1dk
+23:08:10  WARN: Veri yok › ASELS 15dk
+23:08:10  WARN: Veri yok › ASELS 60dk
+23:08:10  WARN: Veri yok › ASELS Gunluk
+23:08:10  WARN: Veri yok › ARZUM 1dk
+23:08:10  WARN: Veri yok › ARZUM 15dk
+23:08:10  WARN: Veri yok › ARZUM 60dk
+23:08:10  WARN: Veri yok › ARZUM Gunluk
+23:08:10  WARN: Veri yok › DEVA 1dk
+23:08:10  WARN: Veri yok › DEVA 15dk
+23:08:10  WARN: Veri yok › DEVA 60dk
+23:08:10  WARN: Veri yok › DEVA Gunluk
+23:08:10  WARN: Veri yok › TUNGE 1dk
+23:08:10  WARN: Veri yok › TUNGE 15dk
+23:08:10  WARN: Veri yok › TUNGE 60dk
+23:08:10  WARN: Veri yok › TUNGE Gunluk
+23:08:10  WARN: Veri yok › TEKTU 1dk
+23:08:10  WARN: Veri yok › TEKTU 15dk
+23:08:10  WARN: Veri yok › TEKTU 60dk
+23:08:10  WARN: Veri yok › TEKTU Gunluk
+23:08:10  WARN: Veri yok › RALYH 1dk
+23:08:10  WARN: Veri yok › RALYH 15dk
+23:08:10  WARN: Veri yok › RALYH 60dk
+23:08:10  WARN: Veri yok › RALYH Gunluk
+23:08:10  WARN: Veri yok › DURDO 1dk
+23:08:10  WARN: Veri yok › DURDO 15dk
+23:08:10  WARN: Veri yok › DURDO 60dk
+23:08:10  WARN: Veri yok › DURDO Gunluk
+23:08:10  WARN: Veri yok › GOKNR 1dk
+23:08:10  WARN: Veri yok › GOKNR 15dk
+23:08:10  WARN: Veri yok › GOKNR 60dk
+23:08:10  WARN: Veri yok › GOKNR Gunluk
+23:08:10  WARN: Veri yok › BIOEN 1dk
+23:08:10  WARN: Veri yok › BIOEN 15dk
+23:08:10  WARN: Veri yok › BIOEN 60dk
+23:08:10  WARN: Veri yok › BIOEN Gunluk
+23:08:10  WARN: Veri yok › TEZOL 1dk
+23:08:10  WARN: Veri yok › TEZOL 15dk
+23:08:10  WARN: Veri yok › TEZOL 60dk
+23:08:10  WARN: Veri yok › TEZOL Gunluk
+23:08:10  WARN: Veri yok › OYAYO 1dk
+23:08:10  WARN: Veri yok › OYAYO 15dk
+23:08:10  WARN: Veri yok › OYAYO 60dk
+23:08:10  WARN: Veri yok › OYAYO Gunluk
+23:08:10  WARN: Veri yok › MOGAN 1dk
+23:08:10  WARN: Veri yok › MOGAN 15dk
+23:08:10  WARN: Veri yok › MOGAN 60dk
+23:08:10  WARN: Veri yok › MOGAN Gunluk
+23:08:10  WARN: Veri yok › ODAS 1dk
+23:08:10  WARN: Veri yok › ODAS 15dk
+23:08:10  WARN: Veri yok › ODAS 60dk
+23:08:10  WARN: Veri yok › ODAS Gunluk
+23:08:10  WARN: Veri yok › BYDNR 1dk
+23:08:10  WARN: Veri yok › BYDNR 15dk
+23:08:10  WARN: Veri yok › BYDNR 60dk
+23:08:10  WARN: Veri yok › BYDNR Gunluk
+23:08:10  WARN: Veri yok › SOKM 1dk
+23:08:10  WARN: Veri yok › SOKM 15dk
+23:08:10  WARN: Veri yok › SOKM 60dk
+23:08:10  WARN: Veri yok › SOKM Gunluk
+23:08:10  WARN: Veri yok › YAYLA 1dk
+23:08:10  WARN: Veri yok › YAYLA 15dk
+23:08:10  WARN: Veri yok › YAYLA 60dk
+23:08:10  WARN: Veri yok › YAYLA Gunluk
+23:08:10  WARN: Veri yok › ENTRA 1dk
+23:08:10  WARN: Veri yok › ENTRA 15dk
+23:08:10  WARN: Veri yok › ENTRA 60dk
+23:08:10  WARN: Veri yok › ENTRA Gunluk
+23:08:10  ====================================================
+23:08:10  TAMAMLANDI: 0 dosya yazýldý  |  0 atlandý (mevcut)  |  280 hata
+23:08:10  Sembol baþýna dosya: 4 periyot × 70 hisse = 280 toplam
+23:08:10  ====================================================
+23:08:14  WARN: Veri yok › ANELE 1dk
+23:08:14  WARN: Veri yok › ANELE 15dk
+23:08:14  WARN: Veri yok › ANELE 60dk
+23:08:14  WARN: Veri yok › ANELE Gunluk
+23:08:14  WARN: Veri yok › BORLS 1dk
+23:08:14  WARN: Veri yok › BORLS 15dk
+23:08:14  WARN: Veri yok › BORLS 60dk
+23:08:14  WARN: Veri yok › BORLS Gunluk
+23:08:14  WARN: Veri yok › KONTR 1dk
+23:08:14  WARN: Veri yok › KONTR 15dk
+23:08:14  WARN: Veri yok › KONTR 60dk
+23:08:14  WARN: Veri yok › KONTR Gunluk
+23:08:14  WARN: Veri yok › SMRVA 1dk
+23:08:14  WARN: Veri yok › SMRVA 15dk
+23:08:14  WARN: Veri yok › SMRVA 60dk
+23:08:14  WARN: Veri yok › SMRVA Gunluk
+23:08:14  WARN: Veri yok › SVGYO 1dk
+23:08:14  WARN: Veri yok › SVGYO 15dk
+23:08:14  WARN: Veri yok › SVGYO 60dk
+23:08:14  WARN: Veri yok › SVGYO Gunluk
+23:08:14  WARN: Veri yok › ADEL 1dk
+23:08:14  WARN: Veri yok › ADEL 15dk
+23:08:14  WARN: Veri yok › ADEL 60dk
+23:08:14  WARN: Veri yok › ADEL Gunluk
+23:08:14  WARN: Veri yok › AAGYO 1dk
+23:08:14  WARN: Veri yok › AAGYO 15dk
+23:08:14  WARN: Veri yok › AAGYO 60dk
+23:08:14  WARN: Veri yok › AAGYO Gunluk
+23:08:14  WARN: Veri yok › TKFEN 1dk
+23:08:14  WARN: Veri yok › TKFEN 15dk
+23:08:14  WARN: Veri yok › TKFEN 60dk
+23:08:14  WARN: Veri yok › TKFEN Gunluk
+23:08:14  WARN: Veri yok › CEOEM 1dk
+23:08:14  WARN: Veri yok › CEOEM 15dk
+23:08:14  WARN: Veri yok › CEOEM 60dk
+23:08:14  WARN: Veri yok › CEOEM Gunluk
+23:08:14  WARN: Veri yok › DMRGD 1dk
+23:08:14  WARN: Veri yok › DMRGD 15dk
+23:08:14  WARN: Veri yok › DMRGD 60dk
+23:08:14  WARN: Veri yok › DMRGD Gunluk
+23:08:14  WARN: Veri yok › GLRMK 1dk
+23:08:14  WARN: Veri yok › GLRMK 15dk
+23:08:14  WARN: Veri yok › GLRMK 60dk
+23:08:14  WARN: Veri yok › GLRMK Gunluk
+23:08:14  WARN: Veri yok › DGNMO 1dk
+23:08:14  WARN: Veri yok › DGNMO 15dk
+23:08:14  WARN: Veri yok › DGNMO 60dk
+23:08:14  WARN: Veri yok › DGNMO Gunluk
+23:08:14  WARN: Veri yok › VRGYO 1dk
+23:08:14  WARN: Veri yok › VRGYO 15dk
+23:08:14  WARN: Veri yok › VRGYO 60dk
+23:08:14  WARN: Veri yok › VRGYO Gunluk
+23:08:14  WARN: Veri yok › ALVES 1dk
+23:08:14  WARN: Veri yok › ALVES 15dk
+23:08:14  WARN: Veri yok › ALVES 60dk
+23:08:14  WARN: Veri yok › ALVES Gunluk
+23:08:14  WARN: Veri yok › BRMEN 1dk
+23:08:14  WARN: Veri yok › BRMEN 15dk
+23:08:14  WARN: Veri yok › BRMEN 60dk
+23:08:14  WARN: Veri yok › BRMEN Gunluk
+23:08:14  WARN: Veri yok › KLMDE 1dk
+23:08:14  WARN: Veri yok › KLMDE 15dk
+23:08:14  WARN: Veri yok › KLMDE 60dk
+23:08:14  WARN: Veri yok › KLMDE Gunluk
+23:08:14  WARN: Veri yok › DOGUB 1dk
+23:08:14  WARN: Veri yok › DOGUB 15dk
+23:08:14  WARN: Veri yok › DOGUB 60dk
+23:08:14  WARN: Veri yok › DOGUB Gunluk
+23:08:14  WARN: Veri yok › SANFM 1dk
+23:08:14  WARN: Veri yok › SANFM 15dk
+23:08:14  WARN: Veri yok › SANFM 60dk
+23:08:14  WARN: Veri yok › SANFM Gunluk
+23:08:14  WARN: Veri yok › OBASE 1dk
+23:08:14  WARN: Veri yok › OBASE 15dk
+23:08:14  WARN: Veri yok › OBASE 60dk
+23:08:14  WARN: Veri yok › OBASE Gunluk
+23:08:14  WARN: Veri yok › BRKO 1dk
+23:08:14  WARN: Veri yok › BRKO 15dk
+23:08:14  WARN: Veri yok › BRKO 60dk
+23:08:14  WARN: Veri yok › BRKO Gunluk
+23:08:14  WARN: Veri yok › TRHOL 1dk
+23:08:14  WARN: Veri yok › TRHOL 15dk
+23:08:14  WARN: Veri yok › TRHOL 60dk
+23:08:14  WARN: Veri yok › TRHOL Gunluk
+23:08:14  WARN: Veri yok › ULUSE 1dk
+23:08:14  WARN: Veri yok › ULUSE 15dk
+23:08:14  WARN: Veri yok › ULUSE 60dk
+23:08:14  WARN: Veri yok › ULUSE Gunluk
+23:08:14  WARN: Veri yok › KTSKR 1dk
+23:08:14  WARN: Veri yok › KTSKR 15dk
+23:08:14  WARN: Veri yok › KTSKR 60dk
+23:08:14  WARN: Veri yok › KTSKR Gunluk
+23:08:14  WARN: Veri yok › LIDER 1dk
+23:08:14  WARN: Veri yok › LIDER 15dk
+23:08:14  WARN: Veri yok › LIDER 60dk
+23:08:14  WARN: Veri yok › LIDER Gunluk
+23:08:14  WARN: Veri yok › CVKMD 1dk
+23:08:14  WARN: Veri yok › CVKMD 15dk
+23:08:14  WARN: Veri yok › CVKMD 60dk
+23:08:14  WARN: Veri yok › CVKMD Gunluk
+23:08:14  WARN: Veri yok › KRDMD 1dk
+23:08:14  WARN: Veri yok › KRDMD 15dk
+23:08:14  WARN: Veri yok › KRDMD 60dk
+23:08:14  WARN: Veri yok › KRDMD Gunluk
+23:08:14  WARN: Veri yok › RNPOL 1dk
+23:08:14  WARN: Veri yok › RNPOL 15dk
+23:08:14  WARN: Veri yok › RNPOL 60dk
+23:08:14  WARN: Veri yok › RNPOL Gunluk
+23:08:14  WARN: Veri yok › DCTTR 1dk
+23:08:14  WARN: Veri yok › DCTTR 15dk
+23:08:14  WARN: Veri yok › DCTTR 60dk
+23:08:14  WARN: Veri yok › DCTTR Gunluk
+23:08:14  WARN: Veri yok › AYCES 1dk
+23:08:14  WARN: Veri yok › AYCES 15dk
+23:08:14  WARN: Veri yok › AYCES 60dk
+23:08:14  WARN: Veri yok › AYCES Gunluk
+23:08:14  WARN: Veri yok › BASSO 1dk
+23:08:14  WARN: Veri yok › BASSO 15dk
+23:08:14  WARN: Veri yok › BASSO 60dk
+23:08:14  WARN: Veri yok › BASSO Gunluk
+23:08:14  WARN: Veri yok › GATEG 1dk
+23:08:14  WARN: Veri yok › GATEG 15dk
+23:08:14  WARN: Veri yok › GATEG 60dk
+23:08:14  WARN: Veri yok › GATEG Gunluk
+23:08:14  WARN: Veri yok › KLMSN 1dk
+23:08:14  WARN: Veri yok › KLMSN 15dk
+23:08:14  WARN: Veri yok › KLMSN 60dk
+23:08:14  WARN: Veri yok › KLMSN Gunluk
+23:08:14  WARN: Veri yok › SEKUR 1dk
+23:08:14  WARN: Veri yok › SEKUR 15dk
+23:08:14  WARN: Veri yok › SEKUR 60dk
+23:08:14  WARN: Veri yok › SEKUR Gunluk
+23:08:14  WARN: Veri yok › ASUZU 1dk
+23:08:14  WARN: Veri yok › ASUZU 15dk
+23:08:14  WARN: Veri yok › ASUZU 60dk
+23:08:14  WARN: Veri yok › ASUZU Gunluk
+23:08:14  WARN: Veri yok › KRDMA 1dk
+23:08:14  WARN: Veri yok › KRDMA 15dk
+23:08:14  WARN: Veri yok › KRDMA 60dk
+23:08:14  WARN: Veri yok › KRDMA Gunluk
+23:08:14  WARN: Veri yok › KERVN 1dk
+23:08:14  WARN: Veri yok › KERVN 15dk
+23:08:14  WARN: Veri yok › KERVN 60dk
+23:08:14  WARN: Veri yok › KERVN Gunluk
+23:08:14  WARN: Veri yok › ERSU 1dk
+23:08:14  WARN: Veri yok › ERSU 15dk
+23:08:14  WARN: Veri yok › ERSU 60dk
+23:08:14  WARN: Veri yok › ERSU Gunluk
+23:08:14  WARN: Veri yok › EMKEL 1dk
+23:08:14  WARN: Veri yok › EMKEL 15dk
+23:08:14  WARN: Veri yok › EMKEL 60dk
+23:08:14  WARN: Veri yok › EMKEL Gunluk
+23:08:14  WARN: Veri yok › ALCTL 1dk
+23:08:14  WARN: Veri yok › ALCTL 15dk
+23:08:14  WARN: Veri yok › ALCTL 60dk
+23:08:14  WARN: Veri yok › ALCTL Gunluk
+23:08:14  WARN: Veri yok › RYGYO 1dk
+23:08:14  WARN: Veri yok › RYGYO 15dk
+23:08:14  WARN: Veri yok › RYGYO 60dk
+23:08:14  WARN: Veri yok › RYGYO Gunluk
+23:08:14  WARN: Veri yok › GZNMI 1dk
+23:08:14  WARN: Veri yok › GZNMI 15dk
+23:08:14  WARN: Veri yok › GZNMI 60dk
+23:08:14  WARN: Veri yok › GZNMI Gunluk
+23:08:14  WARN: Veri yok › SMRTG 1dk
+23:08:14  WARN: Veri yok › SMRTG 15dk
+23:08:14  WARN: Veri yok › SMRTG 60dk
+23:08:14  WARN: Veri yok › SMRTG Gunluk
+23:08:14  WARN: Veri yok › OZRDN 1dk
+23:08:14  WARN: Veri yok › OZRDN 15dk
+23:08:14  WARN: Veri yok › OZRDN 60dk
+23:08:14  WARN: Veri yok › OZRDN Gunluk
+23:08:14  WARN: Veri yok › KRABB 1dk
+23:08:14  WARN: Veri yok › KRABB 15dk
+23:08:14  WARN: Veri yok › KRABB 60dk
+23:08:14  WARN: Veri yok › KRABB Gunluk
+23:08:14  WARN: Veri yok › TERA 1dk
+23:08:14  WARN: Veri yok › TERA 15dk
+23:08:14  WARN: Veri yok › TERA 60dk
+23:08:14  WARN: Veri yok › TERA Gunluk
+23:08:14  WARN: Veri yok › ARMGD 1dk
+23:08:14  WARN: Veri yok › ARMGD 15dk
+23:08:14  WARN: Veri yok › ARMGD 60dk
+23:08:14  WARN: Veri yok › ARMGD Gunluk
+23:08:14  WARN: Veri yok › YGGYO 1dk
+23:08:14  WARN: Veri yok › YGGYO 15dk
+23:08:14  WARN: Veri yok › YGGYO 60dk
+23:08:14  WARN: Veri yok › YGGYO Gunluk
+23:08:14  WARN: Veri yok › MOBTL 1dk
+23:08:14  WARN: Veri yok › MOBTL 15dk
+23:08:14  WARN: Veri yok › MOBTL 60dk
+23:08:14  WARN: Veri yok › MOBTL Gunluk
+23:08:14  WARN: Veri yok › EDATA 1dk
+23:08:14  WARN: Veri yok › EDATA 15dk
+23:08:14  WARN: Veri yok › EDATA 60dk
+23:08:14  WARN: Veri yok › EDATA Gunluk
+23:08:14  WARN: Veri yok › SEGYO 1dk
+23:08:14  WARN: Veri yok › SEGYO 15dk
+23:08:14  WARN: Veri yok › SEGYO 60dk
+23:08:14  WARN: Veri yok › SEGYO Gunluk
+23:08:14  WARN: Veri yok › MAGEN 1dk
+23:08:14  WARN: Veri yok › MAGEN 15dk
+23:08:14  WARN: Veri yok › MAGEN 60dk
+23:08:14  WARN: Veri yok › MAGEN Gunluk
+23:08:14  WARN: Veri yok › ICUGS 1dk
+23:08:14  WARN: Veri yok › ICUGS 15dk
+23:08:14  WARN: Veri yok › ICUGS 60dk
+23:08:14  WARN: Veri yok › ICUGS Gunluk
+23:08:14  WARN: Veri yok › CWENE 1dk
+23:08:14  WARN: Veri yok › CWENE 15dk
+23:08:14  WARN: Veri yok › CWENE 60dk
+23:08:14  WARN: Veri yok › CWENE Gunluk
+23:08:14  WARN: Veri yok › ASELS 1dk
+23:08:14  WARN: Veri yok › ASELS 15dk
+23:08:14  WARN: Veri yok › ASELS 60dk
+23:08:14  WARN: Veri yok › ASELS Gunluk
+23:08:14  WARN: Veri yok › ARZUM 1dk
+23:08:14  WARN: Veri yok › ARZUM 15dk
+23:08:14  WARN: Veri yok › ARZUM 60dk
+23:08:14  WARN: Veri yok › ARZUM Gunluk
+23:08:14  WARN: Veri yok › DEVA 1dk
+23:08:14  WARN: Veri yok › DEVA 15dk
+23:08:14  WARN: Veri yok › DEVA 60dk
+23:08:14  WARN: Veri yok › DEVA Gunluk
+23:08:14  WARN: Veri yok › TUNGE 1dk
+23:08:14  WARN: Veri yok › TUNGE 15dk
+23:08:14  WARN: Veri yok › TUNGE 60dk
+23:08:14  WARN: Veri yok › TUNGE Gunluk
+23:08:14  WARN: Veri yok › TEKTU 1dk
+23:08:14  WARN: Veri yok › TEKTU 15dk
+23:08:14  WARN: Veri yok › TEKTU 60dk
+23:08:14  WARN: Veri yok › TEKTU Gunluk
+23:08:14  WARN: Veri yok › RALYH 1dk
+23:08:14  WARN: Veri yok › RALYH 15dk
+23:08:14  WARN: Veri yok › RALYH 60dk
+23:08:14  WARN: Veri yok › RALYH Gunluk
+23:08:14  WARN: Veri yok › DURDO 1dk
+23:08:14  WARN: Veri yok › DURDO 15dk
+23:08:14  WARN: Veri yok › DURDO 60dk
+23:08:14  WARN: Veri yok › DURDO Gunluk
+23:08:14  WARN: Veri yok › GOKNR 1dk
+23:08:14  WARN: Veri yok › GOKNR 15dk
+23:08:14  WARN: Veri yok › GOKNR 60dk
+23:08:14  WARN: Veri yok › GOKNR Gunluk
+23:08:14  WARN: Veri yok › BIOEN 1dk
+23:08:14  WARN: Veri yok › BIOEN 15dk
+23:08:14  WARN: Veri yok › BIOEN 60dk
+23:08:14  WARN: Veri yok › BIOEN Gunluk
+23:08:14  WARN: Veri yok › TEZOL 1dk
+23:08:14  WARN: Veri yok › TEZOL 15dk
+23:08:14  WARN: Veri yok › TEZOL 60dk
+23:08:14  WARN: Veri yok › TEZOL Gunluk
+23:08:14  WARN: Veri yok › OYAYO 1dk
+23:08:14  WARN: Veri yok › OYAYO 15dk
+23:08:14  WARN: Veri yok › OYAYO 60dk
+23:08:14  WARN: Veri yok › OYAYO Gunluk
+23:08:14  WARN: Veri yok › MOGAN 1dk
+23:08:14  WARN: Veri yok › MOGAN 15dk
+23:08:14  WARN: Veri yok › MOGAN 60dk
+23:08:14  WARN: Veri yok › MOGAN Gunluk
+23:08:14  WARN: Veri yok › ODAS 1dk
+23:08:14  WARN: Veri yok › ODAS 15dk
+23:08:14  WARN: Veri yok › ODAS 60dk
+23:08:14  WARN: Veri yok › ODAS Gunluk
+23:08:14  WARN: Veri yok › BYDNR 1dk
+23:08:14  WARN: Veri yok › BYDNR 15dk
+23:08:14  WARN: Veri yok › BYDNR 60dk
+23:08:14  WARN: Veri yok › BYDNR Gunluk
+23:08:14  WARN: Veri yok › SOKM 1dk
+23:08:14  WARN: Veri yok › SOKM 15dk
+23:08:14  WARN: Veri yok › SOKM 60dk
+23:08:14  WARN: Veri yok › SOKM Gunluk
+23:08:14  WARN: Veri yok › YAYLA 1dk
+23:08:14  WARN: Veri yok › YAYLA 15dk
+23:08:14  WARN: Veri yok › YAYLA 60dk
+23:08:14  WARN: Veri yok › YAYLA Gunluk
+23:08:14  WARN: Veri yok › ENTRA 1dk
+23:08:14  WARN: Veri yok › ENTRA 15dk
+23:08:14  WARN: Veri yok › ENTRA 60dk
+23:08:14  WARN: Veri yok › ENTRA Gunluk
+23:08:14  ====================================================
+23:08:14  TAMAMLANDI: 0 dosya yazýldý  |  0 atlandý (mevcut)  |  280 hata
+23:08:14  Sembol baþýna dosya: 4 periyot × 70 hisse = 280 toplam
+23:08:14  ====================================================
+23:42:48  ============================================================
+23:42:48  EXPORT BASLIYOR — 09.04.2026 23:42:48
+23:42:48  Kaynak: D:\iDeal\ChartData\IMKBH
+23:42:48  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+23:42:48  Semboller: 70, Periyotlar: 4
+23:43:57  ============================================================
+23:43:57  EXPORT BASLIYOR - 09.04.2026 23:43:57
+23:43:57  Kaynak: D:\iDeal\ChartData\IMKBH
+23:43:57  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+23:43:57  Semboller: 70, Periyotlar: 4
+23:44:01    20 dosya tamamlandi... Son: SVGYO Gunluk (24 bar)
+23:44:05    40 dosya tamamlandi... Son: DMRGD Gunluk (636 bar)
+23:44:09    60 dosya tamamlandi... Son: BRMEN Gunluk (5000 bar)
+23:44:09  EKSIK: KLMDE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KLMDE.01)
+23:44:09  EKSIK: KLMDE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KLMDE.01)
+23:44:09  EKSIK: KLMDE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KLMDE.60)
+23:44:09  EKSIK: KLMDE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KLMDE.G)
+23:44:13    80 dosya tamamlandi... Son: TRHOL Gunluk (5000 bar)
+23:44:18    100 dosya tamamlandi... Son: KRDMD Gunluk (5000 bar)
+23:44:20  EKSIK: BASSO 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'BASSO.01)
+23:44:20  EKSIK: BASSO 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'BASSO.01)
+23:44:20  EKSIK: BASSO 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'BASSO.60)
+23:44:20  EKSIK: BASSO Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'BASSO.G)
+23:44:22    120 dosya tamamlandi... Son: KLMSN Gunluk (5000 bar)
+23:44:27    140 dosya tamamlandi... Son: ERSU Gunluk (5000 bar)
+23:44:33    160 dosya tamamlandi... Son: SMRTG Gunluk (1012 bar)
+23:44:34  EKSIK: KRABB 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KRABB.01)
+23:44:34  EKSIK: KRABB 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KRABB.01)
+23:44:34  EKSIK: KRABB 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KRABB.60)
+23:44:34  EKSIK: KRABB Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KRABB.G)
+23:44:36    180 dosya tamamlandi... Son: MOBTL Gunluk (1097 bar)
+23:44:40    200 dosya tamamlandi... Son: CWENE Gunluk (736 bar)
+23:44:44  EKSIK: TUNGE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'TUNGE.01)
+23:44:44  EKSIK: TUNGE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'TUNGE.01)
+23:44:44  EKSIK: TUNGE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'TUNGE.60)
+23:44:44  EKSIK: TUNGE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'TUNGE.G)
+23:44:47    220 dosya tamamlandi... Son: RALYH Gunluk (5000 bar)
+23:44:51    240 dosya tamamlandi... Son: OYAYO Gunluk (4755 bar)
+23:44:56    260 dosya tamamlandi... Son: YAYLA Gunluk (3106 bar)
+23:44:57  ============================================================
+23:44:57  TAMAMLANDI: 264 dosya yazildi  |  0 mevcut (atlandi)  |  16 hata/eksik
+23:44:57  Eksik semboller: KLMDE_1dk, KLMDE_15dk, KLMDE_60dk, KLMDE_Gunluk, BASSO_1dk, BASSO_15dk, BASSO_60dk, BASSO_Gunluk, KRABB_1dk, KRABB_15dk, KRABB_60dk, KRABB_Gunluk, TUNGE_1dk, TUNGE_15dk, TUNGE_60dk, TUNGE_Gunluk
+23:47:37  ============================================================
+23:47:37  EXPORT BASLIYOR - 09.04.2026 23:47:37
+23:47:37  Kaynak: D:\iDeal\ChartData\IMKBH
+23:47:37  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+23:47:37  Semboller: 70, Periyotlar: 4
+23:47:40    20 dosya tamamlandi... Son: SVGYO Gunluk (24 bar)
+23:47:45    40 dosya tamamlandi... Son: DMRGD Gunluk (636 bar)
+23:47:48    60 dosya tamamlandi... Son: BRMEN Gunluk (5000 bar)
+23:47:48  EKSIK: KLMDE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KLMDE.01)
+23:47:48  EKSIK: KLMDE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KLMDE.01)
+23:47:48  EKSIK: KLMDE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KLMDE.60)
+23:47:48  EKSIK: KLMDE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KLMDE.G)
+23:47:52    80 dosya tamamlandi... Son: TRHOL Gunluk (5000 bar)
+23:47:57    100 dosya tamamlandi... Son: KRDMD Gunluk (5000 bar)
+23:47:59  EKSIK: BASSO 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'BASSO.01)
+23:47:59  EKSIK: BASSO 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'BASSO.01)
+23:47:59  EKSIK: BASSO 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'BASSO.60)
+23:47:59  EKSIK: BASSO Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'BASSO.G)
+23:48:01    120 dosya tamamlandi... Son: KLMSN Gunluk (5000 bar)
+23:48:06    140 dosya tamamlandi... Son: ERSU Gunluk (5000 bar)
+23:48:12    160 dosya tamamlandi... Son: SMRTG Gunluk (1012 bar)
+23:48:13  EKSIK: KRABB 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KRABB.01)
+23:48:13  EKSIK: KRABB 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KRABB.01)
+23:48:13  EKSIK: KRABB 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KRABB.60)
+23:48:13  EKSIK: KRABB Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KRABB.G)
+23:48:15    180 dosya tamamlandi... Son: MOBTL Gunluk (1097 bar)
+23:48:20    200 dosya tamamlandi... Son: CWENE Gunluk (736 bar)
+23:48:26  EKSIK: TUNGE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'TUNGE.01)
+23:48:26  EKSIK: TUNGE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'TUNGE.01)
+23:48:26  EKSIK: TUNGE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'TUNGE.60)
+23:48:26  EKSIK: TUNGE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'TUNGE.G)
+23:48:29    220 dosya tamamlandi... Son: RALYH Gunluk (5000 bar)
+23:48:35    240 dosya tamamlandi... Son: OYAYO Gunluk (4755 bar)
+23:48:42    260 dosya tamamlandi... Son: YAYLA Gunluk (3106 bar)
+23:48:43  ============================================================
+23:48:43  TAMAMLANDI: 264 dosya yazildi  |  0 mevcut (atlandi)  |  16 hata/eksik
+23:48:43  Eksik semboller: KLMDE_1dk, KLMDE_15dk, KLMDE_60dk, KLMDE_Gunluk, BASSO_1dk, BASSO_15dk, BASSO_60dk, BASSO_Gunluk, KRABB_1dk, KRABB_15dk, KRABB_60dk, KRABB_Gunluk, TUNGE_1dk, TUNGE_15dk, TUNGE_60dk, TUNGE_Gunluk
+01:48:44  UYARI: Piyasa dýþý saatte çalýþtýrýldý (01:48). GrafikVerileriniOku boþ döner. 09:55-18:20 arasýnda tekrar çalýþtýrýn.
+01:50:13  UYARI: Piyasa dýþý saatte çalýþtýrýldý (01:50). GrafikVerileriniOku boþ döner. 00:55-18:20 arasýnda tekrar çalýþtýrýn.
+01:51:44  ====================================================
+01:51:44  EXPORT BAÞLIYOR — 10.04.2026 01:51:44
+01:51:44  Hedef: D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export\
+01:51:44  WARN: Veri yok › ANELE 1dk
+01:51:44  WARN: Veri yok › ANELE 15dk
+01:51:44  WARN: Veri yok › ANELE 60dk
+01:51:44  WARN: Veri yok › ANELE Gunluk
+01:51:44  WARN: Veri yok › BORLS 1dk
+01:51:44  WARN: Veri yok › BORLS 15dk
+01:51:44  WARN: Veri yok › BORLS 60dk
+01:51:44  WARN: Veri yok › BORLS Gunluk
+01:51:44  WARN: Veri yok › KONTR 1dk
+01:51:44  WARN: Veri yok › KONTR 15dk
+01:51:44  WARN: Veri yok › KONTR 60dk
+01:51:44  WARN: Veri yok › KONTR Gunluk
+01:51:44  WARN: Veri yok › SMRVA 1dk
+01:51:44  WARN: Veri yok › SMRVA 15dk
+01:51:44  WARN: Veri yok › SMRVA 60dk
+01:51:44  WARN: Veri yok › SMRVA Gunluk
+01:51:44  WARN: Veri yok › SVGYO 1dk
+01:51:44  WARN: Veri yok › SVGYO 15dk
+01:51:44  WARN: Veri yok › SVGYO 60dk
+01:51:44  WARN: Veri yok › SVGYO Gunluk
+01:51:44  WARN: Veri yok › ADEL 1dk
+01:51:44  WARN: Veri yok › ADEL 15dk
+01:51:44  WARN: Veri yok › ADEL 60dk
+01:51:44  WARN: Veri yok › ADEL Gunluk
+01:51:44  WARN: Veri yok › AAGYO 1dk
+01:51:44  WARN: Veri yok › AAGYO 15dk
+01:51:44  WARN: Veri yok › AAGYO 60dk
+01:51:44  WARN: Veri yok › AAGYO Gunluk
+01:51:44  WARN: Veri yok › TKFEN 1dk
+01:51:44  WARN: Veri yok › TKFEN 15dk
+01:51:44  WARN: Veri yok › TKFEN 60dk
+01:51:44  WARN: Veri yok › TKFEN Gunluk
+01:51:44  WARN: Veri yok › CEOEM 1dk
+01:51:44  WARN: Veri yok › CEOEM 15dk
+01:51:44  WARN: Veri yok › CEOEM 60dk
+01:51:44  WARN: Veri yok › CEOEM Gunluk
+01:51:44  WARN: Veri yok › DMRGD 1dk
+01:51:44  WARN: Veri yok › DMRGD 15dk
+01:51:44  WARN: Veri yok › DMRGD 60dk
+01:51:44  WARN: Veri yok › DMRGD Gunluk
+01:51:44  WARN: Veri yok › GLRMK 1dk
+01:51:44  WARN: Veri yok › GLRMK 15dk
+01:51:44  WARN: Veri yok › GLRMK 60dk
+01:51:44  WARN: Veri yok › GLRMK Gunluk
+01:51:44  WARN: Veri yok › DGNMO 1dk
+01:51:44  WARN: Veri yok › DGNMO 15dk
+01:51:44  WARN: Veri yok › DGNMO 60dk
+01:51:44  WARN: Veri yok › DGNMO Gunluk
+01:51:44  WARN: Veri yok › VRGYO 1dk
+01:51:44  WARN: Veri yok › VRGYO 15dk
+01:51:44  WARN: Veri yok › VRGYO 60dk
+01:51:44  WARN: Veri yok › VRGYO Gunluk
+01:51:44  WARN: Veri yok › ALVES 1dk
+01:51:44  WARN: Veri yok › ALVES 15dk
+01:51:44  WARN: Veri yok › ALVES 60dk
+01:51:44  WARN: Veri yok › ALVES Gunluk
+01:51:44  WARN: Veri yok › BRMEN 1dk
+01:51:44  WARN: Veri yok › BRMEN 15dk
+01:51:44  WARN: Veri yok › BRMEN 60dk
+01:51:44  WARN: Veri yok › BRMEN Gunluk
+01:51:44  WARN: Veri yok › KLMDE 1dk
+01:51:44  WARN: Veri yok › KLMDE 15dk
+01:51:44  WARN: Veri yok › KLMDE 60dk
+01:51:44  WARN: Veri yok › KLMDE Gunluk
+01:51:44  WARN: Veri yok › DOGUB 1dk
+01:51:44  WARN: Veri yok › DOGUB 15dk
+01:51:44  WARN: Veri yok › DOGUB 60dk
+01:51:44  WARN: Veri yok › DOGUB Gunluk
+01:51:44  WARN: Veri yok › SANFM 1dk
+01:51:44  WARN: Veri yok › SANFM 15dk
+01:51:44  WARN: Veri yok › SANFM 60dk
+01:51:44  WARN: Veri yok › SANFM Gunluk
+01:51:44  WARN: Veri yok › OBASE 1dk
+01:51:44  WARN: Veri yok › OBASE 15dk
+01:51:44  WARN: Veri yok › OBASE 60dk
+01:51:44  WARN: Veri yok › OBASE Gunluk
+01:51:44  WARN: Veri yok › BRKO 1dk
+01:51:44  WARN: Veri yok › BRKO 15dk
+01:51:44  WARN: Veri yok › BRKO 60dk
+01:51:44  WARN: Veri yok › BRKO Gunluk
+01:51:44  WARN: Veri yok › TRHOL 1dk
+01:51:44  WARN: Veri yok › TRHOL 15dk
+01:51:44  WARN: Veri yok › TRHOL 60dk
+01:51:44  WARN: Veri yok › TRHOL Gunluk
+01:51:44  WARN: Veri yok › ULUSE 1dk
+01:51:44  WARN: Veri yok › ULUSE 15dk
+01:51:44  WARN: Veri yok › ULUSE 60dk
+01:51:44  WARN: Veri yok › ULUSE Gunluk
+01:51:44  WARN: Veri yok › KTSKR 1dk
+01:51:44  WARN: Veri yok › KTSKR 15dk
+01:51:44  WARN: Veri yok › KTSKR 60dk
+01:51:44  WARN: Veri yok › KTSKR Gunluk
+01:51:44  WARN: Veri yok › LIDER 1dk
+01:51:44  WARN: Veri yok › LIDER 15dk
+01:51:44  WARN: Veri yok › LIDER 60dk
+01:51:44  WARN: Veri yok › LIDER Gunluk
+01:51:44  WARN: Veri yok › CVKMD 1dk
+01:51:44  WARN: Veri yok › CVKMD 15dk
+01:51:44  WARN: Veri yok › CVKMD 60dk
+01:51:44  WARN: Veri yok › CVKMD Gunluk
+01:51:44  WARN: Veri yok › KRDMD 1dk
+01:51:44  WARN: Veri yok › KRDMD 15dk
+01:51:44  WARN: Veri yok › KRDMD 60dk
+01:51:44  WARN: Veri yok › KRDMD Gunluk
+01:51:44  WARN: Veri yok › RNPOL 1dk
+01:51:44  WARN: Veri yok › RNPOL 15dk
+01:51:44  WARN: Veri yok › RNPOL 60dk
+01:51:44  WARN: Veri yok › RNPOL Gunluk
+01:51:44  WARN: Veri yok › DCTTR 1dk
+01:51:44  WARN: Veri yok › DCTTR 15dk
+01:51:44  WARN: Veri yok › DCTTR 60dk
+01:51:44  WARN: Veri yok › DCTTR Gunluk
+01:51:44  WARN: Veri yok › AYCES 1dk
+01:51:44  WARN: Veri yok › AYCES 15dk
+01:51:44  WARN: Veri yok › AYCES 60dk
+01:51:44  WARN: Veri yok › AYCES Gunluk
+01:51:44  WARN: Veri yok › BASSO 1dk
+01:51:44  WARN: Veri yok › BASSO 15dk
+01:51:44  WARN: Veri yok › BASSO 60dk
+01:51:44  WARN: Veri yok › BASSO Gunluk
+01:51:44  WARN: Veri yok › GATEG 1dk
+01:51:44  WARN: Veri yok › GATEG 15dk
+01:51:44  WARN: Veri yok › GATEG 60dk
+01:51:44  WARN: Veri yok › GATEG Gunluk
+01:51:44  WARN: Veri yok › KLMSN 1dk
+01:51:44  WARN: Veri yok › KLMSN 15dk
+01:51:44  WARN: Veri yok › KLMSN 60dk
+01:51:44  WARN: Veri yok › KLMSN Gunluk
+01:51:44  WARN: Veri yok › SEKUR 1dk
+01:51:44  WARN: Veri yok › SEKUR 15dk
+01:51:44  WARN: Veri yok › SEKUR 60dk
+01:51:44  WARN: Veri yok › SEKUR Gunluk
+01:51:44  WARN: Veri yok › ASUZU 1dk
+01:51:44  WARN: Veri yok › ASUZU 15dk
+01:51:44  WARN: Veri yok › ASUZU 60dk
+01:51:44  WARN: Veri yok › ASUZU Gunluk
+01:51:44  WARN: Veri yok › KRDMA 1dk
+01:51:44  WARN: Veri yok › KRDMA 15dk
+01:51:44  WARN: Veri yok › KRDMA 60dk
+01:51:44  WARN: Veri yok › KRDMA Gunluk
+01:51:44  WARN: Veri yok › KERVN 1dk
+01:51:44  WARN: Veri yok › KERVN 15dk
+01:51:44  WARN: Veri yok › KERVN 60dk
+01:51:44  WARN: Veri yok › KERVN Gunluk
+01:51:44  WARN: Veri yok › ERSU 1dk
+01:51:44  WARN: Veri yok › ERSU 15dk
+01:51:44  WARN: Veri yok › ERSU 60dk
+01:51:44  WARN: Veri yok › ERSU Gunluk
+01:51:44  WARN: Veri yok › EMKEL 1dk
+01:51:44  WARN: Veri yok › EMKEL 15dk
+01:51:44  WARN: Veri yok › EMKEL 60dk
+01:51:44  WARN: Veri yok › EMKEL Gunluk
+01:51:44  WARN: Veri yok › ALCTL 1dk
+01:51:44  WARN: Veri yok › ALCTL 15dk
+01:51:44  WARN: Veri yok › ALCTL 60dk
+01:51:44  WARN: Veri yok › ALCTL Gunluk
+01:51:44  WARN: Veri yok › RYGYO 1dk
+01:51:44  WARN: Veri yok › RYGYO 15dk
+01:51:44  WARN: Veri yok › RYGYO 60dk
+01:51:44  WARN: Veri yok › RYGYO Gunluk
+01:51:44  WARN: Veri yok › GZNMI 1dk
+01:51:44  WARN: Veri yok › GZNMI 15dk
+01:51:44  WARN: Veri yok › GZNMI 60dk
+01:51:44  WARN: Veri yok › GZNMI Gunluk
+01:51:44  WARN: Veri yok › SMRTG 1dk
+01:51:44  WARN: Veri yok › SMRTG 15dk
+01:51:44  WARN: Veri yok › SMRTG 60dk
+01:51:44  WARN: Veri yok › SMRTG Gunluk
+01:51:44  WARN: Veri yok › OZRDN 1dk
+01:51:44  WARN: Veri yok › OZRDN 15dk
+01:51:44  WARN: Veri yok › OZRDN 60dk
+01:51:44  WARN: Veri yok › OZRDN Gunluk
+01:51:44  WARN: Veri yok › KRABB 1dk
+01:51:44  WARN: Veri yok › KRABB 15dk
+01:51:44  WARN: Veri yok › KRABB 60dk
+01:51:44  WARN: Veri yok › KRABB Gunluk
+01:51:44  WARN: Veri yok › TERA 1dk
+01:51:44  WARN: Veri yok › TERA 15dk
+01:51:44  WARN: Veri yok › TERA 60dk
+01:51:44  WARN: Veri yok › TERA Gunluk
+01:51:44  WARN: Veri yok › ARMGD 1dk
+01:51:44  WARN: Veri yok › ARMGD 15dk
+01:51:44  WARN: Veri yok › ARMGD 60dk
+01:51:44  WARN: Veri yok › ARMGD Gunluk
+01:51:44  WARN: Veri yok › YGGYO 1dk
+01:51:44  WARN: Veri yok › YGGYO 15dk
+01:51:44  WARN: Veri yok › YGGYO 60dk
+01:51:44  WARN: Veri yok › YGGYO Gunluk
+01:51:44  WARN: Veri yok › MOBTL 1dk
+01:51:44  WARN: Veri yok › MOBTL 15dk
+01:51:44  WARN: Veri yok › MOBTL 60dk
+01:51:44  WARN: Veri yok › MOBTL Gunluk
+01:51:44  WARN: Veri yok › EDATA 1dk
+01:51:44  WARN: Veri yok › EDATA 15dk
+01:51:44  WARN: Veri yok › EDATA 60dk
+01:51:44  WARN: Veri yok › EDATA Gunluk
+01:51:44  WARN: Veri yok › SEGYO 1dk
+01:51:44  WARN: Veri yok › SEGYO 15dk
+01:51:44  WARN: Veri yok › SEGYO 60dk
+01:51:44  WARN: Veri yok › SEGYO Gunluk
+01:51:44  WARN: Veri yok › MAGEN 1dk
+01:51:44  WARN: Veri yok › MAGEN 15dk
+01:51:44  WARN: Veri yok › MAGEN 60dk
+01:51:44  WARN: Veri yok › MAGEN Gunluk
+01:51:44  WARN: Veri yok › ICUGS 1dk
+01:51:44  WARN: Veri yok › ICUGS 15dk
+01:51:44  WARN: Veri yok › ICUGS 60dk
+01:51:44  WARN: Veri yok › ICUGS Gunluk
+01:51:44  WARN: Veri yok › CWENE 1dk
+01:51:44  WARN: Veri yok › CWENE 15dk
+01:51:44  WARN: Veri yok › CWENE 60dk
+01:51:44  WARN: Veri yok › CWENE Gunluk
+01:51:44  WARN: Veri yok › ASELS 1dk
+01:51:44  WARN: Veri yok › ASELS 15dk
+01:51:44  WARN: Veri yok › ASELS 60dk
+01:51:44  WARN: Veri yok › ASELS Gunluk
+01:51:44  WARN: Veri yok › ARZUM 1dk
+01:51:44  WARN: Veri yok › ARZUM 15dk
+01:51:44  WARN: Veri yok › ARZUM 60dk
+01:51:44  WARN: Veri yok › ARZUM Gunluk
+01:51:44  WARN: Veri yok › DEVA 1dk
+01:51:44  WARN: Veri yok › DEVA 15dk
+01:51:44  WARN: Veri yok › DEVA 60dk
+01:51:44  WARN: Veri yok › DEVA Gunluk
+01:51:44  WARN: Veri yok › TUNGE 1dk
+01:51:44  WARN: Veri yok › TUNGE 15dk
+01:51:44  WARN: Veri yok › TUNGE 60dk
+01:51:44  WARN: Veri yok › TUNGE Gunluk
+01:51:44  WARN: Veri yok › TEKTU 1dk
+01:51:44  WARN: Veri yok › TEKTU 15dk
+01:51:44  WARN: Veri yok › TEKTU 60dk
+01:51:44  WARN: Veri yok › TEKTU Gunluk
+01:51:44  WARN: Veri yok › RALYH 1dk
+01:51:44  WARN: Veri yok › RALYH 15dk
+01:51:44  WARN: Veri yok › RALYH 60dk
+01:51:44  WARN: Veri yok › RALYH Gunluk
+01:51:44  WARN: Veri yok › DURDO 1dk
+01:51:44  WARN: Veri yok › DURDO 15dk
+01:51:44  WARN: Veri yok › DURDO 60dk
+01:51:44  WARN: Veri yok › DURDO Gunluk
+01:51:44  WARN: Veri yok › GOKNR 1dk
+01:51:44  WARN: Veri yok › GOKNR 15dk
+01:51:44  WARN: Veri yok › GOKNR 60dk
+01:51:44  WARN: Veri yok › GOKNR Gunluk
+01:51:44  WARN: Veri yok › BIOEN 1dk
+01:51:44  WARN: Veri yok › BIOEN 15dk
+01:51:44  WARN: Veri yok › BIOEN 60dk
+01:51:44  WARN: Veri yok › BIOEN Gunluk
+01:51:44  WARN: Veri yok › TEZOL 1dk
+01:51:44  WARN: Veri yok › TEZOL 15dk
+01:51:44  WARN: Veri yok › TEZOL 60dk
+01:51:44  WARN: Veri yok › TEZOL Gunluk
+01:51:44  WARN: Veri yok › OYAYO 1dk
+01:51:44  WARN: Veri yok › OYAYO 15dk
+01:51:44  WARN: Veri yok › OYAYO 60dk
+01:51:44  WARN: Veri yok › OYAYO Gunluk
+01:51:44  WARN: Veri yok › MOGAN 1dk
+01:51:44  WARN: Veri yok › MOGAN 15dk
+01:51:44  WARN: Veri yok › MOGAN 60dk
+01:51:44  WARN: Veri yok › MOGAN Gunluk
+01:51:44  WARN: Veri yok › ODAS 1dk
+01:51:44  WARN: Veri yok › ODAS 15dk
+01:51:44  WARN: Veri yok › ODAS 60dk
+01:51:44  WARN: Veri yok › ODAS Gunluk
+01:51:44  WARN: Veri yok › BYDNR 1dk
+01:51:44  WARN: Veri yok › BYDNR 15dk
+01:51:44  WARN: Veri yok › BYDNR 60dk
+01:51:44  WARN: Veri yok › BYDNR Gunluk
+01:51:44  WARN: Veri yok › SOKM 1dk
+01:51:44  WARN: Veri yok › SOKM 15dk
+01:51:44  WARN: Veri yok › SOKM 60dk
+01:51:44  WARN: Veri yok › SOKM Gunluk
+01:51:44  WARN: Veri yok › YAYLA 1dk
+01:51:44  WARN: Veri yok › YAYLA 15dk
+01:51:44  WARN: Veri yok › YAYLA 60dk
+01:51:44  WARN: Veri yok › YAYLA Gunluk
+01:51:44  WARN: Veri yok › ENTRA 1dk
+01:51:44  WARN: Veri yok › ENTRA 15dk
+01:51:44  WARN: Veri yok › ENTRA 60dk
+01:51:44  WARN: Veri yok › ENTRA Gunluk
+01:51:44  WARN: Veri yok › AKBNK 1dk
+01:51:44  WARN: Veri yok › AKBNK 15dk
+01:51:44  WARN: Veri yok › AKBNK 60dk
+01:51:44  WARN: Veri yok › AKBNK Gunluk
+01:51:44  WARN: Veri yok › GARAN 1dk
+01:51:44  WARN: Veri yok › GARAN 15dk
+01:51:44  WARN: Veri yok › GARAN 60dk
+01:51:44  WARN: Veri yok › GARAN Gunluk
+01:51:44  WARN: Veri yok › YKBNK 1dk
+01:51:44  WARN: Veri yok › YKBNK 15dk
+01:51:44  WARN: Veri yok › YKBNK 60dk
+01:51:44  WARN: Veri yok › YKBNK Gunluk
+01:51:44  WARN: Veri yok › ISCTR 1dk
+01:51:44  WARN: Veri yok › ISCTR 15dk
+01:51:44  WARN: Veri yok › ISCTR 60dk
+01:51:44  WARN: Veri yok › ISCTR Gunluk
+01:51:44  WARN: Veri yok › HALKB 1dk
+01:51:44  WARN: Veri yok › HALKB 15dk
+01:51:44  WARN: Veri yok › HALKB 60dk
+01:51:44  WARN: Veri yok › HALKB Gunluk
+01:51:44  WARN: Veri yok › VAKBN 1dk
+01:51:44  WARN: Veri yok › VAKBN 15dk
+01:51:44  WARN: Veri yok › VAKBN 60dk
+01:51:44  WARN: Veri yok › VAKBN Gunluk
+01:51:44  WARN: Veri yok › ALBRK 1dk
+01:51:44  WARN: Veri yok › ALBRK 15dk
+01:51:44  WARN: Veri yok › ALBRK 60dk
+01:51:44  WARN: Veri yok › ALBRK Gunluk
+01:51:44  WARN: Veri yok › QNBFB 1dk
+01:51:44  WARN: Veri yok › QNBFB 15dk
+01:51:44  WARN: Veri yok › QNBFB 60dk
+01:51:44  WARN: Veri yok › QNBFB Gunluk
+01:51:44  WARN: Veri yok › TSKB 1dk
+01:51:44  WARN: Veri yok › TSKB 15dk
+01:51:44  WARN: Veri yok › TSKB 60dk
+01:51:44  WARN: Veri yok › TSKB Gunluk
+01:51:44  WARN: Veri yok › KLNMA 1dk
+01:51:44  WARN: Veri yok › KLNMA 15dk
+01:51:44  WARN: Veri yok › KLNMA 60dk
+01:51:44  WARN: Veri yok › KLNMA Gunluk
+01:51:44  WARN: Veri yok › EREGL 1dk
+01:51:44  WARN: Veri yok › EREGL 15dk
+01:51:44  WARN: Veri yok › EREGL 60dk
+01:51:44  WARN: Veri yok › EREGL Gunluk
+01:51:44  WARN: Veri yok › KCHOL 1dk
+01:51:44  WARN: Veri yok › KCHOL 15dk
+01:51:44  WARN: Veri yok › KCHOL 60dk
+01:51:44  WARN: Veri yok › KCHOL Gunluk
+01:51:44  WARN: Veri yok › SAHOL 1dk
+01:51:44  WARN: Veri yok › SAHOL 15dk
+01:51:44  WARN: Veri yok › SAHOL 60dk
+01:51:44  WARN: Veri yok › SAHOL Gunluk
+01:51:44  WARN: Veri yok › SISE 1dk
+01:51:44  WARN: Veri yok › SISE 15dk
+01:51:44  WARN: Veri yok › SISE 60dk
+01:51:44  WARN: Veri yok › SISE Gunluk
+01:51:44  WARN: Veri yok › TOASO 1dk
+01:51:44  WARN: Veri yok › TOASO 15dk
+01:51:44  WARN: Veri yok › TOASO 60dk
+01:51:44  WARN: Veri yok › TOASO Gunluk
+01:51:44  WARN: Veri yok › FROTO 1dk
+01:51:44  WARN: Veri yok › FROTO 15dk
+01:51:44  WARN: Veri yok › FROTO 60dk
+01:51:44  WARN: Veri yok › FROTO Gunluk
+01:51:44  WARN: Veri yok › ARCLK 1dk
+01:51:44  WARN: Veri yok › ARCLK 15dk
+01:51:44  WARN: Veri yok › ARCLK 60dk
+01:51:44  WARN: Veri yok › ARCLK Gunluk
+01:51:44  WARN: Veri yok › BIMAS 1dk
+01:51:44  WARN: Veri yok › BIMAS 15dk
+01:51:44  WARN: Veri yok › BIMAS 60dk
+01:51:44  WARN: Veri yok › BIMAS Gunluk
+01:51:44  WARN: Veri yok › MIGRS 1dk
+01:51:44  WARN: Veri yok › MIGRS 15dk
+01:51:44  WARN: Veri yok › MIGRS 60dk
+01:51:44  WARN: Veri yok › MIGRS Gunluk
+01:51:44  WARN: Veri yok › TAVHL 1dk
+01:51:44  WARN: Veri yok › TAVHL 15dk
+01:51:44  WARN: Veri yok › TAVHL 60dk
+01:51:44  WARN: Veri yok › TAVHL Gunluk
+01:51:44  WARN: Veri yok › TUPRS 1dk
+01:51:44  WARN: Veri yok › TUPRS 15dk
+01:51:44  WARN: Veri yok › TUPRS 60dk
+01:51:44  WARN: Veri yok › TUPRS Gunluk
+01:51:44  WARN: Veri yok › SHCOL 1dk
+01:51:44  WARN: Veri yok › SHCOL 15dk
+01:51:44  WARN: Veri yok › SHCOL 60dk
+01:51:44  WARN: Veri yok › SHCOL Gunluk
+01:51:44  WARN: Veri yok › ECILC 1dk
+01:51:44  WARN: Veri yok › ECILC 15dk
+01:51:44  WARN: Veri yok › ECILC 60dk
+01:51:44  WARN: Veri yok › ECILC Gunluk
+01:51:44  WARN: Veri yok › KCAER 1dk
+01:51:44  WARN: Veri yok › KCAER 15dk
+01:51:44  WARN: Veri yok › KCAER 60dk
+01:51:44  WARN: Veri yok › KCAER Gunluk
+01:51:44  WARN: Veri yok › ZOREN 1dk
+01:51:44  WARN: Veri yok › ZOREN 15dk
+01:51:44  WARN: Veri yok › ZOREN 60dk
+01:51:44  WARN: Veri yok › ZOREN Gunluk
+01:51:44  WARN: Veri yok › AKSEN 1dk
+01:51:44  WARN: Veri yok › AKSEN 15dk
+01:51:44  WARN: Veri yok › AKSEN 60dk
+01:51:44  WARN: Veri yok › AKSEN Gunluk
+01:51:44  WARN: Veri yok › AYEN 1dk
+01:51:44  WARN: Veri yok › AYEN 15dk
+01:51:44  WARN: Veri yok › AYEN 60dk
+01:51:44  WARN: Veri yok › AYEN Gunluk
+01:51:44  WARN: Veri yok › ODAS 1dk
+01:51:44  WARN: Veri yok › ODAS 15dk
+01:51:44  WARN: Veri yok › ODAS 60dk
+01:51:44  WARN: Veri yok › ODAS Gunluk
+01:51:44  WARN: Veri yok › NTHOL 1dk
+01:51:44  WARN: Veri yok › NTHOL 15dk
+01:51:44  WARN: Veri yok › NTHOL 60dk
+01:51:44  WARN: Veri yok › NTHOL Gunluk
+01:51:44  WARN: Veri yok › TURSG 1dk
+01:51:44  WARN: Veri yok › TURSG 15dk
+01:51:44  WARN: Veri yok › TURSG 60dk
+01:51:44  WARN: Veri yok › TURSG Gunluk
+01:51:44  WARN: Veri yok › EKGYO 1dk
+01:51:44  WARN: Veri yok › EKGYO 15dk
+01:51:44  WARN: Veri yok › EKGYO 60dk
+01:51:44  WARN: Veri yok › EKGYO Gunluk
+01:51:44  WARN: Veri yok › ISGYO 1dk
+01:51:44  WARN: Veri yok › ISGYO 15dk
+01:51:44  WARN: Veri yok › ISGYO 60dk
+01:51:44  WARN: Veri yok › ISGYO Gunluk
+01:51:44  WARN: Veri yok › OZGYO 1dk
+01:51:44  WARN: Veri yok › OZGYO 15dk
+01:51:44  WARN: Veri yok › OZGYO 60dk
+01:51:44  WARN: Veri yok › OZGYO Gunluk
+01:51:44  WARN: Veri yok › ALGYO 1dk
+01:51:44  WARN: Veri yok › ALGYO 15dk
+01:51:44  WARN: Veri yok › ALGYO 60dk
+01:51:44  WARN: Veri yok › ALGYO Gunluk
+01:51:44  WARN: Veri yok › RYGYO 1dk
+01:51:44  WARN: Veri yok › RYGYO 15dk
+01:51:44  WARN: Veri yok › RYGYO 60dk
+01:51:44  WARN: Veri yok › RYGYO Gunluk
+01:51:44  WARN: Veri yok › SMART 1dk
+01:51:44  WARN: Veri yok › SMART 15dk
+01:51:44  WARN: Veri yok › SMART 60dk
+01:51:44  WARN: Veri yok › SMART Gunluk
+01:51:44  WARN: Veri yok › ONRYT 1dk
+01:51:44  WARN: Veri yok › ONRYT 15dk
+01:51:44  WARN: Veri yok › ONRYT 60dk
+01:51:44  WARN: Veri yok › ONRYT Gunluk
+01:51:44  WARN: Veri yok › MRGYO 1dk
+01:51:44  WARN: Veri yok › MRGYO 15dk
+01:51:44  WARN: Veri yok › MRGYO 60dk
+01:51:44  WARN: Veri yok › MRGYO Gunluk
+01:51:44  WARN: Veri yok › NUGYO 1dk
+01:51:44  WARN: Veri yok › NUGYO 15dk
+01:51:44  WARN: Veri yok › NUGYO 60dk
+01:51:44  WARN: Veri yok › NUGYO Gunluk
+01:51:44  WARN: Veri yok › VKGYO 1dk
+01:51:44  WARN: Veri yok › VKGYO 15dk
+01:51:44  WARN: Veri yok › VKGYO 60dk
+01:51:44  WARN: Veri yok › VKGYO Gunluk
+01:51:44  WARN: Veri yok › TCELL 1dk
+01:51:44  WARN: Veri yok › TCELL 15dk
+01:51:44  WARN: Veri yok › TCELL 60dk
+01:51:44  WARN: Veri yok › TCELL Gunluk
+01:51:44  WARN: Veri yok › TTKOM 1dk
+01:51:44  WARN: Veri yok › TTKOM 15dk
+01:51:44  WARN: Veri yok › TTKOM 60dk
+01:51:44  WARN: Veri yok › TTKOM Gunluk
+01:51:44  WARN: Veri yok › LOGO 1dk
+01:51:44  WARN: Veri yok › LOGO 15dk
+01:51:44  WARN: Veri yok › LOGO 60dk
+01:51:44  WARN: Veri yok › LOGO Gunluk
+01:51:44  WARN: Veri yok › INDES 1dk
+01:51:44  WARN: Veri yok › INDES 15dk
+01:51:44  WARN: Veri yok › INDES 60dk
+01:51:44  WARN: Veri yok › INDES Gunluk
+01:51:44  WARN: Veri yok › FONET 1dk
+01:51:44  WARN: Veri yok › FONET 15dk
+01:51:44  WARN: Veri yok › FONET 60dk
+01:51:44  WARN: Veri yok › FONET Gunluk
+01:51:44  WARN: Veri yok › NETAÞ 1dk
+01:51:44  WARN: Veri yok › NETAÞ 15dk
+01:51:44  WARN: Veri yok › NETAÞ 60dk
+01:51:44  WARN: Veri yok › NETAÞ Gunluk
+01:51:44  WARN: Veri yok › KAREL 1dk
+01:51:44  WARN: Veri yok › KAREL 15dk
+01:51:44  WARN: Veri yok › KAREL 60dk
+01:51:44  WARN: Veri yok › KAREL Gunluk
+01:51:44  WARN: Veri yok › LINK 1dk
+01:51:44  WARN: Veri yok › LINK 15dk
+01:51:44  WARN: Veri yok › LINK 60dk
+01:51:44  WARN: Veri yok › LINK Gunluk
+01:51:44  WARN: Veri yok › DGATE 1dk
+01:51:44  WARN: Veri yok › DGATE 15dk
+01:51:44  WARN: Veri yok › DGATE 60dk
+01:51:44  WARN: Veri yok › DGATE Gunluk
+01:51:44  WARN: Veri yok › OBAMS 1dk
+01:51:44  WARN: Veri yok › OBAMS 15dk
+01:51:44  WARN: Veri yok › OBAMS 60dk
+01:51:44  WARN: Veri yok › OBAMS Gunluk
+01:51:44  ====================================================
+01:51:44  TAMAMLANDI: 0 dosya yazýldý  |  0 atlandý (mevcut)  |  480 hata
+01:51:44  Sembol baþýna dosya: 4 periyot × 120 hisse = 480 toplam
+01:51:44  ====================================================
+02:12:08  ============================================================
+02:12:08  EXPORT BASLIYOR - 10.04.2026 02:12:08
+02:12:08  Kaynak: D:\iDeal\ChartData\IMKBH
+02:12:08  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+02:12:08  Semboller: 431, Periyotlar: 4
+02:12:16    20 dosya tamamlandi... Son: AFYON Gunluk (5000 bar)
+02:12:23    40 dosya tamamlandi... Son: AKCNS Gunluk (5000 bar)
+02:12:29    60 dosya tamamlandi... Son: AKSA Gunluk (5000 bar)
+02:12:36    80 dosya tamamlandi... Son: ALARK Gunluk (5000 bar)
+02:12:42    100 dosya tamamlandi... Son: ALGYO Gunluk (5000 bar)
+02:12:45  BOÞ: ALMAD 1dk
+02:12:45  BOÞ: ALMAD 15dk
+02:12:45  BOÞ: ALMAD 60dk
+02:12:45  BOÞ: ALMAD Gunluk
+02:12:49    120 dosya tamamlandi... Son: ANHYT Gunluk (5000 bar)
+02:12:55    140 dosya tamamlandi... Son: ARENA Gunluk (5000 bar)
+02:12:55  EKSIK: ARMDA 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'ARMDA.01)
+02:12:55  EKSIK: ARMDA 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'ARMDA.01)
+02:12:55  EKSIK: ARMDA 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'ARMDA.60)
+02:12:55  EKSIK: ARMDA Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'ARMDA.G)
+02:13:01    160 dosya tamamlandi... Son: ATATP Gunluk (1214 bar)
+02:13:05  EKSIK: AVISA 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'AVISA.01)
+02:13:05  EKSIK: AVISA 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'AVISA.01)
+02:13:05  EKSIK: AVISA 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'AVISA.60)
+02:13:05  EKSIK: AVISA Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'AVISA.G)
+02:13:07    180 dosya tamamlandi... Son: AYDEM Gunluk (1237 bar)
+02:13:13    200 dosya tamamlandi... Son: BAKAB Gunluk (5000 bar)
+02:13:18    220 dosya tamamlandi... Son: BERA Gunluk (3353 bar)
+02:13:25    240 dosya tamamlandi... Son: BIZIM Gunluk (3812 bar)
+02:13:31    260 dosya tamamlandi... Son: BNTAS Gunluk (2734 bar)
+02:13:35  EKSIK: BRNHL 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'BRNHL.01)
+02:13:35  EKSIK: BRNHL 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'BRNHL.01)
+02:13:35  EKSIK: BRNHL 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'BRNHL.60)
+02:13:35  EKSIK: BRNHL Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'BRNHL.G)
+02:13:37    280 dosya tamamlandi... Son: BRSAN Gunluk (5000 bar)
+02:13:37  EKSIK: BRTHL 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'BRTHL.01)
+02:13:37  EKSIK: BRTHL 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'BRTHL.01)
+02:13:37  EKSIK: BRTHL 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'BRTHL.60)
+02:13:37  EKSIK: BRTHL Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'BRTHL.G)
+02:13:43    300 dosya tamamlandi... Son: BURCE Gunluk (5000 bar)
+02:13:49    320 dosya tamamlandi... Son: CEMAS Gunluk (3957 bar)
+02:13:56    340 dosya tamamlandi... Son: CMBTN Gunluk (5000 bar)
+02:14:01  BOÞ: DAGHL 1dk
+02:14:01  BOÞ: DAGHL 15dk
+02:14:01  BOÞ: DAGHL 60dk
+02:14:01  BOÞ: DAGHL Gunluk
+02:14:02    360 dosya tamamlandi... Son: DAGI Gunluk (3729 bar)
+02:14:05  EKSIK: DERAS 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'DERAS.01)
+02:14:05  EKSIK: DERAS 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'DERAS.01)
+02:14:05  EKSIK: DERAS 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'DERAS.60)
+02:14:05  EKSIK: DERAS Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'DERAS.G)
+02:14:07    380 dosya tamamlandi... Son: DERIM Gunluk (5000 bar)
+02:14:13    400 dosya tamamlandi... Son: DGGYO Gunluk (5000 bar)
+02:14:13  EKSIK: DGKLB 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'DGKLB.01)
+02:14:13  EKSIK: DGKLB 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'DGKLB.01)
+02:14:13  EKSIK: DGKLB 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'DGKLB.60)
+02:14:13  EKSIK: DGKLB Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'DGKLB.G)
+02:14:20    420 dosya tamamlandi... Son: DOAS Gunluk (5000 bar)
+02:14:26    440 dosya tamamlandi... Son: DURDO Gunluk (5000 bar)
+02:14:32    460 dosya tamamlandi... Son: EDATA Gunluk (1193 bar)
+02:14:38    480 dosya tamamlandi... Son: EGPRO Gunluk (5000 bar)
+02:14:47    500 dosya tamamlandi... Son: ENJSA Gunluk (2044 bar)
+02:14:54    520 dosya tamamlandi... Son: ERCB Gunluk (1062 bar)
+02:15:02    540 dosya tamamlandi... Son: ESEN Gunluk (1378 bar)
+02:15:09    560 dosya tamamlandi... Son: FENER Gunluk (5000 bar)
+02:15:16    580 dosya tamamlandi... Son: FRIGO Gunluk (5000 bar)
+02:15:24    600 dosya tamamlandi... Son: GENIL Gunluk (1175 bar)
+02:15:29    620 dosya tamamlandi... Son: GLCVY Gunluk (1121 bar)
+02:15:36    640 dosya tamamlandi... Son: GOODY Gunluk (5000 bar)
+02:15:43    660 dosya tamamlandi... Son: GSRAY Gunluk (5000 bar)
+02:15:49    680 dosya tamamlandi... Son: HATEK Gunluk (3820 bar)
+02:15:55    700 dosya tamamlandi... Son: HLGYO Gunluk (3292 bar)
+02:16:00    720 dosya tamamlandi... Son: ICBCT Gunluk (5000 bar)
+02:16:00  BOÞ: IDEAS 1dk
+02:16:00  BOÞ: IDEAS 15dk
+02:16:00  BOÞ: IDEAS 60dk
+02:16:00  BOÞ: IDEAS Gunluk
+02:16:07    740 dosya tamamlandi... Son: IHLAS Gunluk (5000 bar)
+02:16:13    760 dosya tamamlandi... Son: INFO Gunluk (3621 bar)
+02:16:15  EKSIK: IPEKE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'IPEKE.01)
+02:16:15  EKSIK: IPEKE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'IPEKE.01)
+02:16:15  EKSIK: IPEKE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'IPEKE.60)
+02:16:15  EKSIK: IPEKE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'IPEKE.G)
+02:16:20    780 dosya tamamlandi... Son: ISDMR Gunluk (2510 bar)
+02:16:28    800 dosya tamamlandi... Son: ISMEN Gunluk (4745 bar)
+02:16:30  BOÞ: ITTFH 1dk
+02:16:30  BOÞ: ITTFH 15dk
+02:16:30  BOÞ: ITTFH 60dk
+02:16:30  BOÞ: ITTFH Gunluk
+02:16:34    820 dosya tamamlandi... Son: IZMDC Gunluk (5000 bar)
+02:16:34  BOÞ: IZTAR 1dk
+02:16:34  BOÞ: IZTAR 15dk
+02:16:34  BOÞ: IZTAR 60dk
+02:16:34  BOÞ: IZTAR Gunluk
+02:16:44    840 dosya tamamlandi... Son: KARTN Gunluk (5000 bar)
+02:16:44  BOÞ: KARYE 1dk
+02:16:44  BOÞ: KARYE 15dk
+02:16:44  BOÞ: KARYE 60dk
+02:16:44  BOÞ: KARYE Gunluk
+02:16:49  BOÞ: KERVT 1dk
+02:16:49  BOÞ: KERVT 15dk
+02:16:49  BOÞ: KERVT 60dk
+02:16:49  BOÞ: KERVT Gunluk
+02:16:53    860 dosya tamamlandi... Son: KGYO Gunluk (5000 bar)
+02:16:59    880 dosya tamamlandi... Son: KLRHO Gunluk (941 bar)
+02:17:03    900 dosya tamamlandi... Son: KONTR Gunluk (1372 bar)
+02:17:06  EKSIK: KOZAA 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KOZAA.01)
+02:17:06  EKSIK: KOZAA 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KOZAA.01)
+02:17:06  EKSIK: KOZAA 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KOZAA.60)
+02:17:06  EKSIK: KOZAA Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KOZAA.G)
+02:17:06  EKSIK: KOZAL 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'KOZAL.01)
+02:17:06  EKSIK: KOZAL 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'KOZAL.01)
+02:17:06  EKSIK: KOZAL 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'KOZAL.60)
+02:17:06  EKSIK: KOZAL Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'KOZAL.G)
+02:17:11    920 dosya tamamlandi... Son: KRDMD Gunluk (5000 bar)
+02:17:16    940 dosya tamamlandi... Son: KRTEK Gunluk (5000 bar)
+02:17:21    960 dosya tamamlandi... Son: KZBGY Gunluk (1170 bar)
+02:17:27    980 dosya tamamlandi... Son: LOGO Gunluk (5000 bar)
+02:17:33    1000 dosya tamamlandi... Son: MAKTK Gunluk (5000 bar)
+02:17:39    1020 dosya tamamlandi... Son: MEGAP Gunluk (3479 bar)
+02:17:46    1040 dosya tamamlandi... Son: METRO Gunluk (5000 bar)
+02:17:51  BOÞ: MIPAZ 1dk
+02:17:51  BOÞ: MIPAZ 15dk
+02:17:51  BOÞ: MIPAZ 60dk
+02:17:51  BOÞ: MIPAZ Gunluk
+02:17:54    1060 dosya tamamlandi... Son: MNDTR Gunluk (5000 bar)
+02:18:01    1080 dosya tamamlandi... Son: MSGYO Gunluk (2310 bar)
+02:18:08    1100 dosya tamamlandi... Son: NIBAS Gunluk (3536 bar)
+02:18:15    1120 dosya tamamlandi... Son: OBASE Gunluk (925 bar)
+02:18:16  BOÞ: OLMK 1dk
+02:18:16  BOÞ: OLMK 15dk
+02:18:16  BOÞ: OLMK 60dk
+02:18:16  BOÞ: OLMK Gunluk
+02:18:21    1140 dosya tamamlandi... Son: OSTIM Gunluk (3481 bar)
+02:18:25  EKSIK: OZBAL 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'OZBAL.01)
+02:18:25  EKSIK: OZBAL 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'OZBAL.01)
+02:18:25  EKSIK: OZBAL 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'OZBAL.60)
+02:18:25  EKSIK: OZBAL Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'OZBAL.G)
+02:18:27    1160 dosya tamamlandi... Son: OZGYO Gunluk (5000 bar)
+02:18:31    1180 dosya tamamlandi... Son: PAMEL Gunluk (2965 bar)
+02:18:35  BOÞ: PEGYO 1dk
+02:18:35  BOÞ: PEGYO 15dk
+02:18:35  BOÞ: PEGYO 60dk
+02:18:35  BOÞ: PEGYO Gunluk
+02:18:38    1200 dosya tamamlandi... Son: PENGD Gunluk (5000 bar)
+02:18:47    1220 dosya tamamlandi... Son: PINSU Gunluk (5000 bar)
+02:18:53    1240 dosya tamamlandi... Son: POLHO Gunluk (3478 bar)
+02:18:59    1260 dosya tamamlandi... Son: PSDTC Gunluk (2864 bar)
+02:19:03    1280 dosya tamamlandi... Son: RTALB Gunluk (2975 bar)
+02:19:10    1300 dosya tamamlandi... Son: SAHOL Gunluk (5000 bar)
+02:19:16    1320 dosya tamamlandi... Son: SASA Gunluk (5000 bar)
+02:19:22    1340 dosya tamamlandi... Son: SELEC Gunluk (5000 bar)
+02:19:27    1360 dosya tamamlandi... Son: SKBNK Gunluk (5000 bar)
+02:19:32    1380 dosya tamamlandi... Son: SNICA Gunluk (845 bar)
+02:19:37    1400 dosya tamamlandi... Son: SUWEN Gunluk (992 bar)
+02:19:44    1420 dosya tamamlandi... Son: TEKTU Gunluk (5000 bar)
+02:19:44  BOÞ: TETMT 1dk
+02:19:45  BOÞ: TETMT 15dk
+02:19:45  BOÞ: TETMT 60dk
+02:19:45  BOÞ: TETMT Gunluk
+02:19:48  EKSIK: TIRE 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'TIRE.01)
+02:19:48  EKSIK: TIRE 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'TIRE.01)
+02:19:48  EKSIK: TIRE 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'TIRE.60)
+02:19:48  EKSIK: TIRE Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'TIRE.G)
+02:19:52    1440 dosya tamamlandi... Son: TKNSA Gunluk (3485 bar)
+02:19:59    1460 dosya tamamlandi... Son: TRCAS Gunluk (5000 bar)
+02:20:08    1480 dosya tamamlandi... Son: TSPOR Gunluk (5000 bar)
+02:20:18    1500 dosya tamamlandi... Son: TUPRS Gunluk (5000 bar)
+02:20:26    1520 dosya tamamlandi... Son: ULUFA Gunluk (1107 bar)
+02:20:34    1540 dosya tamamlandi... Son: VAKBN Gunluk (5000 bar)
+02:20:42    1560 dosya tamamlandi... Son: VERUS Gunluk (3110 bar)
+02:20:50    1580 dosya tamamlandi... Son: YAPRK Gunluk (3736 bar)
+02:20:56    1600 dosya tamamlandi... Son: YGGYO Gunluk (3171 bar)
+02:20:59  EKSIK: YKGYO 1dk (D:\iDeal\ChartData\IMKBH\01\IMKBH'YKGYO.01)
+02:20:59  EKSIK: YKGYO 15dk (kaynak: D:\iDeal\ChartData\IMKBH\01\IMKBH'YKGYO.01)
+02:20:59  EKSIK: YKGYO 60dk (D:\iDeal\ChartData\IMKBH\60\IMKBH'YKGYO.60)
+02:20:59  EKSIK: YKGYO Gunluk (D:\iDeal\ChartData\IMKBH\G\IMKBH'YKGYO.G)
+02:21:03    1620 dosya tamamlandi... Son: YYAPI Gunluk (5000 bar)
+02:21:06  ============================================================
+02:21:06  TAMAMLANDI: 1632 dosya yazildi  |  0 mevcut (atlandi)  |  92 hata/eksik
+02:21:06  Eksik semboller: ARMDA_1dk, ARMDA_15dk, ARMDA_60dk, ARMDA_Gunluk, AVISA_1dk, AVISA_15dk, AVISA_60dk, AVISA_Gunluk, BRNHL_1dk, BRNHL_15dk, BRNHL_60dk, BRNHL_Gunluk, BRTHL_1dk, BRTHL_15dk, BRTHL_60dk, BRTHL_Gunluk, DERAS_1dk, DERAS_15dk, DERAS_60dk, DERAS_Gunluk, DGKLB_1dk, DGKLB_15dk, DGKLB_60dk, DGKLB_Gunluk, IPEKE_1dk, IPEKE_15dk, IPEKE_60dk, IPEKE_Gunluk, KOZAA_1dk, KOZAA_15dk, KOZAA_60dk, KOZAA_Gunluk, KOZAL_1dk, KOZAL_15dk, KOZAL_60dk, KOZAL_Gunluk, OZBAL_1dk, OZBAL_15dk, OZBAL_60dk, OZBAL_Gunluk, TIRE_1dk, TIRE_15dk, TIRE_60dk, TIRE_Gunluk, YKGYO_1dk, YKGYO_15dk, YKGYO_60dk, YKGYO_Gunluk
+02:41:56  ============================================================
+02:41:56  EXPORT BASLIYOR - 10.04.2026 02:41:56
+02:41:56  Kaynak: D:\iDeal\ChartData\IMKBH
+02:41:56  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+02:41:56  Semboller: 467 (IMKBH:418 + VIP:49), Periyotlar: 4
+02:41:56  BOÞ: ALMAD 1dk
+02:41:56  BOÞ: ALMAD 15dk
+02:41:56  BOÞ: ALMAD 60dk
+02:41:56  BOÞ: ALMAD Gunluk
+02:41:56  BOÞ: DAGHL 1dk
+02:41:56  BOÞ: DAGHL 15dk
+02:41:56  BOÞ: DAGHL 60dk
+02:41:56  BOÞ: DAGHL Gunluk
+02:41:56  BOÞ: IDEAS 1dk
+02:41:56  BOÞ: IDEAS 15dk
+02:41:56  BOÞ: IDEAS 60dk
+02:41:56  BOÞ: IDEAS Gunluk
+02:41:56  BOÞ: ITTFH 1dk
+02:41:56  BOÞ: ITTFH 15dk
+02:41:56  BOÞ: ITTFH 60dk
+02:41:56  BOÞ: ITTFH Gunluk
+02:41:56  BOÞ: IZTAR 1dk
+02:41:56  BOÞ: IZTAR 15dk
+02:41:56  BOÞ: IZTAR 60dk
+02:41:56  BOÞ: IZTAR Gunluk
+02:41:56  BOÞ: KARYE 1dk
+02:41:56  BOÞ: KARYE 15dk
+02:41:56  BOÞ: KARYE 60dk
+02:41:56  BOÞ: KARYE Gunluk
+02:41:56  BOÞ: KERVT 1dk
+02:41:56  BOÞ: KERVT 15dk
+02:41:56  BOÞ: KERVT 60dk
+02:41:56  BOÞ: KERVT Gunluk
+02:41:56  BOÞ: MIPAZ 1dk
+02:41:56  BOÞ: MIPAZ 15dk
+02:41:56  BOÞ: MIPAZ 60dk
+02:41:56  BOÞ: MIPAZ Gunluk
+02:41:56  BOÞ: OLMK 1dk
+02:41:56  BOÞ: OLMK 15dk
+02:41:56  BOÞ: OLMK 60dk
+02:41:56  BOÞ: OLMK Gunluk
+02:41:56  BOÞ: PEGYO 1dk
+02:41:56  BOÞ: PEGYO 15dk
+02:41:56  BOÞ: PEGYO 60dk
+02:41:56  BOÞ: PEGYO Gunluk
+02:41:56  BOÞ: TETMT 1dk
+02:41:56  BOÞ: TETMT 15dk
+02:41:56  BOÞ: TETMT 60dk
+02:41:56  BOÞ: TETMT Gunluk
+02:42:01    20 dosya tamamlandi... Son: VIP-ARCLK Gunluk (1787 bar)
+02:42:04    40 dosya tamamlandi... Son: VIP-CIMSA Gunluk (542 bar)
+02:42:08    60 dosya tamamlandi... Son: VIP-ENKAI Gunluk (749 bar)
+02:42:14    80 dosya tamamlandi... Son: VIP-HALKB Gunluk (1784 bar)
+02:42:19    100 dosya tamamlandi... Son: VIP-KRDMD Gunluk (1793 bar)
+02:42:24    120 dosya tamamlandi... Son: VIP-PGSUS Gunluk (1784 bar)
+02:42:29    140 dosya tamamlandi... Son: VIP-TAVHL Gunluk (1787 bar)
+02:42:35    160 dosya tamamlandi... Son: VIP-TRALT Gunluk (1777 bar)
+02:42:39    180 dosya tamamlandi... Son: VIP-ULKER Gunluk (367 bar)
+02:42:46  ============================================================
+02:42:46  TAMAMLANDI: 196 dosya yazildi  |  1628 mevcut (atlandi)  |  44 hata/eksik
+23:42:10  ============================================================
+23:42:10  EXPORT BASLIYOR - 10.04.2026 23:42:10
+23:42:10  Kaynak: D:\iDeal\ChartData\IMKBH
+23:42:10  Hedef : D:\Projects\IdealQuant\reference\ideal_docs\BarData_Export
+23:42:10  Semboller: 467 (IMKBH:418 + VIP:49), Periyotlar: 4
+23:42:17    20 dosya tamamlandi... Son: AGESA Gunluk (2864 bar)
+23:42:24    40 dosya tamamlandi... Son: AKENR Gunluk (5000 bar)
+23:42:31    60 dosya tamamlandi... Son: AKSEN Gunluk (3988 bar)
+23:42:37    80 dosya tamamlandi... Son: ALBRK Gunluk (4715 bar)
+23:42:44    100 dosya tamamlandi... Son: ALKA Gunluk (5000 bar)
+23:42:45  BOÞ: ALMAD 1dk
+23:42:45  BOÞ: ALMAD 15dk
+23:42:45  BOÞ: ALMAD 60dk
+23:42:45  BOÞ: ALMAD Gunluk
+23:42:49    120 dosya tamamlandi... Son: ANSGR Gunluk (5000 bar)
+23:42:56    140 dosya tamamlandi... Son: ARSAN Gunluk (5000 bar)
+23:43:02    160 dosya tamamlandi... Son: ATEKS Gunluk (5000 bar)
+23:43:08    180 dosya tamamlandi... Son: AYEN Gunluk (5000 bar)
+23:43:14    200 dosya tamamlandi... Son: BANVT Gunluk (5000 bar)
+23:43:19    220 dosya tamamlandi... Son: BEYAZ Gunluk (3478 bar)
+23:43:26    240 dosya tamamlandi... Son: BJKAS Gunluk (5000 bar)
+23:43:31    260 dosya tamamlandi... Son: BOBET Gunluk (1216 bar)
+23:43:37    280 dosya tamamlandi... Son: BRYAT Gunluk (5000 bar)
+23:43:43    300 dosya tamamlandi... Son: BURVA Gunluk (5000 bar)
+23:43:50    320 dosya tamamlandi... Son: CEMTS Gunluk (5000 bar)
+23:43:56    340 dosya tamamlandi... Son: CONSE Gunluk (994 bar)
+23:43:59  BOÞ: DAGHL 1dk
+23:44:00  BOÞ: DAGHL 15dk
+23:44:00  BOÞ: DAGHL 60dk
+23:44:00  BOÞ: DAGHL Gunluk
+23:44:01    360 dosya tamamlandi... Son: DAPGM Gunluk (1033 bar)
+23:44:07    380 dosya tamamlandi... Son: DESA Gunluk (5000 bar)
+23:44:13    400 dosya tamamlandi... Son: DGNMO Gunluk (5000 bar)
+23:44:19    420 dosya tamamlandi... Son: DOCO Gunluk (3857 bar)
+23:44:26    440 dosya tamamlandi... Son: DYOBY Gunluk (5000 bar)
+23:44:32    460 dosya tamamlandi... Son: EDIP Gunluk (5000 bar)
+23:44:38    480 dosya tamamlandi... Son: EGSER Gunluk (5000 bar)
+23:44:45    500 dosya tamamlandi... Son: ENKAI Gunluk (5000 bar)
+23:44:50    520 dosya tamamlandi... Son: EREGL Gunluk (5000 bar)
+23:44:55    540 dosya tamamlandi... Son: ETILR Gunluk (3442 bar)
+23:45:01    560 dosya tamamlandi... Son: FLAP Gunluk (3455 bar)
+23:45:07    580 dosya tamamlandi... Son: FROTO Gunluk (5000 bar)
+23:45:14    600 dosya tamamlandi... Son: GENTS Gunluk (5000 bar)
+23:45:19    620 dosya tamamlandi... Son: GLRYH Gunluk (4990 bar)
+23:45:26    640 dosya tamamlandi... Son: GOZDE Gunluk (4071 bar)
+23:45:32    660 dosya tamamlandi... Son: GUBRF Gunluk (5000 bar)
+23:45:39    680 dosya tamamlandi... Son: HDFGS Gunluk (2808 bar)
+23:45:44    700 dosya tamamlandi... Son: HTTBT Gunluk (1028 bar)
+23:45:48  BOÞ: IDEAS 1dk
+23:45:48  BOÞ: IDEAS 15dk
+23:45:48  BOÞ: IDEAS 60dk
+23:45:48  BOÞ: IDEAS Gunluk
+23:45:50    720 dosya tamamlandi... Son: IEYHO Gunluk (5000 bar)
+23:45:56    740 dosya tamamlandi... Son: IHLGM Gunluk (5000 bar)
+23:46:01    760 dosya tamamlandi... Son: INTEM Gunluk (5000 bar)
+23:46:08    780 dosya tamamlandi... Son: ISFIN Gunluk (5000 bar)
+23:46:13    800 dosya tamamlandi... Son: ISSEN Gunluk (1103 bar)
+23:46:15  BOÞ: ITTFH 1dk
+23:46:15  BOÞ: ITTFH 15dk
+23:46:15  BOÞ: ITTFH 60dk
+23:46:15  BOÞ: ITTFH Gunluk
+23:46:18  BOÞ: IZTAR 1dk
+23:46:18  BOÞ: IZTAR 15dk
+23:46:18  BOÞ: IZTAR 60dk
+23:46:18  BOÞ: IZTAR Gunluk
+23:46:19    820 dosya tamamlandi... Son: JANTS Gunluk (3416 bar)
+23:46:25  BOÞ: KARYE 1dk
+23:46:25  BOÞ: KARYE 15dk
+23:46:25  BOÞ: KARYE 60dk
+23:46:25  BOÞ: KARYE Gunluk
+23:46:27    840 dosya tamamlandi... Son: KATMR Gunluk (3867 bar)
+23:46:29  BOÞ: KERVT 1dk
+23:46:29  BOÞ: KERVT 15dk
+23:46:29  BOÞ: KERVT 60dk
+23:46:29  BOÞ: KERVT Gunluk
+23:46:33    860 dosya tamamlandi... Son: KIMMR Gunluk (1143 bar)
+23:46:38    880 dosya tamamlandi... Son: KLSYN Gunluk (1027 bar)
+23:46:43    900 dosya tamamlandi... Son: KONYA Gunluk (5000 bar)
+23:46:50    920 dosya tamamlandi... Son: KRGYO Gunluk (2994 bar)
+23:46:55    940 dosya tamamlandi... Son: KRVGD Gunluk (1340 bar)
+23:47:00    960 dosya tamamlandi... Son: LIDER Gunluk (1006 bar)
+23:47:06    980 dosya tamamlandi... Son: LUKSK Gunluk (5000 bar)
+23:47:11    1000 dosya tamamlandi... Son: MANAS Gunluk (1183 bar)
+23:47:17    1020 dosya tamamlandi... Son: MEPET Gunluk (3692 bar)
+23:47:22    1040 dosya tamamlandi... Son: METUR Gunluk (5000 bar)
+23:47:25  BOÞ: MIPAZ 1dk
+23:47:25  BOÞ: MIPAZ 15dk
+23:47:25  BOÞ: MIPAZ 60dk
+23:47:25  BOÞ: MIPAZ Gunluk
+23:47:29    1060 dosya tamamlandi... Son: MOBTL Gunluk (1098 bar)
+23:47:34    1080 dosya tamamlandi... Son: MTRKS Gunluk (1254 bar)
+23:47:40    1100 dosya tamamlandi... Son: NTGAZ Gunluk (1257 bar)
+23:47:46    1120 dosya tamamlandi... Son: ODAS Gunluk (3232 bar)
+23:47:46  BOÞ: OLMK 1dk
+23:47:46  BOÞ: OLMK 15dk
+23:47:46  BOÞ: OLMK 60dk
+23:47:46  BOÞ: OLMK Gunluk
+23:47:52    1140 dosya tamamlandi... Son: OTKAR Gunluk (5000 bar)
+23:47:58    1160 dosya tamamlandi... Son: OZKGY Gunluk (3549 bar)
+23:48:02    1180 dosya tamamlandi... Son: PAPIL Gunluk (1590 bar)
+23:48:04  BOÞ: PEGYO 1dk
+23:48:04  BOÞ: PEGYO 15dk
+23:48:04  BOÞ: PEGYO 60dk
+23:48:04  BOÞ: PEGYO Gunluk
+23:48:08    1200 dosya tamamlandi... Son: PENTA Gunluk (1228 bar)
+23:48:15    1220 dosya tamamlandi... Son: PKART Gunluk (5000 bar)
+23:48:20    1240 dosya tamamlandi... Son: POLTK Gunluk (3034 bar)
+23:48:26    1260 dosya tamamlandi... Son: PSGYO Gunluk (1083 bar)
+23:48:30    1280 dosya tamamlandi... Son: RUBNS Gunluk (942 bar)
+23:48:37    1300 dosya tamamlandi... Son: SAMAT Gunluk (3712 bar)
+23:48:43    1320 dosya tamamlandi... Son: SAYAS Gunluk (3204 bar)
+23:48:48    1340 dosya tamamlandi... Son: SELVA Gunluk (1200 bar)
+23:48:54    1360 dosya tamamlandi... Son: SKTAS Gunluk (5000 bar)
+23:48:59    1380 dosya tamamlandi... Son: SOKM Gunluk (1976 bar)
+23:49:04    1400 dosya tamamlandi... Son: TATGD Gunluk (5000 bar)
+23:49:10  BOÞ: TETMT 1dk
+23:49:10  BOÞ: TETMT 15dk
+23:49:10  BOÞ: TETMT 60dk
+23:49:10  BOÞ: TETMT Gunluk
+23:49:11    1420 dosya tamamlandi... Son: TEZOL Gunluk (1148 bar)
+23:49:18    1440 dosya tamamlandi... Son: TLMAN Gunluk (2056 bar)
+23:49:26    1460 dosya tamamlandi... Son: TRGYO Gunluk (3883 bar)
+23:49:33    1480 dosya tamamlandi... Son: TTKOM Gunluk (4493 bar)
+23:49:40    1500 dosya tamamlandi... Son: TUREX Gunluk (1252 bar)
+23:49:46    1520 dosya tamamlandi... Son: ULUSE Gunluk (2858 bar)
+23:49:53    1540 dosya tamamlandi... Son: VAKFN Gunluk (5000 bar)
+23:50:00    1560 dosya tamamlandi... Son: VESBE Gunluk (5000 bar)
+23:50:07    1580 dosya tamamlandi... Son: YATAS Gunluk (5000 bar)
+23:50:12    1600 dosya tamamlandi... Son: YGYO Gunluk (5000 bar)
+23:50:19    1620 dosya tamamlandi... Son: YYLGD Gunluk (976 bar)
+23:50:24    1640 dosya tamamlandi... Son: VIP-AKSEN Gunluk (859 bar)
+23:50:29    1660 dosya tamamlandi... Son: VIP-BIMAS Gunluk (1764 bar)
+23:50:32    1680 dosya tamamlandi... Son: VIP-EKGYO Gunluk (1794 bar)
+23:50:37    1700 dosya tamamlandi... Son: VIP-GARAN Gunluk (3105 bar)
+23:50:42    1720 dosya tamamlandi... Son: VIP-KCHOL Gunluk (1787 bar)
+23:50:46    1740 dosya tamamlandi... Son: VIP-OYAKC Gunluk (1310 bar)
+23:50:52    1760 dosya tamamlandi... Son: VIP-SISE Gunluk (1788 bar)
+23:50:58    1780 dosya tamamlandi... Son: VIP-TKFEN Gunluk (1787 bar)
+23:51:03    1800 dosya tamamlandi... Son: VIP-TTKOM Gunluk (1798 bar)
+23:51:08    1820 dosya tamamlandi... Son: VIP-X030-T Gunluk (5000 bar)
+23:51:09  ============================================================
+23:51:09  TAMAMLANDI: 1824 dosya yazildi  |  0 mevcut (atlandi)  |  44 hata/eksik
