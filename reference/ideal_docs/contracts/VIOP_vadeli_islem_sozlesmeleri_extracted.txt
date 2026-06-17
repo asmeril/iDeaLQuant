@@ -1,0 +1,1452 @@
+
+
+===== PAGE 1 =====
+VADELİ İŞLEM 
+SÖZLEŞMELERİ
+VİOP
+
+===== PAGE 2 =====
+1
+Borsa İstanbul, yerli ve yabancı yatırımcıların ülkemizde 
+türev ürünlere yatırım yapabilmesi, Türk finans piyasalarının 
+gelişmiş finansal piyasalar ile bütünleşmesi ve Borsa’nın 
+geniş yelpazede ürünlere yatırım yapılabilecek bir finansal 
+süpermarkete dönüşmesi amacı doğrultusunda vadeli 
+işlem ve opsiyon sözleşmelerini işleme açarak yatırımcıların 
+kullanımına sunmaktadır. Bu dokümanda, vadeli işlem 
+sözleşmeleri ile ilgili temel bilgilerin yanı sıra,
+Borsa İstanbul’da işlem gören sözleşmelere ve bu 
+sözleşmelerin işlem göreceği Vadeli İşlem ve Opsiyon 
+Piyasası’na (VİOP) ilişkin bilgiler verilmektedir. 
+Giriş1
+İşbu yayındaki bilgi ve veriler, genel bilgi edinilmesi amacıyla hazırlanmıştır. Bu yayında yer alan bilgilerin doğruluğu konusunda
+gerekli özen gösterilmiş olmasına rağmen, bilgiler ve verilerdeki hatalardan veya alınacak yatırım kararları ile bunların 
+sonuçlarından Borsa İstanbul  sorumlu değildir. Zira buradaki bilgiler yatırım amaçlı bir teklif veya tavsiye amacını taşımamaktadır.
+
+===== PAGE 3 =====
+32
+Vadeli İşlem 
+Sözleşmeleri 2
+2.1 Vadeli İşlem Sözleşmesinin Tanımı 
+Vadeli işlem sözleşmesi (futures), sözleşmenin taraflarına, 
+standartlaştırılmış miktar ve kalitedeki bir malı, kıymeti veya 
+finansal göstergeyi, belirlenen ileri bir tarihte, bugünden 
+üzerinde anlaşılan fiyattan alma veya satma yükümlülüğü 
+getirmektedir.
+Vadeli işlem sözleşmelerinin dört asgari unsuru vardır: Nitelik, 
+fiyat, miktar ve vade. Bu asgari unsurlar borsalarda işlem 
+gören vadeli işlem sözleşmelerinde standardize edilmiştir.
+Borsalarda vadeli işlem sözleşmelerinde işlem yapabilmek için 
+belirlenen başlangıç teminatı (initial margin) Takas Kurumu’na 
+yatırılmalıdır. Oluşan zararlar ya da nakit-dışı teminatların 
+değerlerinin düşmesi sonucunda teminat seviyesinin sürdürme 
+teminatının (maintenance margin) altına düşmesi durumunda 
+ilgili yatırımcılara teminat tamamlama çağrısı yapılır.
+Vadeli işlem sözleşmesinin vade tarihinde uzlaşması fiziki 
+teslimat veya nakdi uzlaşı şeklinde gerçekleştirilir. 
+Fiziki teslimatta üzerinde anlaşılan dayanak varlık kaydi 
+olarak el değiştirir. Nakdi uzlaşıda ise sözleşme fiyatı ile 
+vade tarihindeki cari fiyat arasındaki fark kadar tutar taraflar 
+arasında el değiştirir.
+2.2 Vadeli İşlem Sözleşmelerinin Teorik Fiyatının 
+Hesaplanması 
+Vadeli işlem sözleşmesinin fiyatını belirleyen faktörler;
+• Dayanak varlık spot piyasa fiyatı
+• Faiz oranı
+• Temettü getirisi
+• Vadeye kalan gün sayısıdır.
+Teorik Fiyat = DF x   1+(Faiz Oranı-Temettü Getirisi) X  VKG 
+ 
+DF: Dayanak varlık spot fiyatı
+VKG: Vadeye kalan gün sayısı
+365
+2.3 Vadeli İşlem Sözleşmelerinde Kâr/Zarar 
+Spot piyasa fiyatı 50 TL olan bir dayanak varlığa ilişkin 3 ay 
+vadeli 55 TL fiyatlı vadeli işlem sözleşmesinde uzun pozisyon 
+sahibi bir yatırımcının kâr/zarar durumu aşağıda gösterilmiştir.
+Grafik 1:Vadeli İşlem Sözleşmesi Uzun Pozisyonu Kâr/Zararı
+Grafik 2: Vadeli İşlem Sözleşmesi Kısa Pozisyonu Kâr/Zararı
+Yatırımcı 3 aylık süre sonunda dayanak varlığın fiyatının 
+yükseleceği beklentisi içerisindedir. Bu nedenle dayanak 
+varlığı 55 TL’den, 3 ay sonra teslimatı veya nakit uzlaşısı 
+gerçekleşecek şekilde bugünden satın almıştır. Grafikte 
+görüldüğü gibi, 55 TL başa baş noktasıdır. Dayanak varlığın 
+spot fiyatı 55 TL’nin üzerinde herhangi bir seviyede iken 
+yatırımcı kâr elde edecektir. Aynı şekilde spot fiyat 55 TL’nin 
+altında iken ise zarar söz konusudur.
+Aynı vadeli işlem sözleşmesinde kısa pozisyon sahibi için ise 
+tam tersi bir durum söz konusudur. Vadeli işlem sözleşmesini 
+satan taraf dayanak varlığın spot fiyatı 55 TL’nin altında iken 
+kâr, üstünde iken ise zarar eder. 
+50
+10 20 30 40 50 60 70 80 90 100 110
+40
+30
+20
+10
+0
+-10
+-20
+-30
+-40
+-50
+-60
+K/Z
+Spot fiyatı
+K/Z
+60
+10 20 30 40 50 60 70 80 90 100 110
+50
+40
+30
+20
+10
+0
+-10
+-20
+-30
+-40
+-50
+K/Z
+
+
+===== PAGE 4 =====
+2.4.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en yakın fiyat 
+adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı günlük 
+uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, seans içerisinde geriye dönük olarak bulunan son 10 işlemin miktar 
+ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük uzlaşma fiyatının hesaplanamaması durumunda, aşağıda belirtilen 
+yöntemler tek başına ya da birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade ayları için geçerli olan günlük uzlaşma fiyatları da dikkate alınarak 
+hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi tarafından günlük 
+uzlaşma fiyatının değiştirilme durumu saklıdır.
+2.4.5.2 Vade Sonu Uzlaşma Fiyatı 
+Dayanak varlık olarak kabul edilen her payın son işlem gününde spot piyasada ikinci seans sonundaki kapanış seansında oluşan 
+kapanış fiyatı, vade sonu uzlaşma fiyatı olarak kabul edilir.
+Son işlem gününde, spot piyasada ikinci seansın ve/veya kapanış seansının kısmen veya tamamen kapalı olması veya açık olup 
+da fiyat oluşmaması durumunda vade sonu uzlaşma fiyatı, Uzlaşma Fiyatı Komitesi tarafından belirlenir.
+ 2.4.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+54
+2.4.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+ 2.4 Pay Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   ABCDE    1212    S0
+Örnek: F_ABCDE1212S0
+T. Garanti Bankası A.Ş GARAN
+T. İş Bankası A.Ş. ISCTR
+Akbank T.A.Ş. AKBNK
+Türkiye Vakıflar Bankası T.A.O. VAKBN
+Yapı ve Kredi Bankası A.Ş. YKBNK
+Türk Hava Yolları A.O. THYAO
+Ereğli Demir ve Çelik Fabrikaları T.A.Ş. EREGL
+H.Ö. Sabancı Holding A.Ş. SAHOL
+Turkcell İletişim Hizmetleri A.Ş. TCELL
+Tüpraş Türkiye Petrol Rafinerileri A.Ş. TUPRS
+2.4.2 Dayanak Varlıklar 
+Borsa İstanbul Pay Piyasası’nda işlem gören ve Borsa 
+tarafından belirlenen kriterlere göre dayanak varlık olarak 
+seçilen pay senetleri aşağıdaki tabloda yer almaktadır.
+2.4.3 Sözleşme Büyüklüğü 
+Bir adet standart sözleşme, dayanak varlığa ait 100 adet payı 
+temsil eder. Dayanak varlığın fiyat ve miktarını etkileyecek 
+bedelli/bedelsiz sermaye artırımı, temettü ödemesi 
+(temettü verimi >%10 ise), birleşme ve benzeri durumlarda 
+(özsermaye halleri), Borsa tarafından sözleşmelerde fiyat 
+ve/veya çarpan değişikliği yapılması halinde, sözleşme 
+büyüklüğü standart sözleşme büyüklüğünden farklı 
+belirlenebilir. Bu gibi durumlarda aynı dayanak varlık üzerine, 
+“sözleşme büyüklüğü standart” ve “sözleşme büyüklüğü 
+standart olmayan” olmak üzere farklı sözleşmeler işlem 
+görebilir.
+2.4.4  Uzlaşma Şekli 
+Pay vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak 
+fiziki teslimat uygulanır. Pay vadeli işlem sözleşmelerinde 
+fiziki teslimat, pay senetlerinin sözleşme fiyatı üzerinden 
+kaydi olarak el değiştirmesi şeklinde gerçekleşir.
+
+===== PAGE 5 =====
+76
+2.4.6 Vade Ayları 
+Şubat, Nisan, Haziran, Ağustos, Ekim ve Aralık. Piyasada 
+aynı anda, içinde bulunulan aya en yakın üç vade ayına 
+ait sözleşmeler işlem görür. Bu üç vade ayından biri Aralık 
+değilse, Aralık vade ayı ayrıca işleme açılır. (Örneğin; “Aralık, 
+Şubat, Nisan” veya “Şubat, Nisan, Haziran, Aralık”)
+2.4.7 Takas Süresi
+Takas, vade sonunda fiziki teslimat için T+3, diğer işlemlerde 
+ise T+1 olarak uygulanır. Örneğin, fiziki teslimata konu 
+pay vadeli işlem sözleşmelerinin takas süresinin T+3 
+olduğu durumda 31 Ocak 2013 vadeli pay vadeli işlem 
+sözleşmelerinin son işlem günü 31 Ocak 2013 tarihi olup, fiziki 
+teslimatı (2 ve 3 Şubat hafta sonu olduğundan)
+5 Şubat 2013 tarihinde gerçekleştirilir. Diğer işlemler için 
+zararlar hesaplardan T günü sonunda tahsil edilirken, kârlar 
+ise hesaplara T+1 günü aktarılır. Seans sonrasında hesaplara 
+aktarılacak/hesaplardan tahsil edilecek kâr/zarar rakamları 
+gün sonu uzlaşma fiyatlarına göre kesinleşir.  
+2.4.8 Sözleşmenin Vadesi ve Son İşlem Günü
+Pay vadeli işlem sözleşmelerinde vade ve son işlem günü her 
+vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda son işlem günü bir 
+önceki iş günüdür.
+2.4.9  Fiyat Kotasyonu ve Minimum Fiyat Adımı
+Emir defterinde fiyat teklifleri 1 adet dayanak varlık bazında 
+gösterilir. Diğer bir ifadeyle, işlem sisteminde sözleşmelere 
+ait teklifler, bir adet dayanak varlık için verilen fiyat 
+üzerinden girilir.
+Sözleşmenin fiyatı, virgülden sonra iki basamak olacak 
+şekilde işlem sistemine girilir. Miktar teklifleri bir adet 
+sözleşme ve katları şeklinde girilir.
+2.4.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında 
+kullanılan fiyattır. Baz fiyat, vadeli işlem sözleşmenin işleme 
+açıldığı gün Uzlaşma Fiyatı Komitesi tarafından belirlenir, 
+diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen 
+baz fiyatın ±%20’sidir. Bu yöntemle hesaplanan alt veya üst 
+limitin fiyat adımına tekabül etmemesi halinde üst limit bir 
+üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.4.11 İşlem Saatleri
+İşlemler 09:10 - 17:40 saatleri arasında tek bir seansta 
+gerçekleştirilir. 12:30 - 13:55 arası işlem yapılmayan bölümdür.
+
+
+===== PAGE 6 =====
+2.5.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan fiyatın 
+piyasa gerçeklerini yansıtmaması durumunda, aşağıda 
+belirtilen yöntemler tek başına ya da birlikte kullanılarak 
+günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+98
+2.5.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+2.5.2 Dayanak Varlık  
+BIST 30 Fiyat Endeksi
+2.5.3 Sözleşme Büyüklüğü 
+Dayanak varlık, endeks değerinin 1.000’e bölünmüş halidir. Her bir endeks vadeli işlem sözleşmesi bu şekilde hesaplanan 100 
+adet dayanak varlığı temsil eder. (Örnek: BIST 30 Endeksi/1.000)*100 TL=(102.355/1.000)*100=10.235,50 TL)
+2.5.4 Uzlaşma Şekli 
+Endeks vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak nakdi uzlaşı uygulanır.
+2.5.5.2 Vade Sonu Uzlaşma Fiyatı 
+Vade sonu uzlaşma fiyatı, dayanak varlık olarak kabul edilen 
+BIST 30 Endeksinin son işlem gününde spot piyasada ikinci 
+seans sürekli müzayedenin son 30 dakikası süresince ilan 
+edilen endeks değerlerinin zaman ağırlıklı ortalaması ile 
+BIST 30 Endeks kapanış değerinin sırasıyla %80 ve %20 
+oranlarıyla ağırlıklandırılması ile hesaplanan değerin 1000’e 
+bölünmesi suretiyle hesaplanır. Vade sonu uzlaşma fiyatı, 
+bulunan değerin en yakın fiyat adımına yuvarlanması ile elde 
+edilen değerdir.
+Son işlem gününde, spot piyasada ikinci seansın ve/veya 
+kapanış seansının kısmen veya tamamen kapalı olması 
+veya spot piyasada endeks değerinin hesaplanamaması 
+durumunda vade sonu uzlaşma fiyatı, Uzlaşma Fiyatı 
+Komitesi tarafından belirlenir.
+2.5.6 Vade Ayları 
+Şubat, Nisan, Haziran, Ağustos, Ekim ve Aralık. Piyasada 
+aynı anda, içinde bulunulan aya en yakın üç vade ayına 
+ait sözleşmeler işlem görür. Bu üç vade ayından biri Aralık 
+değilse, Aralık vade ayı ayrıca işleme açılır. (Örneğin; “Aralık, 
+Şubat, Nisan” veya “Şubat, Nisan, Haziran, Aralık”)
+2.5.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T 
+günü sonunda tahsil edilirken, kârlar hesaplara T+1 günü 
+aktarılır.  
+ 2.5 BIST 30 Endeks Vadeli İşlem Sözleşmelerinin Özellikleri  2.5.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   XU030   1212    S0
+Örnek: F_XU0301212S0
+
+
+===== PAGE 7 =====
+1110
+2.5.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Pay endeksi vadeli işlem sözleşmelerinde vade ve son işlem günü her vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda sözleşmenin vadesi bir önceki iş günüdür.
+2.5.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+Emir defterinde fiyat teklifleri 1 adet dayanak varlık bazında gösterilir. Diğer bir ifadeyle, işlem sisteminde bir adet dayanak varlık 
+için verilen fiyat üzerinden girilir.
+Sözleşme fiyatı, endeks değerinin 1.000’e bölünmesiyle oluşan değerin virgülden sonra üç basamak olacak şekilde işlem 
+sistemine girilir (Örnek: 102,325) ve bir defada gerçekleşebilecek en küçük fiyat adımı 0,025’dir (25 BIST 30 endeks puanı) 
+(Örnek: 102,325; 102,350 vb.). Miktar teklifleri bir adet sözleşme ve katları şeklinde girilir.
+2.5.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%15’idir. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.5.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında tek bir seansta gerçekleştirilir. 12:30 - 13:55 arası işlem yapılmayan bölümdür.
+2.6.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+ 2.6 TLDolar Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   TRYUSD  1212    S0
+Örnek: F_TRYUSD1212S0
+
+
+===== PAGE 8 =====
+TLDolar vadeli işlem sözleşmelerinde vade ve son işlem günü her vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda sözleşmenin vadesi bir önceki iş günüdür.
+1 ABD Doları’nın Türk Lirası cinsinden değeri virgülden sonra dört basamak halinde kote edilir. Minimum fiyat adımı 0,0005 TL’dir. 
+Minimum fiyat adımının değeri bir sözleşme için 0,5 TL’ye (0,0005*1000) karşılık gelir. Bu şekilde girilecek fiyat kotasyonlarının 
+virgülden sonraki son rakamı 0 (sıfır) ya da 5 (beş) olur (1,7750; 1,7755; 1,7760 gibi).
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir seansta gerçekleştirilir.
+1312
+ 2.6.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+ 2.6.9 Fiyat Kotasyonu ve Minimum Fiyat 
+ 2.6.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+ 2.6.11 İşlem Saatleri 
+2.6.2 Dayanak Varlık 
+Türk Lirası/ABD Doları kuru
+2.6.3 Sözleşme Büyüklüğü 
+1.000 ABD Doları
+2.6.4 Uzlaşma Şekli 
+TLDolar vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak 
+nakdi uzlaşı uygulanır.
+2.6.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan günlük 
+uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en yakın fiyat 
+adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan fiyatın 
+piyasayı doğru yansıtmaması durumunda, aşağıda belirtilen 
+yöntemler tek başına ya da birlikte kullanılarak günlük 
+uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.6.5.2 Vade Sonu Uzlaşma Fiyatı 
+Son işlem günü saat 15:30’da TCMB tarafından açıklanan
+gösterge niteliğindeki ABD Doları satış kuru.
+Vade döngü ayları Şubat, Nisan, Haziran, Ağustos, Ekim ve 
+Aralık’tır. Piyasada aynı anda, içinde bulunulan aya en yakın üç 
+döngü ayı işlem görür. Bu üç vade ayından biri Aralık değilse, 
+Aralık vade ayı ayrıca açılır. (Örneğin; “Aralık, Şubat, Nisan” 
+veya “Şubat, Nisan, Haziran, Aralık”)
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü 
+sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır.  
+ 2.6.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+ 2.6.6 Vade Ayları 
+ 2.6.7 Takas Süresi 
+
+===== PAGE 9 =====
+2.7.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+2.7.2 Dayanak Varlık 
+Türk Lirası/Euro kuru
+2.7.3 Sözleşme Büyüklüğü 
+1.000 Euro
+1514
+ 2.7 TLEuro Vadeli İşlem Sözleşmelerinin 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   TRYEUR  1212    S0
+Örnek: F_TRYEUR1212S0
+2.7.4 Uzlaşma Şekli 
+TLEuro vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak 
+nakdi uzlaşı uygulanır.
+2.7.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en yakın 
+fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı, günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan fiyatın 
+piyasayı doğru yansıtmadığına kanaat getirilmesi durumunda, 
+aşağıda belirtilen yöntemler tek başına ya da birlikte 
+kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b)Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+2.7.5.2 Vade Sonu Uzlaşma Fiyatı 
+Son işlem günü saat 15:30’da TCMB tarafından açıklanan 
+gösterge niteliğindeki Euro satış kuru.
+Vade döngü ayları Şubat, Nisan, Haziran, Ağustos, Ekim ve 
+Aralık’tır. Piyasada aynı anda, içinde bulunulan aya en yakın üç 
+döngü ayı işlem görür. Bu üç vade ayından biri Aralık değilse, 
+Aralık vade ayı ayrıca açılır. (Örneğin; “Aralık, Şubat, Nisan” 
+veya “Şubat, Nisan, Haziran, Aralık”)
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü 
+sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır.  
+TLEuro vadeli işlem sözleşmelerinde vade ve son işlem günü 
+her vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda sözleşmenin vadesi 
+bir önceki iş günüdür.
+1 Euro’nun Türk Lirası cinsinden değeri virgülden sonra dört 
+basamak halinde kote edilir. Minimum fiyat adımı 0,0005’dir. 
+Minimum fiyat adımının değeri bir sözleşme için 0,5 TL’ye 
+(0,0005*1.000) karşılık gelir. Bu şekilde girilecek fiyat 
+kotasyonlarının virgülden sonraki son rakamı 0 (sıfır) ya da 
+5 (beş) olur (2,3750; 2,3755; 2,3760 gibi).kotasyonlarının 
+virgülden sonraki son rakamı 0 (sıfır) ya da 5 (beş) olur 
+(2,3750; 2,3755; 2,3760 gibi).
+ 2.7.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+ 2.7.6 Vade Ayları 
+ 2.7.7 Takas Süresi 
+ 2.7.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+ 2.7.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+
+
+===== PAGE 10 =====
+1716
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir seansta gerçekleştirilir.
+2.8.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+2.8.2  Dayanak Varlık 
+Euro/Amerikan (ABD) Doları (EUR/USD) çapraz kurudur.
+2.8.3  Sözleşme Büyüklüğü 
+1.000 Euro
+2.8.4  Uzlaşma Şekli
+EUR/USD çapraz kuru vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak nakdi uzlaşı uygulanır.
+ 2.7.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+ 2.7.11 İşlem Saatleri 
+ 2.8 EUR/USD Çapraz Kuru Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   EURUSD  1212    S0
+Örnek: F_EURUSD1212S0
+
+
+===== PAGE 11 =====
+1918
+2.8.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan 
+fiyatın piyasayı doğru yansıtmadığına kanaat getirilmesi 
+durumunda, aşağıda belirtilen yöntemler tek başına ya da 
+birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+ 2.8.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 2.8.5.2 Vade Sonu Uzlaşma Fiyatı 
+ 
+TCMB’nin son işlem gününde açıkladığı gösterge niteliğindeki 
+Euro/Amerikan Doları çapraz kurudur.
+Belirlenen vade sonu uzlaşma fiyatı en yakın fiyat adımına 
+yuvarlanır.
+2.8.6 Vade Ayları 
+Vade döngü ayları Mart, Haziran, Eylül ve Aralık’tır. Aynı anda 
+içinde bulunulan aya en yakın iki vade ayına ait sözleşmeler 
+işlem görür. Bu iki vade ayından biri Aralık ayı değilse, Aralık 
+vade ayı ayrıca işleme açılır.
+2.8.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T 
+günü sonunda tahsil edilirken, kârlar hesaplara T+1 günü 
+aktarılır.  
+2.8.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+EUR/USD çapraz kuru vadeli işlem sözleşmelerinde vade 
+ve son işlem günü her vade ayının son iş günü olur. Yurt 
+içi piyasaların resmi tatil nedeniyle yarım gün olması 
+durumunda sözleşmenin vadesi bir önceki iş günüdür.
+2.8.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+1 Euro’nun ABD Doları cinsinden değeri virgülden sonra dört 
+basamak halinde kote edilir. (Örnek: 1,3050; 1,3051 gibi)
+Minimum fiyat adımı 0,0001‘dir. Minimum fiyat adımının 
+değeri 0,1 ABD Doları’na karşılık gelmektedir.
+2.8.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında 
+kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için 
+ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen 
+baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst 
+limitin fiyat adımına tekabül etmemesi halinde üst limit bir 
+üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.8.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir 
+seansta gerçekleştirilir.
+2.8.12 Dolar Kuru 
+Bu sözleşmeye ilişkin işlemlerde ABD Doları değerlerinin 
+TL’ye çevrilmesinde TCMB tarafından saat 15:30 itibarıyla 
+açıklanan gösterge niteliğindeki ABD Doları Alış Kuru esas 
+alınır. Borsa tarafından gerekli görülen durumlarda ya da 
+TCMB tarafından gösterge niteliğindeki ABD Doları Alış 
+Kurunun açıklanmaması durumunda, Dolar Kuru spot 
+piyasada oluşan Dolar kurları dikkate alınarak güncellenebilir.
+
+
+===== PAGE 12 =====
+2.9.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan günlük 
+uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en yakın fiyat 
+adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan fiyatın 
+piyasayı doğru yansıtmadığına kanaat getirilmesi durumunda, 
+aşağıda belirtilen yöntemler tek başına ya da birlikte 
+kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.9.5.2 Vade Sonu Uzlaşma Fiyatı 
+Vade sonu uzlaşma fiyatı, son işlem günündeki Londra’da 
+öğleden sonra yapılan altın fiyat sabitleme seansında (The 
+London Gold Market Fixing Ltd. tarafından açıklanan The 
+London Gold Fixing P.M.) oluşan altın Dolar/ons fiyatının 
+Merkez Bankasının saat 15.30’da açıklayacağı gösterge 
+niteliğindeki ABD Doları satış kuru kullanılarak TL/gram’a 
+çevrilmesi ile bulunan değer vade sonu uzlaşma fiyatı olarak 
+kullanılır. Londra’da öğleden sonra altın fiyat sabitleme seansı 
+yapılmazsa, sabah seansında oluşan altın Dolar/ons fiyatı 
+vade sonu uzlaşma fiyatı olarak kullanılır. Son işlem gününde 
+resmi tatil veya başka bir nedenle fiyat açıklanmaması halinde, 
+uluslararası spot piyasalarda Türkiye saati ile saat 17:00’de 
+oluşan Dolar/ons altın alış ve satış fiyatının ortalaması baz 
+alınır. Ons ağırlık birimi 31,1035’e bölünerek grama çevrilir.
+Yukarıdaki yöntemlerle belirlenen vade sonu uzlaşma fiyatı en 
+yakın fiyat adımına yuvarlanır.
+2.9.6 Vade Ayları 
+Şubat, Nisan, Haziran, Ağustos, Ekim ve Aralık. Aynı anda 
+içinde bulunulan aya en yakın üç vade ayına ait sözleşmeler 
+işlem görür. 
+2.9.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü 
+sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır.  
+2.9.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Altın vadeli işlem sözleşmelerinde vade ve son işlem günü 
+her vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda sözleşmenin vadesi 
+bir önceki iş günüdür.
+ 2.9.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+2.9.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+2.9.2 Dayanak Varlık  
+Saf altın
+2.9.3 Sözleşme Büyüklüğü 
+100 gram
+2.9.4  Uzlaşma Şekli 
+Altın vadeli işlem sözleşmelerinin uzlaşma yöntemi olarak nakdi uzlaşı uygulanır.
+2120
+ 2.9 Altın Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   XAUTRY  1212    S0
+Örnek: F_XAUTRY1212S0
+
+
+===== PAGE 13 =====
+2322
+2.9.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+1 gram altının Türk Lirası cinsinden değeri virgülden sonra üç basamak olacak şekilde sisteme girilir. Minimum fiyat adımı
+0,005 TL’dir.
+2.9.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.9.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir seansta gerçekleştirilir.
+2.10.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+ 2.10 Dolar/Ons Altın Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F    XAUUSD  1212    S0
+Örnek: F_XAUUSD1212S0
+
+
+===== PAGE 14 =====
+2.10.2 Dayanak Varlık 
+Saf altın
+2.10.3 Sözleşme Büyüklüğü 
+1 ons altın
+2.10.4 Uzlaşma Şekli 
+Dolar/Ons altın vadeli işlem sözleşmelerinin uzlaşma 
+yöntemi olarak nakdi uzlaşı uygulanır.
+2.10.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan 
+fiyatın piyasayı doğru yansıtmadığına kanaat getirilmesi 
+durumunda, aşağıda belirtilen yöntemler tek başına ya da 
+birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.10.5.2 Vade Sonu Uzlaşma Fiyatı 
+Vade sonu uzlaşma fiyatı, son işlem gününde Londra’da 
+öğleden sonra yapılan altın fiyat sabitleme seansında (The 
+London Gold Market Fixing Ltd. tarafından açıklanan The 
+London Gold Fixing P.M.) oluşan altın Dolar/Ons fiyatıdır.
+Son işlem gününde Londra’da öğleden sonra altın fiyat 
+sabitleme seansı yapılmazsa, sabah seansında oluşan altın 
+Dolar/Ons fiyatı vade sonu uzlaşma fiyatı olarak kullanılır.
+Son işlem gününde resmi tatil veya başka bir nedenle fiyat 
+açıklanmaması halinde, uluslararası spot piyasalarda Türkiye 
+saati ile saat 17:00’de oluşan Dolar/Ons altın alış ve satış 
+fiyatının ortalaması vade sonu uzlaşma fiyatı olarak kullanılır.
+Yukarıdaki yöntemlerle belirlenen vade sonu uzlaşma fiyatı 
+en yakın fiyat adımına yuvarlanır.
+2.10.6 Vade Ayları 
+Vade döngü ayları Şubat, Nisan, Haziran, Ağustos, Ekim ve 
+Aralık’tır. Piyasada aynı anda, içinde bulunulan aya en yakın 
+üç vade ayına ait sözleşmeler işlem görür.
+2.10.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T 
+günü sonunda tahsil edilirken, kârlar hesaplara T+1 günü 
+aktarılır.  
+2524
+ 2.10.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+2.10.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Dolar/Ons altın vadeli işlem sözleşmelerinde vade ve 
+son işlem günü her vade ayının son iş günü olur. Yurt 
+içi piyasaların resmi tatil nedeniyle yarım gün olması 
+durumunda sözleşmenin vadesi bir önceki iş günüdür.
+2.10.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+1 ons altının ABD Doları cinsinden değeri virgülden sonra 
+iki basamak olacak şekilde işlem sistemine girilir. (Örnek: 
+1.450,05; 1.450,10 gibi)
+Minimum fiyat adımı 0,05‘dir. Minimum fiyat adımının değeri 
+0,05 ABD Doları’na karşılık gelmektedir.
+2.10.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında 
+kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için 
+ise bir önceki günün uzlaşma fiyatıdır. Günlük fiyat değişim 
+limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. 
+Bu yöntemle hesaplanan alt veya üst limitin fiyat adımına 
+tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt 
+limit ise bir alt fiyat adımına yuvarlanır.
+2.10.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir 
+seansta gerçekleştirilir.
+2.10.12 Dolar Kuru 
+Bu sözleşmeye ilişkin işlemlerde ABD Doları değerlerinin 
+TL’ye çevrilmesinde TCMB tarafından saat 15:30 itibarıyla 
+açıklanan gösterge niteliğindeki ABD Doları Alış Kuru esas 
+alınır. Borsa tarafından gerekli görülen durumlarda ya da 
+TCMB tarafından gösterge niteliğindeki ABD Doları Alış 
+Kuru’nun açıklanmaması durumunda, Dolar Kuru spot 
+piyasada oluşan Dolar kurları dikkate alınarak güncellenebilir.
+
+
+===== PAGE 15 =====
+2.11.2 Dayanak Varlık 
+Ege Standart 1 baz kalite pamuk
+2.11.3 Sözleşme Büyüklüğü 
+1.000 kg (1 ton)
+2.11.4 Uzlaşma Şekli 
+Ege Pamuk vadeli işlem sözleşmelerinin uzlaşma yöntemi 
+olarak nakdi uzlaşı uygulanır.
+2.11.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan 
+fiyatın piyasayı doğru yansıtmadığına kanaat getirilmesi 
+durumunda, aşağıda belirtilen yöntemler tek başına ya da 
+birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Dayanak varlığın spot fiyatı veya sözleşmenin diğer vade 
+ayları için geçerli olan günlük uzlaşma fiyatları da dikkate 
+alınarak hesaplanacak “teorik” fiyatlar
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.11.5.2 Vade Sonu Uzlaşma Fiyatı 
+Vade Sonu Uzlaşma Fiyatı şu şekilde hesaplanır:
+1.  Dayanak varlığın vade ayı son işlem günü ve öncesindeki 
+asgari iki iş gününe ait İzmir Ticaret Borsası’nda oluşan 
+Ege Standart 1 baz kalite pamuk fiyatlarının miktar ağırlıklı 
+ortalaması Vade Sonu Uzlaşma Fiyatı olarak alınır.
+2. Bu günlerde İzmir Ticaret Borsası’nda yeterli işlem 
+olmaması halinde, var olan işlemlerin ortalaması ile İzmir 
+Ticaret Borsası pamuk salonunda faaliyet gösteren asgari on 
+iki üyeden azami %1 fiyat aralığı ile Ege Standart 1 baz kalite 
+pamuk için alınacak kotasyonların arasından en iyi ve en 
+kötü iki fiyat atıldıktan sonra kalanların aritmetik ortalaması 
+uzlaşma fiyatı olarak alınır. Spot piyasada gerçekleşen 
+işlemlerin Vade Sonu Uzlaşma Fiyatı’nın belirlenmesinde 
+yeterli olup olmadığına Uzlaşma Fiyatı Komitesi karar verir.
+2726
+2.11.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+ 2.11 Ege Pamuk Vadeli İşlem Sözleşmelerinin Özellikleri  
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   COTEGE  1212    S0
+Örnek: F_COTEGE1212S0
+ 2.11.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+
+===== PAGE 16 =====
+2928 2928
+2.11.6 Vade Ayları 
+Vade döngü ayları Mart, Mayıs, Temmuz, Ekim ve Aralık’tır. Aynı anda içinde bulunulan aya en yakın iki vade ayına ait sözleşmeler 
+işlem görür. 
+2.11.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır.  
+2.11.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Ege Pamuk vadeli işlem sözleşmelerinde vade ve son işlem günü her vade ayının son iş günü olur. Yurt içi piyasaların resmi tatil 
+nedeniyle yarım gün olması durumunda sözleşmenin vadesi bir önceki iş günüdür.
+2.11.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+1 kg Ege Standart 1 baz kalite pamuğun Türk Lirası cinsinden değeri virgülden sonra üç basamak halinde kote edilir. Minimum 
+fiyat adımı 0,005’dir. Minimum fiyat adımının değeri 5 TL’ye karşılık gelmektedir. Bu şekilde girilecek fiyat kotasyonlarının 
+virgülden sonraki son rakamı 0 (sıfır) ya da 5 (beş) olur (2,125 veya 2,410 TL/kg gibi).
+2.11.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti   
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.11.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında tek bir seansta gerçekleştirilir. 12:30 - 13:55 arası işlem yapılmayan bölümdür.
+2.12.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+ 2.12 Anadolu Kırmızı Buğday Vadeli İşlem Sözleşmelerinin Özellikleri 
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F   WHTANR  1212    S0
+Örnek: F_WHTANR1212S0
+
+
+===== PAGE 17 =====
+ 2.12.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+3130
+2.12.2 Dayanak Varlık
+Anadolu kırmızı sert baz kalite buğday (Bezostaja-1, 
+Doğu- 88, Gün- 91, Haymana- 79, İkizce- 96, Karasu- 90, 
+Lancer, Odeskaya- 51, Şahin) Anadolu kırmızı sert kalitede 
+buğdayı oluşturduğu belirtilen bu buğday cinsleri, TMO’nun 
+sınıflandırması esas alınarak belirlenmiştir. Ayrıca spot 
+borsaların “Anadolu kırmızı sert buğday” olarak tescil 
+ettiği emtia da yukarıdaki sınıflamaya dahildir. TMO’nun 
+sınıflandırma kriterlerinde bir değişiklik olması halinde, 
+Anadolu kırmızı sert olarak belirtilen buğday kalitesinin denk 
+geldiği yeni buğday kalitesi ve bu kaliteyi oluşturan yeni 
+buğday cinsleri sözleşmeye dayanak kabul edilir.
+2.12.3 Sözleşme Büyüklüğü 
+5.000 kg (5 ton)
+2.12.4 Uzlaşma Şekli 
+Anadolu Kırmızı Buğday vadeli işlem sözleşmelerinin uzlaşma 
+yöntemi olarak nakdi uzlaşı uygulanır.
+2.12.5.1 Günlük Uzlaşma Fiyatı
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan 
+fiyatın piyasayı doğru yansıtmadığına kanaat getirilmesi 
+durumunda, aşağıda belirtilen yöntemler tek başına ya da 
+birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Sözleşmenin vadesine kadar olan süre için geçerli olan ve 
+Borsa tarafından belirlenen faiz oranı, dayanak varlığın spot 
+fiyatı veya sözleşmenin diğer vade ayları için geçerli olan 
+günlük uzlaşma fiyatı kullanılarak hesaplanacak “teorik” 
+fiyat
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.12.5.2  Vade Sonu Uzlaşma Fiyatı
+Vade Sonu Uzlaşma Fiyatı şu şekilde hesaplanır:
+Kullanılacak fiyatların belirlenmesi:
+1. Son işlem günü ve öncesindeki bir iş gününde Konya ve 
+Polatlı Ticaret Borsası’nda Anadolu kırmızı sert buğdayının 
+birinci, ikinci, üçüncü ve dördüncü derece baz kalitesi için gün 
+sonu itibariyle oluşmuş fiyatların miktar ağırlıklı ortalaması 
+her gün için ayrı ayrı hesaplanır (Bu şekilde en fazla dört fiyat 
+verisi elde edilir.).
+2. Edirne, Eskişehir, Gaziantep, Karaman, Çorum, Uzunköprü 
+ve Yozgat Ticaret Borsalarında Anadolu kırmızı sert buğdayı 
+için son işlem gününde ve önceki bir iş gününde oluşmuş 
+fiyatlar elde edilir (Bu şekilde en fazla on dört fiyat verisi 
+elde edilir.).
+• Konya ve/veya Polatlı Ticaret Borsası’nda birinci, ikinci, 
+üçüncü veya dördüncü derecedeki Anadolu kırmızı sert 
+buğdayların herhangi biri için borsada fiyat oluşmaması 
+durumunda, miktar ağırlıklı ortalama fiyat hesaplamasında 
+fiyat oluşmuş olan dereceler için oluşan fiyat ve miktar 
+bilgileri dikkate alınır.
+• Konya ve Polatlı Ticaret Borsası’nda birinci, ikinci, üçüncü 
+ve dördüncü derecedeki Anadolu kırmızı sert buğdaylarının 
+hiçbirinde fiyat oluşmaması durumunda o gün için Polatlı 
+Ticaret Borsası’ndan ya da Konya Ticaret Borsası’ndan fiyat 
+verisi alınamadığı kabul edilir.
+• Polatlı ve Konya Ticaret Borsalarının dışındaki borsalardan 
+son işlem gününde veya son işlem gününden önceki bir iş 
+gününde, Anadolu Kırmızı Sert buğdayı için fiyat oluşmaması
+durumunda, o gün için bu borsalardan fiyat alınamadığı kabul
+edilir. Bu durumda, bu borsaların fiyat bilgileri (2. maddede 
+bahsedilen) aritmetik ortalamaya dahil edilmez. 
+Yukarıda açıklanan tüm fiyatların (en fazla 18 fiyat verisi) 
+aritmetik ortalaması bulunur. Bu fiyat vade sonu uzlaşma 
+fiyatı olarak kabul edilir.
+Spot borsaların fiyat verisinin son işlem gününü takip 
+eden iş günlerinde açıklanması durumunda, Uzlaşma Fiyatı 
+Komitesi uzlaşma fiyatını son işlem gününü takip eden 
+günde açıklayabilir veya spot borsaların son işlem günü fiyat 
+verilerini dikkate almadan son işlem gününde açıklayabilir.
+Borsa, uygun koşulların sağlanması halinde, Vade Sonu 
+Uzlaşma Fiyatı hesaplanmasında fiyat verisi alınan borsaların 
+sayısını artırabilir veya azaltabilir.
+Uzlaşma Fiyatı Komitesi, Borsanın seans saatlerini ve takas 
+sürecini dikkate alarak uzlaşma fiyatının hesaplanmasında 
+spot borsalardaki seansın bir kısmında oluşan fiyat verilerini 
+dikkate alabilir.
+Spot borsalardan alınan fiyatlar, dayanak varlığın teslim 
+edilmesi halinde doğabilecek KDV ve benzeri satış vergileri 
+hariç olarak dikkate alınır.
+
+
+===== PAGE 18 =====
+3332
+2.12.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, her bir sözleşme için belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan alt veya üst limitin 
+fiyat adımına tekabül etmemesi halinde üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına yuvarlanır.
+2.12.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında tek bir seansta gerçekleştirilir. 12:30 - 13:55 arası işlem yapılmayan bölümdür.
+2.13.1 Vadeli İşlem Sözleşme Kodu 
+Vadeli işlem sözleşmelerinde sözleşme kodu; sözleşme türü, dayanak varlık kodu, vade tarihi ve sözleşme büyüklüğünün 
+standart olup olmadığı bilgisini içerecek şekilde oluşturulmuştur. 
+2.13.2 Dayanak Varlık 
+Vade ayının her bir saati için Piyasa İşleticisi tarafından açıklanan Kısıtsız Piyasa Takas Fiyatları’ndan (KPTF) hesaplanan basit 
+aritmetik ortalamasıdır.
+ 2.13 Baz Yük Elektrik Vadeli İşlem Sözleşmelerinin Özellikleri 
+2.12.6 Vade Ayları 
+Vade döngü ayları Mart, Mayıs, Temmuz, Eylül ve Aralık’tır. Aynı anda içinde bulunulan aya en yakın iki vade ayına ait 
+sözleşmeler işlem görür.
+2.12.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır.  
+2.12.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Anadolu Kırmızı Buğday vadeli işlem sözleşmelerinde vade ve son işlem günü her vade ayının son iş günü olur. Yurt içi 
+piyasaların resmi tatil nedeniyle yarım gün olması durumunda sözleşmenin vadesi bir önceki iş günüdür.
+2.12.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+ 
+1 kg Anadolu kırmızı sert baz kalitede buğdayın Türk Lirası cinsinden değeri virgülden sonra dört basamak halinde kote edilir. Bu 
+şekilde girilecek fiyat kotasyonlarının virgülden sonraki son rakamı 0 (sıfır) ya da 5 (beş) olur (0,3865 veya 0,3870 TL/kg gibi).
+Minimum fiyat adım değeri 0,0005’dir. Minimum fiyat adımının değeri 2,5 TL’ye karşılık gelmektedir.
+S: Standart
+N: Standart Olmayan (Özsermaye hali 
+sonucu oluşan)
+Vadeli (Futures) Dayanak
+varlık kodu 
+Vade tarihi
+(AAYY-Aralık 2012)
+F    ELCBAS  1212    S0
+Örnek: F_ELCBAS1212S0
+
+
+===== PAGE 19 =====
+3534
+2.13.3 Sözleşme Büyüklüğü 
+Vade ayındaki saat sayısı x 0,1 MWh
+Vade Ayındaki Saat Sayısı: Vade ayındaki gün sayısı x24 
+Sözleşme büyüklüğü vade ayındaki gün sayısına ve yaz 
+saati/kış saati uygulamasına göre değişkenlik gösterir. Kış 
+saatinden yaz saatine geçiş yapılan gün için saat sayısı 23, 
+yaz saatinden kış saatine geçiş yapılan gün için ise saat sayısı 
+25 olarak uygulanacaktır.
+Örnek:
+30 gün içeren aylar için sözleşme büyüklüğü 72 MWh’dir 
+(30x24x0,1MWh), 31 gün içeren aylar için sözleşme 
+büyüklüğü 74,4 MWh’dir (31x24x0,1MWh), 28 gün 
+çeken Şubat ayı için sözleşme büyüklüğü 67,2 MWh’dir 
+(28x24x0,1MWh), 29 gün çeken Şubat ayı için sözleşme 
+büyüklüğü 69,6 MWh’dir (29x24x0,1 MWh). Belirtilen 
+sözleşme büyüklükleri kış saatinden yaz saatine/yaz 
+saatinden kış saatine geçilen aylar için geçerli değildir.
+2.13.4 Uzlaşma Şekli 
+Baz Yük Elektirk vadeli işlem sözleşmelerinin uzlaşma 
+yöntemi olarak nakdi uzlaşı uygulanır.
+2.13.5.1 Günlük Uzlaşma Fiyatı 
+Seans sonunda hesapların güncellenmesinde kullanılan 
+günlük uzlaşma fiyatı aşağıdaki şekilde hesaplanır ve en 
+yakın fiyat adımına yuvarlanır:
+a) Seans sona ermeden önceki son 10 dakika içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı 
+günlük uzlaşma fiyatı olarak belirlenir.  
+b) Eğer son 10 dakika içerisinde 10’dan az işlem yapıldıysa, 
+seans içerisinde geriye dönük olarak bulunan son 10 işlemin 
+miktar ağırlıklı ortalama fiyatı alınır.
+c) Seans içerisinde 10’dan az işlem yapıldıysa, seans içerisinde 
+gerçekleştirilen tüm işlemlerin miktar ağırlıklı ortalama fiyatı
+d) Seans içerisinde hiç işlem yapılmamışsa, bir önceki günün 
+uzlaşma fiyatı
+günlük uzlaşma fiyatı olarak belirlenir. 
+Seans sonunda yukarıda belirtilen yöntemlere göre günlük 
+uzlaşma fiyatının hesaplanamaması veya hesaplanan 
+fiyatın piyasayı doğru yansıtmadığına kanaat getirilmesi 
+durumunda, aşağıda belirtilen yöntemler tek başına ya da 
+birlikte kullanılarak günlük uzlaşma fiyatı tespit edilebilir.
+a) Seans sonundaki en iyi alış ve satış kotasyonlarının 
+ortalaması
+b) Sözleşmenin vadesine kadar olan süre için geçerli olan ve 
+Borsa tarafından belirlenen faiz oranı, dayanak varlığın spot 
+fiyatı veya sözleşmenin diğer vade ayları için geçerli olan 
+günlük uzlaşma fiyatı kullanılarak hesaplanacak “teorik” 
+fiyat
+Özel Emir Pazarı’nda gerçekleşen işlemler yukarıdaki 
+hesaplamalara dahil edilmez. Uzlaşma Fiyatı Komitesi 
+tarafından günlük uzlaşma fiyatının değiştirilme durumu 
+saklıdır.
+2.13.5.2 Vade Sonu Uzlaşma Fiyatı 
+Vade ayının her bir saati için Piyasa İşleticisi tarafından 
+açıklanan Kısıtsız Piyasa Takas Fiyatları’ndan (KPTF) 
+hesaplanan basit aritmetik ortalama son uzlaşma fiyatı olur. 
+Bu yöntemle belirlenen vade sonu uzlaşma fiyatı en yakın 
+fiyat adımına yuvarlanır.
+ 2.13.5 Günlük ve Vade Sonu Uzlaşma Fiyatları 
+
+===== PAGE 20 =====
+3736
+2.13.6 Vade Ayları 
+Yılın bütün ayları (Aynı anda içinde bulunulan ay ve bu 
+aya en yakın üç vade olmak üzere toplam 4 vade ayına ait 
+sözleşmeler işlem görür.).
+2.13.7 Takas Süresi 
+Takas süresi T+1 olarak uygulanır. Zararlar hesaplardan T günü 
+sonunda tahsil edilirken, kârlar hesaplara T+1 günü aktarılır. 
+ 
+2.13.8 Sözleşmenin Vadesi ve Son İşlem Günü 
+Baz Yük Elektrik vadeli işlem sözleşmelerinde vade ve 
+son işlem günü her vade ayının son iş günü olur. Yurt içi 
+piyasaların resmi tatil nedeniyle yarım gün olması durumunda 
+sözleşmenin vadesi bir önceki iş günüdür.
+2.13.9 Fiyat Kotasyonu ve Minimum Fiyat Adımı 
+1 MWh elektrik enerjisinin TL değeri virgülden sonra iki 
+basamak olarak ifade edilir (Örnek: 121,20). Minimum fiyat 
+adımı 0,10 TL’dir. (Örnek: Sözleşme büyüklüğü 72 MWh olan 
+vade ayları için minimum fiyat adımı değeri 7,2 TL, sözleşme 
+büyüklüğü 74,4 MWh olan vade ayları için minimum fiyat adımı 
+değeri 7,44 TL, sözleşme büyüklüğü 67,2 MWh olan vade ayları 
+için minimum fiyat adımı değeri 6,72 TL, sözleşme büyüklüğü 
+69,6 MWh olan vade ayları için minimum fiyat adımı değeri 
+6,96 TL’dir.)
+.
+2.13.10 Baz Fiyat ve Günlük Fiyat Değişim Limiti 
+Baz fiyat, günlük fiyat değişim limitlerinin hesaplanmasında 
+kullanılan ve sözleşmenin işleme açıldığı gün Uzlaşma Fiyatı 
+Komitesi tarafından belirlenen fiyat, diğer işlem günleri için ise 
+bir önceki günün uzlaşma fiyatıdır. 
+Günlük fiyat değişim limiti, farklı vadeli her bir sözleşme için 
+belirlenen baz fiyatın ±%10’udur. Bu yöntemle hesaplanan 
+alt veya üst limitin fiyat adımına tekabül etmemesi halinde 
+üst limit bir üst fiyat adımına, alt limit ise bir alt fiyat adımına 
+yuvarlanır.
+2.13.11 İşlem Saatleri 
+İşlemler 09:10 - 17:45 saatleri arasında kesintisiz tek bir 
+seansta gerçekleştirilir.
+
+
+===== PAGE 21 =====
+3938
+Takasbank sistemi tarafından, saklama hesaplarının risk 
+durumunda bir değişiklik olması halinde Borsa’ya bildirilir. 
+Söz konusu saklama hesabına bağlı işlem hesaplarının risk 
+durumu Borsa tarafından güncellenir.
+1 ve 2 risk seviyeleri uyarı niteliğindedir, sadece “riskli” 
+hesap statüsüne yaklaşıldığını gösterir. 3 risk seviyesindeki 
+hesaplar “riskli hesap” statüsündedir.
+Riskli duruma giren hesabın pasif emirleri işlem sisteminde 
+otomatik olarak iptal edilir. Hesap, teminat yatırarak
+ve /veya bulunması gereken teminat tutarını azaltıcı işlem 
+yaparak riskli durumdan çıkabilir. Riskli hesaplar için teminat 
+yatırılabilir ancak çekilemez.
+Bir önceki güne ilişkin teminat tamamlama çağrısı bulunan 
+hesaplar risk azaltıcı işlem yaparak veya nakit teminat 
+yatırarak riskli durumdan çıkabilirler.
+Üyeler risk durumlarını, işlem sisteminden ve Takasbank 
+sisteminden, teminat durumlarını ise sadece Takasbank 
+sisteminden takip edebilirler.
+Piyasada gerçekleştirilen işlemler için portföy bazında 
+teminatlandırma yöntemi uygulanır. Portföy bazında 
+teminat hesaplamasına esas teşkil edecek parametreler 
+Takasbank tarafından belirlenir ve duyurulur. Takasbank, 
+portföy bazında teminatlandırma işlemlerinde Standard 
+Portfolio Analysis of Risk (SPAN) algoritmasını kullanır.
+SPAN algoritmasında, değişik fiyat ve volatilite değişim 
+seviyelerine dayalı olarak oluşturulan senaryolar arasından 
+maksimum risk göz önünde bulundurularak, teminat tutarı 
+portföy bazında hesaplanmaktadır.
+3.1.1 Başlangıç Teminatı – Sürdürme Teminatı
+(Initial Margin – Maintenance Margin) 
+Vadeli işlem ve opsiyon sözleşmelerini almak veya satmak 
+için Takas Merkezi’ne yatırılması zorunlu olan asgari tutar 
+başlangıç teminatıdır. 
+Sürdürme teminatı, Piyasadaki günlük fiyat değişimleri 
+karşısında güncellenen teminat tutarlarının ve teminat 
+olarak bulundurulması gereken varlık kompozisyonunun 
+koruması gereken asgari düzeydir.
+Teminat tutarının sürdürme teminatı seviyesinin altına 
+inmesi durumunda Takasbank tarafından teminat 
+tamamlama çağrısı yapılır. 
+3.1.2 Hesapların Güncellenmesi (Marking to Market) 
+Hesapların güncellenmesi, piyasada işlem yapan tarafların 
+sahip oldukları pozisyonların her gün sonunda belirlenen 
+uzlaşma fiyatları esas alınarak değerlemeye tabi tutulup 
+hesaplara yansıtılmasıdır. 
+Hesapların güncellenmesiyle oluşan değişiklikler sonucunda, 
+bir hesaptaki tutarın teminat olarak bulunması gereken 
+asgari tutarı aşması halinde, aşan kısım hesap sahibi 
+tarafından çekilebilir. Hesapların güncellenmesi sonucunda 
+teminat açığının ortaya çıkması durumunda, Takas Merkezi 
+tarafından teminat tamamlama çağrısı yapılır.
+3.1.3 Teminat Tamamlama Çağrısı (Margin Call) 
+Seans kapanışından sonra vadeli işlem ve opsiyon 
+sözleşmelerine ait gün sonu uzlaşma fiyatları belirlenir 
+ve tüm hesaplar güncellenir. Toplam teminatı, Sürdürme 
+Teminatı tutarının altına düşen veya eksi nakit teminat 
+oluşan hesaplar için ilgili üyelere “teminat tamamlama 
+çağrısı” yapılır. Üyeler teminat tamamlama çağrısı 
+yükümlülüklerini T+1 günü en geç saat 15:00’a kadar yerine 
+getirmek zorundadırlar.
+VİOP risk yönetimi Takasbank tarafından yapılır. İşlem 
+sisteminde gerçekleşen işlemler gerçek zamanlı olarak 
+Takasbank tarafından çekilerek pozisyona dönüştürülür. 
+Pozisyonu güncellenen hesaplar için son açık pozisyon ve 
+son parametre dosyası verilerine göre “Bulunması Gereken 
+Teminat” hesaplanır. “Sürdürme Teminatı”, bulunması 
+gereken teminat değerinin %75’i olarak dikkate alınır.
+Teminat Tamamlama Çağrısı 
+[
+Toplam Teminat ± Toplam Kâr/Zarar] < [Sürdürme Teminatı] 
+Sürdürme teminatının, [Toplam Teminat +/- Toplam 
+Kar/Zarar] tutarına oranı olarak tanımlanan risk oranı 
+%100’den büyük ise, ilgili hesap “riskli” duruma düşer. 
+Risksizden riskliye doğru 0, 1, 2 ve 3 olarak dört risk seviyesi 
+belirlenmiştir.
+Tablo 1: Risk Oranları ve Risk Seviyeleri
+Hesaplar, risk durumuna göre kademeli olarak bilgilendirme 
+yapılarak risk azaltıcı işlemler yapılması konusunda 
+yönlendirilir.
+ 3.2 VİOP Risk Yönetimi ve Teminatlandırma Sistemi 
+Risk Oranı (%) Risk Seviyesi
+75 >= Risk Oranı 0
+90 >= Risk Oranı >75 1
+100 >= Risk Oranı > 90 2
+Risk Oranı >100 3
+ 3.2.1 Teminatlandırma Yöntemi 
+Risk Yönetimi ve 
+Teminatlandırma3
+
+===== PAGE 22 =====
+4140
+Senaryo
+Fiyat Değişim Aralığının 
+(PSR) Bir Oranı Olarak Fiyat 
+Hareketi;
+Volatilite Hareketi (VSR) 
+Senaryo
+Fiyat Değişim Aralığının 
+(PSR) Bir Oranı Olarak Fiyat 
+Hareketi;
+Volatilite Hareketi (VSR)
+1 Fiyat Sabit; Volatilite Yukarı 2 Fiyat Sabit; Volatilite Aşağı
+3 Fiyat 1/3 Yukarı; Volatilite Yukarı 4 Fiyat 1/3 Yukarı; Volatilite 
+Aşağı
+5 Fiyat 1/3 Aşağı; Volatilite Yukarı 6 Fiyat 1/3 Aşağı; Volatilite Aşağı
+7 Fiyat 2/3 Yukarı; Volatilite Yukarı 8 Fiyat 2/3 Yukarı; Volatilite 
+Aşağı
+9 Fiyat 2/3 Aşağı; Volatilite Yukarı 10 Fiyat 2/3 Aşağı; Volatilite 
+Aşağı
+11 Fiyat 3/3 Yukarı; Volatilite Yukarı 12 Fiyat 3/3 Yukarı; Volatilite 
+Aşağı
+13 Fiyat 3/3 Aşağı; Volatilite Yukarı 14 Fiyat 3/3 Aşağı; Volatilite 
+Aşağı
+15
+Aşırı Hareket Senaryosu: Fiyat 3 
+Yukarı, Volatilite Sabit, Kapsama 
+Oranı
+16
+Aşırı Hareket Senaryosu: Fiyat 
+3 Aşağı, Volatilite Sabit,
+Kapsama Oranı
+SPAN, aynı dayanak varlığa bağlı sözleşmeleri gruplandırarak 
+analiz eder. Örneğin, aynı dayanak varlığa bağlı vadeli 
+işlem sözleşmeleri, opsiyon sözleşmeleri ve vadeli işlem 
+sözleşmeleri üzerine opsiyonlar aynı grupta yer alabilir. SPAN 
+bu gruplamayı ürün grubu (Combined Commodity) olarak 
+tanımlamaktadır. Takasbank, SPAN risk analizini kullanarak 
+portföylerin risk yönetimini 5 adımda yapar:
+1.  Adım: Ürün Grubu Risk Analizi 
+2. Adım: Ürün Grupları Arası Risk Analizi 
+3. Adım: SPAN Risk Değerinin Hesaplanması 
+4. Adım: Başlangıç Teminatının Hesaplanması
+5. Adım: Bulunması Gereken Teminatın Hesaplanması 
+Bu adımların detayları aşağıdaki gibidir:
+3.2.1.1 Ürün Grubu Risk Analizi 
+SPAN risk analizini, her biri bir dayanak varlığı temsil eden 
+ürün grupları bazında yapar. Her bir ürün grubunun riski 
+diğer ürün gruplarından bağımsız bir şekilde hesaplanır. 
+Bir ürün grubunun riski, tarama riski ve ürün grubu içi risk 
+olarak tanımlanan vadeler arası yayılma pozisyonu riski 
+toplamından oluşur.
+Ürün Grubu Riski
+Tarama Risk + Vadeler Arası Yayılma Pozisyonu Riski
+3.2.1.1.1 Tarama Riski (Scan Risk) 
+SPAN, her bir sözleşme için “Fiyat Değişim Aralığı” ve “Volatilite Değişim Aralığı” değerleri üzerine senaryoları kullanarak Risk 
+Dizileri (Risk Arrays) hesaplamaktadır. 
+a) Fiyat Değişim Aralığı (Price Scan Range-PSR)
+Dayanak varlık için oluşabilecek maksimum fiyat değişikliğini ifade eder.
+b) Volatilite Değişim Aralığı (Volatility Scan Range-VSR)
+Opsiyonun dayanak varlık fiyatı için oluşabilecek maksimum volatilite değişikliğini ifade eder. 
+Her bir sözleşme için hesaplanan risk dizileri, sözleşmenin dayalı olduğu varlığın farklı fiyat ve volatilite senaryolarına göre 
+sözleşmede oluşabilecek kâr/zarar rakamını gösteren dizilerdir. Risk dizileri aşağıdaki tabloda (Tablo 2) yer alan 16 standart 
+senaryo kullanılarak hesaplanır. Bunlardan son ikisi (15. ve 16. senaryolar), dayanak varlık fiyatında oluşabilecek uç hareketleri 
+temsil etmektedir. Uç senaryoların diğer senaryolara göre baskın çıkmaması için, oluşan kâr/zarar rakamı bir kapsama oranı ile 
+çarpılır.
+Tablo 2: SPAN Senaryoları 
+
+===== PAGE 23 =====
+4342
+Her bir sözleşmenin ilgili senaryodaki riski, sahip olunan pozisyonla risk dizisindeki değerin çarpılması suretiyle bulunur.
+Bir portföydeki aynı ürün grubuna bağlı sözleşmeler birlikte değerlendirilerek her bir senaryo için portföydeki ilgili ürün grubuna 
+bağlı sözleşmelerin riskleri toplanır. Bir ürün grubu için en kötü senaryo, portföyde yer alan sözleşmelerin riskinin toplamda en 
+yüksek olduğu senaryodur. Ürün grubu bazında en kötü senaryoda oluşan risk “Tarama Riski” olarak adlandırılır ve bir anlamda 
+piyasa riskini ifade eder.
+3.2.1.1.2 Vadeler Arası Yayılma Pozisyonu Riski (Intra-Commodity Spread Charge)
+Tarama riski hesaplanırken SPAN, öncelikle bir dayanak varlığın farklı vadelerdeki vadeli işlem sözleşme fiyatlarının aynı oranda 
+değişeceğini varsayar. Bu yüzden herhangi bir aydaki uzun pozisyon, başka bir aydaki kısa pozisyon ile netleştirilir. Vadeler 
+arası fiyat hareketleri farklı olabileceğinden, portföyler, vadeler arası fiyat riskine açıktır. Ürün grubuna ait vadeler arası yayılma 
+pozisyonu bulunurken, ürün grubundaki sözleşmelere ait delta değerleri kullanılarak opsiyon sözleşmeleri eşdeğer vadeli 
+işlem sözleşmelerine çevrilir ve vadeli işlem sözleşmeleri ile opsiyon sözleşmeleri arasında da vadeler arası yayılma pozisyonu 
+hesaplanır.
+Delta, dayanak varlığın fiyatındaki birim değişimin sözleşme fiyatında oluşturacağı değişim miktarıdır. Yukarıdaki tabloda (Tablo 
+2) tanımlanan 16 senaryodan 7 tanesine ait delta değerleri Takasbank tarafından belirlenen olasılıklar ile ağırlıklandırılarak 
+sözleşme bazında bileşik delta hesaplanır.
+Bileşik Delta, alım opsiyonları için 0 ile 1, satım opsiyonları için -1 ile 0 arasında değerler almaktadır. Vadeli işlem sözleşmeleri için 
+Bileşik Delta 1’dir. 
+Her sözleşme için hesaplanan Bileşik Delta değeri, portföyün ilgili ürün grubuna bağlı sözleşmelerdeki pozisyon sayısı ve delta 
+katsayılarıyla (delta scaling factor) çarpılarak, portföyün ürün grubu bazında “Net Delta” değeri hesaplanır. Böylece büyüklükleri 
+farklı olan pozisyonlar aynı ölçekte ifade edilmiş olmaktadır. 
+Net Delta
+Bileşik Delta X Delta Katsayısı X Pozisyon Sayısı
+SPAN parametre dosyasına tanımlanan vade-seviye grupları (tiers tanımlaması) ve öncelik sırası kullanılarak portföyün ilgili ürün 
+grubuna ait vadeler arası yayılma pozisyonu riski bulunur.
+3.2.1.2 Ürün Grupları Arası Risk Analizi (Inter-Commodity Spread Credit)
+Bir portföy için her bir ürün grubunun riski hesaplandıktan sonra, ürün gruplarının fiyat hareketleri arasındaki ilişkilerin 
+(korelasyonların) portföy riskini düşürebileceği durumlar göz önünde bulundurularak teminat hesaplanmaktadır. Opsiyon 
+pozisyonları, deltalar kullanılarak vadeli işlem pozisyonlarına dönüştürülerek, ürün grupları arası yayılma pozisyonu indirimi 
+opsiyonlar için de kullanılmaktadır.
+Ürün grupları arası yayılma pozisyonları, öncelik sırasına göre 
+ürünlerin net deltaları kullanılarak oluşturulmaktadır. Ürün 
+grupları arası yayılma pozisyonları sonucu yapılacak indirim 
+tutarı, ikili ürün grupları arasında Takasbank tarafından 
+belirlenen parametrelere göre hesaplanmaktadır.
+3.2.1.3 SPAN Risk Değerinin Hesaplanması 
+SPAN riski, tarama riski ve vadeler arası yayılma pozisyonu 
+riski toplamından ürün grupları arası yayılma pozisyonu 
+indirimi düşülerek bulunur. 
+Diğer taraftan, aşırı zararda (Deep out-of-the-money) 
+kısa opsiyon pozisyonları, bir portföy için tarama riskinin 
+karşılayacağından daha fazla risk teşkil edebilir. Piyasa 
+koşullarındaki ani bir değişiklik, bu opsiyonların içsel değerini 
+artırabilir ve bu durum büyük zararlara neden olabilir. 
+SPAN, bu riski sözleşme bazında belirlenen “Kısa Opsiyon 
+Pozisyonu Minimum Riski” olarak adlandırmaktadır. Her bir 
+opsiyon sözleşmesindeki kısa pozisyonların, sözleşmenin 
+“Kısa Opsiyon Pozisyonu Minimum Riski” ile çarpılarak 
+portföy bazında toplanması suretiyle portföyün “Kısa 
+Opsiyon Pozisyonu Minimum Riski” hesaplanmaktadır.
+SPAN riski, portföyün kısa opsiyon pozisyonları minimum 
+riskinden az olamaz.
+Span Riski
+Maks. (Tarama Riski + Vadeler Arası Yayılma Pozisyonu 
+Riski - Ürünler Arası Yayılma Pozisyonu İndirimi),
+(Kısa Opsiyon Pozisyon Minimum Riski))
+3.2.1.4 Başlangıç Teminatı Hesaplanması 
+Opsiyonlar için hesap güncellemesi SPAN’de “Net Opsiyon 
+Değeri” olarak ifade edilmektedir. Net Opsiyon Değeri, bir
+portföydeki uzun opsiyon pozisyonları toplam değerinden
+kısa opsiyon pozisyonları toplam değerinin çıkarılması ile 
+hesaplanmaktadır.
+Net Opsiyon Değeri
+Uzun Opsiyon Pozisyonları Toplam Değeri - Kısa Opsiyon 
+Pozisyonları Toplam Değeri
+Portföyün başlangıç teminatı, SPAN Riski Değerinden Net 
+Opsiyon Değeri’nin çıkarılması ile bulunur. Net opsiyon 
+değerine esas olan fiyatlar Takasbank tarafından belirlenir.
+Başlangıç Teminatı
+Span Riski - Net Opsiyon Değeri
+3.2.1.5 Bulunması Gereken Teminatın Hesaplanması 
+Bulunması gereken teminat, başlangıç teminatı ile fiziki 
+teslimat teminatının toplamıdır.
+Fiziki Teslimat Teminatı
+Fiziki Teslimata Konu Dayanak Varlık Sayısı x Dayanak 
+Varlığın Fiyat Değişim Aralığı
+Bulunması Gereken Teminat
+Başlangıç Teminatı x Fiziki Teslimat Teminatı
+3.2.1.6 Sürdürme Teminatının Hesaplanması 
+Piyasada oluşan zararlar ya da nakit dışı teminatların 
+değerlerinin düşmesi sonucunda, bulunması gereken 
+teminatın inebileceği en düşük seviyeye sürdürme teminatı 
+denir. İşlem teminatı tutarının sürdürme teminatı seviyesinin 
+altına inmesi durumunda, Takasbank tarafından teminat 
+tamamlama çağrısı yapılır. Sürdürme teminatı seviyesi, 
+bulunması gereken teminatın %75’i olarak belirlenmiştir
+
+===== PAGE 24 =====
+4544
+ 4.1 Vadeli Piyasalar Neler Sağlar? 
+4.1.1 Riskten Korunma (Hedging) 
+Vadeli piyasalar yatırımcılara, sözleşmeye konu olan dayanak 
+varlığın işlem gördüğü spot piyasalarda ortaya çıkabilecek 
+fiyat değişimlerine karşı korunma olanağı sağlar.
+4.1.2 Etkin Fiyat Oluşumu 
+Finansal piyasalarda spot piyasanın yanında etkin 
+faaliyet gösteren bir vadeli piyasanın varlığı fiyat oluşum 
+mekanizmasının daha etkin çalışmasını sağlar. Vadeli 
+piyasanın olması nedeniyle, dayanak varlık fiyatına ilişkin 
+gelecek öngörüleri de devreye girdiği için spot piyasada 
+oluşan fiyat sadece spot piyasanın olduğu duruma göre çok 
+daha etkin olacaktır. 
+4.1.3 Yüksek Likidite 
+Vadeli piyasalar spot piyasalara göre daha düşük tutarlı 
+yatırımla aynı miktarda dayanak varlık üzerine yatırım 
+yapmaya olanak verdiğinden, daha geniş kitlelere yatırım 
+yapma fırsatı sunarak  her iki piyasanın da daha likit olmasını 
+sağlar.
+4.1.4 Kaldıraç Etkisi 
+Vadeli piyasalar yatırımcılara küçük miktarda yatırımla 
+büyük miktarlı pozisyon alma ve kaldıraç etkisi yardımıyla 
+yüksek kazanç elde etme imkânı sağlar. Ancak kaldıraç etkisi 
+yatırımcı için, spot piyasaya göre çok daha hızlı ve büyük 
+miktarda zarar etme riskini de içinde barındırır.
+4.1.5 Portföy Çeşitlendirmesi 
+Vadeli piyasalar portföy yöneticilerine, portföy 
+çeşitlendirmesi ve dolayısıyla da riskin yayılması açısından 
+değişik seçenekler sunar.
+4.1.6 Sentetik Pozisyonlar 
+Vadeli piyasalarda işlem gören ürünler kullanılarak spot piyasalarda işlem gören ürünlerinkine benzer getiri grafiği olan sentetik 
+pozisyonlar oluşturulabilir. Bu özelliği nedeniyle vadeli piyasalar, piyasalarda etkinliğin artmasına ve spot piyasadaki fiyat 
+dalgalanmalarının (volatilite) azalmasına yardımcı olur.
+4.2.1 Riskten Korunmak İsteyen Yatırımcılar 
+Bir sermaye piyasası aracı, döviz, kıymetli maden veya malı kullanan, bunlarda pozisyon tutan veya gelecekte teslimatını 
+bekleyen, ancak ilgili ürünün fiyatında gelecekte meydana gelebilecek beklenmedik değişimlerden korunmak isteyen 
+yatırımcılar, vadeli piyasalarda spot piyasadaki pozisyonlarının tersi yönünde pozisyon alırlar.
+4.2.2 Spekülatörler 
+Spekülatörler, korunma amacıyla işlem yapanlardan farklı olarak fiyat beklentileri çerçevesinde kâr elde etmek amacıyla yatırım 
+yapan kişiler veya kurumlardır. Vadeli piyasalar özellikle kaldıraç etkisi sebebiyle spekülatörlere oldukça önemli fırsatlar sunar. 
+Spekülatörler ise piyasanın likiditesini ve işlem hacmini arttırır. Bu yatırımcı tipinin risk alma konusundaki istekliliği diğer piyasa 
+katılımcılarına taşıdıkları riski spekülatörlere devrederek riskten korunma imkânı sağlar. 
+4.2.3 Arbitrajcılar 
+Arbitrajcılar, iki veya daha fazla piyasada eş zamanlı yapılan alım satım işlemleri ile risksiz kâr elde etmeyi hedefleyen kişiler 
+veya kurumlardır. Örneğin, bir mal coğrafi olarak farklı yerlerde farklı iki fiyattan işlem görüyorsa arbitrajcı hemen ucuz olan 
+yerden alır, pahalı olan yerde satar ve böylece risksiz kâr elde eder. Benzer şekilde spot piyasalar ile vadeli piyasalar arasındaki 
+taşıma maliyeti (cost of carry) nedeniyle oluşması gereken fiyattan farklı seviyelerde fiyat oluşması durumunda, arbitrajcılar 
+devreye girerek ucuz olan piyasada alış, pahalı olan piyasada satış yaparak piyasaları dengelerler. Arbitrajcıların varlığı piyasaların 
+birbirleriyle uyumlu ve dengeli hareket etmesine ve doğru fiyat oluşumuna katkı sağlar.
+ 4.2 Kimler Vadeli Piyasalarda İşlem Yapar?  
+Vadeli Piyasalarda 
+Yatırım4
+
+===== PAGE 25 =====
+
+
+===== PAGE 26 =====
+
+
+===== PAGE 27 =====
+/borsaistanbulEN
+/borsaistanbul /borsaistanbul
+Aralık 2013

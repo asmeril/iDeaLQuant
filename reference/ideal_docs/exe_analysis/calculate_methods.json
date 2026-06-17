@@ -1,0 +1,4304 @@
+{
+  "by_method": {
+    "Calculate": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "Calculate",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxTeminat",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.RiskClass",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.RiskTakasClass",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.RiskDusukLotClass",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.RiskYuksekHacimClass",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.RiskHisselerClass",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "StockAllBrokerRecord",
+        "method": "Calculate",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateATR": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateATR",
+        "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "R4"
+        ]
+      }
+    ],
+    "CalculateAccumulationDistribution": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAccumulationDistribution",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAccumulationSwingIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAccumulationSwingIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAkd": [
+      {
+        "class": "ideal.KurumAkdClass",
+        "method": "CalculateAkd",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      },
+      {
+        "class": "ideal.formHacim",
+        "method": "CalculateAkd",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateAkdx": [
+      {
+        "class": "ideal.HisseAkdClass",
+        "method": "CalculateAkdx",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateAlligator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAlligator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAroonOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAroonOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAroonUpDown": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAroonUpDown",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAverage1": [
+      {
+        "class": "ideal.cxDepth",
+        "method": "CalculateAverage1",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateAverage2": [
+      {
+        "class": "ideal.cxDepth",
+        "method": "CalculateAverage2",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateAverageDirectionalIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAverageDirectionalIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAverageDirectionalIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateAverageDirectionalIndexE": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAverageDirectionalIndexE",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAverageDirectionalRating": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAverageDirectionalRating",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAverageTrueRange": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAverageTrueRange",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateAwesomeOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateAwesomeOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoFK": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoFK",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoNetKar": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoNetKar",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoOdenmisSerm": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoOdenmisSerm",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoOzSerm": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoOzSerm",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoPD": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoPD",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBilancoPDDD": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBilancoPDDD",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBollingerBands": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBollingerBands",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateBollingerBandsStatic": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBollingerBandsStatic",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateBollingerWidth": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateBollingerWidth",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateButtonPositions": [
+      {
+        "class": "ideal.FormControl",
+        "method": "CalculateButtonPositions",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formHedefPanel",
+        "method": "CalculateButtonPositions",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formSablonRobot",
+        "method": "CalculateButtonPositions",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateChaikinMoneyFlow": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateChaikinMoneyFlow",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateChaikinOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateChaikinOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateChaikinVolatility": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateChaikinVolatility",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateChandeMomentum": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateChandeMomentum",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateChartIndex": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateChartIndex",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateCheckSum": [
+      {
+        "class": "ideal.MessageUtils",
+        "method": "CalculateCheckSum",
+        "return": "String",
+        "args": [
+          "String"
+        ]
+      }
+    ],
+    "CalculateColLeft": [
+      {
+        "class": "ideal.cxGrid",
+        "method": "CalculateColLeft",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateCommodityChannelIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateCommodityChannelIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateCommoditySelectionIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateCommoditySelectionIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateDUBIX": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDUBIX",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateData": [
+      {
+        "class": "ideal.formHacim",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formTarama",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formSistemSorgu",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formSistemOptimizer",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formHucresel",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formIndicatorValues",
+        "method": "CalculateData",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateDaysToExpiry": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateDaysToExpiry",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateDema": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDema",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateDemandIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDemandIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateDetrendedPriceOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDetrendedPriceOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateDigerSymbol": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDigerSymbol",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateDirectionalIndicator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDirectionalIndicator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateDirectionalMovement": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDirectionalMovement",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateDoubleMA": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateDoubleMA",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateEaseOfMovement": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateEaseOfMovement",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateEhlersDistCoefFilter": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateEhlersDistCoefFilter",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateEhlersFilter": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateEhlersFilter",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateElliotWaveOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateElliotWaveOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateEnvelope": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateEnvelope",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateEnvelopeStatic": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateEnvelopeStatic",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateFaizMb": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateFaizMb",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateFiboRet": [
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateFiboRet",
+        "return": "Void",
+        "args": [
+          "ValueClass System.Drawing.PointF",
+          "ValueClass System.Drawing.PointF",
+          "I4"
+        ]
+      }
+    ],
+    "CalculateFibonacciBands": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateFibonacciBands",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateFisherTransform": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateFisherTransform",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateFontHeight": [
+      {
+        "class": "Margin",
+        "method": "CalculateFontHeight",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateForecastOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateForecastOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateFxSniper": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateFxSniper",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateHHV": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateHHV",
+        "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "R4"
+        ]
+      }
+    ],
+    "CalculateHacim": [
+      {
+        "class": "ideal.HacimClass",
+        "method": "CalculateHacim",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateHighLowBox": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateHighLowBox",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateHighLowChange": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateHighLowChange",
+        "return": "Void",
+        "args": [
+          "String"
+        ]
+      }
+    ],
+    "CalculateHighLowChangeTuribGosterge": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateHighLowChangeTuribGosterge",
+        "return": "Void",
+        "args": [
+          "String"
+        ]
+      }
+    ],
+    "CalculateHighLowRange": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateHighLowRange",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateHisse": [
+      {
+        "class": "ideal.formHacim",
+        "method": "CalculateHisse",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateHisseAkd": [
+      {
+        "class": "ideal.HisseAkdClass",
+        "method": "CalculateHisseAkd",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateHisseKurum": [
+      {
+        "class": "ideal.HisseAkdClass",
+        "method": "CalculateHisseKurum",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateHisseKz": [
+      {
+        "class": "ideal.formFixPortfoy",
+        "method": "CalculateHisseKz",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formOms",
+        "method": "CalculateHisseKz",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateHullMA": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateHullMA",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateIchimoku": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateIchimoku",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateImkbMaliyet": [
+      {
+        "class": "ideal.formHesap",
+        "method": "CalculateImkbMaliyet",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateIncrement": [
+      {
+        "class": "ideal.formYatayBotChart",
+        "method": "CalculateIncrement",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "ValueClass System.Decimal",
+          "ValueClass System.Decimal",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formPacalChart",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formGridChart",
+        "method": "CalculateIncrement",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "ValueClass System.Decimal",
+          "ValueClass System.Decimal",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formSepetGetiri",
+        "method": "CalculateIncrement",
+        "return": "R4",
+        "args": [
+          "R4",
+          "R4"
+        ]
+      },
+      {
+        "class": "ideal.formTrendBotChart",
+        "method": "CalculateIncrement",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "ValueClass System.Decimal",
+          "ValueClass System.Decimal",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formHacim",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formHisseGenel",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formAlanSatanChart",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formPgc",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.formSistemOptimizer",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8"
+        ]
+      },
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateIncrement",
+        "return": "R4",
+        "args": [
+          "R4",
+          "R4"
+        ]
+      },
+      {
+        "class": "ideal.View.ViewFon.formFonGenel",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.View.ViewFon.formFonGrafik",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      },
+      {
+        "class": "ideal.View.ViewFon.FonGenelYedek.formFonGenel",
+        "method": "CalculateIncrement",
+        "return": "R8",
+        "args": [
+          "R8",
+          "R8",
+          "Boolean"
+        ]
+      }
+    ],
+    "CalculateIntradayMomentumIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateIntradayMomentumIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateIslemKasa": [
+      {
+        "class": "ideal.KodRobotClass",
+        "method": "CalculateIslemKasa",
+        "return": "Void",
+        "args": [
+          "R8"
+        ]
+      }
+    ],
+    "CalculateKZ": [
+      {
+        "class": "ideal.KodRobotClass",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.YatayBotClass",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.Arbitraj1Class",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.PacalBotClass",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.GridBotClass",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.TrendBotClass",
+        "method": "CalculateKZ",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateKademe": [
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateKademe",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateKairi": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateKairi",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateKeltnerChannel": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateKeltnerChannel",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateKlingerOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateKlingerOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateKurumHisse": [
+      {
+        "class": "ideal.KurumAkdClass",
+        "method": "CalculateKurumHisse",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateKurumTum": [
+      {
+        "class": "ideal.KurumAkdClass",
+        "method": "CalculateKurumTum",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      },
+      {
+        "class": "ideal.formHacim",
+        "method": "CalculateKurumTum",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateLLV": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLLV",
+        "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "R4"
+        ]
+      }
+    ],
+    "CalculateLinReg": [
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateLinReg",
+        "return": "Void",
+        "args": [
+          "I4",
+          "I4"
+        ]
+      }
+    ],
+    "CalculateLinearRegression": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLinearRegression",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateLinearRegressionIndicator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLinearRegressionIndicator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateLinearRegressionIntercept": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLinearRegressionIntercept",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateLinearRegressionSlope": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLinearRegressionSlope",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateLot": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateLot",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateMA": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMA",
+        "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "ValueClass ideal.enAvrMethods",
+          "R4"
+        ]
+      }
+    ],
+    "CalculateMMA": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMMA",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateMacd": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMacd",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateMacdHistogram": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMacdHistogram",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateManuel": [
+      {
+        "class": "ideal.formBmc",
+        "method": "CalculateManuel",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateMassIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMassIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateMaxDD": [
+      {
+        "class": "ideal.cxSistem",
+        "method": "CalculateMaxDD",
+        "return": "R4",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateMaxDdDate": [
+      {
+        "class": "ideal.cxSistem",
+        "method": "CalculateMaxDdDate",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateMinMax2": [
+      {
+        "class": "ideal.formSepetGetiri",
+        "method": "CalculateMinMax2",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateMomentum": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMomentum",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateMoneyFlow": [
+      {
+        "class": "ideal.cxIslemler",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthTurib",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formEmirSira",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthImkb",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formTradeImkb",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthBorrow",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthClearing",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthRepo2",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthVip",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthRepo1",
+        "method": "CalculateMoneyFlow",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateMoneyFlowIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMoneyFlowIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateMoneyflow": [
+      {
+        "class": "ideal.formTradeTurib",
+        "method": "CalculateMoneyflow",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formTradeVip",
+        "method": "CalculateMoneyflow",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateMovingAverage": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMovingAverage",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateMovingAverageStatic": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateMovingAverageStatic",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateNegativeVolumeIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateNegativeVolumeIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateNonlinearEhlersFilter": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateNonlinearEhlersFilter",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>",
+          "R4"
+        ]
+      }
+    ],
+    "CalculateOnBalanceVolume": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateOnBalanceVolume",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateOpenInterest": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateOpenInterest",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePGC": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePGC",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePHPL01": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePHPL01",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateParabolicSAR": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateParabolicSAR",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateParabolicSAR",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePerformance": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePerformance",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.formTahta",
+        "method": "CalculatePerformance",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formBmc",
+        "method": "CalculatePerformance",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formSablonRobot",
+        "method": "CalculatePerformance",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculatePgc": [
+      {
+        "class": "ideal.cxIslemler",
+        "method": "CalculatePgc",
+        "return": "R8",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< ValueClass ideal.IslemStruct1>",
+          "I4",
+          "I4",
+          "String",
+          "ByRef R8",
+          "ByRef R8",
+          "ByRef GenericInst Class System.Collections.Generic.List`1< GenericInst ValueClass System.Collections.Generic.KeyValuePair`2< String, R8>>",
+          "ByRef GenericInst Class System.Collections.Generic.List`1< GenericInst ValueClass System.Collections.Generic.KeyValuePair`2< String, R8>>"
+        ]
+      },
+      {
+        "class": "ideal.formEmirSira",
+        "method": "CalculatePgc",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formPgcOzet",
+        "method": "CalculatePgc",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.formDepthImkb",
+        "method": "CalculatePgc",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculatePgcGunVol": [
+      {
+        "class": "ideal.cxIslemler",
+        "method": "CalculatePgcGunVol",
+        "return": "R8",
+        "args": [
+          "String",
+          "ValueClass System.DateTime",
+          "I4"
+        ]
+      }
+    ],
+    "CalculatePivot": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePivot",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePivotBand": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePivotBand",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePolarizedFractalEfficiency": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePolarizedFractalEfficiency",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePositiveVolumeIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePositiveVolumeIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePriceOscillatorPercent": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceOscillatorPercent",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceOscillatorPercentHistogram": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceOscillatorPercentHistogram",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceOscillatorPoints": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceOscillatorPoints",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceOscillatorPointsHistogram": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceOscillatorPointsHistogram",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceRange": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceRange",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculatePriceRocPercent": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceRocPercent",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceRocPoints": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceRocPoints",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceRocPoints",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculatePriceStep": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculatePriceStep",
+        "return": "Void",
+        "args": []
+      },
+      {
+        "class": "ideal.cxPortfolio",
+        "method": "CalculatePriceStep",
+        "return": "R4",
+        "args": [
+          "String"
+        ]
+      }
+    ],
+    "CalculatePriceVolumeTrend": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculatePriceVolumeTrend",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateProjectionBands": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateProjectionBands",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateProjectionBandwidth": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateProjectionBandwidth",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateProjectionOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateProjectionOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateQQE": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateQQE",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateQQEI": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateQQEI",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateQstick": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateQstick",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateRAVI": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRAVI",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateRSIDenvelope": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRSIDenvelope",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateRangeIndicator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRangeIndicator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateRangeIndicator",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateRangeSymbol": [
+      {
+        "class": "ideal.ChartControl",
+        "method": "CalculateRangeSymbol",
+        "return": "Void",
+        "args": [
+          "I4"
+        ]
+      }
+    ],
+    "CalculateRelativeMomentumIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRelativeMomentumIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateRelativeStrengthIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRelativeStrengthIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateRelativeVolatilityIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRelativeVolatilityIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateRsquared": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateRsquared",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateSembol": [
+      {
+        "class": "ideal.AlanSatanClass",
+        "method": "CalculateSembol",
+        "return": "GenericInst Class System.Collections.Generic.List`1< Class ideal.AlanSatanClass>",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< ValueClass ideal.IslemStruct1>"
+        ]
+      }
+    ],
+    "CalculateSenti": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateSenti",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>",
+          "ValueClass ideal.exIndicatorTypes"
+        ]
+      }
+    ],
+    "CalculateSistem": [
+      {
+        "class": "ideal.formSinyalDonus",
+        "method": "CalculateSistem",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateStandardDeviation": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStandardDeviation",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateStandardError": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStandardError",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateStandardErrorBands": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStandardErrorBands",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateStartKasa": [
+      {
+        "class": "ideal.KodRobotClass",
+        "method": "CalculateStartKasa",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateStochasticFastOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticFastOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateStochasticMomentumIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticMomentumIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticMomentumIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateStochasticOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateStochasticRSI": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticRSI",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateStochasticSlow": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateStochasticSlow",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateSwingIndex": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateSwingIndex",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateTKE": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTKE",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateTTI": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTTI",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTakas": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTakas",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateTavanTaban": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateTavanTaban",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateTema": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTema",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTeminat": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateTeminat",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateTeorikPrice": [
+      {
+        "class": "ideal.cxBasic",
+        "method": "CalculateTeorikPrice",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateTillsonT3": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTillsonT3",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateTimeSeriesForecast": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTimeSeriesForecast",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateToma": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateToma",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateToma",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>",
+          "ValueClass ideal.enAvrMethods"
+        ]
+      }
+    ],
+    "CalculateTomaPuan": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTomaPuan",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTomas": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTomas",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTrendScore": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTrendScore",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTrix": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTrix",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateTufeTuik": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTufeTuik",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateTypicalPrice": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateTypicalPrice",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateUltimateOscillator": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateUltimateOscillator",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateUserEndeks": [
+      {
+        "class": "ideal.MainForm",
+        "method": "CalculateUserEndeks",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateUserSymbols": [
+      {
+        "class": "ideal.MainForm",
+        "method": "CalculateUserSymbols",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateVerticalHorizontalFilter": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVerticalHorizontalFilter",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateViopKZ": [
+      {
+        "class": "Request",
+        "method": "CalculateViopKZ",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateViopKZAnlik": [
+      {
+        "class": "Request",
+        "method": "CalculateViopKZAnlik",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateViopKZFifoMaliyet": [
+      {
+        "class": "Request",
+        "method": "CalculateViopKZFifoMaliyet",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "R8",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateViopKZLastPrice": [
+      {
+        "class": "Request",
+        "method": "CalculateViopKZLastPrice",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "R8",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateViopPositionSize": [
+      {
+        "class": "Request",
+        "method": "CalculateViopPositionSize",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateViopSettlementPrice": [
+      {
+        "class": "Request",
+        "method": "CalculateViopSettlementPrice",
+        "return": "ValueClass System.Decimal",
+        "args": [
+          "String",
+          "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+          "ValueClass System.Decimal"
+        ]
+      }
+    ],
+    "CalculateVipMaliyet": [
+      {
+        "class": "ideal.formHesap",
+        "method": "CalculateVipMaliyet",
+        "return": "Void",
+        "args": []
+      }
+    ],
+    "CalculateVolatility": [
+      {
+        "class": "ideal.cxChartData",
+        "method": "CalculateVolatility",
+        "return": "R8",
+        "args": [
+          "String",
+          "I4"
+        ]
+      }
+    ],
+    "CalculateVolume": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolume",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeOscillatorPercent": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeOscillatorPercent",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeOscillatorPercentHistogram": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeOscillatorPercentHistogram",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeOscillatorPoints": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeOscillatorPoints",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeOscillatorPointsHistogram": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeOscillatorPointsHistogram",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeSymbol": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeSymbol",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateVolumeSymbolPercent": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateVolumeSymbolPercent",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateWeightedClose": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateWeightedClose",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateWilliamsAccDist": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateWilliamsAccDist",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      }
+    ],
+    "CalculateWilliamsR": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateWilliamsR",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+        ]
+      },
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateWilliamsR",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateYurticiLisans": [
+      {
+        "class": "ideal.cxCustomer",
+        "method": "CalculateYurticiLisans",
+        "return": "ValueClass System.Decimal",
+        "args": []
+      }
+    ],
+    "CalculateZigZagPercent": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateZigZagPercent",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ],
+    "CalculateZigZagPoints": [
+      {
+        "class": "ideal.cxIndicator",
+        "method": "CalculateZigZagPoints",
+        "return": "Void",
+        "args": [
+          "GenericInst Class System.Collections.Generic.List`1< R4>"
+        ]
+      }
+    ]
+  },
+  "all": [
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMA",
+      "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "ValueClass ideal.enAvrMethods",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateHHV",
+      "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLLV",
+      "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateATR",
+      "return": "GenericInst Class System.Collections.Generic.List`1< R4>",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "Calculate",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAlligator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBollingerBands",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBollingerBandsStatic",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDema",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDoubleMA",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateEhlersFilter",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateEhlersDistCoefFilter",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateNonlinearEhlersFilter",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateEnvelope",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateEnvelopeStatic",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateFibonacciBands",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateHighLowBox",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateHighLowRange",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateIchimoku",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateKeltnerChannel",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLinearRegression",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMovingAverage",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMovingAverageStatic",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateParabolicSAR",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateParabolicSAR",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePivotBand",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceRange",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateProjectionBands",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePHPL01",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStandardErrorBands",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTema",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTimeSeriesForecast",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateToma",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateToma",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>",
+        "ValueClass ideal.enAvrMethods"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTomas",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTypicalPrice",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateWeightedClose",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateZigZagPercent",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateZigZagPoints",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAccumulationSwingIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAccumulationDistribution",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAverageDirectionalIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAverageDirectionalIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAverageDirectionalIndexE",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAverageDirectionalRating",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAroonUpDown",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAroonOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAverageTrueRange",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateAwesomeOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoFK",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoNetKar",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoOdenmisSerm",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoOzSerm",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoPD",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBilancoPDDD",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateBollingerWidth",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateChandeMomentum",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateCommodityChannelIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateCommoditySelectionIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateChaikinMoneyFlow",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateChaikinOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateChaikinVolatility",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDemandIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDetrendedPriceOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDirectionalIndicator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDirectionalMovement",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateEaseOfMovement",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateForecastOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateIntradayMomentumIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateKairi",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateKlingerOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLinearRegressionIndicator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLinearRegressionSlope",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLinearRegressionIntercept",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateLot",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMacd",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMacdHistogram",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMassIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMomentum",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMoneyFlowIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateNegativeVolumeIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateOnBalanceVolume",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateOpenInterest",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePerformance",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePolarizedFractalEfficiency",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePositiveVolumeIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceOscillatorPercent",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceOscillatorPercentHistogram",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceOscillatorPoints",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceOscillatorPointsHistogram",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceRocPercent",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceRocPoints",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceRocPoints",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePriceVolumeTrend",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateProjectionBandwidth",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateProjectionOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateQstick",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRangeIndicator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRAVI",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRelativeMomentumIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRelativeStrengthIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRelativeVolatilityIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRSIDenvelope",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateRsquared",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStandardDeviation",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStandardError",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticMomentumIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticMomentumIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticFastOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticRSI",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateSwingIndex",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTakas",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTKE",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTrendScore",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTrix",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDUBIX",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateUltimateOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVerticalHorizontalFilter",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolume",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeOscillatorPercent",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeOscillatorPercentHistogram",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeOscillatorPoints",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeOscillatorPointsHistogram",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeSymbol",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateVolumeSymbolPercent",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateWilliamsAccDist",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateWilliamsR",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateWilliamsR",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateFxSniper",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTomaPuan",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateQQE",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateQQEI",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateDigerSymbol",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateElliotWaveOscillator",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateStochasticSlow",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTTI",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateMMA",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePivot",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTillsonT3",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateHullMA",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateSenti",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>",
+        "ValueClass ideal.exIndicatorTypes"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculatePGC",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateFaizMb",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateTufeTuik",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBar>"
+      ]
+    },
+    {
+      "class": "ideal.cxIndicator",
+      "method": "CalculateFisherTransform",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.MessageUtils",
+      "method": "CalculateCheckSum",
+      "return": "String",
+      "args": [
+        "String"
+      ]
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateChartIndex",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateDaysToExpiry",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateHighLowChange",
+      "return": "Void",
+      "args": [
+        "String"
+      ]
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateHighLowChangeTuribGosterge",
+      "return": "Void",
+      "args": [
+        "String"
+      ]
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculatePriceStep",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateTeorikPrice",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateTeminat",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxBasic",
+      "method": "CalculateTavanTaban",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxChartData",
+      "method": "CalculateVolatility",
+      "return": "R8",
+      "args": [
+        "String",
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.cxCustomer",
+      "method": "CalculateYurticiLisans",
+      "return": "ValueClass System.Decimal",
+      "args": []
+    },
+    {
+      "class": "ideal.cxDepth",
+      "method": "CalculateAverage1",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.cxDepth",
+      "method": "CalculateAverage2",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.AlanSatanClass",
+      "method": "CalculateSembol",
+      "return": "GenericInst Class System.Collections.Generic.List`1< Class ideal.AlanSatanClass>",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< ValueClass ideal.IslemStruct1>"
+      ]
+    },
+    {
+      "class": "ideal.cxTeminat",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxIslemler",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxIslemler",
+      "method": "CalculatePgc",
+      "return": "R8",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< ValueClass ideal.IslemStruct1>",
+        "I4",
+        "I4",
+        "String",
+        "ByRef R8",
+        "ByRef R8",
+        "ByRef GenericInst Class System.Collections.Generic.List`1< GenericInst ValueClass System.Collections.Generic.KeyValuePair`2< String, R8>>",
+        "ByRef GenericInst Class System.Collections.Generic.List`1< GenericInst ValueClass System.Collections.Generic.KeyValuePair`2< String, R8>>"
+      ]
+    },
+    {
+      "class": "ideal.cxIslemler",
+      "method": "CalculatePgcGunVol",
+      "return": "R8",
+      "args": [
+        "String",
+        "ValueClass System.DateTime",
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.HacimClass",
+      "method": "CalculateHacim",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.KurumAkdClass",
+      "method": "CalculateAkd",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.KurumAkdClass",
+      "method": "CalculateKurumTum",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.KurumAkdClass",
+      "method": "CalculateKurumHisse",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.HisseAkdClass",
+      "method": "CalculateAkdx",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.HisseAkdClass",
+      "method": "CalculateHisseAkd",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.HisseAkdClass",
+      "method": "CalculateHisseKurum",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.cxPortfolio",
+      "method": "CalculatePriceStep",
+      "return": "R4",
+      "args": [
+        "String"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopKZAnlik",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopPositionSize",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopSettlementPrice",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopKZ",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopKZLastPrice",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "R8",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Request",
+      "method": "CalculateViopKZFifoMaliyet",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "String",
+        "R8",
+        "GenericInst Class System.Collections.Generic.List`1< Class GerceklesenIslemClass>",
+        "ValueClass System.Decimal"
+      ]
+    },
+    {
+      "class": "Margin",
+      "method": "CalculateFontHeight",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxGrid",
+      "method": "CalculateColLeft",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.RiskClass",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.RiskTakasClass",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.RiskDusukLotClass",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.RiskYuksekHacimClass",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.RiskHisselerClass",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formFixPortfoy",
+      "method": "CalculateHisseKz",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.KodRobotClass",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.KodRobotClass",
+      "method": "CalculateStartKasa",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.KodRobotClass",
+      "method": "CalculateIslemKasa",
+      "return": "Void",
+      "args": [
+        "R8"
+      ]
+    },
+    {
+      "class": "ideal.formDepthTurib",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formOms",
+      "method": "CalculateHisseKz",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formTradeTurib",
+      "method": "CalculateMoneyflow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.FormControl",
+      "method": "CalculateButtonPositions",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.YatayBotClass",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formYatayBotChart",
+      "method": "CalculateIncrement",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "ValueClass System.Decimal",
+        "ValueClass System.Decimal",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.Arbitraj1Class",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formSinyalDonus",
+      "method": "CalculateSistem",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.PacalBotClass",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formPacalChart",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.formGridChart",
+      "method": "CalculateIncrement",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "ValueClass System.Decimal",
+        "ValueClass System.Decimal",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.GridBotClass",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHedefPanel",
+      "method": "CalculateButtonPositions",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formSepetGetiri",
+      "method": "CalculateIncrement",
+      "return": "R4",
+      "args": [
+        "R4",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.formSepetGetiri",
+      "method": "CalculateMinMax2",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.TrendBotClass",
+      "method": "CalculateKZ",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formTrendBotChart",
+      "method": "CalculateIncrement",
+      "return": "ValueClass System.Decimal",
+      "args": [
+        "ValueClass System.Decimal",
+        "ValueClass System.Decimal",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.formTahta",
+      "method": "CalculatePerformance",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formBmc",
+      "method": "CalculateManuel",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formBmc",
+      "method": "CalculatePerformance",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHacim",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.formHacim",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHacim",
+      "method": "CalculateAkd",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHacim",
+      "method": "CalculateKurumTum",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHacim",
+      "method": "CalculateHisse",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHisseGenel",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.formTarama",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formAlanSatanChart",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "StockAllBrokerRecord",
+      "method": "Calculate",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formEmirSira",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formEmirSira",
+      "method": "CalculatePgc",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formPgcOzet",
+      "method": "CalculatePgc",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formSablonRobot",
+      "method": "CalculatePerformance",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formSablonRobot",
+      "method": "CalculateButtonPositions",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthImkb",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthImkb",
+      "method": "CalculatePgc",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formTradeImkb",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formPgc",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.formSistemSorgu",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formSistemOptimizer",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8"
+      ]
+    },
+    {
+      "class": "ideal.formSistemOptimizer",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHesap",
+      "method": "CalculateImkbMaliyet",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHesap",
+      "method": "CalculateVipMaliyet",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formHucresel",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formIndicatorValues",
+      "method": "CalculateData",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.cxSistem",
+      "method": "CalculateMaxDD",
+      "return": "R4",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.cxSistem",
+      "method": "CalculateMaxDdDate",
+      "return": "Void",
+      "args": [
+        "GenericInst Class System.Collections.Generic.List`1< R4>"
+      ]
+    },
+    {
+      "class": "ideal.formDepthBorrow",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthClearing",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthRepo2",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthVip",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formTradeVip",
+      "method": "CalculateMoneyflow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.formDepthRepo1",
+      "method": "CalculateMoneyFlow",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.MainForm",
+      "method": "CalculateUserEndeks",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.MainForm",
+      "method": "CalculateUserSymbols",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateRangeSymbol",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateRangeIndicator",
+      "return": "Void",
+      "args": [
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateIncrement",
+      "return": "R4",
+      "args": [
+        "R4",
+        "R4"
+      ]
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateFiboRet",
+      "return": "Void",
+      "args": [
+        "ValueClass System.Drawing.PointF",
+        "ValueClass System.Drawing.PointF",
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateLinReg",
+      "return": "Void",
+      "args": [
+        "I4",
+        "I4"
+      ]
+    },
+    {
+      "class": "ideal.ChartControl",
+      "method": "CalculateKademe",
+      "return": "Void",
+      "args": []
+    },
+    {
+      "class": "ideal.View.ViewFon.formFonGenel",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.View.ViewFon.formFonGrafik",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    },
+    {
+      "class": "ideal.View.ViewFon.FonGenelYedek.formFonGenel",
+      "method": "CalculateIncrement",
+      "return": "R8",
+      "args": [
+        "R8",
+        "R8",
+        "Boolean"
+      ]
+    }
+  ]
+}

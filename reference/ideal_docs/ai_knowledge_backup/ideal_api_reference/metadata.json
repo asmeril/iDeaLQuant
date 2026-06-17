@@ -1,0 +1,9 @@
+{
+  "title": "iDeal Platform System API Reference",
+  "summary": "Complete API reference for iDeal trading platform (Sezai Kılıç). Covers order management (EmirSembol, EmirIslem, EmirTipi, EmirMiktari, EmirFiyati, EmirSuresi, EmirGonder), VİOP functions (ViopHesapOku, RobotViopAktif), position tracking (PozisyonKontrolOku/Guncelle), state management (SayiTablosu, SozcukTablosu), real-time data (SonFiyat, AlisFiyat, SatisFiyat, YuzeyselVeriOku, KademeAnalizOku, DerinlikVerisiOku), technical indicators (100+ indicators), robot framework, query system, and optimization module.",
+  "created_at": "2026-04-01T23:25:00+03:00",
+  "references": [
+    "D:/Projects/IdealQuant/reference/iDeal_SistemGenel.pdf",
+    "D:/Projects/IdealQuant/reference/ideal_docs/ideal_sistem_genel_FULL.txt"
+  ]
+}

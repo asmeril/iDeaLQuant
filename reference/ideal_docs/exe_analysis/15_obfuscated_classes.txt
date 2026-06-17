@@ -1,0 +1,253 @@
+# Obfuscated sınıflar (alan içerenler) — 253 adet
+
+NOT: Obfuscated sınıflar orijinal isimlerini kaybetmiş ama içerikleri kalıcı
+
+
+class <>c  [2153 üye]
+
+class <>c  [1122 üye]
+
+class <>c  [594 üye]
+
+class <>c  [450 üye]
+
+class <>c  [415 üye]
+
+class <>c  [338 üye]
+
+class <>c  [206 üye]
+
+class <Login>d__60  [171 üye]
+  field: String                    accountnameX
+  field: String                    passwordX
+  field: String                    parolaX
+
+class <>c  [140 üye]
+
+class <>c  [118 üye]
+
+class <>c  [100 üye]
+
+class <>c  [95 üye]
+
+class <>c  [86 üye]
+
+class <>c  [84 üye]
+
+class <>c  [75 üye]
+
+class <>c  [68 üye]
+
+class <>c  [61 üye]
+
+class <>c  [59 üye]
+
+class <>c  [57 üye]
+
+class <>c  [54 üye]
+
+class <>c  [45 üye]
+
+class <>c  [43 üye]
+
+class <OrderInsert>d__24  [41 üye]
+  field: Class AccountRecord       accountX
+  field: Class BuySellRecord       buySellX
+
+class <>c  [41 üye]
+
+class <>c  [41 üye]
+
+class <>c  [40 üye]
+
+class <>c  [39 üye]
+
+class <>c  [38 üye]
+
+class <>c  [37 üye]
+
+class <>c  [37 üye]
+
+class <GetRemoteIP>d__42  [36 üye]
+  field: Class AccountRecord       account
+
+class <>c  [34 üye]
+
+class <>c  [33 üye]
+
+class <>c  [33 üye]
+
+class <>c  [31 üye]
+
+class <>c  [31 üye]
+
+class <>c  [30 üye]
+
+class <>c  [30 üye]
+
+class <>c  [29 üye]
+
+class <>c  [29 üye]
+
+class <>c  [29 üye]
+
+class <>c  [28 üye]
+
+class <GetSymbols>d__31  [27 üye]
+  field: Class AccountRecord       accountX
+
+class <>c  [27 üye]
+
+class <>c  [27 üye]
+
+class <>c  [26 üye]
+
+class <>c  [26 üye]
+
+class <>c  [25 üye]
+
+class <DownloadFileAsync>d__27  [25 üye]
+  field: String                    url
+  field: String                    destinationFilePath
+  field: GenericInst Class System.IProgress`1< R8> progress
+  field: Class System.Action       onCompleted
+
+class <>c  [25 üye]
+
+class <>c  [25 üye]
+
+class <>o__13  [24 üye]
+
+class <>c  [23 üye]
+
+class <varantOpsiyonSecListele>d__54  [23 üye]
+
+class <ReadLatestTakasDataAsync>d__49  [22 üye]
+  field: String                    takasDirectory
+
+class <>c  [22 üye]
+
+class <DoldurKullanimFiyatComboBox>d__27  [21 üye]
+  field: GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBasic> filteredList
+
+class <>o__14  [21 üye]
+
+class <>o__15  [21 üye]
+
+class <UpdateDataGridViewAsync>d__46  [20 üye]
+  field: GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBasic> opsiyonList
+  field: GenericInst Class System.Collections.Generic.Dictionary`2< String, R8> takasData
+
+class <>c  [19 üye]
+
+class <PlaceOrder>d__7  [18 üye]
+  field: String                    symbol
+  field: String                    side
+  field: ValueClass System.Decimal quantity
+  field: ValueClass System.Decimal price
+
+class <OrderHistoryBySymbol>d__28  [18 üye]
+  field: Class AccountRecord       accountX
+  field: String                    marketSymbolX
+
+class <>c  [18 üye]
+
+class <>c  [18 üye]
+
+class <>c  [18 üye]
+
+class <GetAccountBalance>d__6  [17 üye]
+  field: String                    asset
+
+class <GetOrdersHistory>d__18  [17 üye]
+  field: Class AccountRecord       accountX
+
+class <GetTrades>d__38  [17 üye]
+  field: Class AccountRecord       accountX
+
+class <GetUserTrades>d__27  [17 üye]
+  field: Class AccountRecord       accountX
+
+class <>c  [17 üye]
+
+class <DoldurFiyatComboBox>d__26  [17 üye]
+  field: GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBasic> filteredList
+
+class <>c  [17 üye]
+
+class <>c  [17 üye]
+
+class <>c  [16 üye]
+
+class <>c  [16 üye]
+
+class <>c  [16 üye]
+
+class <>c  [16 üye]
+
+class <GetAccountInfo>d__9  [15 üye]
+
+class <button_Click>d__7  [15 üye]
+  field: Object                    sender
+  field: Class System.EventArgs    e
+
+class <button_Click>d__7  [15 üye]
+  field: Object                    sender
+  field: Class System.EventArgs    e
+
+class <>c  [15 üye]
+
+class <>c  [15 üye]
+
+class <>c  [15 üye]
+
+class <CancelOrders>d__19  [14 üye]
+  field: Class AccountRecord       accountX
+  field: String                    orderId
+
+class <GetAccountInfo>d__16  [14 üye]
+  field: Class AccountRecord       accountX
+
+class <Orderbook>d__30  [14 üye]
+  field: Class AccountRecord       accountX
+  field: String                    marketSymbolX
+
+class <>o__190  [14 üye]
+
+class <UpdateDataGridViewWithPriceAsync>d__57  [14 üye]
+  field: GenericInst Class System.Collections.Generic.List`1< Class ideal.cxBasic> opsiyonList
+  field: GenericInst Class System.Collections.Generic.Dictionary`2< String, R8> takasData
+  field: R4                        selectedDateClosePrice
+
+class <GetAsets>d__32  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetFutureExchangeInfo>d__21  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetFutureOrders>d__23  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetFuturePozitions>d__22  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetKlineHistory>d__35  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetOrders>d__20  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetTickers>d__39  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetTradesOhlc>d__36  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <GetWallet>d__34  [13 üye]
+  field: Class AccountRecord       accountX
+
+class <>c  [13 üye]
+
+class <dateTimePickerTarih_ValueChanged>d__24  [13 üye]
+  field: Object                    sender
+  field: Class System.EventArgs    e

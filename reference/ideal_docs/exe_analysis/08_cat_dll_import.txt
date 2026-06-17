@@ -1,0 +1,15 @@
+# Kategori: dll_import (13 öğe)
+
+<externalIP>5__7
+DataAktarimPort
+DataAktarimPortNo
+Gdi32.dll
+GetIsYatirimPortHeader
+ImportFromFile
+ImportFromFileMetaTrader
+ImportFromFileMetaTrader_Click
+ImportFromFile_Click
+kernel32.dll
+mscoree.dll
+user32.dll
+zlib64.dll

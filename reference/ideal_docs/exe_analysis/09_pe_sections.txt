@@ -1,0 +1,5 @@
+Machine    : 0x014C (x86)
+Section sz : 3
+  Section [0]: .text     VA=0x00002000  VSize=18263748  RSize=18264064  Flags=0x60000020
+  Section [1]: .rsrc     VA=0x0116E000  VSize=   23152  RSize=   23552  Flags=0x40000040
+  Section [2]: .reloc    VA=0x01174000  VSize=      12  RSize=     512  Flags=0x42000040

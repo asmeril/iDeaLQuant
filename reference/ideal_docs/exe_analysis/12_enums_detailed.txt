@@ -1,0 +1,70 @@
+
+enum AwgKvrHJUS3TxryUsj
+
+enum ButtonTypes
+
+enum ButtonTypes
+
+enum ButtonTypes
+
+enum IDealOrderType
+
+enum Microsoft.Office.Interop.Excel.XlFileFormat
+
+enum Microsoft.Office.Interop.Excel.XlPlatform
+
+enum Microsoft.Office.Interop.Excel.XlSaveAsAccessMode
+
+enum ideal.AccountType
+
+enum ideal.AlgoTypes
+
+enum ideal.ConnectionState
+
+enum ideal.FixRouterAccountEnum
+
+enum ideal.LoadingEffectType
+
+enum ideal.MessageField
+
+enum ideal.MessageType
+
+enum ideal.OrderCapacity
+
+enum ideal.OrderSide
+
+enum ideal.OrderStatus
+
+enum ideal.OrderType
+
+enum ideal.Piyasa
+
+enum ideal.TimeInForce
+
+enum ideal.TradeBotOrderType
+
+enum ideal.TradeBotRequestType
+
+enum ideal.TradeBotStatus
+
+enum ideal.enAlarmTip
+
+enum ideal.enAvrMethods
+
+enum ideal.enCheckTypes
+
+enum ideal.enDrawStyles
+
+enum ideal.enElementTypes
+
+enum ideal.enInsertAction
+
+enum ideal.enMouseAction
+
+enum ideal.enPriceFields
+
+enum ideal.exIndicatorTypes
+
+enum ideal.exSistemObjectTypes
+
+enum idealgoTab

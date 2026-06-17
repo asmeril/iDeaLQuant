@@ -1,0 +1,8 @@
+{
+  "title": "iDeal Platform Primary Reference Rule (ideal_docs)",
+  "summary": "CRITICAL SYSTEM DIRECTIVE: The folder D:\\Projects\\IdealQuant\\reference\\ideal_docs\\ is the absolute source of truth for iDeal API and algorithmic development. ALWAYS consult files in this folder using grep_search or reading the text files before assuming iDeal API functionalities. This applies to ALL IdealData related projects.",
+  "created_at": "2026-04-02T23:58:00+03:00",
+  "references": [
+    "D:/Projects/IdealQuant/reference/ideal_docs"
+  ]
+}

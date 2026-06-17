@@ -1,0 +1,41 @@
+
+# ideal.exe — Analiz Özeti
+Tarih      : 2026-04-11
+Dosya      : D:\iDeal\ideal.exe (17.5 MB, .NET 4.6, x86)
+MVID       : 54F36D18-35C8-4D4A-A0D4-BC34219BABC3
+
+## Tip İstatistikleri
+- Toplam TypeDef    : 3221
+- Anlamlı sınıf    : 2126
+- Obfuscated sınıf : 1060
+- Enum             : 35
+- Veri modeli sınıf: 1117
+- Finans sınıfı    : 361
+
+## Koruma Durumu
+- ildasm: "Protected module" hatası (IL kodu dump edilemedi)
+- Metadata: Başarıyla okundu (42MB)
+- Bilinen obfuscator imzası: YOK
+- Kısa/hash-like sınıf isimleri: 1060 adet → hafif obfuscation var
+
+## Önemli Teknik Alanlar (String Analizi)
+- Finans string'leri       : 3068
+- DB/SQL ilgili string'ler : 1499
+- Network string'leri      : 1021
+- Sütun adı benzeri string : 878
+
+## Platform
+- Makine: x86 (0x014C)
+- Runtime: .NET Framework 4.6
+- Sections: .text (17.4MB), .rsrc (22KB), .reloc (0.5KB)
+
+## İlgili Çıktı Dosyaları
+- 11_meaningful_classes.txt    — Anlamlı tüm class/interface + fields/props
+- 12_enums_detailed.txt        — Tüm enum değerleri
+- 13_data_models_top200.txt    — En çok alana sahip 200 veri modeli
+- 14_finance_classes.txt       — Finans/Trading ilgili sınıflar
+- 15_obfuscated_classes.txt    — Obfuscated ama içerik dolu sınıflar
+- 06_strings_ascii.txt         — 111K ASCII string
+- 07_strings_unicode.txt       — 26K Unicode string
+- 08_cat_finance.txt           — 3068 finans string'i
+- 08_cat_column_name.txt       — 878 sütun adı / enum değeri

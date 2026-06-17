@@ -1,0 +1,5 @@
+# Koruma Analizi
+
+Bulunan korumalar: Tespit edilemedi
+
+NOT: ildasm 'Protected module' hatası verdi — CF_STRONGNAME veya custom flag
