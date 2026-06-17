@@ -1,0 +1,2613 @@
+rid,type,name,property_type,accessors
+1,<>f__AnonymousType0`4,symbol,!0,get_symbol
+2,<>f__AnonymousType0`4,type,!1,get_type
+3,<>f__AnonymousType0`4,side,!2,get_side
+4,<>f__AnonymousType0`4,quantity,!3,get_quantity
+5,<>f__AnonymousType1`1,MarketSegmentID,!0,get_MarketSegmentID
+6,<>f__AnonymousType2`1,ProductID,!0,get_ProductID
+7,<>f__AnonymousType3`1,ProductGroupID,!0,get_ProductGroupID
+8,<>f__AnonymousType4`1,ProductSubGroupID,!0,get_ProductSubGroupID
+9,<>f__AnonymousType5`1,ProductGradeID,!0,get_ProductGradeID
+10,<>f__AnonymousType6`1,DistrictID,!0,get_DistrictID
+11,<>f__AnonymousType7`1,TownID,!0,get_TownID
+12,<>f__AnonymousType8`1,WarehouseCode,!0,get_WarehouseCode
+13,<>f__AnonymousType9`1,KurucuKodu,!0,get_KurucuKodu
+14,<>f__AnonymousType10`1,SemsiyeTur,!0,get_SemsiyeTur
+15,<>f__AnonymousType11`2,name,!0,get_name
+16,<>f__AnonymousType11`2,exp,!1,get_exp
+17,<>f__AnonymousType12`4,sub,!0,get_sub
+18,<>f__AnonymousType12`4,iat,!1,get_iat
+19,<>f__AnonymousType12`4,exp,!2,get_exp
+20,<>f__AnonymousType12`4,plan,!3,get_plan
+21,<>f__AnonymousType13`2,alg,!0,get_alg
+22,<>f__AnonymousType13`2,typ,!1,get_typ
+23,<>f__AnonymousType14`1,Symbol,!0,get_Symbol
+24,<>f__AnonymousType15`3,tanim,!0,get_tanim
+25,<>f__AnonymousType15`3,dip,!1,get_dip
+26,<>f__AnonymousType15`3,zirve,!2,get_zirve
+27,<>f__AnonymousType16`3,BaseSymbol,!0,get_BaseSymbol
+28,<>f__AnonymousType16`3,SubMarket,!1,get_SubMarket
+29,<>f__AnonymousType16`3,FI273,!2,get_FI273
+30,<>f__AnonymousType17`2,SourceCode,!0,get_SourceCode
+31,<>f__AnonymousType17`2,Key,!1,get_Key
+32,<>f__AnonymousType18`2,chat_id,!0,get_chat_id
+33,<>f__AnonymousType18`2,text,!1,get_text
+34,<>f__AnonymousType19`1,vade,!0,get_vade
+35,<>f__AnonymousType20`1,kullanimFiyati,!0,get_kullanimFiyati
+36,exchangeInfoResult,timezone,string,set_timezone; get_timezone
+37,exchangeInfoResult,serverTime,long,set_serverTime; get_serverTime
+38,exchangeInfoResult,rateLimits,class Ratelimit[],set_rateLimits; get_rateLimits
+39,exchangeInfoResult,exchangeFilters,object[],set_exchangeFilters; get_exchangeFilters
+40,exchangeInfoResult,symbols,class Symbol[],set_symbols; get_symbols
+41,Ratelimit,rateLimitType,string,set_rateLimitType; get_rateLimitType
+42,Ratelimit,interval,string,set_interval; get_interval
+43,Ratelimit,intervalNum,int,set_intervalNum; get_intervalNum
+44,Ratelimit,limit,int,set_limit; get_limit
+45,Symbol,symbol,string,set_symbol; get_symbol
+46,Symbol,status,string,set_status; get_status
+47,Symbol,baseAsset,string,set_baseAsset; get_baseAsset
+48,Symbol,baseAssetPrecision,int,get_baseAssetPrecision; set_baseAssetPrecision
+49,Symbol,quoteAsset,string,get_quoteAsset; set_quoteAsset
+50,Symbol,quotePrecision,int,get_quotePrecision; set_quotePrecision
+51,Symbol,quoteAssetPrecision,int,set_quoteAssetPrecision; get_quoteAssetPrecision
+52,Symbol,baseCommissionPrecision,int,set_baseCommissionPrecision; get_baseCommissionPrecision
+53,Symbol,quoteCommissionPrecision,int,set_quoteCommissionPrecision; get_quoteCommissionPrecision
+54,Symbol,orderTypes,string[],set_orderTypes; get_orderTypes
+55,Symbol,icebergAllowed,bool,set_icebergAllowed; get_icebergAllowed
+56,Symbol,ocoAllowed,bool,set_ocoAllowed; get_ocoAllowed
+57,Symbol,quoteOrderQtyMarketAllowed,bool,get_quoteOrderQtyMarketAllowed; set_quoteOrderQtyMarketAllowed
+58,Symbol,isSpotTradingAllowed,bool,set_isSpotTradingAllowed; get_isSpotTradingAllowed
+59,Symbol,isMarginTradingAllowed,bool,set_isMarginTradingAllowed; get_isMarginTradingAllowed
+60,Symbol,filters,class Filter[],set_filters; get_filters
+61,Symbol,permissions,string[],set_permissions; get_permissions
+62,Filter,filterType,string,set_filterType; get_filterType
+63,Filter,minPrice,string,set_minPrice; get_minPrice
+64,Filter,maxPrice,string,set_maxPrice; get_maxPrice
+65,Filter,tickSize,string,set_tickSize; get_tickSize
+66,Filter,multiplierUp,string,get_multiplierUp; set_multiplierUp
+67,Filter,multiplierDown,string,get_multiplierDown; set_multiplierDown
+68,Filter,avgPriceMins,int,get_avgPriceMins; set_avgPriceMins
+69,Filter,minQty,string,set_minQty; get_minQty
+70,Filter,maxQty,string,get_maxQty; set_maxQty
+71,Filter,stepSize,string,set_stepSize; get_stepSize
+72,Filter,minNotional,string,get_minNotional; set_minNotional
+73,Filter,applyToMarket,bool,set_applyToMarket; get_applyToMarket
+74,Filter,limit,int,get_limit; set_limit
+75,Filter,maxNumOrders,int,get_maxNumOrders; set_maxNumOrders
+76,Filter,maxNumAlgoOrders,int,get_maxNumAlgoOrders; set_maxNumAlgoOrders
+77,Filter,maxPosition,string,set_maxPosition; get_maxPosition
+78,Error,Code,string,get_Code; set_Code
+79,Error,Message,string,get_Message; set_Message
+80,AccountInfo,CanTrade,bool,get_CanTrade; set_CanTrade
+81,AccountInfo,CanWithdraw,bool,get_CanWithdraw; set_CanWithdraw
+82,AccountInfo,CanDeposit,bool,set_CanDeposit; get_CanDeposit
+83,AccountInfo,UpdateTime,valuetype System.DateTimeOffset,get_UpdateTime; set_UpdateTime
+84,AccountInfo,Balances,System.Collections.Generic.List`1<class BalanceItem>,get_Balances; set_Balances
+85,AccountInfo,Success,bool,set_Success; get_Success
+86,AccountInfo,Error,class Error,get_Error; set_Error
+87,BalanceItem,Asset,string,set_Asset; get_Asset
+88,BalanceItem,Free,valuetype System.Decimal,get_Free; set_Free
+89,BalanceItem,Locked,valuetype System.Decimal,set_Locked; get_Locked
+90,ideal.cxElement,FibonacciLevelColor,valuetype System.Drawing.Color[],get_FibonacciLevelColor; set_FibonacciLevelColor
+91,ideal.cxElement,Visible,bool,get_Visible; set_Visible
+92,ideal.cxIndicator,SpecialDrawing,int,get_SpecialDrawing
+93,ideal.FormationRegion,StartTime,valuetype System.DateTime,set_StartTime; get_StartTime
+94,ideal.FormationRegion,EndTime,valuetype System.DateTime,set_EndTime; get_EndTime
+95,ideal.FormationRegion,TopPrice,float,get_TopPrice; set_TopPrice
+96,ideal.FormationRegion,BottomPrice,float,set_BottomPrice; get_BottomPrice
+97,ideal.FormationRegion,StartIndex,int,get_StartIndex; set_StartIndex
+98,ideal.FormationRegion,EndIndex,int,set_EndIndex; get_EndIndex
+99,ideal.FormationRegion,Label,string,get_Label; set_Label
+100,ideal.clsFixOrder,State,valuetype ideal.ConnectionState,get_State; set_State
+101,ideal.clsFixOrder,GetOrderDictionary,"System.Collections.Generic.Dictionary`2<valuetype System.Guid, class ideal.FixOrderData>",get_GetOrderDictionary
+102,ideal.FixRouterAccountData,account_type,valuetype ideal.FixRouterAccountEnum,get_account_type; set_account_type
+103,ideal.FixRouterAccountData,account,string,set_account; get_account
+104,ideal.FixOrderData,newOrder,class NewOrder,get_newOrder; set_newOrder
+105,ideal.FixOrderData,orderReport,class OrderReport,get_orderReport; set_orderReport
+106,ideal.FixOrderData,cancelOrderReport,class OrderReport,set_cancelOrderReport; get_cancelOrderReport
+107,ideal.FixOrderData,error,class Error,get_error; set_error
+108,ideal.FixOrderData,piyasa,valuetype ideal.Piyasa,set_piyasa; get_piyasa
+109,AuthResponse,Success,bool,get_Success; set_Success
+110,AuthResponse,ErrorMessage,string,set_ErrorMessage; get_ErrorMessage
+111,Login,_Username,string,get__Username; set__Username
+112,Login,Username,string,set_Username; get_Username
+113,Login,Password,string,get_Password; set_Password
+114,Heartbeat,Timestamp,string,set_Timestamp; get_Timestamp
+115,NewOrder,OrderUuid,string,set_OrderUuid; get_OrderUuid
+116,NewOrder,Symbol,string,get_Symbol; set_Symbol
+117,NewOrder,Quantity,double,get_Quantity; set_Quantity
+118,NewOrder,OrderType,valuetype ideal.OrderType,get_OrderType; set_OrderType
+119,NewOrder,OrderSide,valuetype ideal.OrderSide,set_OrderSide; get_OrderSide
+120,NewOrder,TimeInForce,valuetype ideal.TimeInForce,get_TimeInForce; set_TimeInForce
+121,NewOrder,OrderCapacity,System.Nullable`1<valuetype ideal.OrderCapacity>,get_OrderCapacity; set_OrderCapacity
+122,NewOrder,Account,string,get_Account; set_Account
+123,NewOrder,AccountType,System.Nullable`1<valuetype ideal.AccountType>,set_AccountType; get_AccountType
+124,NewOrder,Price,System.Nullable`1<double>,get_Price; set_Price
+125,NewOrder,OffHoursTrading,bool,get_OffHoursTrading; set_OffHoursTrading
+126,CancelOrder,OrderUuid,string,get_OrderUuid; set_OrderUuid
+127,CancelOrder,OrderId,int,set_OrderId; get_OrderId
+128,CancelOrder,Symbol,string,get_Symbol; set_Symbol
+129,CancelOrder,Quantity,double,set_Quantity; get_Quantity
+130,CancelOrder,OrderSide,valuetype ideal.OrderSide,get_OrderSide; set_OrderSide
+131,CancelOrder,Account,string,set_Account; get_Account
+132,CancelReplaceOrder,OrderUuid,string,get_OrderUuid; set_OrderUuid
+133,CancelReplaceOrder,OrderId,int,set_OrderId; get_OrderId
+134,CancelReplaceOrder,Symbol,string,get_Symbol; set_Symbol
+135,CancelReplaceOrder,Quantity,double,get_Quantity; set_Quantity
+136,CancelReplaceOrder,Price,double,set_Price; get_Price
+137,CancelReplaceOrder,OrderSide,valuetype ideal.OrderSide,get_OrderSide; set_OrderSide
+138,CancelReplaceOrder,OrderType,valuetype ideal.OrderType,get_OrderType; set_OrderType
+139,CancelReplaceOrder,Account,string,set_Account; get_Account
+140,OrderReport,OrderId,int,set_OrderId; get_OrderId
+141,OrderReport,OrderStatus,valuetype ideal.OrderStatus,set_OrderStatus; get_OrderStatus
+142,OrderReport,OriginalOrderId,System.Nullable`1<int>,get_OriginalOrderId; set_OriginalOrderId
+143,OrderReport,FilledQuantity,System.Nullable`1<double>,set_FilledQuantity; get_FilledQuantity
+144,OrderReport,ExecutedQuantity,System.Nullable`1<double>,set_ExecutedQuantity; get_ExecutedQuantity
+145,OrderReport,BuyPrice,System.Nullable`1<double>,get_BuyPrice; set_BuyPrice
+146,OrderReport,RejectReason,string,get_RejectReason; set_RejectReason
+147,OrderReport,TransactionTime,string,get_TransactionTime; set_TransactionTime
+148,OrderReport,OrderSendingTime,string,get_OrderSendingTime; set_OrderSendingTime
+149,GetOrder,Id,int,set_Id; get_Id
+150,GetOrders,Page,System.Nullable`1<int>,set_Page; get_Page
+151,GetOrders,PageSize,System.Nullable`1<int>,set_PageSize; get_PageSize
+152,GetOrders,StartDate,string,set_StartDate; get_StartDate
+153,GetOrders,EndDate,string,get_EndDate; set_EndDate
+154,Error,Message,string,set_Message; get_Message
+155,GetAccountsResponse,Account,string,get_Account; set_Account
+156,ideal.IdealMessage,BeginString,string,get_BeginString; set_BeginString
+157,ideal.IdealMessage,MessageId,string,set_MessageId; get_MessageId
+158,ideal.IdealMessage,SendingTime,string,get_SendingTime; set_SendingTime
+159,ideal.IdealMessage,History,bool,set_History; get_History
+160,ideal.IdealMessage,Code,string,set_Code; get_Code
+161,ideal.IdealMessage,Sender,string,get_Sender; set_Sender
+162,MessageSchema,Schemas,"System.Collections.Generic.Dictionary`2<valuetype ideal.MessageType, class ideal.IdealMessage>",get_Schemas; set_Schemas
+163,ideal.cxICRYPEX,ApiKey,string,get_ApiKey; set_ApiKey
+164,ideal.cxICRYPEX,SecretKey,string,get_SecretKey; set_SecretKey
+165,ideal.SymbolClass,symbol,string,set_symbol; get_symbol
+166,ideal.SymbolClass,baseasset,string,get_baseasset; set_baseasset
+167,ideal.SymbolClass,baseassetname,string,get_baseassetname; set_baseassetname
+168,ideal.SymbolClass,basePrecision,string,set_basePrecision; get_basePrecision
+169,ideal.SymbolClass,basePrecisionShow,string,get_basePrecisionShow; set_basePrecisionShow
+170,ideal.SymbolClass,quoteAsset,string,set_quoteAsset; get_quoteAsset
+171,ideal.SymbolClass,quoteassetname,string,set_quoteassetname; get_quoteassetname
+172,ideal.SymbolClass,quotePrecision,string,set_quotePrecision; get_quotePrecision
+173,ideal.SymbolClass,quotePrecisionShow,string,get_quotePrecisionShow; set_quotePrecisionShow
+174,ideal.SymbolClass,status,bool,get_status; set_status
+175,ideal.SymbolClass,description,string,set_description; get_description
+176,CreateHmacSignature,HmacSignature,string,set_HmacSignature; get_HmacSignature
+177,ideal.CreateHmacSignature,HmacSignature,string,get_HmacSignature; set_HmacSignature
+178,ideal.ServerTime,Time,string,get_Time; set_Time
+179,ideal.Data,Code,string,set_Code; get_Code
+180,ideal.Data,Message,string,get_Message; set_Message
+181,ideal.ErrorMessages,Message,string,get_Message; set_Message
+182,ideal.ErrorMessages,Data,class ideal.Data,set_Data; get_Data
+183,ideal.Error,Code,string,set_Code; get_Code
+184,ideal.Error,Message,string,set_Message; get_Message
+185,ideal.ErrorsList,Errors,System.Collections.Generic.List`1<class ideal.Error>,set_Errors; get_Errors
+186,ideal.OrderItem,id,int,get_id; set_id
+187,ideal.OrderItem,symbol,string,set_symbol; get_symbol
+188,ideal.OrderItem,createdDate,object,get_createdDate; set_createdDate
+189,ideal.OrderItem,updatedDate,object,set_updatedDate; get_updatedDate
+190,ideal.OrderItem,price,string,set_price; get_price
+191,ideal.OrderItem,quantity,string,set_quantity; get_quantity
+192,ideal.OrderItem,leftQuantity,string,set_leftQuantity; get_leftQuantity
+193,ideal.OrderItem,triggerPrice,string,get_triggerPrice; set_triggerPrice
+194,ideal.OrderItem,totalQuote,string,set_totalQuote; get_totalQuote
+195,ideal.OrderItem,side,string,set_side; get_side
+196,ideal.OrderItem,status,string,set_status; get_status
+197,ideal.OrderItem,type,string,get_type; set_type
+198,ideal.OrderItem,clientId,string,set_clientId; get_clientId
+199,ideal.AccountSpotWallet,Request,double,set_Request; get_Request
+200,ideal.AccountSpotWallet,Blocked,string,set_Blocked; get_Blocked
+201,ideal.AccountSpotWallet,Total,string,set_Total; get_Total
+202,ideal.AccountSpotWallet,Available,string,set_Available; get_Available
+203,ideal.CancelOrdersResult,ok,bool,set_ok; get_ok
+204,ideal.CancelOrdersResult,id,int,set_id; get_id
+205,ideal.CancelOrdersResult,code,string,set_code; get_code
+206,ideal.OrderRequest,ClientId,string,get_ClientId; set_ClientId
+207,ideal.OrderRequest,Type,string,set_Type; get_Type
+208,ideal.OrderRequest,Side,string,set_Side; get_Side
+209,ideal.OrderRequest,Symbol,string,set_Symbol; get_Symbol
+210,ideal.OrderRequest,Price,string,set_Price; get_Price
+211,ideal.OrderRequest,Quantity,string,set_Quantity; get_Quantity
+212,ideal.OrderRequest,Total,string,set_Total; get_Total
+213,ideal.TradeItem,Date,int,get_Date; set_Date
+214,ideal.TradeItem,OrderId,int,get_OrderId; set_OrderId
+215,ideal.TradeItem,PairSymbol,string,get_PairSymbol; set_PairSymbol
+216,ideal.TradeItem,Side,string,get_Side; set_Side
+217,ideal.TradeItem,Quantity,string,get_Quantity; set_Quantity
+218,ideal.TradeItem,Price,string,get_Price; set_Price
+219,ideal.TradeItem,Fee,string,get_Fee; set_Fee
+220,ideal.TradeItem,Total,string,set_Total; get_Total
+221,ideal.TradeItem,MarketType,string,get_MarketType; set_MarketType
+222,ideal.UserTrade,PageIndex,int,get_PageIndex; set_PageIndex
+223,ideal.UserTrade,PageSize,int,get_PageSize; set_PageSize
+224,ideal.UserTrade,TotalCount,int,get_TotalCount; set_TotalCount
+225,ideal.UserTrade,TotalPages,int,get_TotalPages; set_TotalPages
+226,ideal.UserTrade,IndexFrom,int,get_IndexFrom; set_IndexFrom
+227,ideal.UserTrade,HasPreviousPage,bool,set_HasPreviousPage; get_HasPreviousPage
+228,ideal.UserTrade,HasNextPage,bool,get_HasNextPage; set_HasNextPage
+229,ideal.UserTrade,items,System.Collections.Generic.List`1<class ideal.TradeItem>,set_items; get_items
+230,ideal.Tickers,Symbol,string,get_Symbol; set_Symbol
+231,ideal.Tickers,Last,string,get_Last; set_Last
+232,ideal.Tickers,Ask,string,get_Ask; set_Ask
+233,ideal.Tickers,Bid,string,set_Bid; get_Bid
+234,ideal.Tickers,High,string,set_High; get_High
+235,ideal.Tickers,Low,string,set_Low; get_Low
+236,ideal.Tickers,Avg,string,set_Avg; get_Avg
+237,ideal.Tickers,Change,string,set_Change; get_Change
+238,ideal.Tickers,Qty,string,set_Qty; get_Qty
+239,ideal.Tickers,Volume,string,set_Volume; get_Volume
+240,ChartResponse,getchartdata,class Getchartdata,set_getchartdata; get_getchartdata
+241,Getchartdata,ts,long,set_ts; get_ts
+242,Getchartdata,open,double,set_open; get_open
+243,Getchartdata,high,double,set_high; get_high
+244,Getchartdata,low,double,set_low; get_low
+245,Getchartdata,close,double,set_close; get_close
+246,Getchartdata,volume,double,set_volume; get_volume
+247,ideal.AccountInfoModel,UserId,int,set_UserId; get_UserId
+248,ideal.AccountInfoModel,GroupId,int,set_GroupId; get_GroupId
+249,ideal.AccountInfoModel,Email,string,set_Email; get_Email
+250,ideal.AccountInfoModel,IdentityNumber,string,set_IdentityNumber; get_IdentityNumber
+251,ideal.AccountInfoModel,FirstName,string,set_FirstName; get_FirstName
+252,ideal.AccountInfoModel,LastName,string,set_LastName; get_LastName
+253,ideal.AccountInfoModel,Gsm,string,set_Gsm; get_Gsm
+254,ideal.AccountInfoModel,GsmConfirmed,bool,set_GsmConfirmed; get_GsmConfirmed
+255,ideal.AccountInfoModel,EmailConfirmed,bool,set_EmailConfirmed; get_EmailConfirmed
+256,ideal.AccountInfoModel,Status,string,set_Status; get_Status
+257,ideal.AccountInfoModel,KycEnabled,bool,set_KycEnabled; get_KycEnabled
+258,ideal.AccountInfoModel,LastLoginTime,valuetype System.DateTime,set_LastLoginTime; get_LastLoginTime
+259,ideal.AccountInfoModel,LastLoginIp,string,set_LastLoginIp; get_LastLoginIp
+260,ideal.AccountInfoModel,PhoneTfaEnabled,bool,set_PhoneTfaEnabled; get_PhoneTfaEnabled
+261,ideal.AccountInfoModel,EmailTfaEnabled,bool,set_EmailTfaEnabled; get_EmailTfaEnabled
+262,ideal.AccountInfoModel,AuthenticatorTfaEnabled,bool,set_AuthenticatorTfaEnabled; get_AuthenticatorTfaEnabled
+263,ideal.AccountInfoModel,IsLocal,bool,get_IsLocal; set_IsLocal
+264,ideal.cxBasic,BaseSymbol,string,get_BaseSymbol; set_BaseSymbol
+265,ideal.cxCizilen,ImkbVolume,float,get_ImkbVolume
+266,SysStockItem,Date,string,get_Date; set_Date
+267,SysStockItem,StockCode,string,get_StockCode; set_StockCode
+268,SysStockItem,InvestorCount,long,get_InvestorCount; set_InvestorCount
+269,SkytStockData,Date,string,set_Date; get_Date
+270,SkytStockData,StockCode,string,set_StockCode; get_StockCode
+271,SkytStockData,StockName,string,set_StockName; get_StockName
+272,SkytStockData,ISIN,string,get_ISIN; set_ISIN
+273,SkytStockData,Investors,System.Collections.Generic.List`1<class SkytInvestor>,set_Investors; get_Investors
+274,SkytInvestor,InvestorType,string,get_InvestorType; set_InvestorType
+275,SkytInvestor,NominalValue,valuetype System.Decimal,set_NominalValue; get_NominalValue
+276,SkytInvestor,NominalPercentage,valuetype System.Decimal,get_NominalPercentage; set_NominalPercentage
+277,SembolEndeks,PAY_KODU,string,set_PAY_KODU; get_PAY_KODU
+278,SembolEndeks,TOPLAM_PAY_SAYISI,string,get_TOPLAM_PAY_SAYISI; set_TOPLAM_PAY_SAYISI
+279,SembolEndeks,ENDEKS_DEGERLER,System.Collections.Generic.List`1<class EndeksEntry>,set_ENDEKS_DEGERLER; get_ENDEKS_DEGERLER
+280,EndeksEntry,ENDEKS_KODU,string,set_ENDEKS_KODU; get_ENDEKS_KODU
+281,EndeksEntry,ENDEKSLER,string,get_ENDEKSLER; set_ENDEKSLER
+282,EndeksEntry,FIILI_DOLASIMDAKI_PAY_ORANI,string,get_FIILI_DOLASIMDAKI_PAY_ORANI; set_FIILI_DOLASIMDAKI_PAY_ORANI
+283,EndeksEntry,KATSAYI,string,set_KATSAYI; get_KATSAYI
+284,EndeksEntry,AGIRLIK_YUZDE,string,get_AGIRLIK_YUZDE; set_AGIRLIK_YUZDE
+285,SymbolIW,Symbol,string,set_Symbol; get_Symbol
+286,SymbolIW,ToplamPaySayisi,double,get_ToplamPaySayisi; set_ToplamPaySayisi
+287,EndeksIW,EndeksKod,string,set_EndeksKod; get_EndeksKod
+288,EndeksIW,Tanim,string,get_Tanim; set_Tanim
+289,EndeksIW,FiiliDolasimOrani,float,get_FiiliDolasimOrani; set_FiiliDolasimOrani
+290,EndeksIW,Katsayi,float,get_Katsayi; set_Katsayi
+291,EndeksIW,Agirlik,float,set_Agirlik; get_Agirlik
+292,ideal.cxImkbTedbir,JsonStr,string,set_JsonStr; get_JsonStr
+293,SembolTedbir,PayAdi,string,set_PayAdi; get_PayAdi
+294,SembolTedbir,PayKodu,string,set_PayKodu; get_PayKodu
+295,SembolTedbir,TedbirKodu,string,set_TedbirKodu; get_TedbirKodu
+296,SembolTedbir,TedbirAciklama,string,set_TedbirAciklama; get_TedbirAciklama
+297,SembolTedbir,Tarih1,valuetype System.DateTime,get_Tarih1; set_Tarih1
+298,SembolTedbir,Tarih2,valuetype System.DateTime,set_Tarih2; get_Tarih2
+299,TedbirClass,Tarih,valuetype System.DateTime,get_Tarih; set_Tarih
+300,TedbirClass,Data,System.Collections.Generic.List`1<class SembolTedbir>,get_Data; set_Data
+301,ideal.LoadingButton,LoadingEffect,valuetype ideal.LoadingEffectType,get_LoadingEffect; set_LoadingEffect
+302,ideal.LoadingButton,TimeoutSeconds,int,get_TimeoutSeconds; set_TimeoutSeconds
+303,ideal.LoadingButton,IsLoading,bool,set_IsLoading; get_IsLoading
+304,ideal.cxSetting,MultiLisans,string,get_MultiLisans; set_MultiLisans
+305,ideal.cxTrendAlarm,AlarmTipString,string,get_AlarmTipString
+306,ideal.cxTurib,SecurityID,string,get_SecurityID; set_SecurityID
+307,ideal.cxTurib,Symbol,string,set_Symbol; get_Symbol
+308,ideal.cxTurib,SecurityDesc,string,get_SecurityDesc; set_SecurityDesc
+309,ideal.cxTurib,SecurityDescOrj,string,get_SecurityDescOrj; set_SecurityDescOrj
+310,ideal.cxTurib,SenderCompID,string,set_SenderCompID; get_SenderCompID
+311,ideal.cxTurib,Currency,string,get_Currency; set_Currency
+312,ideal.cxTurib,SecurityIDSource,string,set_SecurityIDSource; get_SecurityIDSource
+313,ideal.cxTurib,TransactTime,string,get_TransactTime; set_TransactTime
+314,ideal.cxTurib,SettlDate,string,get_SettlDate; set_SettlDate
+315,ideal.cxTurib,MinQty,double,set_MinQty; get_MinQty
+316,ideal.cxTurib,PrevClosePx,double,get_PrevClosePx; set_PrevClosePx
+317,ideal.cxTurib,SecurityType,string,get_SecurityType; set_SecurityType
+318,ideal.cxTurib,MaturityMonthYear,string,set_MaturityMonthYear; get_MaturityMonthYear
+319,ideal.cxTurib,Factor,double,get_Factor; set_Factor
+320,ideal.cxTurib,ContractMultiplier,double,set_ContractMultiplier; get_ContractMultiplier
+321,ideal.cxTurib,CFICode,string,get_CFICode; set_CFICode
+322,ideal.cxTurib,MinTradeVol,double,get_MinTradeVol; set_MinTradeVol
+323,ideal.cxTurib,SecurityStatus,string,get_SecurityStatus; set_SecurityStatus
+324,ideal.cxTurib,SecurityStatusText,string,set_SecurityStatusText; get_SecurityStatusText
+325,ideal.cxTurib,UnitOfMeasure,string,get_UnitOfMeasure; set_UnitOfMeasure
+326,ideal.cxTurib,MaxTradeVol,double,get_MaxTradeVol; set_MaxTradeVol
+327,ideal.cxTurib,LowLimitPrice,double,get_LowLimitPrice; set_LowLimitPrice
+328,ideal.cxTurib,HighLimitPrice,double,get_HighLimitPrice; set_HighLimitPrice
+329,ideal.cxTurib,TradingReferencePrice,double,set_TradingReferencePrice; get_TradingReferencePrice
+330,ideal.cxTurib,MinLotSize,double,set_MinLotSize; get_MinLotSize
+331,ideal.cxTurib,ShortSaleRestriction,string,set_ShortSaleRestriction; get_ShortSaleRestriction
+332,ideal.cxTurib,TradingMethod,string,set_TradingMethod; get_TradingMethod
+333,ideal.cxTurib,BasePrice,double,set_BasePrice; get_BasePrice
+334,ideal.cxTurib,SettlementType,string,set_SettlementType; get_SettlementType
+335,ideal.cxTurib,FirstTradingDate,string,set_FirstTradingDate; get_FirstTradingDate
+336,ideal.cxTurib,LastTradingDate,string,set_LastTradingDate; get_LastTradingDate
+337,ideal.cxTurib,HarvestYear,string,set_HarvestYear; get_HarvestYear
+338,ideal.cxTurib,StoreType,string,set_StoreType; get_StoreType
+339,ideal.cxTurib,StoreTypeText,string,set_StoreTypeText; get_StoreTypeText
+340,ideal.cxTurib,MaxLotSize,double,set_MaxLotSize; get_MaxLotSize
+341,ideal.cxTurib,TCReportAllowed,string,set_TCReportAllowed; get_TCReportAllowed
+342,ideal.cxTurib,SecurityTypeName,string,set_SecurityTypeName; get_SecurityTypeName
+343,ideal.cxTurib,SecurityClassID,string,set_SecurityClassID; get_SecurityClassID
+344,ideal.cxTurib,SecurityClassName,string,set_SecurityClassName; get_SecurityClassName
+345,ideal.cxTurib,SettlementDay,int,set_SettlementDay; get_SettlementDay
+346,ideal.cxTurib,TodayFreeMargin,string,set_TodayFreeMargin; get_TodayFreeMargin
+347,ideal.cxTurib,PriceDecimal,int,get_PriceDecimal; set_PriceDecimal
+348,ideal.cxTurib,ValueStep,string,set_ValueStep; get_ValueStep
+349,ideal.cxTurib,OrderAttributeCode,string,get_OrderAttributeCode; set_OrderAttributeCode
+350,ideal.cxTurib,PrevVWap,double,set_PrevVWap; get_PrevVWap
+351,ideal.cxTurib,SecuritySubTypeID,string,set_SecuritySubTypeID; get_SecuritySubTypeID
+352,ideal.cxTurib,SecuritySubTypeName,string,set_SecuritySubTypeName; get_SecuritySubTypeName
+353,ideal.cxTurib,SecurityAltID,string,set_SecurityAltID; get_SecurityAltID
+354,ideal.cxTurib,SecurityAltIDSource,string,set_SecurityAltIDSource; get_SecurityAltIDSource
+355,ideal.cxTurib,UnderlyingSymbol,string,set_UnderlyingSymbol; get_UnderlyingSymbol
+356,ideal.cxTurib,UnderlyingSecurityDesc,string,set_UnderlyingSecurityDesc; get_UnderlyingSecurityDesc
+357,ideal.cxTurib,MarketID,string,set_MarketID; get_MarketID
+358,ideal.cxTurib,MarketName,string,set_MarketName; get_MarketName
+359,ideal.cxTurib,MarketSegmentID,string,set_MarketSegmentID; get_MarketSegmentID
+360,ideal.cxTurib,MarketSegmentName,string,set_MarketSegmentName; get_MarketSegmentName
+361,ideal.cxTurib,MarketSubSegmentID,string,set_MarketSubSegmentID; get_MarketSubSegmentID
+362,ideal.cxTurib,MarketSubSegmentName,string,get_MarketSubSegmentName; set_MarketSubSegmentName
+363,ideal.cxTurib,StartTickPriceRange,double,get_StartTickPriceRange; set_StartTickPriceRange
+364,ideal.cxTurib,EndTickPriceRange,double,get_EndTickPriceRange; set_EndTickPriceRange
+365,ideal.cxTurib,TickIncrement,double,set_TickIncrement; get_TickIncrement
+366,ideal.cxTurib,CountryID,string,get_CountryID; set_CountryID
+367,ideal.cxTurib,CountryName,string,get_CountryName; set_CountryName
+368,ideal.cxTurib,RegionID,string,set_RegionID; get_RegionID
+369,ideal.cxTurib,RegionName,string,set_RegionName; get_RegionName
+370,ideal.cxTurib,DistrictID,string,set_DistrictID; get_DistrictID
+371,ideal.cxTurib,DistrictName,string,set_DistrictName; get_DistrictName
+372,ideal.cxTurib,TownID,string,set_TownID; get_TownID
+373,ideal.cxTurib,TownName,string,get_TownName; set_TownName
+374,ideal.cxTurib,ProductID,string,set_ProductID; get_ProductID
+375,ideal.cxTurib,ProductName,string,set_ProductName; get_ProductName
+376,ideal.cxTurib,ProductGroupID,string,set_ProductGroupID; get_ProductGroupID
+377,ideal.cxTurib,ProductGroupName,string,set_ProductGroupName; get_ProductGroupName
+378,ideal.cxTurib,ProductSubGroupID,string,get_ProductSubGroupID; set_ProductSubGroupID
+379,ideal.cxTurib,ProductSubGroupName,string,set_ProductSubGroupName; get_ProductSubGroupName
+380,ideal.cxTurib,ProductGradeID,string,set_ProductGradeID; get_ProductGradeID
+381,ideal.cxTurib,ProductGradeName,string,set_ProductGradeName; get_ProductGradeName
+382,ideal.cxTurib,ProductClassID,string,set_ProductClassID; get_ProductClassID
+383,ideal.cxTurib,ProductClassName,string,get_ProductClassName; set_ProductClassName
+384,ideal.cxTurib,ProductOriginID,string,set_ProductOriginID; get_ProductOriginID
+385,ideal.cxTurib,ProductOriginName,string,set_ProductOriginName; get_ProductOriginName
+386,ideal.cxTurib,BranchCode,string,set_BranchCode; get_BranchCode
+387,ideal.cxTurib,BranchName,string,set_BranchName; get_BranchName
+388,ideal.cxTurib,WarehouseCode,string,set_WarehouseCode; get_WarehouseCode
+389,ideal.cxTurib,InstrRegistry,string,set_InstrRegistry; get_InstrRegistry
+390,cxTuribMarketSegment,MarketSegmentID,string,get_MarketSegmentID; set_MarketSegmentID
+391,cxTuribMarketSegment,MarketSegmentName,string,set_MarketSegmentName; get_MarketSegmentName
+392,cxTuribUrun,ProductID,string,set_ProductID; get_ProductID
+393,cxTuribUrun,ProductName,string,set_ProductName; get_ProductName
+394,cxTuribUrunTipi,ProductGroupID,string,set_ProductGroupID; get_ProductGroupID
+395,cxTuribUrunTipi,ProductGroupName,string,set_ProductGroupName; get_ProductGroupName
+396,cxTuribUrunGrubu,ProductSubGroupID,string,set_ProductSubGroupID; get_ProductSubGroupID
+397,cxTuribUrunGrubu,ProductSubGroupName,string,set_ProductSubGroupName; get_ProductSubGroupName
+398,cxTuribUrunSinifi,ProductGradeID,string,set_ProductGradeID; get_ProductGradeID
+399,cxTuribUrunSinifi,ProductGradeName,string,get_ProductGradeName; set_ProductGradeName
+400,cxTuribIl,DistrictID,string,get_DistrictID; set_DistrictID
+401,cxTuribIl,DistrictName,string,get_DistrictName; set_DistrictName
+402,cxTuribIlce,TownID,string,get_TownID; set_TownID
+403,cxTuribIlce,TownName,string,set_TownName; get_TownName
+404,cxTuribDepo,WarehouseCode,string,get_WarehouseCode; set_WarehouseCode
+405,cxTuribDepo,InstrRegistry,string,set_InstrRegistry; get_InstrRegistry
+406,cxTuribStatus,SecurityStatus,string,get_SecurityStatus; set_SecurityStatus
+407,cxTuribStatus,SecurityStatusText,string,set_SecurityStatusText; get_SecurityStatusText
+408,cxTuribStoreType,StoreType,string,get_StoreType; set_StoreType
+409,cxTuribStoreType,StoreTypeText,string,set_StoreTypeText; get_StoreTypeText
+410,ideal.cxFon,Kod,string,get_Kod; set_Kod
+411,ideal.cxFon,IslemDurumu,string,set_IslemDurumu; get_IslemDurumu
+412,ideal.cxFon,KurucuKodu,string,get_KurucuKodu; set_KurucuKodu
+413,ideal.cxFon,KurucuUnvan,string,set_KurucuUnvan; get_KurucuUnvan
+414,ideal.cxFon,KurucuTitle,string,set_KurucuTitle; get_KurucuTitle
+415,ideal.cxFon,Adi,string,get_Adi; set_Adi
+416,ideal.cxFon,KisaAdi,string,get_KisaAdi; set_KisaAdi
+417,ideal.cxFon,Title,string,set_Title; get_Title
+418,ideal.cxFon,Isin,string,get_Isin; set_Isin
+419,ideal.cxFon,Kategori,string,set_Kategori; get_Kategori
+420,ideal.cxFon,IslemGorme,bool,get_IslemGorme; set_IslemGorme
+421,ideal.cxFon,HalkaArzTarihi,System.Nullable`1<valuetype System.DateTime>,set_HalkaArzTarihi; get_HalkaArzTarihi
+422,ideal.cxFon,ParaBirimi,string,get_ParaBirimi; set_ParaBirimi
+423,ideal.cxFon,KisiSayisi,System.Nullable`1<long>,get_KisiSayisi; set_KisiSayisi
+424,ideal.cxFon,TedavPaySay,double,get_TedavPaySay; set_TedavPaySay
+425,ideal.cxFon,TopPayHisseSenediSay,double,set_TopPayHisseSenediSay; get_TopPayHisseSenediSay
+426,ideal.cxFon,RiskDegeri,int,get_RiskDegeri; set_RiskDegeri
+427,ideal.cxFon,PazarPayi,double,get_PazarPayi; set_PazarPayi
+428,ideal.cxFon,FiyatDate,System.Nullable`1<valuetype System.DateTime>,get_FiyatDate; set_FiyatDate
+429,ideal.cxFon,Fiyat,System.Nullable`1<float>,get_Fiyat; set_Fiyat
+430,ideal.cxFon,FonYonetimUcreti,System.Nullable`1<double>,set_FonYonetimUcreti; get_FonYonetimUcreti
+431,ideal.cxFon,YonetimUcretiYil,System.Nullable`1<double>,set_YonetimUcretiYil; get_YonetimUcretiYil
+432,ideal.cxFon,YonetimUcretiGun,System.Nullable`1<double>,set_YonetimUcretiGun; get_YonetimUcretiGun
+433,ideal.cxFon,IcTuzukYonetimUcretiGun,System.Nullable`1<double>,set_IcTuzukYonetimUcretiGun; get_IcTuzukYonetimUcretiGun
+434,ideal.cxFon,IcTuzukYonetimUcretiYil,System.Nullable`1<double>,set_IcTuzukYonetimUcretiYil; get_IcTuzukYonetimUcretiYil
+435,ideal.cxFon,SemsiyeTur,string,set_SemsiyeTur; get_SemsiyeTur
+436,ideal.cxFon,OncekiGunKap,System.Nullable`1<double>,set_OncekiGunKap; get_OncekiGunKap
+437,ideal.cxFon,FonTopYoaktifDeg,System.Nullable`1<double>,set_FonTopYoaktifDeg; get_FonTopYoaktifDeg
+438,ideal.cxFon,IslemBaslagicSaati,System.Nullable`1<valuetype System.TimeSpan>,set_IslemBaslagicSaati; get_IslemBaslagicSaati
+439,ideal.cxFon,IslemBitisSaati,System.Nullable`1<valuetype System.TimeSpan>,set_IslemBitisSaati; get_IslemBitisSaati
+440,ideal.cxFon,IptalSonSaati,System.Nullable`1<valuetype System.TimeSpan>,set_IptalSonSaati; get_IptalSonSaati
+441,ideal.cxFon,FonAlValoru,string,set_FonAlValoru; get_FonAlValoru
+442,ideal.cxFon,FonSatValoru,string,set_FonSatValoru; get_FonSatValoru
+443,ideal.cxFon,MinAlAdet,System.Nullable`1<double>,set_MinAlAdet; get_MinAlAdet
+444,ideal.cxFon,MinSatAdet,System.Nullable`1<double>,set_MinSatAdet; get_MinSatAdet
+445,ideal.cxFon,MaxSatAdet,System.Nullable`1<double>,set_MaxSatAdet; get_MaxSatAdet
+446,ideal.cxFon,MaxAlAdet,System.Nullable`1<double>,get_MaxAlAdet; set_MaxAlAdet
+447,ideal.cxFon,KapUrl,string,set_KapUrl; get_KapUrl
+448,ideal.cxFon,Platform,string,set_Platform; get_Platform
+449,ideal.cxFon,VarlikDagilims,System.Collections.Generic.List`1<class ideal.cxFonVarlikData>,set_VarlikDagilims; get_VarlikDagilims
+450,ideal.cxFon,AylikRaporDatas,System.Collections.Generic.List`1<class ideal.cxFonAylikRaporData>,set_AylikRaporDatas; get_AylikRaporDatas
+451,ideal.cxFon,gunGetiri,System.Nullable`1<double>,set_gunGetiri; get_gunGetiri
+452,ideal.cxFon,son1HaftaGetiri,System.Nullable`1<double>,set_son1HaftaGetiri; get_son1HaftaGetiri
+453,ideal.cxFon,son1AyGetiri,System.Nullable`1<double>,set_son1AyGetiri; get_son1AyGetiri
+454,ideal.cxFon,son3AyGetiri,System.Nullable`1<double>,set_son3AyGetiri; get_son3AyGetiri
+455,ideal.cxFon,son6AyGetiri,System.Nullable`1<double>,set_son6AyGetiri; get_son6AyGetiri
+456,ideal.cxFon,son9AyGetiri,System.Nullable`1<double>,set_son9AyGetiri; get_son9AyGetiri
+457,ideal.cxFon,son1YilGetiri,System.Nullable`1<double>,set_son1YilGetiri; get_son1YilGetiri
+458,ideal.cxFon,son3YilGetiri,System.Nullable`1<double>,set_son3YilGetiri; get_son3YilGetiri
+459,ideal.cxFon,son5YilGetiri,System.Nullable`1<double>,set_son5YilGetiri; get_son5YilGetiri
+460,ideal.cxFon,haftaBasi,System.Nullable`1<double>,set_haftaBasi; get_haftaBasi
+461,ideal.cxFon,ayBasi,System.Nullable`1<double>,set_ayBasi; get_ayBasi
+462,ideal.cxFon,yilBasi,System.Nullable`1<double>,get_yilBasi; set_yilBasi
+463,ideal.cxFon,tumGetiri,System.Nullable`1<double>,get_tumGetiri; set_tumGetiri
+464,ideal.cxFon,stopaj,System.Nullable`1<double>,get_stopaj; set_stopaj
+465,ideal.cxFon,DetaySorgulanmaTarihi,valuetype System.DateTime,get_DetaySorgulanmaTarihi; set_DetaySorgulanmaTarihi
+466,ideal.cxFon,ChartSorgulanmaTarihi,valuetype System.DateTime,get_ChartSorgulanmaTarihi; set_ChartSorgulanmaTarihi
+467,cxFonKurucu,KurucuKodu,string,get_KurucuKodu; set_KurucuKodu
+468,cxFonKurucu,KurucuUnvan,string,get_KurucuUnvan; set_KurucuUnvan
+469,cxFonSemsiyeTur,SemsiyeTur,string,get_SemsiyeTur; set_SemsiyeTur
+470,ideal.cxFonAylikRaporData,Ay,valuetype System.DateTime,set_Ay; get_Ay
+471,ideal.cxFonAylikRaporData,FonToplamDeger,long,get_FonToplamDeger; set_FonToplamDeger
+472,ideal.cxFonAylikRaporData,YatirimciSayisi,long,get_YatirimciSayisi; set_YatirimciSayisi
+473,ideal.cxFonAylikRaporData,NakitGirisCikis,long,set_NakitGirisCikis; get_NakitGirisCikis
+474,ideal.cxFonVarlikData,MenkulKodu,string,set_MenkulKodu; get_MenkulKodu
+475,ideal.cxFonVarlikData,Menkul,string,set_Menkul; get_Menkul
+476,ideal.cxFonVarlikData,Description,string,get_Description; set_Description
+477,ideal.cxFonVarlikData,BalancedValue,System.Nullable`1<double>,get_BalancedValue; set_BalancedValue
+478,ideal.cxHelper,getDefaultEncoding,class System.Text.Encoding,get_getDefaultEncoding
+479,AccountRecord,Tanim,string,get_Tanim; set_Tanim
+480,AccountRecord,Password_R,string,get_Password_R; set_Password_R
+481,AccountRecord,Parola_R,string,set_Parola_R; get_Parola_R
+482,AccountRecord,RemoteImkbIPPort,string,get_RemoteImkbIPPort; set_RemoteImkbIPPort
+483,AccountRecord,RemoteVIOPIPPort,string,set_RemoteVIOPIPPort; get_RemoteVIOPIPPort
+484,AccountRecord,OrderId,int,get_OrderId; set_OrderId
+485,ImkbPositionRecord,Profit,double,get_Profit; set_Profit
+486,ImkbPositionRecord,ProfitYuzde,double,get_ProfitYuzde; set_ProfitYuzde
+487,ImkbPositionRecord,TotalTL,double,get_TotalTL
+488,ImkbOrderRecord,OrderNoString,string,get_OrderNoString
+489,CriptoPositionRecord,Asset,string,get_Asset; set_Asset
+490,CriptoPositionRecord,Order,string,get_Order; set_Order
+491,CriptoPositionRecord,Total,double,get_Total
+492,CriptoPositionRecord,Profit,double,get_Profit; set_Profit
+493,CriptoOrderRecord,OrderNoString,string,get_OrderNoString
+494,CriptoTradeRecord,Symbol,string,set_Symbol; get_Symbol
+495,CriptoTradeRecord,Kod,string,get_Kod; set_Kod
+496,CriptoTradeRecord,Id,int,set_Id; get_Id
+497,CriptoTradeRecord,OrderId,long,set_OrderId; get_OrderId
+498,CriptoTradeRecord,OrderListId,int,set_OrderListId; get_OrderListId
+499,CriptoTradeRecord,Price,valuetype System.Decimal,set_Price; get_Price
+500,CriptoTradeRecord,Quantity,valuetype System.Decimal,set_Quantity; get_Quantity
+501,CriptoTradeRecord,QuoteQuantity,valuetype System.Decimal,set_QuoteQuantity; get_QuoteQuantity
+502,CriptoTradeRecord,Commission,valuetype System.Decimal,set_Commission; get_Commission
+503,CriptoTradeRecord,CommissionAsset,string,set_CommissionAsset; get_CommissionAsset
+504,CriptoTradeRecord,TradeTime,valuetype System.DateTime,get_TradeTime; set_TradeTime
+505,CriptoTradeRecord,IsBuyer,bool,get_IsBuyer; set_IsBuyer
+506,CriptoTradeRecord,IsMaker,bool,get_IsMaker; set_IsMaker
+507,CriptoTradeRecord,IsBestMatch,bool,set_IsBestMatch; get_IsBestMatch
+508,CriptoBinanceAcoountSnapShotRrebord,balances,System.Collections.Generic.List`1<class BalanceCripto>,get_balances; set_balances
+509,CriptoBinanceAcoountSnapShotRrebord,totalAssetOfBtc,valuetype System.Decimal,set_totalAssetOfBtc; get_totalAssetOfBtc
+510,CriptoBinanceAcoountSnapShotRrebord,type,string,get_type; set_type
+511,CriptoBinanceAcoountSnapShotRrebord,Timestamp,valuetype System.DateTime,set_Timestamp; get_Timestamp
+512,BalanceCripto,asset,string,set_asset; get_asset
+513,BalanceCripto,free,string,set_free; get_free
+514,BalanceCripto,locked,string,set_locked; get_locked
+515,BalanceHistoryRecord,Time,valuetype System.DateTime,set_Time; get_Time
+516,BalanceHistoryRecord,Balance,double,set_Balance; get_Balance
+517,BinanceFuture,ApiKey,string,set_ApiKey; get_ApiKey
+518,BinanceFuture,ApiSecret,string,set_ApiSecret; get_ApiSecret
+519,BinanceFuture,BaseUrl,string,set_BaseUrl; get_BaseUrl
+520,BinanceFuture,request,class RequestMethods,set_request; get_request
+521,BinanceFuture,response,class ResponseClasses,set_response; get_response
+522,WebException,code,int,set_code; get_code
+523,WebException,msg,string,set_msg; get_msg
+524,ExchangeInformationAsset,asset,string,set_asset; get_asset
+525,ExchangeInformationAsset,marginAvailable,bool,set_marginAvailable; get_marginAvailable
+526,ExchangeInformationAsset,autoAssetExchange,string,set_autoAssetExchange; get_autoAssetExchange
+527,ExchangeInformationFilter,minPrice,string,set_minPrice; get_minPrice
+528,ExchangeInformationFilter,maxPrice,string,set_maxPrice; get_maxPrice
+529,ExchangeInformationFilter,filterType,string,set_filterType; get_filterType
+530,ExchangeInformationFilter,tickSize,string,set_tickSize; get_tickSize
+531,ExchangeInformationFilter,stepSize,string,set_stepSize; get_stepSize
+532,ExchangeInformationFilter,maxQty,string,set_maxQty; get_maxQty
+533,ExchangeInformationFilter,minQty,string,set_minQty; get_minQty
+534,ExchangeInformationFilter,limit,long,set_limit; get_limit
+535,ExchangeInformationFilter,notional,string,set_notional; get_notional
+536,ExchangeInformationFilter,multiplierDown,string,set_multiplierDown; get_multiplierDown
+537,ExchangeInformationFilter,multiplierUp,string,set_multiplierUp; get_multiplierUp
+538,ExchangeInformationFilter,multiplierDecimal,string,set_multiplierDecimal; get_multiplierDecimal
+539,ExchangeInformationRateLimit,rateLimitType,string,set_rateLimitType; get_rateLimitType
+540,ExchangeInformationRateLimit,interval,string,set_interval; get_interval
+541,ExchangeInformationRateLimit,intervalNum,long,set_intervalNum; get_intervalNum
+542,ExchangeInformationRateLimit,limit,long,get_limit; set_limit
+543,ExchangeInformation,timezone,string,get_timezone; set_timezone
+544,ExchangeInformation,serverTime,long,set_serverTime; get_serverTime
+545,ExchangeInformation,futuresType,string,get_futuresType; set_futuresType
+546,ExchangeInformation,rateLimits,System.Collections.Generic.List`1<class ExchangeInformationRateLimit>,get_rateLimits; set_rateLimits
+547,ExchangeInformation,exchangeFilters,System.Collections.Generic.List`1<object>,get_exchangeFilters; set_exchangeFilters
+548,ExchangeInformation,assets,System.Collections.Generic.List`1<class ExchangeInformationAsset>,set_assets; get_assets
+549,ExchangeInformation,symbols,System.Collections.Generic.List`1<class ExchangeInformationSymbol>,get_symbols; set_symbols
+550,ExchangeInformationSymbol,symbol,string,set_symbol; get_symbol
+551,ExchangeInformationSymbol,pair,string,get_pair; set_pair
+552,ExchangeInformationSymbol,contractType,string,set_contractType; get_contractType
+553,ExchangeInformationSymbol,deliveryDate,object,get_deliveryDate; set_deliveryDate
+554,ExchangeInformationSymbol,onboardDate,object,set_onboardDate; get_onboardDate
+555,ExchangeInformationSymbol,status,string,set_status; get_status
+556,ExchangeInformationSymbol,maintMarginPercent,string,get_maintMarginPercent; set_maintMarginPercent
+557,ExchangeInformationSymbol,requiredMarginPercent,string,get_requiredMarginPercent; set_requiredMarginPercent
+558,ExchangeInformationSymbol,baseAsset,string,get_baseAsset; set_baseAsset
+559,ExchangeInformationSymbol,quoteAsset,string,set_quoteAsset; get_quoteAsset
+560,ExchangeInformationSymbol,marginAsset,string,set_marginAsset; get_marginAsset
+561,ExchangeInformationSymbol,pricePrecision,long,set_pricePrecision; get_pricePrecision
+562,ExchangeInformationSymbol,quantityPrecision,long,set_quantityPrecision; get_quantityPrecision
+563,ExchangeInformationSymbol,baseAssetPrecision,long,set_baseAssetPrecision; get_baseAssetPrecision
+564,ExchangeInformationSymbol,quotePrecision,long,set_quotePrecision; get_quotePrecision
+565,ExchangeInformationSymbol,underlyingType,string,set_underlyingType; get_underlyingType
+566,ExchangeInformationSymbol,underlyingSubType,System.Collections.Generic.List`1<string>,set_underlyingSubType; get_underlyingSubType
+567,ExchangeInformationSymbol,settlePlan,long,set_settlePlan; get_settlePlan
+568,ExchangeInformationSymbol,triggerProtect,string,set_triggerProtect; get_triggerProtect
+569,ExchangeInformationSymbol,liquidationFee,string,set_liquidationFee; get_liquidationFee
+570,ExchangeInformationSymbol,marketTakeBound,string,set_marketTakeBound; get_marketTakeBound
+571,ExchangeInformationSymbol,filters,System.Collections.Generic.List`1<class ExchangeInformationFilter>,set_filters; get_filters
+572,ExchangeInformationSymbol,orderTypes,System.Collections.Generic.List`1<string>,set_orderTypes; get_orderTypes
+573,ExchangeInformationSymbol,timeInForce,System.Collections.Generic.List`1<string>,set_timeInForce; get_timeInForce
+574,Bracket,bracket,int,set_bracket; get_bracket
+575,Bracket,initialLeverage,int,set_initialLeverage; get_initialLeverage
+576,Bracket,notionalCap,object,set_notionalCap; get_notionalCap
+577,Bracket,notionalFloor,int,set_notionalFloor; get_notionalFloor
+578,Bracket,maintMarginRatio,double,set_maintMarginRatio; get_maintMarginRatio
+579,Bracket,cum,double,set_cum; get_cum
+580,Leverage,symbol,string,set_symbol; get_symbol
+581,Leverage,brackets,System.Collections.Generic.List`1<class Bracket>,set_brackets; get_brackets
+582,AccountInformationAsset,asset,string,set_asset; get_asset
+583,AccountInformationAsset,walletBalance,string,set_walletBalance; get_walletBalance
+584,AccountInformationAsset,unrealizedProfit,string,set_unrealizedProfit; get_unrealizedProfit
+585,AccountInformationAsset,marginBalance,string,set_marginBalance; get_marginBalance
+586,AccountInformationAsset,maintMargin,string,set_maintMargin; get_maintMargin
+587,AccountInformationAsset,initialMargin,string,set_initialMargin; get_initialMargin
+588,AccountInformationAsset,positionInitialMargin,string,set_positionInitialMargin; get_positionInitialMargin
+589,AccountInformationAsset,openOrderInitialMargin,string,set_openOrderInitialMargin; get_openOrderInitialMargin
+590,AccountInformationAsset,maxWithdrawAmount,string,get_maxWithdrawAmount; set_maxWithdrawAmount
+591,AccountInformationAsset,crossWalletBalance,string,get_crossWalletBalance; set_crossWalletBalance
+592,AccountInformationAsset,crossUnPnl,string,get_crossUnPnl; set_crossUnPnl
+593,AccountInformationAsset,availableBalance,string,set_availableBalance; get_availableBalance
+594,AccountInformationAsset,marginAvailable,bool,get_marginAvailable; set_marginAvailable
+595,AccountInformationAsset,updateTime,long,set_updateTime; get_updateTime
+596,AccountInformationPosition,symbol,string,get_symbol; set_symbol
+597,AccountInformationPosition,initialMargin,string,set_initialMargin; get_initialMargin
+598,AccountInformationPosition,maintMargin,string,get_maintMargin; set_maintMargin
+599,AccountInformationPosition,unrealizedProfit,string,get_unrealizedProfit; set_unrealizedProfit
+600,AccountInformationPosition,positionInitialMargin,string,get_positionInitialMargin; set_positionInitialMargin
+601,AccountInformationPosition,openOrderInitialMargin,string,set_openOrderInitialMargin; get_openOrderInitialMargin
+602,AccountInformationPosition,leverage,string,get_leverage; set_leverage
+603,AccountInformationPosition,isolated,bool,get_isolated; set_isolated
+604,AccountInformationPosition,entryPrice,string,get_entryPrice; set_entryPrice
+605,AccountInformationPosition,maxNotional,string,get_maxNotional; set_maxNotional
+606,AccountInformationPosition,positionSide,string,get_positionSide; set_positionSide
+607,AccountInformationPosition,positionAmt,string,get_positionAmt; set_positionAmt
+608,AccountInformationPosition,notional,string,set_notional; get_notional
+609,AccountInformationPosition,isolatedWallet,string,get_isolatedWallet; set_isolatedWallet
+610,AccountInformationPosition,updateTime,long,set_updateTime; get_updateTime
+611,AccountInformationPosition,bidNotional,string,get_bidNotional; set_bidNotional
+612,AccountInformationPosition,askNotional,string,set_askNotional; get_askNotional
+613,AccountInformation,feeTier,long,get_feeTier; set_feeTier
+614,AccountInformation,canTrade,bool,get_canTrade; set_canTrade
+615,AccountInformation,canDeposit,bool,get_canDeposit; set_canDeposit
+616,AccountInformation,canWithdraw,bool,set_canWithdraw; get_canWithdraw
+617,AccountInformation,updateTime,long,get_updateTime; set_updateTime
+618,AccountInformation,totalInitialMargin,string,get_totalInitialMargin; set_totalInitialMargin
+619,AccountInformation,totalMaintMargin,string,get_totalMaintMargin; set_totalMaintMargin
+620,AccountInformation,totalWalletBalance,string,get_totalWalletBalance; set_totalWalletBalance
+621,AccountInformation,totalUnrealizedProfit,string,get_totalUnrealizedProfit; set_totalUnrealizedProfit
+622,AccountInformation,totalMarginBalance,string,set_totalMarginBalance; get_totalMarginBalance
+623,AccountInformation,totalPositionInitialMargin,string,set_totalPositionInitialMargin; get_totalPositionInitialMargin
+624,AccountInformation,totalOpenOrderInitialMargin,string,set_totalOpenOrderInitialMargin; get_totalOpenOrderInitialMargin
+625,AccountInformation,totalCrossWalletBalance,string,set_totalCrossWalletBalance; get_totalCrossWalletBalance
+626,AccountInformation,totalCrossUnPnl,string,set_totalCrossUnPnl; get_totalCrossUnPnl
+627,AccountInformation,availableBalance,string,set_availableBalance; get_availableBalance
+628,AccountInformation,maxWithdrawAmount,string,set_maxWithdrawAmount; get_maxWithdrawAmount
+629,AccountInformation,assets,System.Collections.Generic.List`1<class AccountInformationAsset>,set_assets; get_assets
+630,AccountInformation,positions,System.Collections.Generic.List`1<class AccountInformationPosition>,set_positions; get_positions
+631,Position,symbol,string,set_symbol; get_symbol
+632,Position,positionAmt,string,set_positionAmt; get_positionAmt
+633,Position,entryPrice,string,set_entryPrice; get_entryPrice
+634,Position,markPrice,string,set_markPrice; get_markPrice
+635,Position,unRealizedProfit,string,set_unRealizedProfit; get_unRealizedProfit
+636,Position,liquidationPrice,string,set_liquidationPrice; get_liquidationPrice
+637,Position,leverage,string,get_leverage; set_leverage
+638,Position,maxNotionalValue,string,set_maxNotionalValue; get_maxNotionalValue
+639,Position,marginType,string,set_marginType; get_marginType
+640,Position,isolatedMargin,string,set_isolatedMargin; get_isolatedMargin
+641,Position,isAutoAddMargin,string,set_isAutoAddMargin; get_isAutoAddMargin
+642,Position,positionSide,string,set_positionSide; get_positionSide
+643,Position,notional,string,set_notional; get_notional
+644,Position,isolatedWallet,string,set_isolatedWallet; get_isolatedWallet
+645,Position,updateTime,object,set_updateTime; get_updateTime
+646,OpenOrder,orderId,long,set_orderId; get_orderId
+647,OpenOrder,symbol,string,set_symbol; get_symbol
+648,OpenOrder,status,string,set_status; get_status
+649,OpenOrder,clientOrderId,string,set_clientOrderId; get_clientOrderId
+650,OpenOrder,price,string,set_price; get_price
+651,OpenOrder,avgPrice,string,set_avgPrice; get_avgPrice
+652,OpenOrder,origQty,string,set_origQty; get_origQty
+653,OpenOrder,executedQty,string,get_executedQty; set_executedQty
+654,OpenOrder,cumQuote,string,get_cumQuote; set_cumQuote
+655,OpenOrder,timeInForce,string,set_timeInForce; get_timeInForce
+656,OpenOrder,type,string,get_type; set_type
+657,OpenOrder,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+658,OpenOrder,closePosition,bool,get_closePosition; set_closePosition
+659,OpenOrder,side,string,set_side; get_side
+660,OpenOrder,positionSide,string,set_positionSide; get_positionSide
+661,OpenOrder,stopPrice,string,get_stopPrice; set_stopPrice
+662,OpenOrder,workingType,string,get_workingType; set_workingType
+663,OpenOrder,priceProtect,bool,get_priceProtect; set_priceProtect
+664,OpenOrder,origType,string,get_origType; set_origType
+665,OpenOrder,time,long,set_time; get_time
+666,OpenOrder,updateTime,long,get_updateTime; set_updateTime
+667,OrderHistory,orderId,object,set_orderId; get_orderId
+668,OrderHistory,symbol,string,get_symbol; set_symbol
+669,OrderHistory,status,string,get_status; set_status
+670,OrderHistory,clientOrderId,string,get_clientOrderId; set_clientOrderId
+671,OrderHistory,price,string,get_price; set_price
+672,OrderHistory,avgPrice,string,set_avgPrice; get_avgPrice
+673,OrderHistory,origQty,string,set_origQty; get_origQty
+674,OrderHistory,executedQty,string,get_executedQty; set_executedQty
+675,OrderHistory,cumQuote,string,get_cumQuote; set_cumQuote
+676,OrderHistory,timeInForce,string,set_timeInForce; get_timeInForce
+677,OrderHistory,type,string,get_type; set_type
+678,OrderHistory,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+679,OrderHistory,closePosition,bool,get_closePosition; set_closePosition
+680,OrderHistory,side,string,set_side; get_side
+681,OrderHistory,positionSide,string,get_positionSide; set_positionSide
+682,OrderHistory,stopPrice,string,set_stopPrice; get_stopPrice
+683,OrderHistory,workingType,string,set_workingType; get_workingType
+684,OrderHistory,priceProtect,bool,set_priceProtect; get_priceProtect
+685,OrderHistory,origType,string,get_origType; set_origType
+686,OrderHistory,time,long,set_time; get_time
+687,OrderHistory,updateTime,object,set_updateTime; get_updateTime
+688,TradeHistory,symbol,string,set_symbol; get_symbol
+689,TradeHistory,id,int,set_id; get_id
+690,TradeHistory,orderId,object,set_orderId; get_orderId
+691,TradeHistory,side,string,set_side; get_side
+692,TradeHistory,price,string,set_price; get_price
+693,TradeHistory,qty,string,set_qty; get_qty
+694,TradeHistory,realizedPnl,string,set_realizedPnl; get_realizedPnl
+695,TradeHistory,marginAsset,string,set_marginAsset; get_marginAsset
+696,TradeHistory,quoteQty,string,set_quoteQty; get_quoteQty
+697,TradeHistory,commission,string,set_commission; get_commission
+698,TradeHistory,commissionAsset,string,set_commissionAsset; get_commissionAsset
+699,TradeHistory,time,long,set_time; get_time
+700,TradeHistory,positionSide,string,set_positionSide; get_positionSide
+701,TradeHistory,maker,bool,set_maker; get_maker
+702,TradeHistory,buyer,bool,set_buyer; get_buyer
+703,TransactionHistory,symbol,string,set_symbol; get_symbol
+704,TransactionHistory,incomeType,string,set_incomeType; get_incomeType
+705,TransactionHistory,income,string,set_income; get_income
+706,TransactionHistory,asset,string,set_asset; get_asset
+707,TransactionHistory,time,long,set_time; get_time
+708,TransactionHistory,info,string,set_info; get_info
+709,TransactionHistory,tranId,object,set_tranId; get_tranId
+710,TransactionHistory,tradeId,string,set_tradeId; get_tradeId
+711,Asset,accountAlias,string,set_accountAlias; get_accountAlias
+712,Asset,asset,string,set_asset; get_asset
+713,Asset,balance,string,set_balance; get_balance
+714,Asset,crossWalletBalance,string,set_crossWalletBalance; get_crossWalletBalance
+715,Asset,crossUnPnl,string,set_crossUnPnl; get_crossUnPnl
+716,Asset,availableBalance,string,set_availableBalance; get_availableBalance
+717,Asset,maxWithdrawAmount,string,get_maxWithdrawAmount; set_maxWithdrawAmount
+718,Asset,marginAvailable,bool,get_marginAvailable; set_marginAvailable
+719,Asset,updateTime,long,get_updateTime; set_updateTime
+720,CurrentMultiAssetMode,multiAssetsMargin,bool,get_multiAssetsMargin; set_multiAssetsMargin
+721,NewOrderResult,orderId,long,set_orderId; get_orderId
+722,NewOrderResult,symbol,string,get_symbol; set_symbol
+723,NewOrderResult,status,string,set_status; get_status
+724,NewOrderResult,clientOrderId,string,get_clientOrderId; set_clientOrderId
+725,NewOrderResult,price,string,set_price; get_price
+726,NewOrderResult,avgPrice,string,get_avgPrice; set_avgPrice
+727,NewOrderResult,origQty,string,set_origQty; get_origQty
+728,NewOrderResult,executedQty,string,get_executedQty; set_executedQty
+729,NewOrderResult,cumQty,string,set_cumQty; get_cumQty
+730,NewOrderResult,cumQuote,string,get_cumQuote; set_cumQuote
+731,NewOrderResult,timeInForce,string,set_timeInForce; get_timeInForce
+732,NewOrderResult,type,string,set_type; get_type
+733,NewOrderResult,reduceOnly,bool,get_reduceOnly; set_reduceOnly
+734,NewOrderResult,closePosition,bool,get_closePosition; set_closePosition
+735,NewOrderResult,side,string,set_side; get_side
+736,NewOrderResult,positionSide,string,get_positionSide; set_positionSide
+737,NewOrderResult,stopPrice,string,set_stopPrice; get_stopPrice
+738,NewOrderResult,workingType,string,get_workingType; set_workingType
+739,NewOrderResult,priceProtect,bool,set_priceProtect; get_priceProtect
+740,NewOrderResult,origType,string,get_origType; set_origType
+741,NewOrderResult,updateTime,long,get_updateTime; set_updateTime
+742,CancelOrderResult,clientOrderId,string,get_clientOrderId; set_clientOrderId
+743,CancelOrderResult,cumQty,string,set_cumQty; get_cumQty
+744,CancelOrderResult,cumQuote,string,get_cumQuote; set_cumQuote
+745,CancelOrderResult,executedQty,string,get_executedQty; set_executedQty
+746,CancelOrderResult,orderId,long,get_orderId; set_orderId
+747,CancelOrderResult,origQty,string,get_origQty; set_origQty
+748,CancelOrderResult,origType,string,set_origType; get_origType
+749,CancelOrderResult,price,string,set_price; get_price
+750,CancelOrderResult,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+751,CancelOrderResult,side,string,set_side; get_side
+752,CancelOrderResult,positionSide,string,set_positionSide; get_positionSide
+753,CancelOrderResult,status,string,set_status; get_status
+754,CancelOrderResult,stopPrice,string,set_stopPrice; get_stopPrice
+755,CancelOrderResult,closePosition,bool,set_closePosition; get_closePosition
+756,CancelOrderResult,symbol,string,set_symbol; get_symbol
+757,CancelOrderResult,timeInForce,string,set_timeInForce; get_timeInForce
+758,CancelOrderResult,type,string,set_type; get_type
+759,CancelOrderResult,activatePrice,string,set_activatePrice; get_activatePrice
+760,CancelOrderResult,priceRate,string,set_priceRate; get_priceRate
+761,CancelOrderResult,updateTime,long,set_updateTime; get_updateTime
+762,CancelOrderResult,workingType,string,set_workingType; get_workingType
+763,CancelOrderResult,priceProtect,bool,set_priceProtect; get_priceProtect
+764,MarginChangedResult,code,int,get_code; set_code
+765,MarginChangedResult,msg,string,set_msg; get_msg
+766,LeverageChangedResult,symbol,string,set_symbol; get_symbol
+767,LeverageChangedResult,leverage,int,set_leverage; get_leverage
+768,LeverageChangedResult,maxNotionalValue,string,set_maxNotionalValue; get_maxNotionalValue
+769,IcrypexFuture,ApiKey,string,set_ApiKey; get_ApiKey
+770,IcrypexFuture,ApiSecret,string,set_ApiSecret; get_ApiSecret
+771,IcrypexFuture,BaseUrl,string,set_BaseUrl; get_BaseUrl
+772,IcrypexFuture,request,class RequestMethods,set_request; get_request
+773,IcrypexFuture,response,class ResponseClasses,set_response; get_response
+774,WebException,code,int,set_code; get_code
+775,WebException,msg,string,set_msg; get_msg
+776,ExchangeInformationAsset,asset,string,set_asset; get_asset
+777,ExchangeInformationAsset,marginAvailable,bool,set_marginAvailable; get_marginAvailable
+778,ExchangeInformationAsset,autoAssetExchange,string,set_autoAssetExchange; get_autoAssetExchange
+779,ExchangeInformationFilter,minPrice,string,set_minPrice; get_minPrice
+780,ExchangeInformationFilter,maxPrice,string,get_maxPrice; set_maxPrice
+781,ExchangeInformationFilter,filterType,string,get_filterType; set_filterType
+782,ExchangeInformationFilter,tickSize,string,get_tickSize; set_tickSize
+783,ExchangeInformationFilter,stepSize,string,get_stepSize; set_stepSize
+784,ExchangeInformationFilter,maxQty,string,set_maxQty; get_maxQty
+785,ExchangeInformationFilter,minQty,string,get_minQty; set_minQty
+786,ExchangeInformationFilter,limit,long,set_limit; get_limit
+787,ExchangeInformationFilter,notional,string,get_notional; set_notional
+788,ExchangeInformationFilter,multiplierDown,string,set_multiplierDown; get_multiplierDown
+789,ExchangeInformationFilter,multiplierUp,string,get_multiplierUp; set_multiplierUp
+790,ExchangeInformationFilter,multiplierDecimal,string,set_multiplierDecimal; get_multiplierDecimal
+791,ExchangeInformationRateLimit,rateLimitType,string,get_rateLimitType; set_rateLimitType
+792,ExchangeInformationRateLimit,interval,string,set_interval; get_interval
+793,ExchangeInformationRateLimit,intervalNum,long,get_intervalNum; set_intervalNum
+794,ExchangeInformationRateLimit,limit,long,set_limit; get_limit
+795,ExchangeInformation,timezone,string,set_timezone; get_timezone
+796,ExchangeInformation,serverTime,long,get_serverTime; set_serverTime
+797,ExchangeInformation,futuresType,string,get_futuresType; set_futuresType
+798,ExchangeInformation,rateLimits,System.Collections.Generic.List`1<class ExchangeInformationRateLimit>,set_rateLimits; get_rateLimits
+799,ExchangeInformation,exchangeFilters,System.Collections.Generic.List`1<object>,get_exchangeFilters; set_exchangeFilters
+800,ExchangeInformation,assets,System.Collections.Generic.List`1<class ExchangeInformationAsset>,set_assets; get_assets
+801,ExchangeInformation,symbols,System.Collections.Generic.List`1<class ExchangeInformationSymbol>,get_symbols; set_symbols
+802,ExchangeInformationSymbol,symbol,string,set_symbol; get_symbol
+803,ExchangeInformationSymbol,pair,string,get_pair; set_pair
+804,ExchangeInformationSymbol,contractType,string,get_contractType; set_contractType
+805,ExchangeInformationSymbol,deliveryDate,object,get_deliveryDate; set_deliveryDate
+806,ExchangeInformationSymbol,onboardDate,object,set_onboardDate; get_onboardDate
+807,ExchangeInformationSymbol,status,string,get_status; set_status
+808,ExchangeInformationSymbol,maintMarginPercent,string,get_maintMarginPercent; set_maintMarginPercent
+809,ExchangeInformationSymbol,requiredMarginPercent,string,get_requiredMarginPercent; set_requiredMarginPercent
+810,ExchangeInformationSymbol,baseAsset,string,get_baseAsset; set_baseAsset
+811,ExchangeInformationSymbol,quoteAsset,string,set_quoteAsset; get_quoteAsset
+812,ExchangeInformationSymbol,marginAsset,string,get_marginAsset; set_marginAsset
+813,ExchangeInformationSymbol,pricePrecision,long,get_pricePrecision; set_pricePrecision
+814,ExchangeInformationSymbol,quantityPrecision,long,set_quantityPrecision; get_quantityPrecision
+815,ExchangeInformationSymbol,baseAssetPrecision,long,get_baseAssetPrecision; set_baseAssetPrecision
+816,ExchangeInformationSymbol,quotePrecision,long,get_quotePrecision; set_quotePrecision
+817,ExchangeInformationSymbol,underlyingType,string,get_underlyingType; set_underlyingType
+818,ExchangeInformationSymbol,underlyingSubType,System.Collections.Generic.List`1<string>,set_underlyingSubType; get_underlyingSubType
+819,ExchangeInformationSymbol,settlePlan,long,get_settlePlan; set_settlePlan
+820,ExchangeInformationSymbol,triggerProtect,string,set_triggerProtect; get_triggerProtect
+821,ExchangeInformationSymbol,liquidationFee,string,get_liquidationFee; set_liquidationFee
+822,ExchangeInformationSymbol,marketTakeBound,string,set_marketTakeBound; get_marketTakeBound
+823,ExchangeInformationSymbol,filters,System.Collections.Generic.List`1<class ExchangeInformationFilter>,get_filters; set_filters
+824,ExchangeInformationSymbol,orderTypes,System.Collections.Generic.List`1<string>,set_orderTypes; get_orderTypes
+825,ExchangeInformationSymbol,timeInForce,System.Collections.Generic.List`1<string>,get_timeInForce; set_timeInForce
+826,Bracket,bracket,int,get_bracket; set_bracket
+827,Bracket,initialLeverage,int,get_initialLeverage; set_initialLeverage
+828,Bracket,notionalCap,object,get_notionalCap; set_notionalCap
+829,Bracket,notionalFloor,int,get_notionalFloor; set_notionalFloor
+830,Bracket,maintMarginRatio,double,set_maintMarginRatio; get_maintMarginRatio
+831,Bracket,cum,double,get_cum; set_cum
+832,Leverage,symbol,string,set_symbol; get_symbol
+833,Leverage,brackets,System.Collections.Generic.List`1<class Bracket>,get_brackets; set_brackets
+834,AccountInformationAsset,asset,string,get_asset; set_asset
+835,AccountInformationAsset,walletBalance,string,get_walletBalance; set_walletBalance
+836,AccountInformationAsset,unrealizedProfit,string,set_unrealizedProfit; get_unrealizedProfit
+837,AccountInformationAsset,marginBalance,string,get_marginBalance; set_marginBalance
+838,AccountInformationAsset,maintMargin,string,get_maintMargin; set_maintMargin
+839,AccountInformationAsset,initialMargin,string,set_initialMargin; get_initialMargin
+840,AccountInformationAsset,positionInitialMargin,string,get_positionInitialMargin; set_positionInitialMargin
+841,AccountInformationAsset,openOrderInitialMargin,string,set_openOrderInitialMargin; get_openOrderInitialMargin
+842,AccountInformationAsset,maxWithdrawAmount,string,get_maxWithdrawAmount; set_maxWithdrawAmount
+843,AccountInformationAsset,crossWalletBalance,string,set_crossWalletBalance; get_crossWalletBalance
+844,AccountInformationAsset,crossUnPnl,string,set_crossUnPnl; get_crossUnPnl
+845,AccountInformationAsset,availableBalance,string,set_availableBalance; get_availableBalance
+846,AccountInformationAsset,marginAvailable,bool,set_marginAvailable; get_marginAvailable
+847,AccountInformationAsset,updateTime,long,set_updateTime; get_updateTime
+848,AccountInformationPosition,symbol,string,set_symbol; get_symbol
+849,AccountInformationPosition,initialMargin,string,set_initialMargin; get_initialMargin
+850,AccountInformationPosition,maintMargin,string,set_maintMargin; get_maintMargin
+851,AccountInformationPosition,unrealizedProfit,string,get_unrealizedProfit; set_unrealizedProfit
+852,AccountInformationPosition,positionInitialMargin,string,get_positionInitialMargin; set_positionInitialMargin
+853,AccountInformationPosition,openOrderInitialMargin,string,get_openOrderInitialMargin; set_openOrderInitialMargin
+854,AccountInformationPosition,leverage,string,set_leverage; get_leverage
+855,AccountInformationPosition,isolated,bool,get_isolated; set_isolated
+856,AccountInformationPosition,entryPrice,string,set_entryPrice; get_entryPrice
+857,AccountInformationPosition,maxNotional,string,get_maxNotional; set_maxNotional
+858,AccountInformationPosition,positionSide,string,set_positionSide; get_positionSide
+859,AccountInformationPosition,positionAmt,string,set_positionAmt; get_positionAmt
+860,AccountInformationPosition,notional,string,set_notional; get_notional
+861,AccountInformationPosition,isolatedWallet,string,set_isolatedWallet; get_isolatedWallet
+862,AccountInformationPosition,updateTime,long,set_updateTime; get_updateTime
+863,AccountInformationPosition,bidNotional,string,set_bidNotional; get_bidNotional
+864,AccountInformationPosition,askNotional,string,set_askNotional; get_askNotional
+865,AccountInformation,feeTier,long,set_feeTier; get_feeTier
+866,AccountInformation,canTrade,bool,set_canTrade; get_canTrade
+867,AccountInformation,canDeposit,bool,set_canDeposit; get_canDeposit
+868,AccountInformation,canWithdraw,bool,set_canWithdraw; get_canWithdraw
+869,AccountInformation,updateTime,long,set_updateTime; get_updateTime
+870,AccountInformation,totalInitialMargin,string,set_totalInitialMargin; get_totalInitialMargin
+871,AccountInformation,totalMaintMargin,string,set_totalMaintMargin; get_totalMaintMargin
+872,AccountInformation,totalWalletBalance,string,set_totalWalletBalance; get_totalWalletBalance
+873,AccountInformation,totalUnrealizedProfit,string,set_totalUnrealizedProfit; get_totalUnrealizedProfit
+874,AccountInformation,totalMarginBalance,string,set_totalMarginBalance; get_totalMarginBalance
+875,AccountInformation,totalPositionInitialMargin,string,set_totalPositionInitialMargin; get_totalPositionInitialMargin
+876,AccountInformation,totalOpenOrderInitialMargin,string,set_totalOpenOrderInitialMargin; get_totalOpenOrderInitialMargin
+877,AccountInformation,totalCrossWalletBalance,string,set_totalCrossWalletBalance; get_totalCrossWalletBalance
+878,AccountInformation,totalCrossUnPnl,string,set_totalCrossUnPnl; get_totalCrossUnPnl
+879,AccountInformation,availableBalance,string,set_availableBalance; get_availableBalance
+880,AccountInformation,maxWithdrawAmount,string,set_maxWithdrawAmount; get_maxWithdrawAmount
+881,AccountInformation,assets,System.Collections.Generic.List`1<class AccountInformationAsset>,set_assets; get_assets
+882,AccountInformation,positions,System.Collections.Generic.List`1<class AccountInformationPosition>,set_positions; get_positions
+883,Position,symbol,string,set_symbol; get_symbol
+884,Position,positionAmt,string,set_positionAmt; get_positionAmt
+885,Position,entryPrice,string,set_entryPrice; get_entryPrice
+886,Position,markPrice,string,set_markPrice; get_markPrice
+887,Position,unRealizedProfit,string,set_unRealizedProfit; get_unRealizedProfit
+888,Position,liquidationPrice,string,set_liquidationPrice; get_liquidationPrice
+889,Position,leverage,string,get_leverage; set_leverage
+890,Position,maxNotionalValue,string,get_maxNotionalValue; set_maxNotionalValue
+891,Position,marginType,string,set_marginType; get_marginType
+892,Position,isolatedMargin,string,get_isolatedMargin; set_isolatedMargin
+893,Position,isAutoAddMargin,string,get_isAutoAddMargin; set_isAutoAddMargin
+894,Position,positionSide,string,get_positionSide; set_positionSide
+895,Position,notional,string,set_notional; get_notional
+896,Position,isolatedWallet,string,get_isolatedWallet; set_isolatedWallet
+897,Position,updateTime,object,set_updateTime; get_updateTime
+898,OpenOrder,orderId,long,get_orderId; set_orderId
+899,OpenOrder,symbol,string,set_symbol; get_symbol
+900,OpenOrder,status,string,get_status; set_status
+901,OpenOrder,clientOrderId,string,set_clientOrderId; get_clientOrderId
+902,OpenOrder,price,string,set_price; get_price
+903,OpenOrder,avgPrice,string,get_avgPrice; set_avgPrice
+904,OpenOrder,origQty,string,get_origQty; set_origQty
+905,OpenOrder,executedQty,string,get_executedQty; set_executedQty
+906,OpenOrder,cumQuote,string,set_cumQuote; get_cumQuote
+907,OpenOrder,timeInForce,string,set_timeInForce; get_timeInForce
+908,OpenOrder,type,string,set_type; get_type
+909,OpenOrder,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+910,OpenOrder,closePosition,bool,set_closePosition; get_closePosition
+911,OpenOrder,side,string,set_side; get_side
+912,OpenOrder,positionSide,string,set_positionSide; get_positionSide
+913,OpenOrder,stopPrice,string,set_stopPrice; get_stopPrice
+914,OpenOrder,workingType,string,set_workingType; get_workingType
+915,OpenOrder,priceProtect,bool,set_priceProtect; get_priceProtect
+916,OpenOrder,origType,string,set_origType; get_origType
+917,OpenOrder,time,long,set_time; get_time
+918,OpenOrder,updateTime,long,set_updateTime; get_updateTime
+919,OrderHistory,orderId,object,set_orderId; get_orderId
+920,OrderHistory,symbol,string,set_symbol; get_symbol
+921,OrderHistory,status,string,set_status; get_status
+922,OrderHistory,clientOrderId,string,set_clientOrderId; get_clientOrderId
+923,OrderHistory,price,string,set_price; get_price
+924,OrderHistory,avgPrice,string,set_avgPrice; get_avgPrice
+925,OrderHistory,origQty,string,set_origQty; get_origQty
+926,OrderHistory,executedQty,string,set_executedQty; get_executedQty
+927,OrderHistory,cumQuote,string,set_cumQuote; get_cumQuote
+928,OrderHistory,timeInForce,string,set_timeInForce; get_timeInForce
+929,OrderHistory,type,string,set_type; get_type
+930,OrderHistory,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+931,OrderHistory,closePosition,bool,set_closePosition; get_closePosition
+932,OrderHistory,side,string,set_side; get_side
+933,OrderHistory,positionSide,string,set_positionSide; get_positionSide
+934,OrderHistory,stopPrice,string,set_stopPrice; get_stopPrice
+935,OrderHistory,workingType,string,set_workingType; get_workingType
+936,OrderHistory,priceProtect,bool,set_priceProtect; get_priceProtect
+937,OrderHistory,origType,string,get_origType; set_origType
+938,OrderHistory,time,long,get_time; set_time
+939,OrderHistory,updateTime,object,get_updateTime; set_updateTime
+940,TradeHistory,symbol,string,set_symbol; get_symbol
+941,TradeHistory,id,int,get_id; set_id
+942,TradeHistory,orderId,object,set_orderId; get_orderId
+943,TradeHistory,side,string,get_side; set_side
+944,TradeHistory,price,string,set_price; get_price
+945,TradeHistory,qty,string,get_qty; set_qty
+946,TradeHistory,realizedPnl,string,get_realizedPnl; set_realizedPnl
+947,TradeHistory,marginAsset,string,get_marginAsset; set_marginAsset
+948,TradeHistory,quoteQty,string,set_quoteQty; get_quoteQty
+949,TradeHistory,commission,string,get_commission; set_commission
+950,TradeHistory,commissionAsset,string,get_commissionAsset; set_commissionAsset
+951,TradeHistory,time,long,get_time; set_time
+952,TradeHistory,positionSide,string,get_positionSide; set_positionSide
+953,TradeHistory,maker,bool,get_maker; set_maker
+954,TradeHistory,buyer,bool,get_buyer; set_buyer
+955,TransactionHistory,symbol,string,set_symbol; get_symbol
+956,TransactionHistory,incomeType,string,get_incomeType; set_incomeType
+957,TransactionHistory,income,string,set_income; get_income
+958,TransactionHistory,asset,string,get_asset; set_asset
+959,TransactionHistory,time,long,set_time; get_time
+960,TransactionHistory,info,string,get_info; set_info
+961,TransactionHistory,tranId,object,get_tranId; set_tranId
+962,TransactionHistory,tradeId,string,get_tradeId; set_tradeId
+963,Asset,accountAlias,string,set_accountAlias; get_accountAlias
+964,Asset,asset,string,get_asset; set_asset
+965,Asset,balance,string,get_balance; set_balance
+966,Asset,crossWalletBalance,string,get_crossWalletBalance; set_crossWalletBalance
+967,Asset,crossUnPnl,string,get_crossUnPnl; set_crossUnPnl
+968,Asset,availableBalance,string,get_availableBalance; set_availableBalance
+969,Asset,maxWithdrawAmount,string,set_maxWithdrawAmount; get_maxWithdrawAmount
+970,Asset,marginAvailable,bool,set_marginAvailable; get_marginAvailable
+971,Asset,updateTime,long,set_updateTime; get_updateTime
+972,CurrentMultiAssetMode,multiAssetsMargin,bool,set_multiAssetsMargin; get_multiAssetsMargin
+973,NewOrderResult,orderId,long,set_orderId; get_orderId
+974,NewOrderResult,symbol,string,set_symbol; get_symbol
+975,NewOrderResult,status,string,set_status; get_status
+976,NewOrderResult,clientOrderId,string,set_clientOrderId; get_clientOrderId
+977,NewOrderResult,price,string,set_price; get_price
+978,NewOrderResult,avgPrice,string,set_avgPrice; get_avgPrice
+979,NewOrderResult,origQty,string,set_origQty; get_origQty
+980,NewOrderResult,executedQty,string,set_executedQty; get_executedQty
+981,NewOrderResult,cumQty,string,set_cumQty; get_cumQty
+982,NewOrderResult,cumQuote,string,set_cumQuote; get_cumQuote
+983,NewOrderResult,timeInForce,string,set_timeInForce; get_timeInForce
+984,NewOrderResult,type,string,get_type; set_type
+985,NewOrderResult,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+986,NewOrderResult,closePosition,bool,set_closePosition; get_closePosition
+987,NewOrderResult,side,string,set_side; get_side
+988,NewOrderResult,positionSide,string,set_positionSide; get_positionSide
+989,NewOrderResult,stopPrice,string,set_stopPrice; get_stopPrice
+990,NewOrderResult,workingType,string,set_workingType; get_workingType
+991,NewOrderResult,priceProtect,bool,set_priceProtect; get_priceProtect
+992,NewOrderResult,origType,string,set_origType; get_origType
+993,NewOrderResult,updateTime,long,set_updateTime; get_updateTime
+994,CancelOrderResult,clientOrderId,string,set_clientOrderId; get_clientOrderId
+995,CancelOrderResult,cumQty,string,set_cumQty; get_cumQty
+996,CancelOrderResult,cumQuote,string,set_cumQuote; get_cumQuote
+997,CancelOrderResult,executedQty,string,set_executedQty; get_executedQty
+998,CancelOrderResult,orderId,long,set_orderId; get_orderId
+999,CancelOrderResult,origQty,string,set_origQty; get_origQty
+1000,CancelOrderResult,origType,string,get_origType; set_origType
+1001,CancelOrderResult,price,string,get_price; set_price
+1002,CancelOrderResult,reduceOnly,bool,set_reduceOnly; get_reduceOnly
+1003,CancelOrderResult,side,string,get_side; set_side
+1004,CancelOrderResult,positionSide,string,set_positionSide; get_positionSide
+1005,CancelOrderResult,status,string,get_status; set_status
+1006,CancelOrderResult,stopPrice,string,set_stopPrice; get_stopPrice
+1007,CancelOrderResult,closePosition,bool,set_closePosition; get_closePosition
+1008,CancelOrderResult,symbol,string,get_symbol; set_symbol
+1009,CancelOrderResult,timeInForce,string,get_timeInForce; set_timeInForce
+1010,CancelOrderResult,type,string,get_type; set_type
+1011,CancelOrderResult,activatePrice,string,get_activatePrice; set_activatePrice
+1012,CancelOrderResult,priceRate,string,set_priceRate; get_priceRate
+1013,CancelOrderResult,updateTime,long,get_updateTime; set_updateTime
+1014,CancelOrderResult,workingType,string,set_workingType; get_workingType
+1015,CancelOrderResult,priceProtect,bool,get_priceProtect; set_priceProtect
+1016,MarginChangedResult,code,int,get_code; set_code
+1017,MarginChangedResult,msg,string,get_msg; set_msg
+1018,LeverageChangedResult,symbol,string,get_symbol; set_symbol
+1019,LeverageChangedResult,leverage,int,set_leverage; get_leverage
+1020,LeverageChangedResult,maxNotionalValue,string,set_maxNotionalValue; get_maxNotionalValue
+1021,RiskBildirimSonuc,ShowBool,bool,get_ShowBool; set_ShowBool
+1022,RiskBildirimSonuc,Market,string,get_Market; set_Market
+1023,RiskBildirimSonuc,LoginStatus,bool,set_LoginStatus; get_LoginStatus
+1024,RiskBildirimSonuc,Symbol,string,get_Symbol; set_Symbol
+1025,RiskBildirimSonuc,Yon,string,set_Yon; get_Yon
+1026,RiskBildirimSonuc,ShowAll,bool,get_ShowAll; set_ShowAll
+1027,RiskBildirimSonuc,FirstTradeBool,bool,set_FirstTradeBool; get_FirstTradeBool
+1028,ReqArtioxLogin,auth_password,string,get_auth_password; set_auth_password
+1029,ReqArtioxLogin,client_info,class Client_Info,set_client_info; get_client_info
+1030,ReqArtioxLogin,client_ip,string,set_client_ip; get_client_ip
+1031,ReqArtioxLogin,password,string,set_password; get_password
+1032,ReqArtioxLogin,sid,string,get_sid; set_sid
+1033,ReqArtioxLogin,user_email,string,get_user_email; set_user_email
+1034,Client_Info,ip,string,set_ip; get_ip
+1035,Client_Info,city,string,set_city; get_city
+1036,Client_Info,country,string,set_country; get_country
+1037,Client_Info,loc,string,set_loc; get_loc
+1038,ReqArtioxUserService,cookie,class Cookie,set_cookie; get_cookie
+1039,ReqArtioxUserService,client_ip,string,set_client_ip; get_client_ip
+1040,ReqArtioxUserService,sid,string,set_sid; get_sid
+1041,ReqArtioxCancelOrder,cookie,class Cookie,set_cookie; get_cookie
+1042,ReqArtioxCancelOrder,client_ip,string,set_client_ip; get_client_ip
+1043,ReqArtioxCancelOrder,order_id,int,set_order_id; get_order_id
+1044,ReqArtioxCancelOrder,order_type,string,set_order_type; get_order_type
+1045,ReqArtioxCancelOrder,pair_id,int[],set_pair_id; get_pair_id
+1046,ReqArtioxCancelOrder,sid,string,set_sid; get_sid
+1047,ReqArtioxSendOrder,cookie,class Cookie,set_cookie; get_cookie
+1048,ReqArtioxSendOrder,sid,string,set_sid; get_sid
+1049,ReqArtioxSendOrder,client_ip,string,get_client_ip; set_client_ip
+1050,ReqArtioxSendOrder,pair_id,int[],set_pair_id; get_pair_id
+1051,ReqArtioxSendOrder,order_type,string,set_order_type; get_order_type
+1052,ReqArtioxSendOrder,amount,float,set_amount; get_amount
+1053,ReqArtioxSendOrder,price,float,set_price; get_price
+1054,ResArtioxSendOrder,code,int,set_code; get_code
+1055,ResArtioxSendOrder,is_okay,bool,set_is_okay; get_is_okay
+1056,ResArtioxSendOrder,message,string,set_message; get_message
+1057,ResArtioxSendOrder,type,string,set_type; get_type
+1058,ResArtioxSendOrder,symbol,string,set_symbol; get_symbol
+1059,ResArtioxSendOrder,amount,float,set_amount; get_amount
+1060,ResArtioxCancelOrder,code,int,set_code; get_code
+1061,ResArtioxCancelOrder,is_okay,bool,set_is_okay; get_is_okay
+1062,ResArtioxCancelOrder,message,string,set_message; get_message
+1063,ResArtioxLogin,code,int,set_code; get_code
+1064,ResArtioxLogin,is_okay,bool,get_is_okay; set_is_okay
+1065,ResArtioxLogin,message,string,get_message; set_message
+1066,ResArtioxLogin,session_key,string,get_session_key; set_session_key
+1067,ResArtioxLogin,logged_in,bool,get_logged_in; set_logged_in
+1068,ResArtioxLogin,cookie,class Cookie,set_cookie; get_cookie
+1069,Cookie,sessionKey,string,get_sessionKey; set_sessionKey
+1070,Cookie,loggedIn,bool,set_loggedIn; get_loggedIn
+1071,ResArtioxUserService,id,int,get_id; set_id
+1072,ResArtioxUserService,email,string,set_email; get_email
+1073,ResArtioxUserService,art_product_list,class Art_Product_List[],get_art_product_list; set_art_product_list
+1074,ResArtioxUserService,currency_list,class Currency_List[],set_currency_list; get_currency_list
+1075,ResArtioxUserService,pair_list,class Pair_List[],get_pair_list; set_pair_list
+1076,ResArtioxUserService,account_verified,bool,set_account_verified; get_account_verified
+1077,ResArtioxUserService,kyc_verified,bool,get_kyc_verified; set_kyc_verified
+1078,ResArtioxUserService,second_level_kyc_verified,bool,set_second_level_kyc_verified; get_second_level_kyc_verified
+1079,ResArtioxUserService,second_level_kyc_status,string,set_second_level_kyc_status; get_second_level_kyc_status
+1080,ResArtioxUserService,two_factor_auth,bool,get_two_factor_auth; set_two_factor_auth
+1081,ResArtioxUserService,creation_time,long,get_creation_time; set_creation_time
+1082,ResArtioxUserService,account_level,int,set_account_level; get_account_level
+1083,ResArtioxUserService,daily_deposit_limit,float,get_daily_deposit_limit; set_daily_deposit_limit
+1084,ResArtioxUserService,daily_withdrawal_limit,float,set_daily_withdrawal_limit; get_daily_withdrawal_limit
+1085,ResArtioxUserService,monthly_deposit_limit,float,get_monthly_deposit_limit; set_monthly_deposit_limit
+1086,ResArtioxUserService,monthly_withdrawal_limit,float,set_monthly_withdrawal_limit; get_monthly_withdrawal_limit
+1087,ResArtioxUserService,deposit_reference_code,string,get_deposit_reference_code; set_deposit_reference_code
+1088,ResArtioxUserService,open_tooltip,bool,get_open_tooltip; set_open_tooltip
+1089,ResArtioxUserService,vip,bool,get_vip; set_vip
+1090,ResArtioxOrder,id,int,set_id; get_id
+1091,ResArtioxOrder,order_to_cancel,object,get_order_to_cancel; set_order_to_cancel
+1092,ResArtioxOrder,user_id,int,get_user_id; set_user_id
+1093,ResArtioxOrder,pair_id,int[],get_pair_id; set_pair_id
+1094,ResArtioxOrder,kind,string,get_kind; set_kind
+1095,ResArtioxOrder,type,string,set_type; get_type
+1096,ResArtioxOrder,commission_free,bool,get_commission_free; set_commission_free
+1097,ResArtioxOrder,amount,float,get_amount; set_amount
+1098,ResArtioxOrder,init_amount,float,get_init_amount; set_init_amount
+1099,ResArtioxOrder,price,float,get_price; set_price
+1100,ResArtioxOrder,percent,float,set_percent; get_percent
+1101,ResArtioxOrder,status,string,get_status; set_status
+1102,ResArtioxOrder,creation_time,long,get_creation_time; set_creation_time
+1103,ResArtioxTrade,id,int,set_id; get_id
+1104,ResArtioxTrade,pair_id,int[],get_pair_id; set_pair_id
+1105,ResArtioxTrade,buyer_id,int,get_buyer_id; set_buyer_id
+1106,ResArtioxTrade,seller_id,int,set_seller_id; get_seller_id
+1107,ResArtioxTrade,buy_order_id,int,get_buy_order_id; set_buy_order_id
+1108,ResArtioxTrade,sell_order_id,int,get_sell_order_id; set_sell_order_id
+1109,ResArtioxTrade,amount,float,get_amount; set_amount
+1110,ResArtioxTrade,price,float,get_price; set_price
+1111,ResArtioxTrade,type,string,set_type; get_type
+1112,ResArtioxTrade,creation_time,long,get_creation_time; set_creation_time
+1113,ResArtioxTrade,side,string,get_side; set_side
+1114,Art_Product_List,art_product_id,int,set_art_product_id; get_art_product_id
+1115,Art_Product_List,available_amount,float,get_available_amount; set_available_amount
+1116,Art_Product_List,total_amount,float,get_total_amount; set_total_amount
+1117,Art_Product_List,address,string,get_address; set_address
+1118,Currency_List,currency_id,int,set_currency_id; get_currency_id
+1119,Currency_List,available_amount,float,get_available_amount; set_available_amount
+1120,Currency_List,total_amount,float,get_total_amount; set_total_amount
+1121,Currency_List,address,string,get_address; set_address
+1122,Pair_List,pair_id,int[],set_pair_id; get_pair_id
+1123,Pair_List,is_favorite,bool,get_is_favorite; set_is_favorite
+1124,Artiox_Products,id,int,set_id; get_id
+1125,Artiox_Products,name,string,get_name; set_name
+1126,Artiox_Products,symbol,string,set_symbol; get_symbol
+1127,Artiox_Products,value,float,get_value; set_value
+1128,Artiox_Products,value_type,string,set_value_type; get_value_type
+1129,Artiox_Products,pre_sale_supply_ratio,float,get_pre_sale_supply_ratio; set_pre_sale_supply_ratio
+1130,Artiox_Products,pre_sale_circulating_supply,float,get_pre_sale_circulating_supply; set_pre_sale_circulating_supply
+1131,Artiox_Products,pre_sale_supply_stock,float,set_pre_sale_supply_stock; get_pre_sale_supply_stock
+1132,Artiox_Products,public_sale_supply_ratio,float,get_public_sale_supply_ratio; set_public_sale_supply_ratio
+1133,Artiox_Products,public_sale_circulating_supply,float,get_public_sale_circulating_supply; set_public_sale_circulating_supply
+1134,Artiox_Products,public_sale_supply_stock,float,get_public_sale_supply_stock; set_public_sale_supply_stock
+1135,Artiox_Products,circulating_supply_ratio,float,get_circulating_supply_ratio; set_circulating_supply_ratio
+1136,Artiox_Products,circulating_supply,float,set_circulating_supply; get_circulating_supply
+1137,Artiox_Products,total_supply,float,get_total_supply; set_total_supply
+1138,Artiox_Products,right_to_own_ratio,float,get_right_to_own_ratio; set_right_to_own_ratio
+1139,Artiox_Products,contract_address,string,set_contract_address; get_contract_address
+1140,Artiox_Products,creation_time,long,set_creation_time; get_creation_time
+1141,Artiox_Products,color,string[],get_color; set_color
+1142,ResArtioxBlance,creation_time,long,get_creation_time; set_creation_time
+1143,ResArtioxBlance,total_balance,double,set_total_balance; get_total_balance
+1144,ResArtioxTradeItem,id,int,get_id; set_id
+1145,ResArtioxTradeItem,pair_id,int[],get_pair_id; set_pair_id
+1146,ResArtioxTradeItem,buyer_id,int,set_buyer_id; get_buyer_id
+1147,ResArtioxTradeItem,seller_id,int,get_seller_id; set_seller_id
+1148,ResArtioxTradeItem,buy_order_id,int,set_buy_order_id; get_buy_order_id
+1149,ResArtioxTradeItem,sell_order_id,int,set_sell_order_id; get_sell_order_id
+1150,ResArtioxTradeItem,amount,float,get_amount; set_amount
+1151,ResArtioxTradeItem,price,float,get_price; set_price
+1152,ResArtioxTradeItem,type,string,set_type; get_type
+1153,ResArtioxTradeItem,creation_time,long,get_creation_time; set_creation_time
+1154,ReqArtioxOrderBook,pair_id,int[],set_pair_id; get_pair_id
+1155,ReqArtioxOrderBook,limit,int,set_limit; get_limit
+1156,ResArtioxOrderBook,amount,float,set_amount; get_amount
+1157,ResArtioxOrderBook,price,float,get_price; set_price
+1158,ResArtioxOrderBook,type,string,get_type; set_type
+1159,ReqArtioxChart,pair_id,int[],get_pair_id; set_pair_id
+1160,ReqArtioxChart,zoom_level,string,get_zoom_level; set_zoom_level
+1161,ReqArtioxChart,limit,int,get_limit; set_limit
+1162,Bar,time,float,set_time; get_time
+1163,Bar,open,float,set_open; get_open
+1164,Bar,close,float,get_close; set_close
+1165,Bar,high,float,get_high; set_high
+1166,Bar,low,float,get_low; set_low
+1167,Bar,volume,float,set_volume; get_volume
+1168,TebReqClass,Inputs,class TebReqInput[],set_Inputs; get_Inputs
+1169,TebReqClass,Token,string,set_Token; get_Token
+1170,TebReqClass,VersionNo,int,set_VersionNo; get_VersionNo
+1171,TebReqClass,TransactionId,string,set_TransactionId; get_TransactionId
+1172,TebReqClass,Password,string,set_Password; get_Password
+1173,TebReqClass,UserName,string,set_UserName; get_UserName
+1174,TebReqClass,ServiceName,string,set_ServiceName; get_ServiceName
+1175,TebReqInput,Key,string,set_Key; get_Key
+1176,TebReqInput,Value,object,get_Value; set_Value
+1177,TebKeyValue,Key,string,set_Key; get_Key
+1178,TebKeyValue,Value,string,get_Value; set_Value
+1179,TebHesapClass,CevapKodu,int,set_CevapKodu; get_CevapKodu
+1180,TebHesapClass,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1181,TebHesapClass,MusteriNo,int,set_MusteriNo; get_MusteriNo
+1182,TebHesapClass,EkNo,int,set_EkNo; get_EkNo
+1183,TebHesapClass,Urun,string,set_Urun; get_Urun
+1184,TebHesapClass,Menkul,string,set_Menkul; get_Menkul
+1185,TebHesapClass,Stok,float,set_Stok; get_Stok
+1186,TebHesapClass,Blokaj,float,get_Blokaj; set_Blokaj
+1187,TebHesapClass,IslemStogu,float,set_IslemStogu; get_IslemStogu
+1188,TebHesapClass,Maliyet,float,set_Maliyet; get_Maliyet
+1189,TebHesapClass,Fiyat,float,set_Fiyat; get_Fiyat
+1190,TebHesapClass,Tutar,float,set_Tutar; get_Tutar
+1191,TebHesapClass,Degisim,string,set_Degisim; get_Degisim
+1192,TebHesapClass,KarZarar,string,set_KarZarar; get_KarZarar
+1193,TebHesapClass,KarZararYuzde,string,set_KarZararYuzde; get_KarZararYuzde
+1194,TebHesapClass,Renk,string,set_Renk; get_Renk
+1195,TebHesapClass,PozisyonBuyuklugu,string,set_PozisyonBuyuklugu; get_PozisyonBuyuklugu
+1196,TebHesapClass,UzlasmaFiyati,string,set_UzlasmaFiyati; get_UzlasmaFiyati
+1197,TebOrderclass,CevapKodu,System.Nullable`1<int>,get_CevapKodu; set_CevapKodu
+1198,TebOrderclass,CevapMesaj,string,get_CevapMesaj; set_CevapMesaj
+1199,TebOrderclass,Tarih,System.Nullable`1<valuetype System.DateTime>,set_Tarih; get_Tarih
+1200,TebOrderclass,Hisse,string,get_Hisse; set_Hisse
+1201,TebOrderclass,AlisSatis,string,get_AlisSatis; set_AlisSatis
+1202,TebOrderclass,Adet,string,get_Adet; set_Adet
+1203,TebOrderclass,Fiyat,System.Nullable`1<valuetype System.Decimal>,set_Fiyat; get_Fiyat
+1204,TebOrderclass,EmirTuru,string,set_EmirTuru; get_EmirTuru
+1205,TebOrderclass,EmirTipi,string,get_EmirTipi; set_EmirTipi
+1206,TebOrderclass,EmirGecerlilik,string,get_EmirGecerlilik; set_EmirGecerlilik
+1207,TebOrderclass,EmirId,string,set_EmirId; get_EmirId
+1208,TebOrderclass,Status,System.Nullable`1<int>,set_Status; get_Status
+1209,TebOrderclass,UpdateNum,System.Nullable`1<int>,set_UpdateNum; get_UpdateNum
+1210,TebOrderclass,GerceklesmeFiyati,System.Nullable`1<valuetype System.Decimal>,set_GerceklesmeFiyati; get_GerceklesmeFiyati
+1211,TebOrderclass,BekleyenAdet,string,set_BekleyenAdet; get_BekleyenAdet
+1212,TebOrderclass,MidPoint,System.Nullable`1<int>,set_MidPoint; get_MidPoint
+1213,TebOrderclass,Iceberg,System.Nullable`1<int>,set_Iceberg; get_Iceberg
+1214,TebOrderclass,GorunenAdet,string,set_GorunenAdet; get_GorunenAdet
+1215,TebOrderclass,Hesap,string,set_Hesap; get_Hesap
+1216,TebOrderclass,Tutar,System.Nullable`1<valuetype System.Decimal>,set_Tutar; get_Tutar
+1217,TebOrderclass,Referans,string,set_Referans; get_Referans
+1218,TebOrderclass,Aciklama,string,set_Aciklama; get_Aciklama
+1219,TebOrderclass,InsertTime,string,set_InsertTime; get_InsertTime
+1220,TebOrderclass,UpdateTime,string,set_UpdateTime; get_UpdateTime
+1221,TebOrderclass,SiraNo,System.Nullable`1<int>,set_SiraNo; get_SiraNo
+1222,TebOrderclass,TalimatId,string,set_TalimatId; get_TalimatId
+1223,TebOrderclass,IptalEklemeYapilabilir,System.Nullable`1<int>,set_IptalEklemeYapilabilir; get_IptalEklemeYapilabilir
+1224,TebOrderclass,OrjAnaEmirReferans,string,set_OrjAnaEmirReferans; get_OrjAnaEmirReferans
+1225,TebOrderclass,Emir,string,set_Emir; get_Emir
+1226,TebOrderclass,MaxZincirSiraNo,System.Nullable`1<int>,set_MaxZincirSiraNo; get_MaxZincirSiraNo
+1227,TebOrderclass,Islem,System.Nullable`1<int>,set_Islem; get_Islem
+1228,TebOrderclass,SiralamZaman,System.Nullable`1<valuetype System.DateTime>,set_SiralamZaman; get_SiralamZaman
+1229,TebExtreResponseClass,CevapKodu,int,set_CevapKodu; get_CevapKodu
+1230,TebExtreResponseClass,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1231,TebExtreResponseClass,Veri,string,set_Veri; get_Veri
+1232,TebHisseIslemLimitleriHavuz,CevapKodu,int,set_CevapKodu; get_CevapKodu
+1233,TebHisseIslemLimitleriHavuz,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1234,TebHisseIslemLimitleriHavuz,MusteriNo,int,set_MusteriNo; get_MusteriNo
+1235,TebHisseIslemLimitleriHavuz,A1IslemLimiti,System.Nullable`1<valuetype System.Decimal>,set_A1IslemLimiti; get_A1IslemLimiti
+1236,TebHisseIslemLimitleriHavuz,A2IslemLimiti,System.Nullable`1<valuetype System.Decimal>,set_A2IslemLimiti; get_A2IslemLimiti
+1237,TebHisseIslemLimitleriHavuz,A3IslemLimiti,System.Nullable`1<valuetype System.Decimal>,set_A3IslemLimiti; get_A3IslemLimiti
+1238,TebHisseIslemLimitleriHavuz,A4IslemLimiti,System.Nullable`1<valuetype System.Decimal>,get_A4IslemLimiti; set_A4IslemLimiti
+1239,TebHisseIslemLimitleriHavuz,BIslemLimiti,System.Nullable`1<valuetype System.Decimal>,get_BIslemLimiti; set_BIslemLimiti
+1240,TebHisseIslemLimitleriHavuz,CDIslemLimiti,System.Nullable`1<valuetype System.Decimal>,set_CDIslemLimiti; get_CDIslemLimiti
+1241,TebHisseIslemLimitleriHavuz,NakitIslemLimiti,System.Nullable`1<valuetype System.Decimal>,get_NakitIslemLimiti; set_NakitIslemLimiti
+1242,TebHisseIslemLimitleriHavuz,AcigaSatisIslemLimiti,System.Nullable`1<valuetype System.Decimal>,set_AcigaSatisIslemLimiti; get_AcigaSatisIslemLimiti
+1243,TebHisseIslemLimitleriHavuz,KrediRasyo,System.Nullable`1<valuetype System.Decimal>,get_KrediRasyo; set_KrediRasyo
+1244,TebHisseIslemLimitleriHavuz,KrediLimiti,System.Nullable`1<valuetype System.Decimal>,get_KrediLimiti; set_KrediLimiti
+1245,TebHisseIslemLimitleriHavuz,KullanilabilirKrediLimiti,System.Nullable`1<valuetype System.Decimal>,get_KullanilabilirKrediLimiti; set_KullanilabilirKrediLimiti
+1246,TebHisseIslemLimitleriHavuz,Overall,System.Nullable`1<valuetype System.Decimal>,set_Overall; get_Overall
+1247,TebHisseIslemLimitleriHavuz,ToplamAlis,System.Nullable`1<valuetype System.Decimal>,get_ToplamAlis; set_ToplamAlis
+1248,TebHisseIslemLimitleriHavuz,ToplamSatis,System.Nullable`1<valuetype System.Decimal>,get_ToplamSatis; set_ToplamSatis
+1249,TebHisseNakitHareketleriClass,CevapKodu,int,get_CevapKodu; set_CevapKodu
+1250,TebHisseNakitHareketleriClass,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1251,TebHisseNakitHareketleriClass,HisseNakitHareketleri,string,get_HisseNakitHareketleri; set_HisseNakitHareketleri
+1252,TebHisseNakitHareketleriClass,T0,System.Nullable`1<valuetype System.Decimal>,get_T0; set_T0
+1253,TebHisseNakitHareketleriClass,T1,System.Nullable`1<valuetype System.Decimal>,get_T1; set_T1
+1254,TebHisseNakitHareketleriClass,T2,System.Nullable`1<valuetype System.Decimal>,set_T2; get_T2
+1255,TebOrderResultClass,CevapKodu,int,get_CevapKodu; set_CevapKodu
+1256,TebOrderResultClass,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1257,TebOrderCancelorEditResultClass,CevapKodu,int,get_CevapKodu; set_CevapKodu
+1258,TebOrderCancelorEditResultClass,CevapMesaj,string,set_CevapMesaj; get_CevapMesaj
+1259,TebOrderCancelorEditResultClass,BlokajId,int,get_BlokajId; set_BlokajId
+1260,TebOrderCancelorEditResultClass,BlokajTutar,float,get_BlokajTutar; set_BlokajTutar
+1261,TebOrderCancelorEditResultClass,TarihliEmir,int,get_TarihliEmir; set_TarihliEmir
+1262,TebOrderCancelorEditResultClass,TarihliEmirMesaj,string,get_TarihliEmirMesaj; set_TarihliEmirMesaj
+1263,ReqIsYatirimLogin,username,string,get_username; set_username
+1264,ReqIsYatirimLogin,password,string,get_password; set_password
+1265,ReqIsYatirimLogin,loginType,string,set_loginType; get_loginType
+1266,ReqIsYatirimLogin,verificationType,string,set_verificationType; get_verificationType
+1267,ReqIsYatirimLogin,appCode,string,set_appCode; get_appCode
+1268,ReqIsYatirimLogin,appPassword,string,set_appPassword; get_appPassword
+1269,ReqIsYatirimLogin,key,string,set_key; get_key
+1270,ReqIsYatirimLogin,sessionId,string,set_sessionId; get_sessionId
+1271,ReqEquitySendOrder,appCode,string,set_appCode; get_appCode
+1272,ReqEquitySendOrder,appPassword,string,get_appPassword; set_appPassword
+1273,ReqEquitySendOrder,accountId,string,get_accountId; set_accountId
+1274,ReqEquitySendOrder,clOrdId,string,set_clOrdId; get_clOrdId
+1275,ReqEquitySendOrder,instrumentSymbol,string,set_instrumentSymbol; get_instrumentSymbol
+1276,ReqEquitySendOrder,uniqueSymbol,string,get_uniqueSymbol; set_uniqueSymbol
+1277,ReqEquitySendOrder,instrumentType,string,get_instrumentType; set_instrumentType
+1278,ReqEquitySendOrder,qty,double,set_qty; get_qty
+1279,ReqEquitySendOrder,price,double,get_price; set_price
+1280,ReqEquitySendOrder,sideId,string,get_sideId; set_sideId
+1281,ReqEquitySendOrder,closeShortSell,bool,get_closeShortSell; set_closeShortSell
+1282,ReqEquitySendOrder,orderTypeId,string,get_orderTypeId; set_orderTypeId
+1283,ReqEquitySendOrder,timeInForceId,string,get_timeInForceId; set_timeInForceId
+1284,ReqEquitySendOrder,token,string,set_token; get_token
+1285,ReqEquitySendOrder,tokenVersion,string,get_tokenVersion; set_tokenVersion
+1286,ReqEquitySendOrder,marketSegmentAlert,string,get_marketSegmentAlert; set_marketSegmentAlert
+1287,ReqEquitySendOrder,maxFloor,double,set_maxFloor; get_maxFloor
+1288,ReqFutOptSendOrder,appCode,string,set_appCode; get_appCode
+1289,ReqFutOptSendOrder,appPassword,string,get_appPassword; set_appPassword
+1290,ReqFutOptSendOrder,accountId,string,set_accountId; get_accountId
+1291,ReqFutOptSendOrder,clOrdId,string,get_clOrdId; set_clOrdId
+1292,ReqFutOptSendOrder,instrumentSymbol,string,get_instrumentSymbol; set_instrumentSymbol
+1293,ReqFutOptSendOrder,qty,double,get_qty; set_qty
+1294,ReqFutOptSendOrder,price,double,set_price; get_price
+1295,ReqFutOptSendOrder,sideId,string,set_sideId; get_sideId
+1296,ReqFutOptSendOrder,orderTypeId,string,set_orderTypeId; get_orderTypeId
+1297,ReqFutOptSendOrder,timeInForceId,string,get_timeInForceId; set_timeInForceId
+1298,ReqFutOptSendOrder,token,string,set_token; get_token
+1299,ReqFutOptSendOrder,tokenVersion,string,set_tokenVersion; get_tokenVersion
+1300,ReqFutOptSendOrder,tradingSessionId,string,set_tradingSessionId; get_tradingSessionId
+1301,ReqFutOptSendOrder,endDate,string,get_endDate; set_endDate
+1302,ReqFutOptTriggerSendOrder,appCode,string,set_appCode; get_appCode
+1303,ReqFutOptTriggerSendOrder,appPassword,string,get_appPassword; set_appPassword
+1304,ReqFutOptTriggerSendOrder,accountId,string,set_accountId; get_accountId
+1305,ReqFutOptTriggerSendOrder,clOrdId,string,set_clOrdId; get_clOrdId
+1306,ReqFutOptTriggerSendOrder,instrumentSymbol,string,get_instrumentSymbol; set_instrumentSymbol
+1307,ReqFutOptTriggerSendOrder,qty,double,get_qty; set_qty
+1308,ReqFutOptTriggerSendOrder,price,double,set_price; get_price
+1309,ReqFutOptTriggerSendOrder,sideId,string,get_sideId; set_sideId
+1310,ReqFutOptTriggerSendOrder,orderTypeId,string,set_orderTypeId; get_orderTypeId
+1311,ReqFutOptTriggerSendOrder,timeInForceId,string,set_timeInForceId; get_timeInForceId
+1312,ReqFutOptTriggerSendOrder,token,string,set_token; get_token
+1313,ReqFutOptTriggerSendOrder,tokenVersion,string,set_tokenVersion; get_tokenVersion
+1314,ReqFutOptTriggerSendOrder,endDate,string,set_endDate; get_endDate
+1315,ReqFutOptTriggerSendOrder,triggerOrder,bool,set_triggerOrder; get_triggerOrder
+1316,ReqFutOptTriggerSendOrder,triggerTypeId,string,set_triggerTypeId; get_triggerTypeId
+1317,ReqFutOptTriggerSendOrder,triggerPriceTypeId,string,set_triggerPriceTypeId; get_triggerPriceTypeId
+1318,ReqFutOptTriggerSendOrder,triggerPriceDirectionId,string,set_triggerPriceDirectionId; get_triggerPriceDirectionId
+1319,ReqFutOptTriggerSendOrder,triggerSymbol,string,set_triggerSymbol; get_triggerSymbol
+1320,ReqFutOptTriggerSendOrder,triggerPrice,string,get_triggerPrice; set_triggerPrice
+1321,ReqFutOptTriggerSendOrder,tradingSessionId,string,get_tradingSessionId; set_tradingSessionId
+1322,ReqEquityChainSendOrder,accountId,string,get_accountId; set_accountId
+1323,ReqEquityChainSendOrder,clOrdId,string,get_clOrdId; set_clOrdId
+1324,ReqEquityChainSendOrder,instrumentSymbol,string,set_instrumentSymbol; get_instrumentSymbol
+1325,ReqEquityChainSendOrder,instrumentType,string,get_instrumentType; set_instrumentType
+1326,ReqEquityChainSendOrder,qty,double,get_qty; set_qty
+1327,ReqEquityChainSendOrder,price,double,set_price; get_price
+1328,ReqEquityChainSendOrder,sideId,string,set_sideId; get_sideId
+1329,ReqEquityChainSendOrder,closeShortSell,bool,get_closeShortSell; set_closeShortSell
+1330,ReqEquityChainSendOrder,orderTypeId,string,get_orderTypeId; set_orderTypeId
+1331,ReqEquityChainSendOrder,timeInForceId,string,set_timeInForceId; get_timeInForceId
+1332,ReqEquityChainSendOrder,token,string,get_token; set_token
+1333,ReqEquityChainSendOrder,tokenVersion,long,set_tokenVersion; get_tokenVersion
+1334,ReqEquityChainSendOrder,chainOrder,bool,get_chainOrder; set_chainOrder
+1335,ReqEquityChainSendOrder,marketSegmentAlert,string,set_marketSegmentAlert; get_marketSegmentAlert
+1336,ReqEquityChainSendOrder,parentOrderId,string,get_parentOrderId; set_parentOrderId
+1337,ResEquityOrder,ok,bool,get_ok; set_ok
+1338,ResEquityOrder,errorCode,object,set_errorCode; get_errorCode
+1339,ResEquityOrder,errorDescription,object,get_errorDescription; set_errorDescription
+1340,ResEquityOrder,transactionId,string,set_transactionId; get_transactionId
+1341,ResEquityOrder,value,string,get_value; set_value
+1342,LoginRes,ok,bool,set_ok; get_ok
+1343,LoginRes,errorCode,object,get_errorCode; set_errorCode
+1344,LoginRes,errorDescription,object,get_errorDescription; set_errorDescription
+1345,LoginRes,transactionId,string,get_transactionId; set_transactionId
+1346,LoginRes,value,class Value,set_value; get_value
+1347,Value,sessionId,string,get_sessionId; set_sessionId
+1348,Value,bsSessionId,string,get_bsSessionId; set_bsSessionId
+1349,Value,verificationType,string,get_verificationType; set_verificationType
+1350,Value,phoneNumber,object,get_phoneNumber; set_phoneNumber
+1351,Value,token,string,get_token; set_token
+1352,Value,tokenVersion,string,get_tokenVersion; set_tokenVersion
+1353,UserInfoBasic,ok,bool,get_ok; set_ok
+1354,UserInfoBasic,errorCode,object,get_errorCode; set_errorCode
+1355,UserInfoBasic,errorDescription,object,set_errorDescription; get_errorDescription
+1356,UserInfoBasic,transactionId,string,get_transactionId; set_transactionId
+1357,UserInfoBasic,value,class UserInfoBasicValue,set_value; get_value
+1358,UserInfoBasicValue,username,string,get_username; set_username
+1359,UserInfoBasicValue,personName,string,set_personName; get_personName
+1360,UserInfoBasicValue,email,string,get_email; set_email
+1361,UserInfoGetCustomerId,ok,bool,set_ok; get_ok
+1362,UserInfoGetCustomerId,errorCode,object,get_errorCode; set_errorCode
+1363,UserInfoGetCustomerId,errorDescription,object,set_errorDescription; get_errorDescription
+1364,UserInfoGetCustomerId,transactionId,string,get_transactionId; set_transactionId
+1365,UserInfoGetCustomerId,value,string,set_value; get_value
+1366,EquityPosition,ok,bool,set_ok; get_ok
+1367,EquityPosition,errorCode,object,get_errorCode; set_errorCode
+1368,EquityPosition,errorDescription,object,get_errorDescription; set_errorDescription
+1369,EquityPosition,transactionId,string,set_transactionId; get_transactionId
+1370,EquityPosition,value,class EquityValue[],get_value; set_value
+1371,EquityValue,accountId,string,set_accountId; get_accountId
+1372,EquityValue,depotCode,string,get_depotCode; set_depotCode
+1373,EquityValue,depotDescription,string,set_depotDescription; get_depotDescription
+1374,EquityValue,uniqueSymbol,string,get_uniqueSymbol; set_uniqueSymbol
+1375,EquityValue,balanceT,double,get_balanceT; set_balanceT
+1376,EquityValue,balanceT1,double,get_balanceT1; set_balanceT1
+1377,EquityValue,balanceT2,double,set_balanceT2; get_balanceT2
+1378,EquityValue,balanceT3,double,get_balanceT3; set_balanceT3
+1379,EquityValue,useableQty,double,get_useableQty; set_useableQty
+1380,EquityValue,avgPrice,double,get_avgPrice; set_avgPrice
+1381,EquityValue,lastPrice,double,get_lastPrice; set_lastPrice
+1382,EquityValue,currentAmount,double,set_currentAmount; get_currentAmount
+1383,EquityValue,currentAmountT2,double,get_currentAmountT2; set_currentAmountT2
+1384,EquityValue,profitLoss,double,get_profitLoss; set_profitLoss
+1385,EquityValue,assetCoef,int,get_assetCoef; set_assetCoef
+1386,EquityValue,sellCoef,int,get_sellCoef; set_sellCoef
+1387,EquityValue,lastChange,long,set_lastChange; get_lastChange
+1388,EquityValue,dpProfitLoss,double,get_dpProfitLoss; set_dpProfitLoss
+1389,EquityValue,dpAmount,double,get_dpAmount; set_dpAmount
+1390,EquityValue,dpPosKey,string,set_dpPosKey; get_dpPosKey
+1391,EquityValue,equitySymbol,string,get_equitySymbol; set_equitySymbol
+1392,EquityValue,equityType,string,get_equityType; set_equityType
+1393,FutOpt,ok,bool,set_ok; get_ok
+1394,FutOpt,errorCode,object,get_errorCode; set_errorCode
+1395,FutOpt,errorDescription,object,get_errorDescription; set_errorDescription
+1396,FutOpt,transactionId,string,get_transactionId; set_transactionId
+1397,FutOpt,value,class FutOptValue[],get_value; set_value
+1398,FutOptValue,accountId,string,set_accountId; get_accountId
+1399,FutOptValue,depotCode,string,get_depotCode; set_depotCode
+1400,FutOptValue,depotDescription,string,get_depotDescription; set_depotDescription
+1401,FutOptValue,uniqueSymbol,string,set_uniqueSymbol; get_uniqueSymbol
+1402,FutOptValue,balanceT,float,get_balanceT; set_balanceT
+1403,FutOptValue,balanceT1,float,get_balanceT1; set_balanceT1
+1404,FutOptValue,balanceT2,float,get_balanceT2; set_balanceT2
+1405,FutOptValue,balanceT3,float,set_balanceT3; get_balanceT3
+1406,FutOptValue,useableQty,float,get_useableQty; set_useableQty
+1407,FutOptValue,intradayCost,float,get_intradayCost; set_intradayCost
+1408,FutOptValue,lastPrice,float,get_lastPrice; set_lastPrice
+1409,FutOptValue,currentAmount,float,set_currentAmount; get_currentAmount
+1410,FutOptValue,currentAmountT2,float,get_currentAmountT2; set_currentAmountT2
+1411,FutOptValue,profitLoss,float,set_profitLoss; get_profitLoss
+1412,FutOptValue,assetCoef,int,get_assetCoef; set_assetCoef
+1413,FutOptValue,sellCoef,int,set_sellCoef; get_sellCoef
+1414,FutOptValue,lastChange,long,get_lastChange; set_lastChange
+1415,FutOptValue,dpProfitLoss,float,get_dpProfitLoss; set_dpProfitLoss
+1416,FutOptValue,dpAmount,float,get_dpAmount; set_dpAmount
+1417,FutOptValue,dpPosKey,string,get_dpPosKey; set_dpPosKey
+1418,EquityList,ok,bool,set_ok; get_ok
+1419,EquityList,errorCode,object,get_errorCode; set_errorCode
+1420,EquityList,errorDescription,object,set_errorDescription; get_errorDescription
+1421,EquityList,transactionId,string,get_transactionId; set_transactionId
+1422,EquityList,value,class EquityListValue[],set_value; get_value
+1423,EquityListValue,instrumentId,int,get_instrumentId; set_instrumentId
+1424,EquityListValue,symbol,string,set_symbol; get_symbol
+1425,EquityListValue,name,string,get_name; set_name
+1426,EquityListValue,type,string,set_type; get_type
+1427,EquityListValue,group,string,get_group; set_group
+1428,EquityListValue,isinCode,string,set_isinCode; get_isinCode
+1429,EquityListValue,minPrice,float,set_minPrice; get_minPrice
+1430,EquityListValue,maxPrice,float,get_maxPrice; set_maxPrice
+1431,EquityListValue,priceStepList,class EquityListPricesteplist[],get_priceStepList; set_priceStepList
+1432,EquityListPricesteplist,minPx,float,set_minPx; get_minPx
+1433,EquityListPricesteplist,maxPx,float,get_maxPx; set_maxPx
+1434,EquityListPricesteplist,tickSize,float,set_tickSize; get_tickSize
+1435,HisseSummary,ok,bool,get_ok; set_ok
+1436,HisseSummary,errorCode,object,set_errorCode; get_errorCode
+1437,HisseSummary,errorDescription,object,get_errorDescription; set_errorDescription
+1438,HisseSummary,transactionId,string,get_transactionId; set_transactionId
+1439,HisseSummary,value,class HisseSummaryValue,get_value; set_value
+1440,HisseSummaryValue,accountTotals,class Accounttotals,set_accountTotals; get_accountTotals
+1441,HisseSummaryValue,cashPositionList,class Cashpositionlist[],get_cashPositionList; set_cashPositionList
+1442,Accounttotals,totalPortfolioValue,double,get_totalPortfolioValue; set_totalPortfolioValue
+1443,Accounttotals,fonPayAlimSatim,double,get_fonPayAlimSatim; set_fonPayAlimSatim
+1444,Accounttotals,fon_PayStokTransferValue,double,get_fon_PayStokTransferValue; set_fon_PayStokTransferValue
+1445,Accounttotals,onaylanmayan_Kredi,double,set_onaylanmayan_Kredi; get_onaylanmayan_Kredi
+1446,Accounttotals,aciga_Satista_Kullanilan,double,get_aciga_Satista_Kullanilan; set_aciga_Satista_Kullanilan
+1447,Accounttotals,currencyValueEUR,double,set_currencyValueEUR; get_currencyValueEUR
+1448,Accounttotals,currencyValueUSD,double,get_currencyValueUSD; set_currencyValueUSD
+1449,Accounttotals,creditInterest,double,set_creditInterest; get_creditInterest
+1450,Accounttotals,dividendIncome,double,set_dividendIncome; get_dividendIncome
+1451,Accounttotals,usedCredit,double,get_usedCredit; set_usedCredit
+1452,Accounttotals,priorityRight,double,get_priorityRight; set_priorityRight
+1453,Accounttotals,creditLimit,double,set_creditLimit; get_creditLimit
+1454,Cashpositionlist,state,int,set_state; get_state
+1455,Cashpositionlist,symbol,string,get_symbol; set_symbol
+1456,Cashpositionlist,todaysValue,double,set_todaysValue; get_todaysValue
+1457,Cashpositionlist,price,double,get_price; set_price
+1458,Cashpositionlist,percentage,double,set_percentage; get_percentage
+1459,Cashpositionlist,stateDescr,string,set_stateDescr; get_stateDescr
+1460,Cashpositionlist,amtT2,double,set_amtT2; get_amtT2
+1461,Cashpositionlist,amtT3,double,set_amtT3; get_amtT3
+1462,Cashpositionlist,amt,double,get_amt; set_amt
+1463,Cashpositionlist,amtT1,double,get_amtT1; set_amtT1
+1464,Cashpositionlist,amtNet,double,set_amtNet; get_amtNet
+1465,HisseSummary2,ok,bool,set_ok; get_ok
+1466,HisseSummary2,errorCode,object,set_errorCode; get_errorCode
+1467,HisseSummary2,errorDescription,object,set_errorDescription; get_errorDescription
+1468,HisseSummary2,transactionId,string,set_transactionId; get_transactionId
+1469,HisseSummary2,value,class HisseSummary2Value,set_value; get_value
+1470,HisseSummary2Value,accountId,string,get_accountId; set_accountId
+1471,HisseSummary2Value,netAssetBuyLimit,double,set_netAssetBuyLimit; get_netAssetBuyLimit
+1472,HisseSummary2Value,openTradeLimit,double,set_openTradeLimit; get_openTradeLimit
+1473,HisseSummary2Value,availablecreditlimit,double,set_availablecreditlimit; get_availablecreditlimit
+1474,HisseSummary2Value,accountshortSellLimit,double,set_accountshortSellLimit; get_accountshortSellLimit
+1475,Summary,ok,bool,set_ok; get_ok
+1476,Summary,errorCode,object,set_errorCode; get_errorCode
+1477,Summary,errorDescription,object,set_errorDescription; get_errorDescription
+1478,Summary,transactionId,string,set_transactionId; get_transactionId
+1479,Summary,value,class SummaryValue,set_value; get_value
+1480,SummaryValue,accountId,string,set_accountId; get_accountId
+1481,SummaryValue,cashCollateral,double,set_cashCollateral; get_cashCollateral
+1482,SummaryValue,otherCollateral,double,set_otherCollateral; get_otherCollateral
+1483,SummaryValue,longOptionPremium,double,set_longOptionPremium; get_longOptionPremium
+1484,SummaryValue,exerciseCollateral,double,set_exerciseCollateral; get_exerciseCollateral
+1485,SummaryValue,scenerioCollateral,double,get_scenerioCollateral; set_scenerioCollateral
+1486,SummaryValue,positionCollateral,double,set_positionCollateral; get_positionCollateral
+1487,SummaryValue,profitLoss,double,get_profitLoss; set_profitLoss
+1488,SummaryValue,interSpreadCollateral,double,set_interSpreadCollateral; get_interSpreadCollateral
+1489,SummaryValue,spanControlRatio,double,get_spanControlRatio; set_spanControlRatio
+1490,SummaryValue,drawableCollateral,double,set_drawableCollateral; get_drawableCollateral
+1491,SummaryValue,usableCollateral,double,get_usableCollateral; set_usableCollateral
+1492,SummaryValue,requiredCollateral,double,set_requiredCollateral; get_requiredCollateral
+1493,SummaryValue,accountRiskRatio,double,get_accountRiskRatio; set_accountRiskRatio
+1494,SummaryValue,maintanenceCollateral,double,get_maintanenceCollateral; set_maintanenceCollateral
+1495,SummaryValue,requiredCollateralTakasbankStart,double,get_requiredCollateralTakasbankStart; set_requiredCollateralTakasbankStart
+1496,Logout,ok,bool,set_ok; get_ok
+1497,Logout,errorCode,object,set_errorCode; get_errorCode
+1498,Logout,errorDescription,object,set_errorDescription; get_errorDescription
+1499,Logout,transactionId,string,set_transactionId; get_transactionId
+1500,Logout,value,bool,get_value; set_value
+1501,AccountsList,ok,bool,set_ok; get_ok
+1502,AccountsList,errorCode,object,get_errorCode; set_errorCode
+1503,AccountsList,errorDescription,object,set_errorDescription; get_errorDescription
+1504,AccountsList,transactionId,string,set_transactionId; get_transactionId
+1505,AccountsList,value,class Accounts[],set_value; get_value
+1506,Accounts,accountId,string,set_accountId; get_accountId
+1507,Accounts,customerId,int,get_customerId; set_customerId
+1508,Accounts,accountName,string,set_accountName; get_accountName
+1509,Accounts,afkCode,string,set_afkCode; get_afkCode
+1510,Accounts,privateAccount,bool,set_privateAccount; get_privateAccount
+1511,Accounts,accountTypeId,int,get_accountTypeId; set_accountTypeId
+1512,Accounts,complianceScore,string,set_complianceScore; get_complianceScore
+1513,Accounts,legitimacyScore,string,set_legitimacyScore; get_legitimacyScore
+1514,AccountSummaryCash,ok,bool,set_ok; get_ok
+1515,AccountSummaryCash,errorCode,object,set_errorCode; get_errorCode
+1516,AccountSummaryCash,errorDescription,object,set_errorDescription; get_errorDescription
+1517,AccountSummaryCash,transactionId,string,set_transactionId; get_transactionId
+1518,AccountSummaryCash,value,class AccountSummaryCashValue,set_value; get_value
+1519,AccountSummaryCashValue,accountTotals,class Accounttotalcash[],set_accountTotals; get_accountTotals
+1520,AccountSummaryCashValue,accountCashPositions,class Accountcashposition[],set_accountCashPositions; get_accountCashPositions
+1521,Accounttotalcash,accountId,string,set_accountId; get_accountId
+1522,Accounttotalcash,swapEquityRatio,float,set_swapEquityRatio; get_swapEquityRatio
+1523,Accounttotalcash,totalEquityValue,float,set_totalEquityValue; get_totalEquityValue
+1524,Accounttotalcash,totalAmountInAcctCcy,float,set_totalAmountInAcctCcy; get_totalAmountInAcctCcy
+1525,Accounttotalcash,totalEquityValueT2,float,set_totalEquityValueT2; get_totalEquityValueT2
+1526,Accounttotalcash,totalPortfolioValue,float,get_totalPortfolioValue; set_totalPortfolioValue
+1527,Accounttotalcash,dividendIncome,object,get_dividendIncome; set_dividendIncome
+1528,Accounttotalcash,lastChange,long,set_lastChange; get_lastChange
+1529,Accountcashposition,accountId,string,set_accountId; get_accountId
+1530,Accountcashposition,secId,int,set_secId; get_secId
+1531,Accountcashposition,depotCode,string,get_depotCode; set_depotCode
+1532,Accountcashposition,depotDescription,string,set_depotDescription; get_depotDescription
+1533,Accountcashposition,uniqueSymbol,string,get_uniqueSymbol; set_uniqueSymbol
+1534,Accountcashposition,balanceT,float,set_balanceT; get_balanceT
+1535,Accountcashposition,balanceT1,float,get_balanceT1; set_balanceT1
+1536,Accountcashposition,balanceT2,float,get_balanceT2; set_balanceT2
+1537,Accountcashposition,balanceT3,float,get_balanceT3; set_balanceT3
+1538,Accountcashposition,useableQty,float,get_useableQty; set_useableQty
+1539,Accountcashposition,avgPrice,float,set_avgPrice; get_avgPrice
+1540,Accountcashposition,lastPrice,float,set_lastPrice; get_lastPrice
+1541,Accountcashposition,currentAmount,float,set_currentAmount; get_currentAmount
+1542,Accountcashposition,currentAmountT2,float,set_currentAmountT2; get_currentAmountT2
+1543,Accountcashposition,profitLoss,object,get_profitLoss; set_profitLoss
+1544,Accountcashposition,assetCoef,int,set_assetCoef; get_assetCoef
+1545,Accountcashposition,sellCoef,int,get_sellCoef; set_sellCoef
+1546,Accountcashposition,lastChange,long,get_lastChange; set_lastChange
+1547,Accountcashposition,dpProfitLoss,float,get_dpProfitLoss; set_dpProfitLoss
+1548,Accountcashposition,dpAmount,float,set_dpAmount; get_dpAmount
+1549,Accountcashposition,dpPosKey,string,set_dpPosKey; get_dpPosKey
+1550,AccountSummaryCredit,ok,bool,set_ok; get_ok
+1551,AccountSummaryCredit,errorCode,object,set_errorCode; get_errorCode
+1552,AccountSummaryCredit,errorDescription,object,set_errorDescription; get_errorDescription
+1553,AccountSummaryCredit,transactionId,string,set_transactionId; get_transactionId
+1554,AccountSummaryCredit,value,class AccountSummaryCreditValue[],set_value; get_value
+1555,AccountSummaryCreditValue,accountId,string,set_accountId; get_accountId
+1556,AccountSummaryCreditValue,secId,int,set_secId; get_secId
+1557,AccountSummaryCreditValue,depotCode,string,set_depotCode; get_depotCode
+1558,AccountSummaryCreditValue,depotDescription,string,set_depotDescription; get_depotDescription
+1559,AccountSummaryCreditValue,uniqueSymbol,string,set_uniqueSymbol; get_uniqueSymbol
+1560,AccountSummaryCreditValue,balanceT,float,set_balanceT; get_balanceT
+1561,AccountSummaryCreditValue,balanceT1,float,set_balanceT1; get_balanceT1
+1562,AccountSummaryCreditValue,balanceT2,float,set_balanceT2; get_balanceT2
+1563,AccountSummaryCreditValue,balanceT3,float,set_balanceT3; get_balanceT3
+1564,AccountSummaryCreditValue,useableQty,float,set_useableQty; get_useableQty
+1565,AccountSummaryCreditValue,avgPrice,float,set_avgPrice; get_avgPrice
+1566,AccountSummaryCreditValue,lastPrice,float,set_lastPrice; get_lastPrice
+1567,AccountSummaryCreditValue,currentAmount,float,set_currentAmount; get_currentAmount
+1568,AccountSummaryCreditValue,currentAmountT2,float,set_currentAmountT2; get_currentAmountT2
+1569,AccountSummaryCreditValue,profitLoss,object,set_profitLoss; get_profitLoss
+1570,AccountSummaryCreditValue,assetCoef,int,set_assetCoef; get_assetCoef
+1571,AccountSummaryCreditValue,sellCoef,int,set_sellCoef; get_sellCoef
+1572,AccountSummaryCreditValue,lastChange,long,set_lastChange; get_lastChange
+1573,AccountSummaryCreditValue,dpProfitLoss,float,set_dpProfitLoss; get_dpProfitLoss
+1574,AccountSummaryCreditValue,dpAmount,float,set_dpAmount; get_dpAmount
+1575,AccountSummaryCreditValue,dpPosKey,string,set_dpPosKey; get_dpPosKey
+1576,AccountSummaryCreditValue,usedCredit,float,set_usedCredit; get_usedCredit
+1577,AccountSummaryCreditValue,creditInterest,float,set_creditInterest; get_creditInterest
+1578,PasswordChangeRes,ok,bool,get_ok; set_ok
+1579,PasswordChangeRes,errorCode,object,get_errorCode; set_errorCode
+1580,PasswordChangeRes,errorDescription,object,get_errorDescription; set_errorDescription
+1581,PasswordChangeRes,transactionId,string,get_transactionId; set_transactionId
+1582,PasswordChangeRes,value,string,set_value; get_value
+1583,PasswordChangeReq,oldPassword,string,get_oldPassword; set_oldPassword
+1584,PasswordChangeReq,newPassword,string,set_newPassword; get_newPassword
+1585,EquityOrder,ok,bool,get_ok; set_ok
+1586,EquityOrder,errorCode,object,set_errorCode; get_errorCode
+1587,EquityOrder,errorDescription,object,get_errorDescription; set_errorDescription
+1588,EquityOrder,transactionId,string,set_transactionId; get_transactionId
+1589,EquityOrder,value,class EquityOrderValue[],get_value; set_value
+1590,EquityOrderValue,orderId,string,set_orderId; get_orderId
+1591,EquityOrderValue,clOrdId,string,get_clOrdId; set_clOrdId
+1592,EquityOrderValue,origClOrdId,string,set_origClOrdId; get_origClOrdId
+1593,EquityOrderValue,accountId,string,set_accountId; get_accountId
+1594,EquityOrderValue,instrumentId,string,get_instrumentId; set_instrumentId
+1595,EquityOrderValue,instrumentSymbol,string,get_instrumentSymbol; set_instrumentSymbol
+1596,EquityOrderValue,instrumentType,string,set_instrumentType; get_instrumentType
+1597,EquityOrderValue,orderTypeId,string,get_orderTypeId; set_orderTypeId
+1598,EquityOrderValue,orderTypeDescTr,string,set_orderTypeDescTr; get_orderTypeDescTr
+1599,EquityOrderValue,orderTypeDescEn,string,get_orderTypeDescEn; set_orderTypeDescEn
+1600,EquityOrderValue,timeInForceId,string,set_timeInForceId; get_timeInForceId
+1601,EquityOrderValue,timeInForceDescTr,string,get_timeInForceDescTr; set_timeInForceDescTr
+1602,EquityOrderValue,timeInForceDesEn,string,get_timeInForceDesEn; set_timeInForceDesEn
+1603,EquityOrderValue,sideId,string,get_sideId; set_sideId
+1604,EquityOrderValue,sideDescTr,string,set_sideDescTr; get_sideDescTr
+1605,EquityOrderValue,sideDescEn,string,get_sideDescEn; set_sideDescEn
+1606,EquityOrderValue,orderStatusId,string,get_orderStatusId; set_orderStatusId
+1607,EquityOrderValue,orderStatusDescTr,string,get_orderStatusDescTr; set_orderStatusDescTr
+1608,EquityOrderValue,orderStatusDescEn,string,get_orderStatusDescEn; set_orderStatusDescEn
+1609,EquityOrderValue,orderReference,string,set_orderReference; get_orderReference
+1610,EquityOrderValue,price,double,set_price; get_price
+1611,EquityOrderValue,qty,double,get_qty; set_qty
+1612,EquityOrderValue,avgPrice,double,set_avgPrice; get_avgPrice
+1613,EquityOrderValue,remainingQty,double,get_remainingQty; set_remainingQty
+1614,EquityOrderValue,realizedQty,double,get_realizedQty; set_realizedQty
+1615,EquityOrderValue,realizedAmt,double,set_realizedAmt; get_realizedAmt
+1616,EquityOrderValue,maxFloor,double,get_maxFloor; set_maxFloor
+1617,EquityOrderValue,pendingClOrdId,string,get_pendingClOrdId; set_pendingClOrdId
+1618,EquityOrderValue,pendingPrice,float,set_pendingPrice; get_pendingPrice
+1619,EquityOrderValue,pendingQty,float,get_pendingQty; set_pendingQty
+1620,EquityOrderValue,pendingTimeInForceId,string,set_pendingTimeInForceId; get_pendingTimeInForceId
+1621,EquityOrderValue,valueDate,long,get_valueDate; set_valueDate
+1622,EquityOrderValue,valueDateStr,string,set_valueDateStr; get_valueDateStr
+1623,EquityOrderValue,createdDate,long,get_createdDate; set_createdDate
+1624,EquityOrderValue,createdDateStr,string,get_createdDateStr; set_createdDateStr
+1625,EquityOrderValue,createdByName,string,set_createdByName; get_createdByName
+1626,EquityOrderValue,endDate,long,get_endDate; set_endDate
+1627,EquityOrderValue,endDateStr,string,get_endDateStr; set_endDateStr
+1628,EquityOrderValue,description,string,set_description; get_description
+1629,EquityOrderValue,lastUpdateTime,long,get_lastUpdateTime; set_lastUpdateTime
+1630,EquityOrderValue,lastUpdateTimeStr,string,get_lastUpdateTimeStr; set_lastUpdateTimeStr
+1631,EquityOrderValue,lastRealizeTime,long,get_lastRealizeTime; set_lastRealizeTime
+1632,EquityOrderValue,lastRealizeTimeStr,string,set_lastRealizeTimeStr; get_lastRealizeTimeStr
+1633,EquityOrderValue,lastUpdateByName,string,set_lastUpdateByName; get_lastUpdateByName
+1634,EquityOrderValue,chainOrder,bool,get_chainOrder; set_chainOrder
+1635,EquityOrderValue,parentOrderId,string,set_parentOrderId; get_parentOrderId
+1636,EquityOrderValue,triggerOrder,bool,get_triggerOrder; set_triggerOrder
+1637,EquityOrderValue,triggerTypeId,string,set_triggerTypeId; get_triggerTypeId
+1638,EquityOrderValue,triggerTypeDescTr,object,get_triggerTypeDescTr; set_triggerTypeDescTr
+1639,EquityOrderValue,triggerTypeDescEn,object,get_triggerTypeDescEn; set_triggerTypeDescEn
+1640,EquityOrderValue,triggerPriceTypeId,string,get_triggerPriceTypeId; set_triggerPriceTypeId
+1641,EquityOrderValue,triggerPriceTypeDescTr,object,set_triggerPriceTypeDescTr; get_triggerPriceTypeDescTr
+1642,EquityOrderValue,triggerPriceTypeDescEn,object,get_triggerPriceTypeDescEn; set_triggerPriceTypeDescEn
+1643,EquityOrderValue,triggerPriceDirectionId,string,set_triggerPriceDirectionId; get_triggerPriceDirectionId
+1644,EquityOrderValue,triggerPriceDirectionDescTr,object,get_triggerPriceDirectionDescTr; set_triggerPriceDirectionDescTr
+1645,EquityOrderValue,triggerPriceDirectionDescEn,object,set_triggerPriceDirectionDescEn; get_triggerPriceDirectionDescEn
+1646,EquityOrderValue,triggerSymbol,string,set_triggerSymbol; get_triggerSymbol
+1647,EquityOrderValue,triggerPrice,double,set_triggerPrice; get_triggerPrice
+1648,EquityOrderValue,triggerWorking,bool,set_triggerWorking; get_triggerWorking
+1649,EquityOrderValue,cancelable,bool,set_cancelable; get_cancelable
+1650,EquityOrderValue,replaceable,bool,set_replaceable; get_replaceable
+1651,EquityOrderValue,chainable,bool,set_chainable; get_chainable
+1652,EquityOrderValue,tradingSessionId,object,set_tradingSessionId; get_tradingSessionId
+1653,EquityReplaceOrder,errorCode,object,set_errorCode; get_errorCode
+1654,EquityReplaceOrder,errorDescription,object,get_errorDescription; set_errorDescription
+1655,EquityReplaceOrder,transactionId,string,set_transactionId; get_transactionId
+1656,EquityReplaceOrder,ok,bool,set_ok; get_ok
+1657,EquityReplaceOrder,orderId,string,get_orderId; set_orderId
+1658,EquityReplaceOrder,clOrdId,string,set_clOrdId; get_clOrdId
+1659,EquityReplaceOrder,qty,int,set_qty; get_qty
+1660,EquityReplaceOrder,timeInForceId,string,set_timeInForceId; get_timeInForceId
+1661,EquityReplaceOrder,price,float,set_price; get_price
+1662,EquityReplaceOrder,token,string,set_token; get_token
+1663,EquityReplaceOrder,tokenVersion,long,get_tokenVersion; set_tokenVersion
+1664,EquityCancelOrder,orderId,string,set_orderId; get_orderId
+1665,EquityCancelOrder,clOrdId,string,set_clOrdId; get_clOrdId
+1666,EquityCancelOrder,token,string,set_token; get_token
+1667,EquityCancelOrder,tokenVersion,long,set_tokenVersion; get_tokenVersion
+1668,FutOptOrder,ok,bool,set_ok; get_ok
+1669,FutOptOrder,errorCode,object,set_errorCode; get_errorCode
+1670,FutOptOrder,errorDescription,object,set_errorDescription; get_errorDescription
+1671,FutOptOrder,transactionId,string,set_transactionId; get_transactionId
+1672,FutOptOrder,value,class FutOptOrderValue[],set_value; get_value
+1673,FutOptOrderValue,orderId,string,set_orderId; get_orderId
+1674,FutOptOrderValue,clOrdId,string,set_clOrdId; get_clOrdId
+1675,FutOptOrderValue,origClOrdId,string,set_origClOrdId; get_origClOrdId
+1676,FutOptOrderValue,accountId,string,get_accountId; set_accountId
+1677,FutOptOrderValue,instrumentId,string,get_instrumentId; set_instrumentId
+1678,FutOptOrderValue,instrumentSymbol,string,get_instrumentSymbol; set_instrumentSymbol
+1679,FutOptOrderValue,instrumentType,string,set_instrumentType; get_instrumentType
+1680,FutOptOrderValue,orderTypeId,string,get_orderTypeId; set_orderTypeId
+1681,FutOptOrderValue,orderTypeDescTr,string,get_orderTypeDescTr; set_orderTypeDescTr
+1682,FutOptOrderValue,orderTypeDescEn,string,get_orderTypeDescEn; set_orderTypeDescEn
+1683,FutOptOrderValue,timeInForceId,string,set_timeInForceId; get_timeInForceId
+1684,FutOptOrderValue,timeInForceDescTr,string,set_timeInForceDescTr; get_timeInForceDescTr
+1685,FutOptOrderValue,timeInForceDesEn,string,set_timeInForceDesEn; get_timeInForceDesEn
+1686,FutOptOrderValue,sideId,string,set_sideId; get_sideId
+1687,FutOptOrderValue,sideDescTr,string,set_sideDescTr; get_sideDescTr
+1688,FutOptOrderValue,sideDescEn,string,set_sideDescEn; get_sideDescEn
+1689,FutOptOrderValue,orderStatusId,string,set_orderStatusId; get_orderStatusId
+1690,FutOptOrderValue,orderStatusDescTr,string,set_orderStatusDescTr; get_orderStatusDescTr
+1691,FutOptOrderValue,orderStatusDescEn,string,set_orderStatusDescEn; get_orderStatusDescEn
+1692,FutOptOrderValue,orderReference,string,set_orderReference; get_orderReference
+1693,FutOptOrderValue,price,float,set_price; get_price
+1694,FutOptOrderValue,qty,float,set_qty; get_qty
+1695,FutOptOrderValue,avgPrice,float,set_avgPrice; get_avgPrice
+1696,FutOptOrderValue,remainingQty,float,set_remainingQty; get_remainingQty
+1697,FutOptOrderValue,realizedQty,float,set_realizedQty; get_realizedQty
+1698,FutOptOrderValue,realizedAmt,float,get_realizedAmt; set_realizedAmt
+1699,FutOptOrderValue,maxFloor,float,set_maxFloor; get_maxFloor
+1700,FutOptOrderValue,pendingClOrdId,string,set_pendingClOrdId; get_pendingClOrdId
+1701,FutOptOrderValue,pendingPrice,float,set_pendingPrice; get_pendingPrice
+1702,FutOptOrderValue,pendingQty,float,set_pendingQty; get_pendingQty
+1703,FutOptOrderValue,pendingTimeInForceId,string,set_pendingTimeInForceId; get_pendingTimeInForceId
+1704,FutOptOrderValue,valueDate,long,set_valueDate; get_valueDate
+1705,FutOptOrderValue,valueDateStr,string,set_valueDateStr; get_valueDateStr
+1706,FutOptOrderValue,createdDate,long,set_createdDate; get_createdDate
+1707,FutOptOrderValue,createdDateStr,string,set_createdDateStr; get_createdDateStr
+1708,FutOptOrderValue,createdByName,string,set_createdByName; get_createdByName
+1709,FutOptOrderValue,endDate,long,set_endDate; get_endDate
+1710,FutOptOrderValue,endDateStr,string,set_endDateStr; get_endDateStr
+1711,FutOptOrderValue,description,string,set_description; get_description
+1712,FutOptOrderValue,lastUpdateTime,long,set_lastUpdateTime; get_lastUpdateTime
+1713,FutOptOrderValue,lastUpdateTimeStr,string,get_lastUpdateTimeStr; set_lastUpdateTimeStr
+1714,FutOptOrderValue,lastRealizeTime,long,get_lastRealizeTime; set_lastRealizeTime
+1715,FutOptOrderValue,lastRealizeTimeStr,string,get_lastRealizeTimeStr; set_lastRealizeTimeStr
+1716,FutOptOrderValue,lastUpdateByName,string,get_lastUpdateByName; set_lastUpdateByName
+1717,FutOptOrderValue,chainOrder,bool,set_chainOrder; get_chainOrder
+1718,FutOptOrderValue,parentOrderId,string,get_parentOrderId; set_parentOrderId
+1719,FutOptOrderValue,triggerOrder,bool,set_triggerOrder; get_triggerOrder
+1720,FutOptOrderValue,triggerTypeId,string,get_triggerTypeId; set_triggerTypeId
+1721,FutOptOrderValue,triggerTypeDescTr,object,set_triggerTypeDescTr; get_triggerTypeDescTr
+1722,FutOptOrderValue,triggerTypeDescEn,object,get_triggerTypeDescEn; set_triggerTypeDescEn
+1723,FutOptOrderValue,triggerPriceTypeId,string,set_triggerPriceTypeId; get_triggerPriceTypeId
+1724,FutOptOrderValue,triggerPriceTypeDescTr,object,get_triggerPriceTypeDescTr; set_triggerPriceTypeDescTr
+1725,FutOptOrderValue,triggerPriceTypeDescEn,object,set_triggerPriceTypeDescEn; get_triggerPriceTypeDescEn
+1726,FutOptOrderValue,triggerPriceDirectionId,string,get_triggerPriceDirectionId; set_triggerPriceDirectionId
+1727,FutOptOrderValue,triggerPriceDirectionDescTr,object,set_triggerPriceDirectionDescTr; get_triggerPriceDirectionDescTr
+1728,FutOptOrderValue,triggerPriceDirectionDescEn,object,set_triggerPriceDirectionDescEn; get_triggerPriceDirectionDescEn
+1729,FutOptOrderValue,triggerSymbol,string,get_triggerSymbol; set_triggerSymbol
+1730,FutOptOrderValue,triggerPrice,float,get_triggerPrice; set_triggerPrice
+1731,FutOptOrderValue,triggerWorking,bool,set_triggerWorking; get_triggerWorking
+1732,FutOptOrderValue,cancelable,bool,get_cancelable; set_cancelable
+1733,FutOptOrderValue,replaceable,bool,set_replaceable; get_replaceable
+1734,FutOptOrderValue,chainable,bool,get_chainable; set_chainable
+1735,FutOptOrderValue,tradingSessionId,string,set_tradingSessionId; get_tradingSessionId
+1736,FutOptReplaceOrder,errorCode,object,get_errorCode; set_errorCode
+1737,FutOptReplaceOrder,errorDescription,object,get_errorDescription; set_errorDescription
+1738,FutOptReplaceOrder,transactionId,string,get_transactionId; set_transactionId
+1739,FutOptReplaceOrder,ok,bool,set_ok; get_ok
+1740,FutOptReplaceOrder,orderId,string,get_orderId; set_orderId
+1741,FutOptReplaceOrder,clOrdId,string,get_clOrdId; set_clOrdId
+1742,FutOptReplaceOrder,qty,double,get_qty; set_qty
+1743,FutOptReplaceOrder,timeInForceId,string,get_timeInForceId; set_timeInForceId
+1744,FutOptReplaceOrder,price,double,set_price; get_price
+1745,FutOptReplaceOrder,token,string,set_token; get_token
+1746,FutOptReplaceOrder,tokenVersion,long,set_tokenVersion; get_tokenVersion
+1747,FutOptReplaceOrder,endDate,string,set_endDate; get_endDate
+1748,FutOptCancelOrder,orderId,string,set_orderId; get_orderId
+1749,FutOptCancelOrder,clOrdId,string,set_clOrdId; get_clOrdId
+1750,FutOptCancelOrder,token,string,set_token; get_token
+1751,FutOptCancelOrder,tokenVersion,long,set_tokenVersion; get_tokenVersion
+1752,FonPosition,ok,bool,set_ok; get_ok
+1753,FonPosition,errorCode,object,set_errorCode; get_errorCode
+1754,FonPosition,errorDescription,object,set_errorDescription; get_errorDescription
+1755,FonPosition,transactionId,string,set_transactionId; get_transactionId
+1756,FonPosition,value,class FonPositionValue[],set_value; get_value
+1757,FonPositionValue,accountId,string,set_accountId; get_accountId
+1758,FonPositionValue,secId,int,set_secId; get_secId
+1759,FonPositionValue,depotCode,string,set_depotCode; get_depotCode
+1760,FonPositionValue,depotDescription,string,get_depotDescription; set_depotDescription
+1761,FonPositionValue,uniqueSymbol,string,set_uniqueSymbol; get_uniqueSymbol
+1762,FonPositionValue,balanceT,float,set_balanceT; get_balanceT
+1763,FonPositionValue,balanceT1,float,set_balanceT1; get_balanceT1
+1764,FonPositionValue,balanceT2,float,set_balanceT2; get_balanceT2
+1765,FonPositionValue,balanceT3,float,set_balanceT3; get_balanceT3
+1766,FonPositionValue,useableQty,float,set_useableQty; get_useableQty
+1767,FonPositionValue,avgPrice,float,set_avgPrice; get_avgPrice
+1768,FonPositionValue,lastPrice,float,set_lastPrice; get_lastPrice
+1769,FonPositionValue,currentAmount,float,set_currentAmount; get_currentAmount
+1770,FonPositionValue,currentAmountT2,float,set_currentAmountT2; get_currentAmountT2
+1771,FonPositionValue,profitLoss,float,set_profitLoss; get_profitLoss
+1772,FonPositionValue,assetCoef,int,set_assetCoef; get_assetCoef
+1773,FonPositionValue,sellCoef,int,set_sellCoef; get_sellCoef
+1774,FonPositionValue,lastChange,long,set_lastChange; get_lastChange
+1775,FonPositionValue,dpProfitLoss,float,set_dpProfitLoss; get_dpProfitLoss
+1776,FonPositionValue,dpAmount,float,get_dpAmount; set_dpAmount
+1777,FonPositionValue,dpPosKey,string,get_dpPosKey; set_dpPosKey
+1778,FonPositionValue,fundName,string,set_fundName; get_fundName
+1779,ErrorResponse,Data,object,get_Data; set_Data
+1780,ErrorResponse,Success,bool,get_Success; set_Success
+1781,ErrorResponse,Message,string,set_Message; get_Message
+1782,ErrorResponse,StatusCode,int,get_StatusCode; set_StatusCode
+1783,Login1,password,string,set_password; get_password
+1784,Login1,username,string,get_username; set_username
+1785,Login1,loginBySMS,string,get_loginBySMS; set_loginBySMS
+1786,Login2,username,int,set_username; get_username
+1787,Login2,password,string,get_password; set_password
+1788,Login2,otpCode,string,get_otpCode; set_otpCode
+1789,Login2,loginBySMS,string,get_loginBySMS; set_loginBySMS
+1790,LoginSifreUpdate,data,string,set_data; get_data
+1791,LoginSifreUpdate,success,bool,get_success; set_success
+1792,LoginSifreUpdate,message,string,set_message; get_message
+1793,LoginSifreUpdate,statusCode,int,get_statusCode; set_statusCode
+1794,ZorunluSifreReq,username,string,set_username; get_username
+1795,ZorunluSifreReq,password,string,get_password; set_password
+1796,ZorunluSifreReq,otpCode,string,get_otpCode; set_otpCode
+1797,ZorunluSifreReq,passwordChangeToken,string,set_passwordChangeToken; get_passwordChangeToken
+1798,ZorunluSifreReq,newPassword,string,get_newPassword; set_newPassword
+1799,ZorunluSifreResponse,data,class ZorunluSifreResponseData,set_data; get_data
+1800,ZorunluSifreResponse,success,bool,get_success; set_success
+1801,ZorunluSifreResponse,message,object,get_message; set_message
+1802,ZorunluSifreResponse,statusCode,int,set_statusCode; get_statusCode
+1803,ZorunluSifreResponseData,accessToken,string,get_accessToken; set_accessToken
+1804,ZorunluSifreResponseData,expiresIn,int,set_expiresIn; get_expiresIn
+1805,ZorunluSifreResponseData,userData,class ZorunluSifreResponseUserdata,get_userData; set_userData
+1806,ZorunluSifreResponseUserdata,sicilNo,string,get_sicilNo; set_sicilNo
+1807,ZorunluSifreResponseUserdata,ad,string,get_ad; set_ad
+1808,ZorunluSifreResponseUserdata,soyad,string,get_soyad; set_soyad
+1809,ZorunluSifreResponseUserdata,sonGiris,valuetype System.DateTime,set_sonGiris; get_sonGiris
+1810,ZorunluSifreResponseUserdata,kalanGun,int,get_kalanGun; set_kalanGun
+1811,LoginResponse,data,object,get_data; set_data
+1812,LoginResponse,success,bool,get_success; set_success
+1813,LoginResponse,message,object,set_message; get_message
+1814,LoginResponse,statusCode,int,get_statusCode; set_statusCode
+1815,LoginResponseData,accessToken,string,set_accessToken; get_accessToken
+1816,LoginResponseData,expiresIn,int,get_expiresIn; set_expiresIn
+1817,LoginResponseData,userData,class Userdata,get_userData; set_userData
+1818,Userdata,sicilNo,string,get_sicilNo; set_sicilNo
+1819,Userdata,ad,string,set_ad; get_ad
+1820,Userdata,soyad,string,set_soyad; get_soyad
+1821,Userdata,sonGiris,valuetype System.DateTime,set_sonGiris; get_sonGiris
+1822,Userdata,kalanGun,int,set_kalanGun; get_kalanGun
+1823,SmsYenidenGonderimSure,data,int,set_data; get_data
+1824,SmsYenidenGonderimSure,success,bool,get_success; set_success
+1825,SmsYenidenGonderimSure,message,object,set_message; get_message
+1826,SmsYenidenGonderimSure,statusCode,int,set_statusCode; get_statusCode
+1827,SifreKalanSure,data,class Data,set_data; get_data
+1828,SifreKalanSure,success,bool,set_success; get_success
+1829,SifreKalanSure,message,object,get_message; set_message
+1830,SifreKalanSure,statusCode,int,set_statusCode; get_statusCode
+1831,Data,kalanGun,int,set_kalanGun; get_kalanGun
+1832,HesapListesi,data,class HesapListesiData,set_data; get_data
+1833,HesapListesi,success,bool,set_success; get_success
+1834,HesapListesi,message,object,get_message; set_message
+1835,HesapListesi,statusCode,int,set_statusCode; get_statusCode
+1836,HesapListesiData,ADI,string,set_ADI; get_ADI
+1837,HesapListesiData,SOYADI,string,set_SOYADI; get_SOYADI
+1838,HesapListesiData,VirmanliSatisButonu,int,set_VirmanliSatisButonu; get_VirmanliSatisButonu
+1839,HesapListesiData,AltPazarRBF,int,set_AltPazarRBF; get_AltPazarRBF
+1840,HesapListesiData,OTOMATIK_ALIM_SATIM_SZL,int,set_OTOMATIK_ALIM_SATIM_SZL; get_OTOMATIK_ALIM_SATIM_SZL
+1841,HesapListesiData,VERI_DAGITIM_OZEL_EKRAN,int,set_VERI_DAGITIM_OZEL_EKRAN; get_VERI_DAGITIM_OZEL_EKRAN
+1842,HesapListesiData,ReturnValue,int,set_ReturnValue; get_ReturnValue
+1843,HesapListesiData,errorMessage,string,set_errorMessage; get_errorMessage
+1844,HesapListesiData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+1845,HissePortfolioReq,anlikBakiye,int,set_anlikBakiye; get_anlikBakiye
+1846,HissePortfolioResponse,data,class HissePortfolioData,set_data; get_data
+1847,HissePortfolioResponse,success,bool,set_success; get_success
+1848,HissePortfolioResponse,message,object,set_message; get_message
+1849,HissePortfolioResponse,statusCode,int,set_statusCode; get_statusCode
+1850,HissePortfolioData,list,class List[],get_list; set_list
+1851,List,tip,string,get_tip; set_tip
+1852,List,miktar,double,set_miktar; get_miktar
+1853,List,kapanis,float,set_kapanis; get_kapanis
+1854,List,overall_Miktar,double,set_overall_Miktar; get_overall_Miktar
+1855,List,maliyet,string,set_maliyet; get_maliyet
+1856,List,menkulKodu,string,get_menkulKodu; set_menkulKodu
+1857,List,tstok,float,set_tstok; get_tstok
+1858,List,t1stok,float,set_t1stok; get_t1stok
+1859,List,tutar,float,set_tutar; get_tutar
+1860,List,ttutar,float,set_ttutar; get_ttutar
+1861,List,t1tutar,float,get_t1tutar; set_t1tutar
+1862,List,kar_zarar_yuzde,float,get_kar_zarar_yuzde; set_kar_zarar_yuzde
+1863,EksrteReq,ilkTarih,string,get_ilkTarih; set_ilkTarih
+1864,EksrteReq,sonTarih,string,set_sonTarih; get_sonTarih
+1865,EkstreResponse,data,class EkstreData,set_data; get_data
+1866,EkstreResponse,success,bool,set_success; get_success
+1867,EkstreResponse,message,object,set_message; get_message
+1868,EkstreResponse,statusCode,int,set_statusCode; get_statusCode
+1869,EkstreData,list,class EkstreList[],set_list; get_list
+1870,EkstreList,valorTarihi,valuetype System.DateTime,set_valorTarihi; get_valorTarihi
+1871,EkstreList,aciklama,string,set_aciklama; get_aciklama
+1872,EkstreList,borc,float,set_borc; get_borc
+1873,EkstreList,alacak,float,set_alacak; get_alacak
+1874,EkstreList,tutar,float,set_tutar; get_tutar
+1875,AuthPasswordRemainingTimeResponse,isSuccess,bool,set_isSuccess; get_isSuccess
+1876,AuthPasswordRemainingTimeResponse,hasData,bool,set_hasData; get_hasData
+1877,AuthPasswordRemainingTimeResponse,messages,string[],set_messages; get_messages
+1878,AuthPasswordRemainingTimeResponse,data,class AuthPasswordRemainingTimeResponseData,set_data; get_data
+1879,AuthPasswordRemainingTimeResponse,dataCount,System.Nullable`1<int>,get_dataCount; set_dataCount
+1880,AuthPasswordRemainingTimeResponse,errors,string[],set_errors; get_errors
+1881,AuthPasswordRemainingTimeResponse,errorCode,System.Nullable`1<int>,set_errorCode; get_errorCode
+1882,AuthPasswordRemainingTimeResponseData,kalanGun,int,set_kalanGun; get_kalanGun
+1883,AccountInformationResponse,data,class AccountInformationResponseData,set_data; get_data
+1884,AccountInformationResponse,success,bool,set_success; get_success
+1885,AccountInformationResponse,message,object,set_message; get_message
+1886,AccountInformationResponse,statusCode,int,set_statusCode; get_statusCode
+1887,AccountInformationResponseData,islem,class AccountInformationResponseIslem[],set_islem; get_islem
+1888,AccountInformationResponseIslem,islemKodu,string,set_islemKodu; get_islemKodu
+1889,AccountInformationResponseIslem,bakiye,string,set_bakiye; get_bakiye
+1890,AccountInformationResponseIslem,aciklama,string,set_aciklama; get_aciklama
+1891,TwoDateTransactionReq,hisse,string,set_hisse; get_hisse
+1892,TwoDateTransactionReq,grupKodu,string,set_grupKodu; get_grupKodu
+1893,TwoDateTransactionReq,hisseGrupKodu,string,set_hisseGrupKodu; get_hisseGrupKodu
+1894,TwoDateTransactionReq,baslangicTarihi,string,get_baslangicTarihi; set_baslangicTarihi
+1895,TwoDateTransactionReq,bitisTarihi,string,set_bitisTarihi; get_bitisTarihi
+1896,TwoDateTransactionResponse,data,class TwoDateTransactionResponseData,set_data; get_data
+1897,TwoDateTransactionResponse,success,bool,get_success; set_success
+1898,TwoDateTransactionResponse,message,object,set_message; get_message
+1899,TwoDateTransactionResponse,statusCode,int,set_statusCode; get_statusCode
+1900,TwoDateTransactionResponseData,detay,class TwoDateTransactionResponseDetay[],get_detay; set_detay
+1901,TwoDateTransactionResponseData,output,class TwoDateTransactionResponseOutput[],get_output; set_output
+1902,TwoDateTransactionResponseDetay,hesap,int,set_hesap; get_hesap
+1903,TwoDateTransactionResponseDetay,tarih,valuetype System.DateTime,set_tarih; get_tarih
+1904,TwoDateTransactionResponseDetay,hisse,string,get_hisse; set_hisse
+1905,TwoDateTransactionResponseDetay,aS,string,set_aS; get_aS
+1906,TwoDateTransactionResponseDetay,fiyat,double,set_fiyat; get_fiyat
+1907,TwoDateTransactionResponseDetay,alisMiktar,float,get_alisMiktar; set_alisMiktar
+1908,TwoDateTransactionResponseDetay,satisMiktar,float,get_satisMiktar; set_satisMiktar
+1909,TwoDateTransactionResponseDetay,alisTutar,double,get_alisTutar; set_alisTutar
+1910,TwoDateTransactionResponseDetay,satisTutar,double,set_satisTutar; get_satisTutar
+1911,TwoDateTransactionResponseDetay,komOrn,float,get_komOrn; set_komOrn
+1912,TwoDateTransactionResponseDetay,komisyon,double,set_komisyon; get_komisyon
+1913,TwoDateTransactionResponseDetay,bsmv,double,get_bsmv; set_bsmv
+1914,TwoDateTransactionResponseOutput,returnValue,int,set_returnValue; get_returnValue
+1915,StockImproveReq,eskiMiktar,valuetype System.Decimal,get_eskiMiktar; set_eskiMiktar
+1916,StockImproveReq,eskiFiyat,valuetype System.Decimal,set_eskiFiyat; get_eskiFiyat
+1917,StockImproveReq,yeniMiktar,valuetype System.Decimal,get_yeniMiktar; set_yeniMiktar
+1918,StockImproveReq,yeniFiyat,System.Nullable`1<valuetype System.Decimal>,set_yeniFiyat; get_yeniFiyat
+1919,StockImproveReq,gorunenMiktar,System.Nullable`1<valuetype System.Decimal>,get_gorunenMiktar; set_gorunenMiktar
+1920,StockImproveReq,ref,string,set_ref; get_ref
+1921,StockImproveReq,imkbEmirNo,string,set_imkbEmirNo; get_imkbEmirNo
+1922,StockImproveReq,sureTarih,string,get_sureTarih; set_sureTarih
+1923,StockImproveReq,sure,string,get_sure; set_sure
+1924,StockImproveResponse,data,class StockImproveResponseData,set_data; get_data
+1925,StockImproveResponse,success,bool,set_success; get_success
+1926,StockImproveResponse,message,object,set_message; get_message
+1927,StockImproveResponse,statusCode,int,set_statusCode; get_statusCode
+1928,StockImproveResponseData,cal,string,set_cal; get_cal
+1929,StockImproveResponseData,errorCode,int,set_errorCode; get_errorCode
+1930,StockImproveResponseData,errorMessage,string,set_errorMessage; get_errorMessage
+1931,StockImproveResponseData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+1932,AccountDailyTransaction,gerceklesenOzet,int,set_gerceklesenOzet; get_gerceklesenOzet
+1933,AccountDailyTransactionResponse,data,class AccountDailyTransactionData,set_data; get_data
+1934,AccountDailyTransactionResponse,success,bool,set_success; get_success
+1935,AccountDailyTransactionResponse,message,object,set_message; get_message
+1936,AccountDailyTransactionResponse,statusCode,int,set_statusCode; get_statusCode
+1937,AccountDailyTransactionData,hgi,class AccountDailyTransactionHgi[],set_hgi; get_hgi
+1938,AccountDailyTransactionHgi,hesapNo,string,set_hesapNo; get_hesapNo
+1939,AccountDailyTransactionHgi,referans,string,get_referans; set_referans
+1940,AccountDailyTransactionHgi,hisseAdi,string,set_hisseAdi; get_hisseAdi
+1941,AccountDailyTransactionHgi,alSat,string,set_alSat; get_alSat
+1942,AccountDailyTransactionHgi,adet,float,set_adet; get_adet
+1943,AccountDailyTransactionHgi,kalan,float,set_kalan; get_kalan
+1944,AccountDailyTransactionHgi,fiyat,double,set_fiyat; get_fiyat
+1945,AccountDailyTransactionHgi,tutar,float,set_tutar; get_tutar
+1946,AccountDailyTransactionHgi,valor,string,set_valor; get_valor
+1947,AccountDailyTransactionHgi,islemDurumu,string,set_islemDurumu; get_islemDurumu
+1948,AccountDailyTransactionHgi,emirGecerlilikSuresi,string,set_emirGecerlilikSuresi; get_emirGecerlilikSuresi
+1949,AccountDailyTransactionHgi,editOpsiyonlari,string,set_editOpsiyonlari; get_editOpsiyonlari
+1950,AccountDailyTransactionHgi,lotAdet,int,set_lotAdet; get_lotAdet
+1951,AccountDailyTransactionHgi,islemTuru,string,set_islemTuru; get_islemTuru
+1952,AccountDailyTransactionHgi,saat,string,set_saat; get_saat
+1953,AccountDailyTransactionHgi,saat2,string,set_saat2; get_saat2
+1954,AccountDailyTransactionHgi,imkbEmirNo,string,set_imkbEmirNo; get_imkbEmirNo
+1955,AccountDailyTransactionHgi,orjSysId,int,set_orjSysId; get_orjSysId
+1956,AccountDailyTransactionHgi,gerceklesenMiktar,float,set_gerceklesenMiktar; get_gerceklesenMiktar
+1957,AccountDailyTransactionHgi,emirGecerlilikTarihi,valuetype System.DateTime,set_emirGecerlilikTarihi; get_emirGecerlilikTarihi
+1958,AccountDailyTransactionHgi,emirTipi,string,set_emirTipi; get_emirTipi
+1959,AccountDailyTransactionHgi,gorunenMiktar,System.Nullable`1<float>,set_gorunenMiktar; get_gorunenMiktar
+1960,AccountDailyTransactionHgi,zincirVar,System.Nullable`1<int>,set_zincirVar; get_zincirVar
+1961,AccountDailyTransactionHgi,zincirId,System.Nullable`1<int>,get_zincirId; set_zincirId
+1962,AccountDailyTransactionHgi,zincirUstId,System.Nullable`1<int>,set_zincirUstId; get_zincirUstId
+1963,AccountDailyTransactionHgi,emirGirisTarihi,System.Nullable`1<valuetype System.DateTime>,set_emirGirisTarihi; get_emirGirisTarihi
+1964,StockCancelledOrder,data,class StockCancelledOrderData,get_data; set_data
+1965,StockCancelledOrder,success,bool,set_success; get_success
+1966,StockCancelledOrder,message,object,set_message; get_message
+1967,StockCancelledOrder,statusCode,int,get_statusCode; set_statusCode
+1968,StockCancelledOrderData,list,class StockCancelledOrderList[],set_list; get_list
+1969,StockCancelledOrderList,menkul,string,get_menkul; set_menkul
+1970,StockCancelledOrderList,islem,string,set_islem; get_islem
+1971,StockCancelledOrderList,miktar,float,set_miktar; get_miktar
+1972,StockCancelledOrderList,fiyat,float,set_fiyat; get_fiyat
+1973,StockCancelledOrderList,tutar,float,set_tutar; get_tutar
+1974,StockCancelledOrderList,aciklama,string,set_aciklama; get_aciklama
+1975,StockCancelledOrderList,islemeZamani,string,set_islemeZamani; get_islemeZamani
+1976,StockCancelledOrderList,sysId,int,set_sysId; get_sysId
+1977,StockCancelledOrderList,musteri,int,set_musteri; get_musteri
+1978,StockCancelledOrderList,sureNew,string,set_sureNew; get_sureNew
+1979,StockCancelledOrderList,emirTipiNew,string,set_emirTipiNew; get_emirTipiNew
+1980,StockCancelledOrderList,maxFloor,float,set_maxFloor; get_maxFloor
+1981,StockTrading,hisse,string,set_hisse; get_hisse
+1982,StockTrading,grupKodu,string,set_grupKodu; get_grupKodu
+1983,StockTrading,komut,string,set_komut; get_komut
+1984,StockTrading,miktar,valuetype System.Decimal,get_miktar; set_miktar
+1985,StockTrading,fiyat,valuetype System.Decimal,get_fiyat; set_fiyat
+1986,StockTrading,emirTipi,string,get_emirTipi; set_emirTipi
+1987,StockTrading,sureTarih,string,get_sureTarih; set_sureTarih
+1988,StockTrading,sure,string,set_sure; get_sure
+1989,StockTrading,orderType,string,get_orderType; set_orderType
+1990,StockTrading,gorunenMiktar,valuetype System.Decimal,get_gorunenMiktar; set_gorunenMiktar
+1991,StockTrading,altPazarRbf,int,set_altPazarRbf; get_altPazarRbf
+1992,StockTrading,smsGonderimi,string,set_smsGonderimi; get_smsGonderimi
+1993,StockTrading,imkbIslemGrubu,string,get_imkbIslemGrubu; set_imkbIslemGrubu
+1994,StockTrtadingResponse,data,class StockTrtadingResponseData,get_data; set_data
+1995,StockTrtadingResponse,success,bool,set_success; get_success
+1996,StockTrtadingResponse,message,object,get_message; set_message
+1997,StockTrtadingResponse,statusCode,int,set_statusCode; get_statusCode
+1998,StockTrtadingResponseData,hsr,string,get_hsr; set_hsr
+1999,StockTrtadingResponseData,limitAciklama,string,set_limitAciklama; get_limitAciklama
+2000,StockTrtadingResponseData,errorCode,int,get_errorCode; set_errorCode
+2001,StockTrtadingResponseData,errorMessage,string,get_errorMessage; set_errorMessage
+2002,StockTrtadingResponseData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2003,ChainBuySellTSell,hisse,string,get_hisse; set_hisse
+2004,ChainBuySellTSell,grupKodu,string,set_grupKodu; get_grupKodu
+2005,ChainBuySellTSell,ref,string,get_ref; set_ref
+2006,ChainBuySellTSell,sure,string,set_sure; get_sure
+2007,ChainBuySellTSell,orderType,string,get_orderType; set_orderType
+2008,ChainBuySellTSell,miktar,valuetype System.Decimal,get_miktar; set_miktar
+2009,ChainBuySellTSell,fiyat,valuetype System.Decimal,get_fiyat; set_fiyat
+2010,ChainBuySellTSell,emirTipi,string,set_emirTipi; get_emirTipi
+2011,ChainBuySellTSell,gorunenMiktar,valuetype System.Decimal,get_gorunenMiktar; set_gorunenMiktar
+2012,ChainBuySellTSell,altPazarRbf,int,get_altPazarRbf; set_altPazarRbf
+2013,ChainBuySellTSell,sureTarih,object,get_sureTarih; set_sureTarih
+2014,ChainBuySellTSell,imkbEmirNo,string,get_imkbEmirNo; set_imkbEmirNo
+2015,ChainBuySellTSellResponse,data,class ChainBuySellTSellResponseData,get_data; set_data
+2016,ChainBuySellTSellResponse,success,bool,get_success; set_success
+2017,ChainBuySellTSellResponse,message,object,get_message; set_message
+2018,ChainBuySellTSellResponse,statusCode,int,get_statusCode; set_statusCode
+2019,ChainBuySellTSellResponseData,hsr,object,set_hsr; get_hsr
+2020,ChainBuySellTSellResponseData,errorCode,int,get_errorCode; set_errorCode
+2021,ChainBuySellTSellResponseData,errorMessage,string,set_errorMessage; get_errorMessage
+2022,ChainBuySellTSellResponseData,errorUniqueCode,int,get_errorUniqueCode; set_errorUniqueCode
+2023,RiskOnayReq,apYipPoipRbf,string,set_apYipPoipRbf; get_apYipPoipRbf
+2024,RiskOnayResponse,data,class RiskOnayResponseData,get_data; set_data
+2025,RiskOnayResponse,success,bool,set_success; get_success
+2026,RiskOnayResponse,message,object,get_message; set_message
+2027,RiskOnayResponse,statusCode,int,set_statusCode; get_statusCode
+2028,RiskOnayResponseData,errorCode,int,get_errorCode; set_errorCode
+2029,RiskOnayResponseData,errorMessage,string,set_errorMessage; get_errorMessage
+2030,RiskOnayResponseData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2031,StockOrderDeleteReq,ref,string,get_ref; set_ref
+2032,StockOrderDeleteResponse,data,class StockOrderDeleteResponseData,get_data; set_data
+2033,StockOrderDeleteResponse,success,bool,set_success; get_success
+2034,StockOrderDeleteResponse,message,object,get_message; set_message
+2035,StockOrderDeleteResponse,statusCode,int,set_statusCode; get_statusCode
+2036,StockOrderDeleteResponseData,cal,string,get_cal; set_cal
+2037,StockOrderDeleteResponseData,errorCode,int,set_errorCode; get_errorCode
+2038,StockOrderDeleteResponseData,errorMessage,string,get_errorMessage; set_errorMessage
+2039,StockOrderDeleteResponseData,errorUniqueCode,int,get_errorUniqueCode; set_errorUniqueCode
+2040,MusteriHesapOzetiReq,tarih,string,get_tarih; set_tarih
+2041,MusteriHesapOzetiResponse,data,class MusteriHesapOzetiData,set_data; get_data
+2042,MusteriHesapOzetiResponse,success,bool,get_success; set_success
+2043,MusteriHesapOzetiResponse,message,object,get_message; set_message
+2044,MusteriHesapOzetiResponse,statusCode,int,get_statusCode; set_statusCode
+2045,MusteriHesapOzetiData,menkulKiymet,class Menkulkiymet[],get_menkulKiymet; set_menkulKiymet
+2046,MusteriHesapOzetiData,menkulKiymetTurkLirasi,class Menkulkiymetturklirasi[],set_menkulKiymetTurkLirasi; get_menkulKiymetTurkLirasi
+2047,MusteriHesapOzetiData,toplamOverall,class Toplamoverall[],get_toplamOverall; set_toplamOverall
+2048,MusteriHesapOzetiData,viopPozisyon,class ViopPozisyon[],get_viopPozisyon; set_viopPozisyon
+2049,Menkulkiymet,aciklama,string,get_aciklama; set_aciklama
+2050,Menkulkiymet,ana,int,get_ana; set_ana
+2051,Menkulkiymet,tur,string,set_tur; get_tur
+2052,Menkulkiymet,adet,float,get_adet; set_adet
+2053,Menkulkiymet,t1Adet,float,get_t1Adet; set_t1Adet
+2054,Menkulkiymet,t2Adet,float,set_t2Adet; get_t2Adet
+2055,Menkulkiymet,kapanis,float,get_kapanis; set_kapanis
+2056,Menkulkiymet,maliyet,float,get_maliyet; set_maliyet
+2057,Menkulkiymet,tutar3,float,set_tutar3; get_tutar3
+2058,Menkulkiymet,tradeKodu,string,get_tradeKodu; set_tradeKodu
+2059,Menkulkiymetturklirasi,aciklama,string,get_aciklama; set_aciklama
+2060,Menkulkiymetturklirasi,adet,float,get_adet; set_adet
+2061,Menkulkiymetturklirasi,t1Adet,float,get_t1Adet; set_t1Adet
+2062,Menkulkiymetturklirasi,ana,int,set_ana; get_ana
+2063,Menkulkiymetturklirasi,t2Adet,float,get_t2Adet; set_t2Adet
+2064,Toplamoverall,aciklama,string,get_aciklama; set_aciklama
+2065,Toplamoverall,tBakiye,float,set_tBakiye; get_tBakiye
+2066,Toplamoverall,t1Bakiye,float,get_t1Bakiye; set_t1Bakiye
+2067,Toplamoverall,t2Bakiye,float,get_t2Bakiye; set_t2Bakiye
+2068,Toplamoverall,tip,string,get_tip; set_tip
+2069,ViopPozisyon,sozlesmeKodu,string,set_sozlesmeKodu; get_sozlesmeKodu
+2070,ViopPozisyon,uzunKisa,string,get_uzunKisa; set_uzunKisa
+2071,ViopPozisyon,pozisyonSayisi,int,get_pozisyonSayisi; set_pozisyonSayisi
+2072,ViopPozisyon,maliyet,float,get_maliyet; set_maliyet
+2073,ViopPozisyon,kapanis,float,set_kapanis; get_kapanis
+2074,ViopPozisyon,parasalTutar,float,get_parasalTutar; set_parasalTutar
+2075,ViopPozisyon,guniciKz,float,set_guniciKz; get_guniciKz
+2076,MusteriVarlikDegisimi,data,class MusteriVarlikDegisimiData,get_data; set_data
+2077,MusteriVarlikDegisimi,success,bool,set_success; get_success
+2078,MusteriVarlikDegisimi,message,object,get_message; set_message
+2079,MusteriVarlikDegisimi,statusCode,int,get_statusCode; set_statusCode
+2080,MusteriVarlikDegisimiData,list,class MusteriVarlikDegisimiList[],get_list; set_list
+2081,MusteriVarlikDegisimiList,bugunTarih,valuetype System.DateTime,set_bugunTarih; get_bugunTarih
+2082,MusteriVarlikDegisimiList,bugunOverall,float,set_bugunOverall; get_bugunOverall
+2083,MusteriVarlikDegisimiList,dunTarih,valuetype System.DateTime,set_dunTarih; get_dunTarih
+2084,MusteriVarlikDegisimiList,dunOverall,float,get_dunOverall; set_dunOverall
+2085,ViopOrderCancelReq,ref,string,set_ref; get_ref
+2086,ViopOrderCancelReq,imkbEmirNo,string,get_imkbEmirNo; set_imkbEmirNo
+2087,ViopOrderCancelResponse,data,class ViopOrderCancelResponseData,set_data; get_data
+2088,ViopOrderCancelResponse,success,bool,get_success; set_success
+2089,ViopOrderCancelResponse,message,object,get_message; set_message
+2090,ViopOrderCancelResponse,statusCode,int,set_statusCode; get_statusCode
+2091,ViopOrderCancelResponseData,cal,string,set_cal; get_cal
+2092,ViopOrderCancelResponseData,errorCode,int,get_errorCode; set_errorCode
+2093,ViopOrderCancelResponseData,errorMessage,string,set_errorMessage; get_errorMessage
+2094,ViopOrderCancelResponseData,errorUniqueCode,int,get_errorUniqueCode; set_errorUniqueCode
+2095,VipAccountSummaryResponse,data,class VipAccountSummaryResponseData,get_data; set_data
+2096,VipAccountSummaryResponse,success,bool,get_success; set_success
+2097,VipAccountSummaryResponse,message,object,set_message; get_message
+2098,VipAccountSummaryResponse,statusCode,int,set_statusCode; get_statusCode
+2099,VipAccountSummaryResponseData,bvtm,class VipAccountSummaryResponseBvtm[],set_bvtm; get_bvtm
+2100,VipAccountSummaryResponseBvtm,tarih,valuetype System.DateTime,set_tarih; get_tarih
+2101,VipAccountSummaryResponseBvtm,hesap,int,set_hesap; get_hesap
+2102,VipAccountSummaryResponseBvtm,teminatTipi,string,get_teminatTipi; set_teminatTipi
+2103,VipAccountSummaryResponseBvtm,riskDurumu,string,set_riskDurumu; get_riskDurumu
+2104,VipAccountSummaryResponseBvtm,nakitTeminatlar,float,set_nakitTeminatlar; get_nakitTeminatlar
+2105,VipAccountSummaryResponseBvtm,digerTeminatlar,float,set_digerTeminatlar; get_digerTeminatlar
+2106,VipAccountSummaryResponseBvtm,seanslikTeminat,float,set_seanslikTeminat; get_seanslikTeminat
+2107,VipAccountSummaryResponseBvtm,baslangicTeminati,float,set_baslangicTeminati; get_baslangicTeminati
+2108,VipAccountSummaryResponseBvtm,surdurmeTeminatiMarji,float,get_surdurmeTeminatiMarji; set_surdurmeTeminatiMarji
+2109,VipAccountSummaryResponseBvtm,kalanTeminat,float,get_kalanTeminat; set_kalanTeminat
+2110,VipAccountSummaryResponseBvtm,teminatTamamlamaCagrisiHesaplama,float,get_teminatTamamlamaCagrisiHesaplama; set_teminatTamamlamaCagrisiHesaplama
+2111,VipAccountSummaryResponseBvtm,teminatTamamlamaCagrisiMiktari,float,set_teminatTamamlamaCagrisiMiktari; get_teminatTamamlamaCagrisiMiktari
+2112,VipAccountSummaryResponseBvtm,cekilebilirTeminat,float,get_cekilebilirTeminat; set_cekilebilirTeminat
+2113,VipAccountSummaryResponseBvtm,hesapDurumu,string,get_hesapDurumu; set_hesapDurumu
+2114,VipAccountSummaryResponseBvtm,karzarar,float,set_karzarar; get_karzarar
+2115,VipAccountSummaryResponseBvtm,pasifDahilGerekliBaslangic,float,get_pasifDahilGerekliBaslangic; set_pasifDahilGerekliBaslangic
+2116,VipAccountSummaryResponseBvtm,kz_sonFiyat,float,set_kz_sonFiyat; get_kz_sonFiyat
+2117,VipAccountSummaryResponseBvtm,primToplami,float,set_primToplami; get_primToplami
+2118,VipAccountSummaryResponseBvtm,primToplamiBorc,float,set_primToplamiBorc; get_primToplamiBorc
+2119,VipAccountSummaryResponseBvtm,primToplamiAlacak,float,get_primToplamiAlacak; set_primToplamiAlacak
+2120,VipAccountSummaryResponseBvtm,cekilebilirTeminatPasifDahil,float,get_cekilebilirTeminatPasifDahil; set_cekilebilirTeminatPasifDahil
+2121,VipAccountSummaryResponseBvtm,anlikkzmaliyet,float,set_anlikkzmaliyet; get_anlikkzmaliyet
+2122,VipOrdersReq,_ref,string,get__ref; set__ref
+2123,VipOrdersReq,gerceklesenDetay,string,set_gerceklesenDetay; get_gerceklesenDetay
+2124,VipOrdersResponse,data,class VipOrdersResponseData,get_data; set_data
+2125,VipOrdersResponse,success,bool,set_success; get_success
+2126,VipOrdersResponse,message,object,get_message; set_message
+2127,VipOrdersResponse,statusCode,int,get_statusCode; set_statusCode
+2128,VipOrdersResponseData,emirler,class VipOrdersResponseArr[],get_emirler; set_emirler
+2129,VipOrdersResponseArr,hesapNo,int,set_hesapNo; get_hesapNo
+2130,VipOrdersResponseArr,sysId,int,set_sysId; get_sysId
+2131,VipOrdersResponseArr,emirDurum,string,set_emirDurum; get_emirDurum
+2132,VipOrdersResponseArr,hisseKodu,string,set_hisseKodu; get_hisseKodu
+2133,VipOrdersResponseArr,emir,string,set_emir; get_emir
+2134,VipOrdersResponseArr,miktar,float,set_miktar; get_miktar
+2135,VipOrdersResponseArr,fiyat,double,set_fiyat; get_fiyat
+2136,VipOrdersResponseArr,tutar,float,set_tutar; get_tutar
+2137,VipOrdersResponseArr,durum,string,set_durum; get_durum
+2138,VipOrdersResponseArr,imkbEmirNo,string,set_imkbEmirNo; get_imkbEmirNo
+2139,VipOrdersResponseArr,gerceklesenMiktar,double,set_gerceklesenMiktar; get_gerceklesenMiktar
+2140,VipOrdersResponseArr,gerceklesenOrtalama,double,set_gerceklesenOrtalama; get_gerceklesenOrtalama
+2141,VipOrdersResponseArr,seans,string,set_seans; get_seans
+2142,VipOrdersResponseArr,sonTarih,valuetype System.DateTime,set_sonTarih; get_sonTarih
+2143,VipOrdersResponseArr,emirTipiNew,string,set_emirTipiNew; get_emirTipiNew
+2144,VipOrdersResponseArr,orj_SysId,int,set_orj_SysId; get_orj_SysId
+2145,VipOrdersResponseArr,triggerTypeDesc,string,set_triggerTypeDesc; get_triggerTypeDesc
+2146,VipOrdersResponseArr,triggerPrice,float,set_triggerPrice; get_triggerPrice
+2147,VipOrdersResponseArr,iptalAciklama,string,set_iptalAciklama; get_iptalAciklama
+2148,VipOrdersResponseArr,emirGirisAni,string,set_emirGirisAni; get_emirGirisAni
+2149,VipOrdersResponseArr,veriDagiticiMiktar,float,set_veriDagiticiMiktar; get_veriDagiticiMiktar
+2150,VipOrdersResponseArr,tetikSozlesme,string,set_tetikSozlesme; get_tetikSozlesme
+2151,VipOrdersResponseArr,seansNew,string,set_seansNew; get_seansNew
+2152,VipOrdersResponseArr,orjinalTutar,float,set_orjinalTutar; get_orjinalTutar
+2153,VipOrdersResponseArr,gerceklesmeSonZaman,string,set_gerceklesmeSonZaman; get_gerceklesmeSonZaman
+2154,VipPositions,data,class VipPositionsData,set_data; get_data
+2155,VipPositions,success,bool,set_success; get_success
+2156,VipPositions,message,object,set_message; get_message
+2157,VipPositions,statusCode,int,set_statusCode; get_statusCode
+2158,VipPositionsData,bvps,class VipPositionsBvp[],set_bvps; get_bvps
+2159,VipPositionsBvp,tarih,string,get_tarih; set_tarih
+2160,VipPositionsBvp,hesap,int,get_hesap; set_hesap
+2161,VipPositionsBvp,tip,string,set_tip; get_tip
+2162,VipPositionsBvp,karzarar,float,set_karzarar; get_karzarar
+2163,VipPositionsBvp,sozlesme,string,set_sozlesme; get_sozlesme
+2164,VipPositionsBvp,uzunpoztoplami,int,get_uzunpoztoplami; set_uzunpoztoplami
+2165,VipPositionsBvp,kisapoztoplami,int,set_kisapoztoplami; get_kisapoztoplami
+2166,VipPositionsBvp,acikpoztoplami,int,get_acikpoztoplami; set_acikpoztoplami
+2167,VipPositionsBvp,netpozisyon,int,set_netpozisyon; get_netpozisyon
+2168,VipPositionsBvp,acikpozisyondeger,int,get_acikpozisyondeger; set_acikpozisyondeger
+2169,VipPositionsBvp,hesapdurumu,string,get_hesapdurumu; set_hesapdurumu
+2170,VipPositionsBvp,maliyet,float,get_maliyet; set_maliyet
+2171,VipPositionsBvp,kapanis,float,get_kapanis; set_kapanis
+2172,VipPositionsBvp,tutar,float,set_tutar; get_tutar
+2173,VipPositionsBvp,doviztutar,string,set_doviztutar; get_doviztutar
+2174,VipPositionsBvp,kzsonfiyat,float,set_kzsonfiyat; get_kzsonfiyat
+2175,VipPositionsBvp,gunicikzsonfiyat,float,set_gunicikzsonfiyat; get_gunicikzsonfiyat
+2176,VipPositionsBvp,anlikkzmaliyet,float,get_anlikkzmaliyet; set_anlikkzmaliyet
+2177,VipPositionsBvp,sonfiyatkzmaliyet,float,set_sonfiyatkzmaliyet; get_sonfiyatkzmaliyet
+2178,VipPositionsBvp,agirortmaliyet,float,get_agirortmaliyet; set_agirortmaliyet
+2179,VipReportCashReq,basTarih,string,get_basTarih; set_basTarih
+2180,VipReportCashReq,bitTarih,string,get_bitTarih; set_bitTarih
+2181,VipReportCashResponse,data,class VipReportCashResponseData,set_data; get_data
+2182,VipReportCashResponse,success,bool,set_success; get_success
+2183,VipReportCashResponse,message,object,set_message; get_message
+2184,VipReportCashResponse,statusCode,int,set_statusCode; get_statusCode
+2185,VipReportCashResponseData,list,class VipReportCashResponseList[],set_list; get_list
+2186,VipReportCashResponseList,valorTarihi,valuetype System.DateTime,set_valorTarihi; get_valorTarihi
+2187,VipReportCashResponseList,aciklama,string,set_aciklama; get_aciklama
+2188,VipReportCashResponseList,borc,float,set_borc; get_borc
+2189,VipReportCashResponseList,alacak,float,set_alacak; get_alacak
+2190,VipProfitLossReportReq,basTarih,string,set_basTarih; get_basTarih
+2191,VipProfitLossReportReq,bitTarih,string,set_bitTarih; get_bitTarih
+2192,VipProfitLossReportReq,sozlesmeTuru,string,set_sozlesmeTuru; get_sozlesmeTuru
+2193,VipProfitLossResponse,data,class VipProfitLossResponseData,set_data; get_data
+2194,VipProfitLossResponse,success,bool,set_success; get_success
+2195,VipProfitLossResponse,message,object,set_message; get_message
+2196,VipProfitLossResponse,statusCode,int,get_statusCode; set_statusCode
+2197,VipProfitLossResponseData,vrd,class Vrd[],set_vrd; get_vrd
+2198,VipProfitLossResponseData,vrs,class Vr[],set_vrs; get_vrs
+2199,Vrd,aciklama,string,set_aciklama; get_aciklama
+2200,Vrd,sonIslemGunu,valuetype System.DateTime,set_sonIslemGunu; get_sonIslemGunu
+2201,Vrd,kod,string,set_kod; get_kod
+2202,Vrd,karzarar,float,set_karzarar; get_karzarar
+2203,Vrd,acikUzun,int,set_acikUzun; get_acikUzun
+2204,Vrd,acikKisa,int,set_acikKisa; get_acikKisa
+2205,Vrd,uzunKisa,string,set_uzunKisa; get_uzunKisa
+2206,Vrd,kullanımFiyati,float,set_kullanımFiyati; get_kullanımFiyati
+2207,Vrd,doviz,string,set_doviz; get_doviz
+2208,Vr,aciklama,string,set_aciklama; get_aciklama
+2209,Vr,tutar,float,set_tutar; get_tutar
+2210,VipOrderImprovementReq,ref,string,set_ref; get_ref
+2211,VipOrderImprovementReq,imkbEmirNo,string,get_imkbEmirNo; set_imkbEmirNo
+2212,VipOrderImprovementReq,fiyat,valuetype System.Decimal,get_fiyat; set_fiyat
+2213,VipOrderImprovementReq,eskiFiyat,valuetype System.Decimal,get_eskiFiyat; set_eskiFiyat
+2214,VipOrderImprovementReq,miktar,int,get_miktar; set_miktar
+2215,VipOrderImprovementReq,eskiMiktar,int,set_eskiMiktar; get_eskiMiktar
+2216,VipOrderImprovementReq,sure,string,get_sure; set_sure
+2217,VipOrderImprovementReq,acikKapali,int,set_acikKapali; get_acikKapali
+2218,VipOrderImprovementReq,sureTarih,string,get_sureTarih; set_sureTarih
+2219,VipOrderImproveResponse,data,class VipOrderImroveData,set_data; get_data
+2220,VipOrderImproveResponse,success,bool,get_success; set_success
+2221,VipOrderImproveResponse,message,object,set_message; get_message
+2222,VipOrderImproveResponse,statusCode,int,get_statusCode; set_statusCode
+2223,VipOrderImroveData,cal,string,set_cal; get_cal
+2224,VipOrderImroveData,errorCode,int,get_errorCode; set_errorCode
+2225,VipOrderImroveData,errorMessage,string,set_errorMessage; get_errorMessage
+2226,VipOrderImroveData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2227,VipSendOrderReq,sozlesme,string,get_sozlesme; set_sozlesme
+2228,VipSendOrderReq,islem,string,get_islem; set_islem
+2229,VipSendOrderReq,miktar,int,set_miktar; get_miktar
+2230,VipSendOrderReq,fiyat,valuetype System.Decimal,get_fiyat; set_fiyat
+2231,VipSendOrderReq,orderType,string,set_orderType; get_orderType
+2232,VipSendOrderReq,sureTarih,string,get_sureTarih; set_sureTarih
+2233,VipSendOrderReq,sure,string,set_sure; get_sure
+2234,VipSendOrderReq,gorunenMiktar,valuetype System.Decimal,get_gorunenMiktar; set_gorunenMiktar
+2235,VipSendOrderReq,tetikTipi,int,get_tetikTipi; set_tetikTipi
+2236,VipSendOrderReq,tetikFiyat,int,get_tetikFiyat; set_tetikFiyat
+2237,VipSendOrderReq,tetikSozlesme,object,set_tetikSozlesme; get_tetikSozlesme
+2238,VipSendOrderReq,acikKapali,int,get_acikKapali; set_acikKapali
+2239,VipSendOrderReq,smsGonderimi,string,get_smsGonderimi; set_smsGonderimi
+2240,VipSendOrderReq,aksamSeansi,string,get_aksamSeansi; set_aksamSeansi
+2241,VipSendOrderResponse,data,class VipSendOrderResponseDataData,get_data; set_data
+2242,VipSendOrderResponse,success,bool,set_success; get_success
+2243,VipSendOrderResponse,message,object,set_message; get_message
+2244,VipSendOrderResponse,statusCode,int,get_statusCode; set_statusCode
+2245,VipSendOrderResponseDataData,hsr,string,set_hsr; get_hsr
+2246,VipSendOrderResponseDataData,errorCode,int,get_errorCode; set_errorCode
+2247,VipSendOrderResponseDataData,errorMessage,string,get_errorMessage; set_errorMessage
+2248,VipSendOrderResponseDataData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2249,VipTransactionsReq,sozlesme,string,get_sozlesme; set_sozlesme
+2250,VipTransactionsReq,baslangicTarihi,string,get_baslangicTarihi; set_baslangicTarihi
+2251,VipTransactionsReq,bitisTarihi,string,set_bitisTarihi; get_bitisTarihi
+2252,VipTransactionResponse,data,class VipTransactionResponseData,get_data; set_data
+2253,VipTransactionResponse,success,bool,set_success; get_success
+2254,VipTransactionResponse,message,object,get_message; set_message
+2255,VipTransactionResponse,statusCode,int,set_statusCode; get_statusCode
+2256,VipTransactionResponseData,vrd,class VipTransactionResponseVrd[],get_vrd; set_vrd
+2257,VipTransactionResponseVrd,hesap,int,get_hesap; set_hesap
+2258,VipTransactionResponseVrd,tarih,valuetype System.DateTime,set_tarih; get_tarih
+2259,VipTransactionResponseVrd,saat,string,get_saat; set_saat
+2260,VipTransactionResponseVrd,islem,int,get_islem; set_islem
+2261,VipTransactionResponseVrd,sozlesme,string,set_sozlesme; get_sozlesme
+2262,VipTransactionResponseVrd,pazar,string,get_pazar; set_pazar
+2263,VipTransactionResponseVrd,alisSatis,string,get_alisSatis; set_alisSatis
+2264,VipTransactionResponseVrd,fiyat,double,get_fiyat; set_fiyat
+2265,VipTransactionResponseVrd,miktar,int,set_miktar; get_miktar
+2266,VipTransactionResponseVrd,hacim,float,set_hacim; get_hacim
+2267,VipTransactionResponseVrd,karsiUye,string,get_karsiUye; set_karsiUye
+2268,VipTransactionResponseVrd,emirSaati,string,set_emirSaati; get_emirSaati
+2269,VipTransactionResponseVrd,tip,string,get_tip; set_tip
+2270,VipTransactionResponseVrd,seans,int,set_seans; get_seans
+2271,VipTransactionResponseVrd,acikMiktar,int,get_acikMiktar; set_acikMiktar
+2272,VipTransactionResponseVrd,acikKomisyon,int,get_acikKomisyon; set_acikKomisyon
+2273,VipTransactionResponseVrd,borsaPayi,double,get_borsaPayi; set_borsaPayi
+2274,VipTransactionResponseVrd,komisyon,double,set_komisyon; get_komisyon
+2275,VipTransactionResponseVrd,bsmv,double,get_bsmv; set_bsmv
+2276,FonAlSat,data,class FonAlSatData,set_data; get_data
+2277,FonAlSat,success,bool,get_success; set_success
+2278,FonAlSat,message,object,get_message; set_message
+2279,FonAlSat,statusCode,int,set_statusCode; get_statusCode
+2280,FonAlSatData,MIKTAR,int,set_MIKTAR; get_MIKTAR
+2281,FonAlSatData,FIYAT,float,set_FIYAT; get_FIYAT
+2282,FonAlSatData,TUTAR,float,set_TUTAR; get_TUTAR
+2283,FonAlSatData,FON_UNVANI,string,set_FON_UNVANI; get_FON_UNVANI
+2284,FonAlSatData,FON_TIPI,string,set_FON_TIPI; get_FON_TIPI
+2285,FonAlSatData,TAKAS_TARIHI,valuetype System.DateTime,set_TAKAS_TARIHI; get_TAKAS_TARIHI
+2286,FonAlSatData,MUSTERI_NET_BAKIYE,float,set_MUSTERI_NET_BAKIYE; get_MUSTERI_NET_BAKIYE
+2287,FonAlSatData,LIKIT_SYS_NO,int,set_LIKIT_SYS_NO; get_LIKIT_SYS_NO
+2288,FonAlSatData,MIKTAR_TUTAR,string,set_MIKTAR_TUTAR; get_MIKTAR_TUTAR
+2289,FonAlSatData,HESAPLANAN_MIKTAR,int,set_HESAPLANAN_MIKTAR; get_HESAPLANAN_MIKTAR
+2290,FonAlSatData,HESAPLANAN_TUTAR,float,set_HESAPLANAN_TUTAR; get_HESAPLANAN_TUTAR
+2291,FonAlSatData,IHBAR_SYS_NO,int,set_IHBAR_SYS_NO; get_IHBAR_SYS_NO
+2292,FonAlSatData,FIYAT_MARJ_ORANI,int,set_FIYAT_MARJ_ORANI; get_FIYAT_MARJ_ORANI
+2293,FonAlSatData,ReturnValue,int,set_ReturnValue; get_ReturnValue
+2294,FonAlSatData,errorMessage,string,get_errorMessage; set_errorMessage
+2295,FonAlSatData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2296,FonAlSatReq,fonId,string,set_fonId; get_fonId
+2297,FonAlSatReq,fonIslem,string,set_fonIslem; get_fonIslem
+2298,FonAlSatReq,adet,valuetype System.Decimal,set_adet; get_adet
+2299,FonAlSatReq,tutar,valuetype System.Decimal,set_tutar; get_tutar
+2300,FonAlSatReq,kontrol,int,set_kontrol; get_kontrol
+2301,FonIptalResponse,data,class FonIptalResponseData,set_data; get_data
+2302,FonIptalResponse,success,bool,set_success; get_success
+2303,FonIptalResponse,message,object,set_message; get_message
+2304,FonIptalResponse,statusCode,int,set_statusCode; get_statusCode
+2305,FonIptalResponseData,errorCode,int,set_errorCode; get_errorCode
+2306,FonIptalResponseData,errorMessage,string,set_errorMessage; get_errorMessage
+2307,FonIptalResponseData,errorUniqueCode,int,set_errorUniqueCode; get_errorUniqueCode
+2308,fonIptalReq,islemNo,int,set_islemNo; get_islemNo
+2309,FonSatimList,data,class FonSatimListData,get_data; set_data
+2310,FonSatimList,success,bool,get_success; set_success
+2311,FonSatimList,message,object,get_message; set_message
+2312,FonSatimList,statusCode,int,get_statusCode; set_statusCode
+2313,FonSatimListData,list,class FonSatimListList[],get_list; set_list
+2314,FonSatimListList,menkulNo,int,get_menkulNo; set_menkulNo
+2315,FonSatimListList,bakiye,int,get_bakiye; set_bakiye
+2316,FonSatimListList,unvani,string,set_unvani; get_unvani
+2317,FonSatimListList,satisFiyat,float,get_satisFiyat; set_satisFiyat
+2318,FonSatimListList,imkbKodu,string,get_imkbKodu; set_imkbKodu
+2319,FonSatimListList,tipi,string,set_tipi; get_tipi
+2320,FonSatimListList,minPay,int,get_minPay; set_minPay
+2321,FonSatimListList,tutar,float,set_tutar; get_tutar
+2322,FonSatimListList,maliyet,float,get_maliyet; set_maliyet
+2323,FonSatimListList,toplamMaliyet,float,set_toplamMaliyet; get_toplamMaliyet
+2324,FonSatimListList,karZarar,float,get_karZarar; set_karZarar
+2325,FonSatimListList,islemBaslSaati,string,set_islemBaslSaati; get_islemBaslSaati
+2326,FonSatimListList,islemBitisSaati,string,get_islemBitisSaati; set_islemBitisSaati
+2327,FonSatimListList,fifoMaliyet,float,set_fifoMaliyet; get_fifoMaliyet
+2328,FonSatimListList,karZararFifo,float,set_karZararFifo; get_karZararFifo
+2329,FonSatimListList,satisIslemTercihi,string,get_satisIslemTercihi; set_satisIslemTercihi
+2330,FonSatimListList,alisGunArtimi,int,get_alisGunArtimi; set_alisGunArtimi
+2331,FonSatimListList,satisGunArtimi,int,set_satisGunArtimi; get_satisGunArtimi
+2332,FonSatimListList,satimValorAtlatmaSaati,string,get_satimValorAtlatmaSaati; set_satimValorAtlatmaSaati
+2333,FonAlimListesiReq,fonSahiplikFiltre,int,set_fonSahiplikFiltre; get_fonSahiplikFiltre
+2334,FonAlimListesiReq,tefaspFonTuru,int,get_tefaspFonTuru; set_tefaspFonTuru
+2335,FonAlimListesiReq,kurucuUye,string,set_kurucuUye; get_kurucuUye
+2336,FonAlimListesi,data,class FonAlimListesiData,set_data; get_data
+2337,FonAlimListesi,success,bool,get_success; set_success
+2338,FonAlimListesi,message,object,get_message; set_message
+2339,FonAlimListesi,statusCode,int,set_statusCode; get_statusCode
+2340,FonAlimListesiData,list,class FonAlimListesiList[],set_list; get_list
+2341,FonAlimListesiList,menkulNo,int,get_menkulNo; set_menkulNo
+2342,FonAlimListesiList,imkbKodu,string,set_imkbKodu; get_imkbKodu
+2343,FonAlimListesiList,tipi,string,set_tipi; get_tipi
+2344,FonAlimListesiList,unvani,string,get_unvani; set_unvani
+2345,FonAlimListesiList,minPay,int,get_minPay; set_minPay
+2346,FonAlimListesiList,alisFiyat,float,get_alisFiyat; set_alisFiyat
+2347,FonAlimListesiList,satisFiyat,float,get_satisFiyat; set_satisFiyat
+2348,FonAlimListesiList,islemTercihi,string,get_islemTercihi; set_islemTercihi
+2349,FonAlimListesiList,alimValorAtlatmaSaati,string,get_alimValorAtlatmaSaati; set_alimValorAtlatmaSaati
+2350,FonAlimListesiList,alisGunArtimi,int,get_alisGunArtimi; set_alisGunArtimi
+2351,FonAlimListesiList,satisGunArtimi,int,set_satisGunArtimi; get_satisGunArtimi
+2352,FonAlimListesiList,islemBaslSaati,string,get_islemBaslSaati; set_islemBaslSaati
+2353,FonAlimListesiList,islemBitisSaati,string,get_islemBitisSaati; set_islemBitisSaati
+2354,FonTipListesi,data,class FonTipListesiData,get_data; set_data
+2355,FonTipListesi,success,bool,get_success; set_success
+2356,FonTipListesi,message,object,get_message; set_message
+2357,FonTipListesi,statusCode,int,get_statusCode; set_statusCode
+2358,FonTipListesiData,list,class FonTipListesiList[],get_list; set_list
+2359,FonTipListesiList,kod,int,set_kod; get_kod
+2360,FonTipListesiList,aciklama,string,get_aciklama; set_aciklama
+2361,FonKurucuListe,data,class FonKurucuListeData,set_data; get_data
+2362,FonKurucuListe,success,bool,get_success; set_success
+2363,FonKurucuListe,message,object,set_message; get_message
+2364,FonKurucuListe,statusCode,int,get_statusCode; set_statusCode
+2365,FonKurucuListeData,list,class FonKurucuListeList[],get_list; set_list
+2366,FonKurucuListeList,kod,string,get_kod; set_kod
+2367,FonKurucuListeList,aciklama,string,set_aciklama; get_aciklama
+2368,FonTalepListesi,data,class FonTalepListesiData,set_data; get_data
+2369,FonTalepListesi,success,bool,get_success; set_success
+2370,FonTalepListesi,message,object,get_message; set_message
+2371,FonTalepListesi,statusCode,int,set_statusCode; get_statusCode
+2372,FonTalepListesiData,list,class FonTalepListesiList[],set_list; get_list
+2373,FonTalepListesiList,imkbKodu,string,get_imkbKodu; set_imkbKodu
+2374,FonTalepListesiList,unvani,string,set_unvani; get_unvani
+2375,FonTalepListesiList,sysNo,int,get_sysNo; set_sysNo
+2376,FonTalepListesiList,emir,string,get_emir; set_emir
+2377,FonTalepListesiList,miktar,float,get_miktar; set_miktar
+2378,FonTalepListesiList,fiyat,float,get_fiyat; set_fiyat
+2379,FonTalepListesiList,tutar,float,set_tutar; get_tutar
+2380,FonTalepListesiList,valorTarihi,valuetype System.DateTime,set_valorTarihi; get_valorTarihi
+2381,FonTalepListesiList,talepIptal,string,set_talepIptal; get_talepIptal
+2382,FonTalepListesiList,iptalEdilebilir,int,set_iptalEdilebilir; get_iptalEdilebilir
+2383,FonTalepListesiList,tefaspDurum,string,set_tefaspDurum; get_tefaspDurum
+2384,FonTalepListesiList,tefaspHataAciklama,string,get_tefaspHataAciklama; set_tefaspHataAciklama
+2385,FonTalepListesiList,menkulNo,int,get_menkulNo; set_menkulNo
+2386,FonTalepListesiList,gercekesenMiktar,int,set_gercekesenMiktar; get_gercekesenMiktar
+2387,ideal.AlgoClass,RunningMode,bool,get_RunningMode
+2388,ideal.AlgoSettingClass,RunningModeAny,bool,get_RunningModeAny
+2389,ideal.AlgoSettingClass,RunningModeAnyArbitrajNotInclude,bool,get_RunningModeAnyArbitrajNotInclude
+2390,ideal.TradeBotClass,Sembol,string,get_Sembol; set_Sembol
+2391,ideal.TradeBotClass,Prefix,string,set_Prefix; get_Prefix
+2392,ideal.TradeBotClass,Root,string,get_Root; set_Root
+2393,ideal.TradeBotClass,DecPoint,int,get_DecPoint; set_DecPoint
+2394,ideal.TradeBotEmirClass,OrderNo,string,set_OrderNo; get_OrderNo
+2395,ideal.TradeBotEmirClass,ExceuteOrderNo,string,get_ExceuteOrderNo; set_ExceuteOrderNo
+2396,ideal.TradeBotEmirClass,TPOrderNo,string,set_TPOrderNo; get_TPOrderNo
+2397,ideal.TradeBotEmirClass,SLOrderNo,string,get_SLOrderNo; set_SLOrderNo
+2398,ideal.TradeBotEmirClass,BuySell,string,get_BuySell; set_BuySell
+2399,ideal.TradeBotEmirClass,Direction,string,set_Direction; get_Direction
+2400,ideal.TradeBotEmirClass,ExecutionStatusMO,string,get_ExecutionStatusMO; set_ExecutionStatusMO
+2401,ideal.TradeBotEmirClass,ExecutionStatusTP,string,get_ExecutionStatusTP; set_ExecutionStatusTP
+2402,ideal.TradeBotEmirClass,ExecutionStatusSL,string,get_ExecutionStatusSL; set_ExecutionStatusSL
+2403,ideal.TradeBotEmirClass,Yon,string,set_Yon; get_Yon
+2404,ideal.TradeBotEmirClass,Symbol,string,get_Symbol; set_Symbol
+2405,ideal.TradeBotEmirClass,Root,string,get_Root; set_Root
+2406,ideal.TradeBotEmirClass,PriceMO,valuetype System.Decimal,set_PriceMO; get_PriceMO
+2407,ideal.TradeBotEmirClass,PriceTP,valuetype System.Decimal,set_PriceTP; get_PriceTP
+2408,ideal.TradeBotEmirClass,PriceSL,valuetype System.Decimal,set_PriceSL; get_PriceSL
+2409,ideal.TradeBotEmirClass,GpriceTP,valuetype System.Decimal,set_GpriceTP; get_GpriceTP
+2410,ideal.TradeBotEmirClass,GpriceMO,valuetype System.Decimal,get_GpriceMO; set_GpriceMO
+2411,ideal.TradeBotEmirClass,GpriceSL,valuetype System.Decimal,set_GpriceSL; get_GpriceSL
+2412,ideal.TradeBotEmirClass,AmountTP,valuetype System.Decimal,set_AmountTP; get_AmountTP
+2413,ideal.TradeBotEmirClass,AmountMO,valuetype System.Decimal,get_AmountMO; set_AmountMO
+2414,ideal.TradeBotEmirClass,AmountSL,valuetype System.Decimal,get_AmountSL; set_AmountSL
+2415,ideal.TradeBotEmirClass,GAmountMO,valuetype System.Decimal,set_GAmountMO; get_GAmountMO
+2416,ideal.TradeBotEmirClass,GAmountTP,valuetype System.Decimal,set_GAmountTP; get_GAmountTP
+2417,ideal.TradeBotEmirClass,GAmountSL,valuetype System.Decimal,get_GAmountSL; set_GAmountSL
+2418,ideal.TradeBotEmirClass,BalanceMO,valuetype System.Decimal,set_BalanceMO; get_BalanceMO
+2419,ideal.TradeBotEmirClass,BalanceTP,valuetype System.Decimal,get_BalanceTP; set_BalanceTP
+2420,ideal.TradeBotEmirClass,BalanceSL,valuetype System.Decimal,get_BalanceSL; set_BalanceSL
+2421,ideal.TradeBotEmirClass,AcigaBool,bool,set_AcigaBool; get_AcigaBool
+2422,ideal.TradeBotEmirClass,IzleyenBool,bool,get_IzleyenBool; set_IzleyenBool
+2423,ideal.TradeBotEmirClass,TPTick,valuetype System.Decimal,set_TPTick; get_TPTick
+2424,ideal.TradeBotEmirClass,SPTick,valuetype System.Decimal,get_SPTick; set_SPTick
+2425,ideal.TradeBotEmirClass,TradeOderStatus,valuetype ideal.TradeBotStatus,set_TradeOderStatus; get_TradeOderStatus
+2426,TypeASItem,Sembol,string,set_Sembol; get_Sembol
+2427,TypeASItem,Grup,string,get_Grup; set_Grup
+2428,TypeASItem,Seri,string,get_Seri; set_Seri
+2429,TypeASItem,EnDusukASF,float,set_EnDusukASF; get_EnDusukASF
+2430,TypeASItem,EnYuksekASF,float,get_EnYuksekASF; set_EnYuksekASF
+2431,TypeASItem,Aof,float,set_Aof; get_Aof
+2432,TypeASItem,Hacim,double,get_Hacim; set_Hacim
+2433,TypeASItem,Adet,double,set_Adet; get_Adet
+2434,TypeASItem,SozlesmeSay,double,set_SozlesmeSay; get_SozlesmeSay
+2435,TypeOIItem,Sembol,string,set_Sembol; get_Sembol
+2436,TypeOIItem,Grup,string,get_Grup; set_Grup
+2437,TypeOIItem,Seri,string,set_Seri; get_Seri
+2438,TypeOIItem,EnDusukOEF,float,get_EnDusukOEF; set_EnDusukOEF
+2439,TypeOIItem,EnYuksekOEF,float,get_EnYuksekOEF; set_EnYuksekOEF
+2440,TypeOIItem,Aof,float,get_Aof; set_Aof
+2441,TypeOIItem,Hacim,double,get_Hacim; set_Hacim
+2442,TypeOIItem,Adet,double,set_Adet; get_Adet
+2443,TypeOIItem,SozlesmeSay,double,set_SozlesmeSay; get_SozlesmeSay
+2444,TypeMPItem,Sembol,string,set_Sembol; get_Sembol
+2445,TypeMPItem,Grup,string,set_Grup; get_Grup
+2446,TypeMPItem,Seri,string,get_Seri; set_Seri
+2447,TypeMPItem,Hacim,double,set_Hacim; get_Hacim
+2448,TypeMPItem,Adet,double,set_Adet; get_Adet
+2449,TypeMPItem,SozlesmeSay,double,set_SozlesmeSay; get_SozlesmeSay
+2450,ideal.BorsaBultenItem,Tarih,string,set_Tarih; get_Tarih
+2451,ideal.BorsaBultenItem,IslemKodu,string,get_IslemKodu; set_IslemKodu
+2452,ideal.BorsaBultenItem,BultenAdi,string,set_BultenAdi; get_BultenAdi
+2453,ideal.BorsaBultenItem,PazarGrubu,string,set_PazarGrubu; get_PazarGrubu
+2454,ideal.BorsaBultenItem,Pazar,string,get_Pazar; set_Pazar
+2455,ideal.BorsaBultenItem,YapisalBazdaPiyasaAltBolumu,string,get_YapisalBazdaPiyasaAltBolumu; set_YapisalBazdaPiyasaAltBolumu
+2456,ideal.BorsaBultenItem,EnstrumanGrubu,string,set_EnstrumanGrubu; get_EnstrumanGrubu
+2457,ideal.BorsaBultenItem,EnstrumanTipi,string,get_EnstrumanTipi; set_EnstrumanTipi
+2458,ideal.BorsaBultenItem,EnstrumanSinifi,string,get_EnstrumanSinifi; set_EnstrumanSinifi
+2459,ideal.BorsaBultenItem,IslemYontemi,string,get_IslemYontemi; set_IslemYontemi
+2460,ideal.BorsaBultenItem,PiyasaYapici,string,set_PiyasaYapici; get_PiyasaYapici
+2461,ideal.BorsaBultenItem,Bist100Endeks,string,set_Bist100Endeks; get_Bist100Endeks
+2462,ideal.BorsaBultenItem,Bist30Endeks,string,set_Bist30Endeks; get_Bist30Endeks
+2463,ideal.BorsaBultenItem,BrutTakas,string,set_BrutTakas; get_BrutTakas
+2464,ideal.BorsaBultenItem,OzsermayeHali,string,get_OzsermayeHali; set_OzsermayeHali
+2465,ideal.BorsaBultenItem,GeciciDurdurma,string,get_GeciciDurdurma; set_GeciciDurdurma
+2466,ideal.BorsaBultenItem,OncekiKapanisFiyati,string,get_OncekiKapanisFiyati; set_OncekiKapanisFiyati
+2467,ideal.BorsaBultenItem,AcilisFiyati,string,get_AcilisFiyati; set_AcilisFiyati
+2468,ideal.BorsaBultenItem,AcilisSeansiFiyati,string,get_AcilisSeansiFiyati; set_AcilisSeansiFiyati
+2469,ideal.BorsaBultenItem,EnDusukFiyat,string,get_EnDusukFiyat; set_EnDusukFiyat
+2470,ideal.BorsaBultenItem,EnYuksekFiyat,string,get_EnYuksekFiyat; set_EnYuksekFiyat
+2471,ideal.BorsaBultenItem,KapanisFiyati,string,set_KapanisFiyati; get_KapanisFiyati
+2472,ideal.BorsaBultenItem,KapanisSeansiFiyati,string,set_KapanisSeansiFiyati; get_KapanisSeansiFiyati
+2473,ideal.BorsaBultenItem,Degisim,string,set_Degisim; get_Degisim
+2474,ideal.BorsaBultenItem,BekleyenEnIyiAlis,string,get_BekleyenEnIyiAlis; set_BekleyenEnIyiAlis
+2475,ideal.BorsaBultenItem,BekleyenEnIyiSatis,string,set_BekleyenEnIyiSatis; get_BekleyenEnIyiSatis
+2476,ideal.BorsaBultenItem,Aof,string,set_Aof; get_Aof
+2477,ideal.BorsaBultenItem,ToplamIslemHacmi,string,set_ToplamIslemHacmi; get_ToplamIslemHacmi
+2478,ideal.BorsaBultenItem,ToplamIslemAdedi,string,set_ToplamIslemAdedi; get_ToplamIslemAdedi
+2479,ideal.BorsaBultenItem,ToplamSozlesmeSayisi,string,get_ToplamSozlesmeSayisi; set_ToplamSozlesmeSayisi
+2480,ideal.BorsaBultenItem,ReferansFiyat,string,get_ReferansFiyat; set_ReferansFiyat
+2481,ideal.BorsaBultenItem,AcilisSeansiIslemHacmi,string,get_AcilisSeansiIslemHacmi; set_AcilisSeansiIslemHacmi
+2482,ideal.BorsaBultenItem,AcilisSeansiIslemMiktari,string,get_AcilisSeansiIslemMiktari; set_AcilisSeansiIslemMiktari
+2483,ideal.BorsaBultenItem,AcilisSeansiSozlesmeSayisi,string,set_AcilisSeansiSozlesmeSayisi; get_AcilisSeansiSozlesmeSayisi
+2484,ideal.BorsaBultenItem,KapanisSeansiIslemHacmi,string,get_KapanisSeansiIslemHacmi; set_KapanisSeansiIslemHacmi
+2485,ideal.BorsaBultenItem,KapanisSeansiIslemMiktari,string,set_KapanisSeansiIslemMiktari; get_KapanisSeansiIslemMiktari
+2486,ideal.BorsaBultenItem,KapanisSeansiSozlesmeSayisi,string,get_KapanisSeansiSozlesmeSayisi; set_KapanisSeansiSozlesmeSayisi
+2487,ideal.BorsaBultenItem,KapanisFiyatindanIslemlerIslemHacmi,string,get_KapanisFiyatindanIslemlerIslemHacmi; set_KapanisFiyatindanIslemlerIslemHacmi
+2488,ideal.BorsaBultenItem,KapanisFiyatindanIslemlerIslemMiktari,string,get_KapanisFiyatindanIslemlerIslemMiktari; set_KapanisFiyatindanIslemlerIslemMiktari
+2489,ideal.BorsaBultenItem,KapanisFiyatindanIslemlerSozlesmeSayisi,string,get_KapanisFiyatindanIslemlerSozlesmeSayisi; set_KapanisFiyatindanIslemlerSozlesmeSayisi
+2490,ideal.BorsaBultenItem,EnDusukAcigaSatisFiyati,string,set_EnDusukAcigaSatisFiyati; get_EnDusukAcigaSatisFiyati
+2491,ideal.BorsaBultenItem,EnYuksekAcigaSatisFiyati,string,get_EnYuksekAcigaSatisFiyati; set_EnYuksekAcigaSatisFiyati
+2492,ideal.BorsaBultenItem,AcigaSatisAof,string,set_AcigaSatisAof; get_AcigaSatisAof
+2493,ideal.BorsaBultenItem,AcigaSatisIslemHacmi,string,set_AcigaSatisIslemHacmi; get_AcigaSatisIslemHacmi
+2494,ideal.BorsaBultenItem,AcigaSatisIslemAdedi,string,get_AcigaSatisIslemAdedi; set_AcigaSatisIslemAdedi
+2495,ideal.BorsaBultenItem,AcigaSatisSozlesmeSayisi,string,get_AcigaSatisSozlesmeSayisi; set_AcigaSatisSozlesmeSayisi
+2496,ideal.BorsaBultenItem,OzelIslemBildirimiEnDusukFiyat,string,get_OzelIslemBildirimiEnDusukFiyat; set_OzelIslemBildirimiEnDusukFiyat
+2497,ideal.BorsaBultenItem,OzelIslemBildirimiEnYuksekFiyat,string,get_OzelIslemBildirimiEnYuksekFiyat; set_OzelIslemBildirimiEnYuksekFiyat
+2498,ideal.BorsaBultenItem,OzelIslemBildirimiAof,string,set_OzelIslemBildirimiAof; get_OzelIslemBildirimiAof
+2499,ideal.BorsaBultenItem,OzelIslemBildirimiIslemHacmi,string,set_OzelIslemBildirimiIslemHacmi; get_OzelIslemBildirimiIslemHacmi
+2500,ideal.BorsaBultenItem,OzelIslemBildirimiIslemAdedi,string,set_OzelIslemBildirimiIslemAdedi; get_OzelIslemBildirimiIslemAdedi
+2501,ideal.BorsaBultenItem,OzelIslemBildirimiSozlesmeSayisi,string,set_OzelIslemBildirimiSozlesmeSayisi; get_OzelIslemBildirimiSozlesmeSayisi
+2502,ideal.BorsaBultenItem,OrtaNoktaIslemleriIslemHacmi,string,set_OrtaNoktaIslemleriIslemHacmi; get_OrtaNoktaIslemleriIslemHacmi
+2503,ideal.BorsaBultenItem,OrtaNoktaIslemleriIslemAdedi,string,set_OrtaNoktaIslemleriIslemAdedi; get_OrtaNoktaIslemleriIslemAdedi
+2504,ideal.BorsaBultenItem,OrtaNoktaIslemleriSozlesmeSayisi,string,get_OrtaNoktaIslemleriSozlesmeSayisi; set_OrtaNoktaIslemleriSozlesmeSayisi
+2505,ideal.BorsaBultenItem,AcigaSatis,string,get_AcigaSatis; set_AcigaSatis
+2506,ideal.BorsaBultenItem,BistKatilimTumEndeks,string,set_BistKatilimTumEndeks; get_BistKatilimTumEndeks
+2507,ideal.MyButton,_Stil,int,set__Stil; get__Stil
+2508,ideal.MyButton,_ForeColor,valuetype System.Drawing.Color,set__ForeColor; get__ForeColor
+2509,ideal.MyButton,_BackColor,valuetype System.Drawing.Color,set__BackColor; get__BackColor
+2510,ideal.MyButton,_DownColor,valuetype System.Drawing.Color,set__DownColor; get__DownColor
+2511,ideal.MyButton,_BackColor1,valuetype System.Drawing.Color,set__BackColor1; get__BackColor1
+2512,ideal.MyButton,_BackColor2,valuetype System.Drawing.Color,set__BackColor2; get__BackColor2
+2513,ideal.MyButton,_BorderColor,valuetype System.Drawing.Color,set__BorderColor; get__BorderColor
+2514,ideal.MyButton,_Text,string,set__Text; get__Text
+2515,ideal.MyButton,_Font,class System.Drawing.Font,set__Font; get__Font
+2516,ideal.MyButton,_PushEnabled,bool,set__PushEnabled; get__PushEnabled
+2517,ideal.MyPie,_PieBackColor,valuetype System.Drawing.Color,set__PieBackColor; get__PieBackColor
+2518,ideal.MyPie,_PieColors,System.Collections.Generic.List`1<valuetype System.Drawing.Color>,set__PieColors; get__PieColors
+2519,ideal.MyPie,_Values,System.Collections.Generic.List`1<double>,set__Values; get__Values
+2520,ideal.TahtaRobot1Class,Pozisyon,int,get_Pozisyon
+2521,ideal.TahtaRobot1Class,Maliyet,valuetype System.Decimal,get_Maliyet
+2522,ideal.TahtaRobot1Class,AlisOrtalama,valuetype System.Decimal,get_AlisOrtalama
+2523,ideal.TahtaRobot1Class,SatisOrtalama,valuetype System.Decimal,get_SatisOrtalama
+2524,ideal.TahtaRobot2Class,Pozisyon,int,get_Pozisyon
+2525,ideal.TahtaRobot2Class,Maliyet,valuetype System.Decimal,get_Maliyet
+2526,ideal.TahtaRobot2Class,AlisOrtalama,valuetype System.Decimal,get_AlisOrtalama
+2527,ideal.TahtaRobot2Class,SatisOrtalama,valuetype System.Decimal,get_SatisOrtalama
+2528,<GetAllControls>d__7,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.Current,class System.Windows.Forms.Control,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.get_Current
+2529,<GetAllControls>d__7,System.Collections.IEnumerator.Current,object,System.Collections.IEnumerator.get_Current
+2530,ideal.Temperatures,Timestamp,long,set_Timestamp; get_Timestamp
+2531,ideal.Temperatures,ErrorMessage,string,set_ErrorMessage; get_ErrorMessage
+2532,ideal.Temperatures,Result,class ideal.Result,set_Result; get_Result
+2533,ideal.Temperatures,ErrorCode,string,set_ErrorCode; get_ErrorCode
+2534,ideal.YapıKrediLogin,state,string,set_state; get_state
+2535,ideal.YapıKrediLogin,channel,string,set_channel; get_channel
+2536,ideal.Result,Authenticated,bool,set_Authenticated; get_Authenticated
+2537,ideal.Result,Token,object,set_Token; get_Token
+2538,StockAllSymbolRecord,TotalLot1,double,set_TotalLot1; get_TotalLot1
+2539,StockAllSymbolRecord,TotalLot2,double,set_TotalLot2; get_TotalLot2
+2540,TypeStockAll,SymbolFilter,string,set_SymbolFilter; get_SymbolFilter
+2541,ideal.SYS_Chart_Response,s,string,set_s; get_s
+2542,ideal.SYS_Chart_Response,d,class ideal.Sys_Chart_Item[],set_d; get_d
+2543,ideal.Sys_Chart_Item,t,string,set_t; get_t
+2544,ideal.Sys_Chart_Item,v,string,set_v; get_v
+2545,ideal.ChartItem,Date,valuetype System.DateTime,set_Date; get_Date
+2546,ideal.ChartItem,Val,double,set_Val; get_Val
+2547,<GetAllControls>d__40,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.Current,class System.Windows.Forms.Control,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.get_Current
+2548,<GetAllControls>d__40,System.Collections.IEnumerator.Current,object,System.Collections.IEnumerator.get_Current
+2549,<GetAllControls>d__13,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.Current,class System.Windows.Forms.Control,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.get_Current
+2550,<GetAllControls>d__13,System.Collections.IEnumerator.Current,object,System.Collections.IEnumerator.get_Current
+2551,<GetAllControls>d__2,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.Current,class System.Windows.Forms.Control,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.get_Current
+2552,<GetAllControls>d__2,System.Collections.IEnumerator.Current,object,System.Collections.IEnumerator.get_Current
+2553,ideal.cxSistem,AktifViopKontrat,string,get_AktifViopKontrat
+2554,ideal.cxSistem,AktifDolarKontrat,string,get_AktifDolarKontrat
+2555,ideal.cxSistem,AktifEuroKontrat,string,get_AktifEuroKontrat
+2556,ideal.cxSistem,BaglantiVar,bool,get_BaglantiVar
+2557,ideal.cxSistem,HaftaSonu,bool,get_HaftaSonu
+2558,ideal.cxSistem,Saat,string,get_Saat
+2559,ideal.cxSistem,Tarih,string,get_Tarih
+2560,ideal.ChartControl,_Rkademe,valuetype System.Decimal,set__Rkademe; get__Rkademe
+2561,SerbestDrawClass,Visible,bool,set_Visible; get_Visible
+2562,ideal.Properties.Resources,ResourceManager,class System.Resources.ResourceManager,get_ResourceManager
+2563,ideal.Properties.Resources,Culture,class System.Globalization.CultureInfo,set_Culture; get_Culture
+2564,ideal.Properties.Resources,face1,class System.Drawing.Bitmap,get_face1
+2565,ideal.Properties.Resources,face2,class System.Drawing.Bitmap,get_face2
+2566,ideal.Properties.Resources,face3,class System.Drawing.Bitmap,get_face3
+2567,ideal.Properties.Resources,face4,class System.Drawing.Bitmap,get_face4
+2568,ideal.Properties.Resources,face5,class System.Drawing.Bitmap,get_face5
+2569,ideal.Properties.Resources,idealgo_02,class System.Drawing.Bitmap,get_idealgo_02
+2570,ideal.Properties.Resources,idealgo_03,class System.Drawing.Bitmap,get_idealgo_03
+2571,ideal.Properties.Resources,idealgo_04,class System.Drawing.Bitmap,get_idealgo_04
+2572,ideal.Properties.Resources,twittericon224,class System.Drawing.Bitmap,get_twittericon224
+2573,ideal.Properties.Resources,twittericon24,class System.Drawing.Bitmap,get_twittericon24
+2574,ideal.Properties.Resources,x_12,class System.Drawing.Bitmap,get_x_12
+2575,ideal.Properties.Resources,x_logo4,class System.Drawing.Bitmap,get_x_logo4
+2576,ideal.Properties.Settings,Default,class ideal.Properties.Settings,get_Default
+2577,<GetAllControls>d__25,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.Current,class System.Windows.Forms.Control,System.Collections.Generic.IEnumerator<System.Windows.Forms.Control>.get_Current
+2578,<GetAllControls>d__25,System.Collections.IEnumerator.Current,object,System.Collections.IEnumerator.get_Current
+2579,ideal.View.ViewFon.PHTextBox,PlaceHolderText,string,set_PlaceHolderText; get_PlaceHolderText
+2580,ideal.View.ViewFon.RangeTrackBar,SelectedMin,int,set_SelectedMin; get_SelectedMin
+2581,ideal.View.ViewFon.RangeTrackBar,MinValue,int,set_MinValue; get_MinValue
+2582,ideal.View.ViewFon.RangeTrackBar,SelectedMax,int,set_SelectedMax; get_SelectedMax
+2583,ideal.View.ViewFon.RangeTrackBar,MaxValue,int,set_MaxValue; get_MaxValue
+2584,DenizUserInfo,customer_no,string,set_customer_no; get_customer_no
+2585,DenizUserInfo,user_id,string,set_user_id; get_user_id
+2586,DenizUserInfo,session_id,string,set_session_id; get_session_id
+2587,DenizAccessTokenResponse,access_token,string,set_access_token; get_access_token
+2588,DenizAccessTokenResponse,token_type,string,set_token_type; get_token_type
+2589,DenizAccessTokenResponse,expires_in,int,set_expires_in; get_expires_in
+2590,DenizAuthTokenRequest,browserName,string,set_browserName; get_browserName
+2591,DenizAuthTokenRequest,browserVersion,string,set_browserVersion; get_browserVersion
+2592,DenizAuthTokenRequest,recordTime,string,set_recordTime; get_recordTime
+2593,DenizAuthTokenRequest,browserAgent,string,set_browserAgent; get_browserAgent
+2594,DenizAuthTokenRequest,isMobileBrowser,byte,set_isMobileBrowser; get_isMobileBrowser
+2595,DenizAuthTokenRequest,screenResolution,string,set_screenResolution; get_screenResolution
+2596,DenizAuthTokenRequest,code,string,set_code; get_code
+2597,DenizAuthTokenRequest,clientDate,string,set_clientDate; get_clientDate
+2598,DenizAuthTokenRequest,clientTime,string,set_clientTime; get_clientTime
+2599,DenizAuthTokenRequest,clientGMT,string,set_clientGMT; get_clientGMT
+2600,Microsoft.Office.Interop.Excel.Range,_Default,object,set__Default; get__Default
+2601,Microsoft.Office.Interop.Excel.Range,Resize,class Microsoft.Office.Interop.Excel.Range,get_Resize
+2602,Microsoft.Office.Interop.Excel.Range,Value2,object,set_Value2; get_Value2
+2603,Microsoft.Office.Interop.Excel.Sheets,Item,object,get_Item
+2604,Microsoft.Office.Interop.Excel.Sheets,_Default,object,get__Default
+2605,Microsoft.Office.Interop.Excel._Application,Workbooks,class Microsoft.Office.Interop.Excel.Workbooks,get_Workbooks
+2606,Microsoft.Office.Interop.Excel._Application,_Default,string,get__Default
+2607,Microsoft.Office.Interop.Excel._Application,ScreenUpdating,bool,set_ScreenUpdating; get_ScreenUpdating
+2608,Microsoft.Office.Interop.Excel._Application,Visible,bool,set_Visible; get_Visible
+2609,Microsoft.Office.Interop.Excel._Workbook,FullName,string,get_FullName
+2610,Microsoft.Office.Interop.Excel._Workbook,Sheets,class Microsoft.Office.Interop.Excel.Sheets,get_Sheets
+2611,Microsoft.Office.Interop.Excel._Worksheet,Cells,class Microsoft.Office.Interop.Excel.Range,get_Cells
+2612,Microsoft.Office.Interop.Excel._Worksheet,UsedRange,class Microsoft.Office.Interop.Excel.Range,get_UsedRange

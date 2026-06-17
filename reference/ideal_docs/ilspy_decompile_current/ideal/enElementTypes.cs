@@ -1,0 +1,35 @@
+namespace ideal;
+
+public enum enElementTypes
+{
+	None,
+	TrendNormal,
+	TrendHorizontal,
+	TrendVertical,
+	TrendFiboRet,
+	TrendFiboArc,
+	TrendFiboFan,
+	TrendSpeed,
+	TrendCycle,
+	TrendGannFan,
+	TrendFiboZone,
+	TrendFiboImpulse,
+	TrendGannGrid,
+	TrendLinReg,
+	TrendRaffChannel,
+	TrendStDevChannel,
+	TrendStErrorChannel,
+	TrendEqChannel,
+	TrendAndrew,
+	TrendQuadrant,
+	TrendTirone,
+	TrendSquare,
+	TrendCircle,
+	TrendArrowUp,
+	TrendArrowDown,
+	TrendArrowLeft,
+	TrendArrowRight,
+	TrendText,
+	TrendFibo,
+	TrendIsin
+}

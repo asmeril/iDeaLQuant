@@ -1,0 +1,476 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
+using dg3ypDAonQcOidMs0w;
+
+namespace ideal;
+
+public class formDepthRepo1 : FormControl
+{
+	private Font FontData;
+
+	public string ActiveSymbol;
+
+	private int LineSpace;
+
+	private bool GridlineVisible;
+
+	private bool TradeVisible;
+
+	private bool BasicVisible;
+
+	private bool MoneyflowVisible;
+
+	private bool DepthHeaderVisible;
+
+	private int CompositeShow;
+
+	private bool PistonVisible;
+
+	private Color TitleBackColor1;
+
+	private Color TitleBackColor2;
+
+	private Color TitleForeColor;
+
+	private Color TitleBorderColor;
+
+	private Color ActiveCellBackColor1;
+
+	private Color ActiveCellBackColor2;
+
+	private Color ActiveCellForeColor;
+
+	private Color GridBackColor;
+
+	private Color GridForeColor;
+
+	private Color NormalColor;
+
+	private Color HighColor;
+
+	private Color LowColor;
+
+	private Color RelationalNewsColor;
+
+	private Color AverageLineBackColor;
+
+	private Color AverageLineForeColor;
+
+	private Color CurrentLineBackColor;
+
+	private Color CurrentLineForeColor;
+
+	private Color GridlineColor;
+
+	private Color MarketMakerBidBackColor;
+
+	private Color MarketMakerBidForeColor;
+
+	private Color MarketMakerAskBackColor;
+
+	private Color MarketMakerAskForeColor;
+
+	private Color UpdateNormalBackColor;
+
+	private Color UpdateNormalForeColor;
+
+	private Color UpdateHighBackColor;
+
+	private Color UpdateHighForeColor;
+
+	private Color UpdateLowBackColor;
+
+	private Color UpdateLowForeColor;
+
+	private Color VbarBackColor1;
+
+	private Color VbarBackColor2;
+
+	private Color VbarForeColor;
+
+	private Color VbarBorderColor;
+
+	private Color VbarButtonBackColor1;
+
+	private Color VbarButtonBackColor2;
+
+	private cxPage.Depth PageParams;
+
+	private string InitialSymbol;
+
+	private int InitialLeft;
+
+	private int InitialTop;
+
+	private Rectangle InvRect1;
+
+	private Rectangle InvRect2;
+
+	private Color InvBackColor;
+
+	private Color InvForeColor;
+
+	private StringFormat InvAlign;
+
+	private string InvString;
+
+	private Font InvFont;
+
+	private bool VbarVisible;
+
+	private string MenuSender;
+
+	private int TitleHeight;
+
+	private int RowHeight;
+
+	private bool TopMostEnabled;
+
+	private List<cxTrade> DataList;
+
+	private List<cxTrade> DataBuffer;
+
+	private cxGrid Grid;
+
+	private int[] TradeCharWidth;
+
+	private cxDepth DepthItem;
+
+	private cxGrid DepthGrid;
+
+	private int DepthRowCount;
+
+	private long DepthPacketReceiveTime;
+
+	private int[] DepthBidColorStatus;
+
+	private int[] DepthAskColorStatus;
+
+	private long[] DepthBidUpdateTime;
+
+	private long[] DepthAskUpdateTime;
+
+	private int[] DepthCharWidth;
+
+	private long DepthAveragePaintTime;
+
+	private cxBasic BasicItem;
+
+	private cxGrid BasicGrid;
+
+	private int BasicRowCount;
+
+	private int[,] BasicColCode;
+
+	private long BasicPaintTime;
+
+	private bool FormLoaded;
+
+	private Stopwatch CheckTime;
+
+	private cxFont.Margin FontMargin;
+
+	private Font FontHeader;
+
+	private Font FontArrow;
+
+	private Font FontMoneyflowData;
+
+	private Font FontMoneyflowArrow;
+
+	private cxButton HeaderButtons;
+
+	private Pen Pen1;
+
+	private Pen Pen2;
+
+	private SolidBrush Brush1;
+
+	private SolidBrush BrushBack;
+
+	private SolidBrush BrushFore;
+
+	private Rectangle Rect1;
+
+	private Rectangle Rect2;
+
+	private string Str1;
+
+	private Point Point1;
+
+	private float ScrollMidLength;
+
+	private float ScrollSideLength;
+
+	private Rectangle VbarMidRect;
+
+	private Rectangle VbarBottomRect;
+
+	private Rectangle VbarTopRect;
+
+	private IContainer components;
+
+	private Timer timerUpdate;
+
+	private Panel panelVbar;
+
+	private Panel panelBasic;
+
+	private Panel panelDepth;
+
+	private Panel panelTrade;
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public formDepthRepo1(int leftX, int topX, string symbolX, cxPage.Depth pageparamsX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_Load(object sender, EventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_Activated(object sender, EventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_Deactivate(object sender, EventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_FormClosed(object sender, FormClosedEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_MouseDown(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_Paint(object sender, PaintEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void formDepthRepo1_SizeChanged(object sender, EventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+	{
+		return true;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	protected override void OnPaintBackground(PaintEventArgs pevent)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelBasic_MouseDoubleClick(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelBasic_MouseDown(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelBasic_MouseMove(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelBasic_Paint(object sender, PaintEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelDepth_MouseDown(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelDepth_MouseMove(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelDepth_Paint(object sender, PaintEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelTrade_MouseDown(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelTrade_MouseMove(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelTrade_Paint(object sender, PaintEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelVbar_MouseDown(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelVbar_MouseMove(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelVbar_MouseUp(object sender, MouseEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void panelVbar_Paint(object sender, PaintEventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void timerUpdate_Tick(object sender, EventArgs e)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void BasicDataReceived(string symbolX, string updatetypeX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void DepthRefreshed(string symbolX, char bidasktypeX, int rownoX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void DepthUpdateRowReceived(string symbolX, char bidasktypeX, int rownoX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void TradeReceived(cxTrade itemX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void CalculateMoneyFlow()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void InsertDataBuffer()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void InvalidateAll()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void LoadData()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void PaintCell(Graphics grx, bool refreshpaintX, string strX, Font fontX, Color backcolorX, Color forecolorX, Rectangle rect1X, Rectangle rect2X, StringFormat alignX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void PrepareTables()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void PrintDepthLine(Graphics grx, bool refreshpaintX, char bidaskX, int rownoX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void SetPageParams(cxPage.Depth pageparamsX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void SetMainToolbarSymbol()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void ShowMenu(object sender, Point pointX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void ShowMenuTradeCol(object sender, Point pointX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void ShowMenuDepthColumn(object sender, Point pointX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void ShowMenuBasicColumn(object sender, Point pointX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public void ApplyPattern(cxPage.Depth pageparamsX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public void ChangeColors(cxColorEditor coloritemX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public byte[] ConvertPageToByteArray()
+	{
+		return null;
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	public void ProcessMenuMessage(string messageX)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	protected override void Dispose(bool disposing)
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	private void InitializeComponent()
+	{
+	}
+
+	[MethodImpl(MethodImplOptions.NoInlining)]
+	static formDepthRepo1()
+	{
+		WP6RZJql8gZrNhVA9v.prXoP4RuYp();
+		WP6RZJql8gZrNhVA9v.iXLoKRSpAw();
+	}
+}

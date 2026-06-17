@@ -1,0 +1,53 @@
+{
+  "exe": "/media/tevfik/DATA/iDeal/ideal.exe",
+  "size": 18369192,
+  "machine": "0x014C",
+  "cli_rva": 8200,
+  "streams": {
+    "#~": 1796380,
+    "#Strings": 920160,
+    "#US": 783084,
+    "#GUID": 32,
+    "#Blob": 304232
+  },
+  "tables": {
+    "Module": 2,
+    "TypeRef": 854,
+    "TypeDef": 3230,
+    "Field": 44578,
+    "MethodDef": 36403,
+    "Param": 33060,
+    "InterfaceImpl": 91,
+    "MemberRef": 6986,
+    "Constant": 1767,
+    "CustomAttribute": 12743,
+    "FieldMarshal": 57,
+    "ClassLayout": 34,
+    "StandAloneSig": 4449,
+    "EventMap": 3,
+    "Event": 32,
+    "PropertyMap": 393,
+    "Property": 2612,
+    "MethodSemantics": 5193,
+    "MethodImpl": 144,
+    "ModuleRef": 6,
+    "TypeSpec": 1727,
+    "ImplMap": 18,
+    "FieldRVA": 19,
+    "Assembly": 2,
+    "AssemblyRef": 24,
+    "ManifestResource": 298,
+    "NestedClass": 1670,
+    "GenericParam": 43,
+    "MethodSpec": 1350
+  },
+  "counts": {
+    "types": 3230,
+    "fields": 44578,
+    "methods": 36403,
+    "properties": 2612,
+    "events": 32,
+    "implmaps": 18,
+    "memberrefs": 6986
+  }
+}
