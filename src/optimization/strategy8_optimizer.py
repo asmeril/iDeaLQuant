@@ -1,26 +1,26 @@
-"""
+﻿"""
 Strateji 8 (Gap Reversal v1.0) Numba-JIT Support
 ==================================================
-S7 ile aynı mimari:
-- Sabit diziler (session, time_gap, day_of_week, late_aksam, mask) bir kez hesaplanır.
-- Parametre bazlı diziler (Wilder RSI, shifted Vol SMA, Wilder ATR) worker-level
-  cache'te period → np.array olarak tutulur; her kombinasyon için yeniden hesaplanmaz.
-- fast_backtest_strategy8: saf Numba nopython kernel, sıfır Python döngüsü.
+S7 ile aynÄ± mimari:
+- Sabit diziler (session, time_gap, day_of_week, late_aksam, mask) bir kez hesaplanÄ±r.
+- Parametre bazlÄ± diziler (Wilder RSI, shifted Vol SMA, Wilder ATR) worker-level
+  cache'te period â†’ np.array olarak tutulur; her kombinasyon iÃ§in yeniden hesaplanmaz.
+- fast_backtest_strategy8: saf Numba nopython kernel, sÄ±fÄ±r Python dÃ¶ngÃ¼sÃ¼.
 
-Pre-computed arrays sayesinde her kombinasyon için sadece basit dizi erişimleri
-ve koşul kontrolleri yapılır (~40-80x hızlanma beklenir).
+Pre-computed arrays sayesinde her kombinasyon iÃ§in sadece basit dizi eriÅŸimleri
+ve koÅŸul kontrolleri yapÄ±lÄ±r (~40-80x hÄ±zlanma beklenir).
 """
 import numpy as np
 from numba import jit
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PRE-COMPUTATION — Worker-level cache için çağrılır (Numba JIT)
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+# PRE-COMPUTATION â€” Worker-level cache iÃ§in Ã§aÄŸrÄ±lÄ±r (Numba JIT)
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @jit(nopython=True, cache=True)
 def precompute_wilder_rsi(closes: np.ndarray, period: int) -> np.ndarray:
-    """Wilder Smoothing RSI. period parametreli, tam dizi döner."""
+    """Wilder Smoothing RSI. period parametreli, tam dizi dÃ¶ner."""
     n = len(closes)
     rsi = np.full(n, 50.0)
     ag = 0.0
@@ -68,7 +68,7 @@ def precompute_atr_wilder(closes: np.ndarray, highs: np.ndarray, lows: np.ndarra
         else:
             atr_val = (atr_val * (period - 1) + tr) / period
             atr[i] = atr_val
-    # warm-up barları ilk geçerli değerle doldur
+    # warm-up barlarÄ± ilk geÃ§erli deÄŸerle doldur
     first_valid = atr[period] if period < n else 0.0
     for i in range(period):
         atr[i] = first_valid
@@ -78,7 +78,7 @@ def precompute_atr_wilder(closes: np.ndarray, highs: np.ndarray, lows: np.ndarra
 @jit(nopython=True, cache=True)
 def precompute_sma_shifted(arr: np.ndarray, period: int) -> np.ndarray:
     """Shifted SMA (look-ahead bias yok): result[i] = mean(arr[i-period .. i-1]).
-    i < period için 0.0 döner."""
+    i < period iÃ§in 0.0 dÃ¶ner."""
     n = len(arr)
     result = np.zeros(n)
     if n <= period:
@@ -93,9 +93,9 @@ def precompute_sma_shifted(arr: np.ndarray, period: int) -> np.ndarray:
     return result
 
 
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # ANA KERNEL
-# ──────────────────────────────────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 @jit(nopython=True, cache=True)
 def fast_backtest_strategy8(
@@ -105,12 +105,12 @@ def fast_backtest_strategy8(
     lows: np.ndarray,
     volumes: np.ndarray,
     # Sabit (dataset-level) diziler
-    session_arr: np.ndarray,      # int8: 0=dışı, 1=emirToplama, 2=gunSeansi, 3=aksamSeansi
-    time_gap_arr: np.ndarray,     # float64: önceki bar'dan bu yana saat farkı
+    session_arr: np.ndarray,      # int8: 0=dÄ±ÅŸÄ±, 1=emirToplama, 2=gunSeansi, 3=aksamSeansi
+    time_gap_arr: np.ndarray,     # float64: Ã¶nceki bar'dan bu yana saat farkÄ±
     day_of_week_arr: np.ndarray,  # int8: 0=Pzt .. 6=Paz
     mask_arr: np.ndarray,         # bool: False = tatil / vade sonu
-    late_aksam_arr: np.ndarray,   # bool: True = 22:50+ akşam seansı
-    # Parametre-bağımlı diziler (worker cache'ten gelir)
+    late_aksam_arr: np.ndarray,   # bool: True = 22:50+ akÅŸam seansÄ±
+    # Parametre-baÄŸÄ±mlÄ± diziler (worker cache'ten gelir)
     rsi_arr: np.ndarray,          # Wilder RSI (period parametreli)
     vol_ma_arr: np.ndarray,       # Shifted SMA of volumes (hacim_ma_period parametreli)
     atr_arr: np.ndarray,          # Wilder ATR (atr_period parametreli)
@@ -131,11 +131,11 @@ def fast_backtest_strategy8(
     vade_tipi: int,               # 0=SPOT (no short), 1=VIOP_ENDEKS, 2=VIOP_SPOT
 ):
     """
-    Gap Reversal state machine — Numba nopython.
+    Gap Reversal state machine â€” Numba nopython.
     Returns: (net_profit, total_trades, profit_factor, max_dd, sharpe, active_days, total_days)
     """
     n = len(closes)
-    WARM = 60  # RSI(14) + ATR(21) + VolMA(30) ısınması için yeterli
+    WARM = 60  # RSI(14) + ATR(21) + VolMA(30) Ä±sÄ±nmasÄ± iÃ§in yeterli
 
     in_long = False
     in_short = False
@@ -146,7 +146,7 @@ def fast_backtest_strategy8(
 
     gap_active = False
     gap_fill_lvl = 0.0
-    gap_dir = 0        # +1=yukarı gap, -1=aşağı gap
+    gap_dir = 0        # +1=yukarÄ± gap, -1=aÅŸaÄŸÄ± gap
     or_complete = False
     or_high = 0.0
     or_low = 1e18
@@ -169,11 +169,11 @@ def fast_backtest_strategy8(
         is_emir = (sess == 1)
         is_gun = (sess == 2)
 
-        # Seans dışı (gece arası, öğle arası) → atla
+        # Seans dÄ±ÅŸÄ± (gece arasÄ±, Ã¶ÄŸle arasÄ±) â†’ atla
         if sess == 0:
             continue
 
-        # ── Tatil / Vade Sonu ────────────────────────────────────────────────
+        # â”€â”€ Tatil / Vade Sonu â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if not mask_arr[i]:
             if in_long or in_short:
                 trade_pnl = (closes[i] - entry_price) if in_long else (entry_price - closes[i])
@@ -194,18 +194,18 @@ def fast_backtest_strategy8(
                 cooldown_ct = cooldown_bars
             continue
 
-        # ── Cooldown ─────────────────────────────────────────────────────────
+        # â”€â”€ Cooldown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if cooldown_ct > 0:
             cooldown_ct -= 1
 
-        # ── KATMAN 1: GECE GAP TESPİT ────────────────────────────────────────
+        # â”€â”€ KATMAN 1: GECE GAP TESPÄ°T â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         saat_fark = time_gap_arr[i]
         gece_sonrasi = (saat_fark > 6.0) and (saat_fark < 15.0) and is_emir
 
         if gece_sonrasi:
             active_days += 1
 
-            # Gece kalmış pozisyonu zorla kapat
+            # Gece kalmÄ±ÅŸ pozisyonu zorla kapat
             if in_long or in_short:
                 trade_pnl = (closes[i] - entry_price) if in_long else (entry_price - closes[i])
                 current_equity += trade_pnl
@@ -245,7 +245,7 @@ def fast_backtest_strategy8(
             or_low = lows[i]
             pos_start_bar = -1
 
-        # ── KATMAN 2: OPENING RANGE ───────────────────────────────────────────
+        # â”€â”€ KATMAN 2: OPENING RANGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if gap_active and (not or_complete) and or_start_bar >= 0 and is_gun:
             elapsed = i - or_start_bar
             if elapsed < or_bars:
@@ -256,7 +256,7 @@ def fast_backtest_strategy8(
             else:
                 or_complete = True
 
-        # ── KATMAN 3-5: GİRİŞ ───────────────────────────────────────────────
+        # â”€â”€ KATMAN 3-5: GÄ°RÄ°Å â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         giri_on_kosul = (
             is_gun and gap_active and or_complete and
             (not in_long) and (not in_short) and
@@ -270,7 +270,7 @@ def fast_backtest_strategy8(
             vol_ma_val = vol_ma_arr[i]
             hacim_ok = (hacim_filtre_aktif == 0) or (vol_ma_val > 0.0 and volumes[i] >= vol_ma_val * hacim_oran)
 
-            # YUKARI GAP → SHORT
+            # YUKARI GAP â†’ SHORT
             if gap_dir == 1 and yon_modu != 1 and vade_tipi != 0:
                 # C# ile ayni: VadeTipi != "SPOT" kosulu (SPOT'ta short yasakli)
                 or_kirildi = closes[i] < or_low
@@ -284,7 +284,7 @@ def fast_backtest_strategy8(
                     bars_in_pos = 0
                     pos_start_bar = i
 
-            # ASAGI GAP → LONG
+            # ASAGI GAP â†’ LONG
             if gap_dir == -1 and yon_modu != 2:
                 or_kirildi = closes[i] > or_high
                 fill_olmadi = closes[i] < gap_fill_lvl
@@ -297,7 +297,7 @@ def fast_backtest_strategy8(
                     bars_in_pos = 0
                     pos_start_bar = i
 
-        # ── LONG ÇIKIŞ ──────────────────────────────────────────────────────
+        # â”€â”€ LONG Ã‡IKIÅ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if in_long:
             bars_in_pos += 1
 
@@ -326,7 +326,7 @@ def fast_backtest_strategy8(
                 stop_level = 0.0
                 pos_start_bar = -1
 
-        # ── SHORT ÇIKIŞ ─────────────────────────────────────────────────────
+        # â”€â”€ SHORT Ã‡IKIÅ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if in_short:
             bars_in_pos += 1
 
@@ -355,7 +355,7 @@ def fast_backtest_strategy8(
                 stop_level = 0.0
                 pos_start_bar = -1
 
-        # ── Drawdown Takibi ──────────────────────────────────────────────────
+        # â”€â”€ Drawdown Takibi â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if current_equity > peak_equity:
             peak_equity = current_equity
         else:
@@ -363,7 +363,7 @@ def fast_backtest_strategy8(
             if dd > max_dd:
                 max_dd = dd
 
-    # ── Final Metrikleri ────────────────────────────────────────────────────
+    # â”€â”€ Final Metrikleri â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     total_trades = winning_trades + losing_trades
     net_profit = total_profit - total_loss
     profit_factor = total_profit / total_loss if total_loss > 0.0 else 99.0
@@ -378,3 +378,27 @@ def fast_backtest_strategy8(
     total_days = active_days if active_days > 0 else 1
 
     return net_profit, total_trades, profit_factor, max_dd, sharpe_ratio, active_days, total_days
+
+def warmup_strategy8_numba():
+    print('[WARMUP] S8 Numba JIT fonksiyonları derleniyor (Multiprocessing kilitlenmesini önlemek için)...')
+    closes = np.random.random(100).astype(np.float64)
+    highs = closes + 0.1
+    lows = closes - 0.1
+    vols = np.random.random(100).astype(np.float64)
+    session = np.zeros(100, dtype=np.int8)
+    time_gap = np.zeros(100, dtype=np.float64)
+    dow = np.zeros(100, dtype=np.int8)
+    mask = np.ones(100, dtype=np.bool_)
+    late = np.zeros(100, dtype=np.bool_)
+
+    rsi = precompute_wilder_rsi(closes, 5)
+    atr = precompute_atr_wilder(closes, highs, lows, 14)
+    sma = precompute_sma_shifted(vols, 20)
+    _ = fast_backtest_strategy8(
+        closes, closes, highs, lows, vols,
+        session, time_gap, dow, mask, late,
+        rsi, sma, atr,
+        0.05, 2.0, 0, 15, 1, 62.0, 38.0, 1, 0.8, 0.5, 210, 3,
+        0, 1
+    )
+    print('[WARMUP] S8 Numba JIT derleme tamamlandı.')

@@ -1,0 +1,103 @@
+// ================================================================================================
+// S9 GAP MOMENTUM - SİNYAL TAKİPÇİ ROBOT (Telegram Entegreli)
+// ================================================================================================
+var LotSize = 1;
+var SistemAdi = "S9_Gap_Strateji";
+var GrafikSembolu = "VIP'VIP-X030-T";
+var GrafikPeriyodu = "1";
+var EmirSembol = "VIP'VIP-X030-T";
+
+// --- TELEGRAM AYARLARI ---
+string ApiToken = "8581068218:AAEcQ7_-Bl38JeIs1ifpvZusm4QXBz_uFBY"; 
+string ChatId = "-1003352024161";
+
+Action<string, string> SendTelegram = (mesaj, logYazi) => {
+    try { 
+        string url = "https://api.telegram.org/bot" + ApiToken + "/sendMessage?chat_id=" + ChatId + "&text=" + System.Uri.EscapeDataString(mesaj) + "&parse_mode=HTML";
+        System.Net.WebRequest.Create(url).GetResponse().Close();
+        if(logYazi != "") System.IO.File.AppendAllText("C:\\iDeal\\Telegram_Debug_S9.txt", DateTime.Now + " " + logYazi + "\r\n"); 
+    } catch {}
+};
+
+var SonFiyat = Sistem.SonFiyat(EmirSembol);
+var Anahtar = Sistem.Name + "," + EmirSembol;
+double IslemFiyat = 0;
+DateTime IslemTarih;
+var Pozisyon = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih);
+
+var MySistem = Sistem.SistemGetir(SistemAdi, GrafikSembolu, GrafikPeriyodu); 
+
+if (MySistem == null) {
+    Sistem.Mesaj(Sistem.Name + " Hatalı Çalışıyor! (" + SistemAdi + " bulunamadı)");
+}
+else 
+{
+    var SonYon = Sistem.SonYonGetir(SistemAdi, GrafikSembolu, GrafikPeriyodu);
+    
+    // İşlem mantığı
+    if (SonYon == "A" && Pozisyon == 0)
+    {
+        Sistem.PozisyonKontrolGuncelle(Anahtar, LotSize, SonFiyat, "S9 LONG");
+        Sistem.EmirSembol = EmirSembol;
+        Sistem.EmirIslem = "Alis";
+        Sistem.EmirMiktari = LotSize;
+        Sistem.EmirTipi = "Piyasa";
+        Sistem.EmirSuresi = "KIE";
+        Sistem.EmirGonder();
+        
+        SendTelegram("🟢 <b>S9 MOMENTUM: İŞLEME GİRİLDİ</b>\nYön: LONG\nGiriş Fiyatı: " + SonFiyat.ToString("0.00"), "S9 LONG");
+    }
+    else if (SonYon == "S" && Pozisyon == 0)
+    {
+        Sistem.PozisyonKontrolGuncelle(Anahtar, -LotSize, SonFiyat, "S9 SHORT");
+        Sistem.EmirSembol = EmirSembol;
+        Sistem.EmirIslem = "Satis";
+        Sistem.EmirMiktari = LotSize;
+        Sistem.EmirTipi = "Piyasa";
+        Sistem.EmirSuresi = "KIE";
+        Sistem.EmirGonder();
+        
+        SendTelegram("🔴 <b>S9 MOMENTUM: İŞLEME GİRİLDİ</b>\nYön: SHORT\nGiriş Fiyatı: " + SonFiyat.ToString("0.00"), "S9 SHORT");
+    }
+    else if (SonYon == "AEK" && Pozisyon == LotSize) // Piramit Long
+    {
+        Sistem.PozisyonKontrolGuncelle(Anahtar, Pozisyon + LotSize, SonFiyat, "S9 LONG EKLE");
+        Sistem.EmirSembol = EmirSembol;
+        Sistem.EmirIslem = "Alis";
+        Sistem.EmirMiktari = LotSize;
+        Sistem.EmirTipi = "Piyasa";
+        Sistem.EmirSuresi = "KIE";
+        Sistem.EmirGonder();
+        
+        SendTelegram("📈 <b>S9 MOMENTUM: PİRAMİT (EKLEME) YAPILDI</b>\nYön: LONG EK\nFiyat: " + SonFiyat.ToString("0.00"), "S9 LONG EKLE");
+    }
+    else if (SonYon == "SEK" && Pozisyon == -LotSize) // Piramit Short
+    {
+        Sistem.PozisyonKontrolGuncelle(Anahtar, Pozisyon - LotSize, SonFiyat, "S9 SHORT EKLE");
+        Sistem.EmirSembol = EmirSembol;
+        Sistem.EmirIslem = "Satis";
+        Sistem.EmirMiktari = LotSize;
+        Sistem.EmirTipi = "Piyasa";
+        Sistem.EmirSuresi = "KIE";
+        Sistem.EmirGonder();
+        
+        SendTelegram("📉 <b>S9 MOMENTUM: PİRAMİT (EKLEME) YAPILDI</b>\nYön: SHORT EK\nFiyat: " + SonFiyat.ToString("0.00"), "S9 SHORT EKLE");
+    }
+    else if (SonYon == "F" && Pozisyon != 0)
+    {
+        Sistem.PozisyonKontrolGuncelle(Anahtar, 0, SonFiyat, "S9 FLAT");
+        Sistem.EmirSembol = EmirSembol;
+        Sistem.EmirIslem = Pozisyon > 0 ? "Satis" : "Alis";
+        Sistem.EmirMiktari = Math.Abs(Pozisyon);
+        Sistem.EmirTipi = "Piyasa";
+        Sistem.EmirSuresi = "KIE";
+        Sistem.EmirGonder();
+        
+        double KarZararPuan = (Pozisyon < 0) ? (IslemFiyat - SonFiyat) : (SonFiyat - IslemFiyat);
+        string isaret = KarZararPuan > 0 ? "+" : "";
+        string emoji = KarZararPuan > 0 ? "✅" : "❌";
+        
+        string kMesaj = emoji + " <b>S9 MOMENTUM: POZİSYON KAPANDI</b>\nKapanış: " + SonFiyat.ToString("0.00") + "\nKapanan KZ: <b>" + isaret + KarZararPuan.ToString("0.00") + " Puan</b>";
+        SendTelegram(kMesaj, "S9 FLAT");
+    }
+}

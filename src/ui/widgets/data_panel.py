@@ -94,7 +94,8 @@ class DataPanel(QWidget):
             "5: Oliver Kell",
             "6: TOTT HOTT",
             "7: DeepScalp v1.2",
-            "8: Gap Reversal v1.0"
+            "8: Gap Reversal v2.0",
+            "9: Gap Momentum v1.0"
         ])
         self.strategy_combo.currentIndexChanged.connect(self._on_strategy_changed_data)
         layout.addWidget(self.strategy_combo)
@@ -122,13 +123,13 @@ class DataPanel(QWidget):
         return group
         
     def _on_strategy_changed_data(self, index: int):
-        """Strateji değiştiğinde vade_combo'yu güncelle (S5, S7 = 3 mod; S8 = sadece ENDEKS)"""
+        """Strateji değiştiğinde vade_combo'yu güncelle"""
         self.vade_combo.blockSignals(True)
         prev = self.vade_combo.currentText()
         self.vade_combo.clear()
         if index in [4, 6]:  # S5 Oliver Kell veya S7 DeepScalp
             self.vade_combo.addItems(["VIOP_ENDEKS", "VIOP_SPOT", "SPOT"])
-        elif index == 7:  # S8 Gap Reversal — sadece ENDEKS
+        elif index in [7, 8]:  # S8 Gap Reversal, S9 Gap Momentum — sadece ENDEKS
             self.vade_combo.addItems(["ENDEKS"])
         else:
             self.vade_combo.addItems(["ENDEKS", "SPOT"])

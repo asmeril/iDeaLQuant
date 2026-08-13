@@ -1,20 +1,26 @@
 """
-Gap Reversal Strategy (Strateji 8) — S8 v2.0
-==============================================
-BIST30 vadeli piyasasında gece gap'lerinin tersine işlem yapar.
+Gap Momentum Strategy (Strateji 9) — S9 v1.0
+=============================================
+BIST30 vadeli piyasasında gece gap'lerinin YÖNÜNDE işlem yapar.
 
-v2.0 Değişiklikleri vs v1.0:
-- Gap referansı: akşam 22:59 Close (saf gece gap'i)
-- min_gap_puan / max_gap_puan (pct yerine mutlak puan)
-- OR periyot: 15 → 1
-- Giriş: kapanış → High/Low kırılımı (şartlı emir simülasyonu)
-- Hedef: T1 (gap fill) + T2 (fill + t2_bonus)
-- Stop: OR extreme + stop_buffer (dinamik, ATR yerine)
-- Trailing stop: T1 vurulduktan sonra devreye girer
-- Piramit: T1'de lot_scale 1 → 2
-- Zaman stopu: 210 bar → 120 bar (~11:30)
-- RSI / hacim filtreleri kaldırıldı (veri desteklemiyor)
-- Cuma filtresi kaldırıldı (istatistiksel fark yok)
+Gap günlerinin %56'sında OR önce gap yönünde kırılır (momentum).
+S8 bu günleri kaçırır. S9 tam bu günleri hedefler.
+
+Karar mantığı:
+  S9: OR gap yönünde kırılırsa tetiklenir (MOM)
+  S8: OR gap tersine kırılırsa tetiklenir (REV)
+  Her gün ikisinden biri — çakışma yok.
+
+S9 parametreleri:
+  or_bars     : 1 (OR1)
+  t1_mult     : 0.75 (T1 = giriş + OR × 0.75)
+  t2_mult     : 1.25 (T2 = giriş + OR × 1.25)
+  stop_mult   : 0.5  (Stop = giriş - OR × 0.5)
+  trailing    : KULLANILMIYOR (sabit hedef daha iyi)
+  piramit     : T1'de 2. lot
+  zaman_stop  : 300 bar (~15:00)
+  max_gap     : 150 puan (>200p MAE çok yüksek)
+  Pazartesi   : AKTİF (momentum için iyi gün, %80 kazanma)
 """
 
 from __future__ import annotations
@@ -27,63 +33,59 @@ from src.strategies.base_strategy import BaseStrategy
 from src.engine.types import StrategyConfig
 
 
-class GapReversalConfig(StrategyConfig):
-    """S8 Gap Reversal v2.0 parametreleri."""
+class GapMomentumConfig(StrategyConfig):
+    """S9 Gap Momentum v1.0 parametreleri."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Katman 1 — Gap filtre (mutlak puan cinsinden)
-        self.min_gap_puan    = float(kwargs.get('min_gap_puan', 10.0))
-        self.max_gap_puan    = float(kwargs.get('max_gap_puan', 100.0))
+        # Katman 1 — Gap filtre
+        self.min_gap_puan  = float(kwargs.get('min_gap_puan', 10.0))
+        self.max_gap_puan  = float(kwargs.get('max_gap_puan', 150.0))  # 100p DEĞİL, 150p!
         # Katman 2 — Opening Range
-        self.or_bars         = int(kwargs.get('or_bars', 1))
-        # Katman 4 — Stop
-        self.stop_buffer     = float(kwargs.get('stop_buffer', 75.0))    # OR extreme'den mesafe (puan)
-        # Katman 4 — Hedef
-        self.t2_bonus        = float(kwargs.get('t2_bonus', 150.0))      # fill'in ötesi (puan)
-        # Katman 5 — Trailing stop (T1 sonrası)
-        self.trailing_dist   = float(kwargs.get('trailing_dist', 75.0))  # en iyi fiyattan mesafe
-        # Katman 6 — Piramit
-        self.piramit_aktif   = bool(kwargs.get('piramit_aktif', True))
-        # Katman 7 — Zaman stopu
-        self.gap_window_bars = int(kwargs.get('gap_window_bars', 120))   # ~11:30
+        self.or_bars       = int(kwargs.get('or_bars', 1))
+        # Katman 3 — Hedefler (OR katı cinsinden)
+        self.t1_mult       = float(kwargs.get('t1_mult', 0.75))   # T1 = OR × 0.75x
+        self.t2_mult       = float(kwargs.get('t2_mult', 1.25))   # T2 = OR × 1.25x (en iyi net)
+        # Katman 4 — Stop (OR katı)
+        self.stop_mult     = float(kwargs.get('stop_mult', 0.5))   # Stop = OR × 0.5x
+        # Katman 5 — Piramit
+        self.piramit_aktif = bool(kwargs.get('piramit_aktif', True))
+        # Katman 6 — Zaman stopu
+        self.gap_window_bars = int(kwargs.get('gap_window_bars', 300))  # ~15:00
         # Genel
-        self.cooldown_bars   = int(kwargs.get('cooldown_bars', 3))
-        self.yon_modu        = str(kwargs.get('yon_modu', 'CIFT'))
-
-        # Geriye dönük uyumluluk: v1.0 parametreleri sessizce yoksayılır
-        # (min_gap_pct, max_gap_pct, rsi_*, hacim_*, atr_*, cuma_aktif)
+        self.cooldown_bars = int(kwargs.get('cooldown_bars', 3))
+        self.yon_modu      = str(kwargs.get('yon_modu', 'CIFT'))
 
 
-class GapReversalStrategy(BaseStrategy):
+class GapMomentumStrategy(BaseStrategy):
     """
-    S8: Gap Reversal v2.0
+    S9: Gap Momentum v1.0
 
     Katmanlar
     ---------
-    1. Gece gap tespiti (09:25 emir toplama barı)
-       - Referans: önceki gün akşam Close (~22:59)
-       - Filtre: min_gap_puan <= gap_abs <= max_gap_puan
-    2. Opening Range oluşumu (OR_BARS = 1 bar = 1 dakika)
-    3. OR kırılması — gap yönünün TERSİNDE giriş (High/Low simülasyonu)
-       UP gap  → Low < OR_Low  → SHORT @ OR_Low (şartlı emir simülasyonu)
-       DOWN gap→ High > OR_High → LONG  @ OR_High
-    4. Stop: OR_High + stop_buffer (UP gap/SHORT) | OR_Low - stop_buffer (DOWN gap/LONG)
-    5. T1 hedefi: prev_close (gap fill) → yarı çıkış + trailing aktif + piramit
-    6. T2 hedefi: prev_close ± t2_bonus → kalan çıkış
-    7. Trailing stop: T1 sonrası best_price ± trailing_dist
-    8. Zaman stopu: OR bitişinden gap_window_bars bar (~11:30)
-    9. Akşam seansı: 22:50'de açık pozisyon kapatılır
+    1. Gece gap tespiti (09:25 barı, akşam 22:59 referansı)
+       - min_gap_puan <= gap_abs <= max_gap_puan
+    2. OR1 oluşumu (1 dakika bar)
+    3. OR gap YÖNÜNDE kırılırsa giriş (gap yönünde momentum)
+       UP gap  → High > OR_High → LONG @ OR_High (şartlı emir sim.)
+       DOWN gap→ Low  < OR_Low  → SHORT @ OR_Low
+    4. Stop: giriş - OR × stop_mult (UP/LONG) | giriş + OR × stop_mult (DOWN/SHORT)
+    5. T1: giriş + OR × t1_mult → piramit (2. lot)
+    6. T2: giriş + OR × t2_mult → kalan kapatılır
+    7. Trailing stop: KULLANILMIYOR (sabit hedef daha iyi)
+    8. Zaman stopu: OR bitişinden gap_window_bars bar (~15:00)
+    9. Akşam: 22:50'de kapat
+
+    Not: S8'in ters sinyali olmayan günlerde tetiklenir (OR yönüne göre).
     """
 
-    def __init__(self, config: GapReversalConfig):
+    def __init__(self, config: GapMomentumConfig):
         super().__init__(config)
         self.config = config
 
     @classmethod
-    def from_config_dict(cls, cache: Any, params: dict, dates=None) -> 'GapReversalStrategy':
-        """IndicatorCache nesnesi VEYA plain dict ile çalışır."""
-        config = GapReversalConfig(**params)
+    def from_config_dict(cls, cache: Any, params: dict, dates=None) -> 'GapMomentumStrategy':
+        config = GapMomentumConfig(**params)
         instance = cls(config)
         if isinstance(cache, dict):
             instance._cache = SimpleNamespace(**cache)
@@ -118,24 +120,22 @@ class GapReversalStrategy(BaseStrategy):
         in_long = in_short = False
         entry_price   = 0.0
         stop_level    = 0.0
-        t1_lvl        = 0.0    # T1: gap fill
-        t2_lvl        = 0.0    # T2: fill ± bonus
-        t1_hit        = False  # T1 vuruldu mu?
-        best_price    = 0.0    # trailing stop referansı
-        lot_scale     = 1      # 1 → 2 (piramit)
+        t1_lvl        = 0.0
+        t2_lvl        = 0.0
+        t1_hit        = False
+        lot_scale     = 1
         bars_in_pos   = 0
         cooldown_ct   = 0
 
         gap_active    = False
-        gap_fill_lvl  = 0.0
-        gap_dir       = 0       # +1 UP gap, -1 DOWN gap
+        gap_dir       = 0
         or_complete   = False
         or_start_bar  = -1
         or_high       = 0.0
         or_low        = float('inf')
+        or_range      = 0.0
         pos_start_bar = -1
 
-        # Akşam kapanışı takibi
         last_aksam_close = 0.0
 
         warm_bars = 60
@@ -167,9 +167,7 @@ class GapReversalStrategy(BaseStrategy):
             if not (emir_toplama or gun_seansi or aksam_seansi):
                 continue
 
-            # ----------------------------------------------------------
-            # Akşam kapanışını takip et (22:55+ barları)
-            # ----------------------------------------------------------
+            # Akşam kapanışı güncelle
             if aksam_seansi and dates is not None and i < len(dates):
                 if dates[i].hour >= 22 and dates[i].minute >= 55:
                     last_aksam_close = closes[i]
@@ -180,7 +178,7 @@ class GapReversalStrategy(BaseStrategy):
             gece_sonrasi = (6.0 < saat_fark < 15.0) and emir_toplama
 
             if gece_sonrasi:
-                # Açık pozisyon varsa kapat (gece taşıma yok)
+                # Açık pozisyon kapat
                 if in_long:
                     exits_long[i] = True
                     in_long = False; bars_in_pos = 0
@@ -194,25 +192,24 @@ class GapReversalStrategy(BaseStrategy):
                     entry_price = stop_level = 0.0
                     t1_hit = False; lot_scale = 1; pos_start_bar = -1
 
-                # Referans: akşam 22:59 kapanışı; yoksa bir önceki bar
                 ref_close = last_aksam_close if last_aksam_close > 0 else closes[i - 1]
-                teorik    = closes[i]          # 09:25 barı = teorik açılış
+                teorik    = closes[i]
                 raw_gap   = teorik - ref_close
                 gap_abs   = abs(raw_gap)
 
-                gap_active   = (self.config.min_gap_puan <= gap_abs <= self.config.max_gap_puan)
-                gap_fill_lvl = ref_close
-                gap_dir      = 1 if raw_gap > 0.0 else -1
+                gap_active = (self.config.min_gap_puan <= gap_abs <= self.config.max_gap_puan)
+                gap_dir    = 1 if raw_gap > 0.0 else -1
 
                 or_complete  = False
                 or_start_bar = i if gap_active else -1
                 or_high      = highs[i]
                 or_low       = lows[i]
+                or_range     = 0.0
                 pos_start_bar = -1
-                last_aksam_close = 0.0   # sıfırla (bir sonraki gün için)
+                last_aksam_close = 0.0
 
             # ----------------------------------------------------------
-            # Katman 2: OR güncelleme (OR1 = 1 bar)
+            # Katman 2: OR oluşumu
             # ----------------------------------------------------------
             if gap_active and not or_complete and or_start_bar >= 0 and gun_seansi:
                 elapsed = i - or_start_bar
@@ -220,10 +217,15 @@ class GapReversalStrategy(BaseStrategy):
                     if highs[i] > or_high: or_high = highs[i]
                     if lows[i]  < or_low:  or_low  = lows[i]
                 else:
+                    or_range    = or_high - or_low
                     or_complete = True
 
+            # OR range sıfırsa giriş yapma (düz bar)
+            if or_complete and or_range < 1.0:
+                gap_active = False
+
             # ----------------------------------------------------------
-            # Katman 3: Giriş — High/Low kırılımı simülasyonu
+            # Katman 3: Giriş — Gap YÖNÜNDE OR kırılımı
             # ----------------------------------------------------------
             giris_on_kosul = (
                 gun_seansi and gap_active and or_complete and
@@ -235,61 +237,55 @@ class GapReversalStrategy(BaseStrategy):
                 or_end_bar = or_start_bar + self.config.or_bars
                 zaman_ok   = (i - or_end_bar) < self.config.gap_window_bars
 
-                # UP gap → SHORT: Low OR_Low'u aşağı kırarsa gir
-                if gap_dir == 1 and self.config.yon_modu != 'SADECE_AL' and zaman_ok:
-                    if lows[i] <= or_low and highs[i] > gap_fill_lvl:
-                        signals[i]    = -1
-                        in_short      = True
-                        entry_price   = or_low                            # şartlı emir = OR_Low
-                        stop_level    = or_high + self.config.stop_buffer
-                        t1_lvl        = gap_fill_lvl                      # T1: fill
-                        t2_lvl        = gap_fill_lvl - self.config.t2_bonus  # T2: fill - bonus
-                        t1_hit        = False
-                        best_price    = or_low
-                        lot_scale     = 1
-                        bars_in_pos   = 0
-                        pos_start_bar = i
+                if zaman_ok:
+                    # UP gap → LONG: High OR_High'ı yukarı kırarsa (gap yönünde)
+                    if gap_dir == 1 and self.config.yon_modu != 'SADECE_SAT':
+                        if highs[i] >= or_high:
+                            t1_dist    = or_range * self.config.t1_mult
+                            t2_dist    = or_range * self.config.t2_mult
+                            stop_dist  = or_range * self.config.stop_mult
+                            signals[i] = 1
+                            in_long    = True
+                            entry_price   = or_high
+                            stop_level    = or_high - stop_dist
+                            t1_lvl        = or_high + t1_dist
+                            t2_lvl        = or_high + t2_dist
+                            t1_hit        = False
+                            lot_scale     = 1
+                            bars_in_pos   = 0
+                            pos_start_bar = i
 
-                # DOWN gap → LONG: High OR_High'ı yukarı kırarsa gir
-                if gap_dir == -1 and self.config.yon_modu != 'SADECE_SAT' and zaman_ok and not in_short:
-                    if highs[i] >= or_high and lows[i] < gap_fill_lvl:
-                        signals[i]    = 1
-                        in_long       = True
-                        entry_price   = or_high
-                        stop_level    = or_low - self.config.stop_buffer
-                        t1_lvl        = gap_fill_lvl
-                        t2_lvl        = gap_fill_lvl + self.config.t2_bonus
-                        t1_hit        = False
-                        best_price    = or_high
-                        lot_scale     = 1
-                        bars_in_pos   = 0
-                        pos_start_bar = i
+                    # DOWN gap → SHORT: Low OR_Low'u aşağı kırarsa
+                    if gap_dir == -1 and self.config.yon_modu != 'SADECE_AL' and not in_long:
+                        if lows[i] <= or_low:
+                            t1_dist    = or_range * self.config.t1_mult
+                            t2_dist    = or_range * self.config.t2_mult
+                            stop_dist  = or_range * self.config.stop_mult
+                            signals[i] = -1
+                            in_short   = True
+                            entry_price   = or_low
+                            stop_level    = or_low + stop_dist
+                            t1_lvl        = or_low - t1_dist
+                            t2_lvl        = or_low - t2_dist
+                            t1_hit        = False
+                            lot_scale     = 1
+                            bars_in_pos   = 0
+                            pos_start_bar = i
 
             # ----------------------------------------------------------
-            # Çıkış mantığı — LONG
+            # Çıkış — LONG
             # ----------------------------------------------------------
             if in_long:
                 bars_in_pos += 1
                 th_now = (dates[i].hour + dates[i].minute / 60.0
                           if (dates is not None and i < len(dates)) else 0.0)
 
-                # Best_price güncelle (trailing için)
-                if highs[i] > best_price:
-                    best_price = highs[i]
-
-                # T1 vuruldu mu?
                 if not t1_hit and highs[i] >= t1_lvl:
                     t1_hit = True
                     if self.config.piramit_aktif:
                         lot_scale = 2
 
-                # Stop hesapla
-                if t1_hit:
-                    stop_now = best_price - self.config.trailing_dist   # trailing stop
-                else:
-                    stop_now = stop_level                                # sabit stop
-
-                stop_hit    = lows[i] <= stop_now
+                stop_hit    = lows[i] <= stop_level    # sabit stop (trailing yok!)
                 t2_hit_flag = highs[i] >= t2_lvl
                 zaman_doldu = pos_start_bar > 0 and (i - pos_start_bar) >= self.config.gap_window_bars
                 aksam_kapa  = aksam_seansi and th_now >= (22 + 50/60)
@@ -305,30 +301,19 @@ class GapReversalStrategy(BaseStrategy):
                     pos_start_bar = -1
 
             # ----------------------------------------------------------
-            # Çıkış mantığı — SHORT
+            # Çıkış — SHORT
             # ----------------------------------------------------------
             if in_short:
                 bars_in_pos += 1
                 th_now = (dates[i].hour + dates[i].minute / 60.0
                           if (dates is not None and i < len(dates)) else 0.0)
 
-                # Best_price güncelle (SHORT: düşük fiyat lehine)
-                if lows[i] < best_price:
-                    best_price = lows[i]
-
-                # T1 vuruldu mu?
                 if not t1_hit and lows[i] <= t1_lvl:
                     t1_hit = True
                     if self.config.piramit_aktif:
                         lot_scale = 2
 
-                # Stop hesapla
-                if t1_hit:
-                    stop_now = best_price + self.config.trailing_dist   # trailing stop
-                else:
-                    stop_now = stop_level                                # sabit stop
-
-                stop_hit    = highs[i] >= stop_now
+                stop_hit    = highs[i] >= stop_level   # sabit stop
                 t2_hit_flag = lows[i] <= t2_lvl
                 zaman_doldu = pos_start_bar > 0 and (i - pos_start_bar) >= self.config.gap_window_bars
                 aksam_kapa  = aksam_seansi and th_now >= (22 + 50/60)

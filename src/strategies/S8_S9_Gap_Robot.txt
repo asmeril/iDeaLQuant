@@ -1,0 +1,418 @@
+// ================================================================================================
+// S8 + S9 GAP ROBOT — iDeal Robot Kodu
+// ================================================================================================
+// Strateji  : S8 Gap Reversal v2.0 + S9 Gap Momentum v1.0
+// Enstrüman : VIP-X030-T (BIST30 Vadeli)
+// Periyot   : 1 Dakika
+//
+// ÇALIŞMA MANTIĞI:
+//   - Her sabah 09:25 barında gap hesaplar
+//   - 09:30 barında Opening Range (OR) oluşturulur (09:25 barı OR dışıdır)
+//   - 09:31'de (OR1 bittikten sonra) hangi taraf önce kırıldıysa:
+//       OR gap yönünde (MOM) → S9 LONG/SHORT devreye girer
+//       OR gap tersine (REV) → S8 SHORT/LONG devreye girer
+//   - Her iki yön için şartlı emirler 09:31'de borsaya gönderilir
+//   - Hangisi önce tetiklenirse diğeri iptal edilir
+//
+// AKIM:
+//   1. 09:25: Gap hesapla, referans = önceki gün 22:59 kapanışı. OR değişkenlerini sıfırla.
+//   2. 09:30: Sadece 09:30 saniyelerindeki tickler ile OR H/L oluştur.
+//   3. 09:31: OR1 tamam → 2 şartlı emir gönder (MOM + REV)
+//   4. Tetikleme sonrası: stop + T1 + T2 takibi SonFiyat döngüsüyle
+//   5. T1 vurulunca: yarı çıkış + piramit lot
+//   6. T2 / stop / zaman stopu / akşam → tam çıkış
+//
+// NOT: Bu robot kodu iDeal Portföy penceresinde "ROBOT" olarak kaydedilir.
+// ================================================================================================
+
+// --- PARAMETRELER (Yeni Optimizasyon Sonuçları) ---
+var EmirSembol      = "VIP'VIP-X030-T";   // Kontrat sembolü
+var LotSize         = 1;                   // Başlangıç lot (T1'de 2'ye çıkar)
+var MinGapPuan      = 15.0;               // Minimum gap büyüklüğü (puan)
+var MaxGapPuan      = 150.0;              // Maksimum gap büyüklüğü (puan) 
+var StopBuffer      = 50.0;               // S8: OR extreme'den stop mesafesi (Optimize)
+var T2Bonus         = 150.0;              // S8: fill'den sonra ek hedef
+var TrailingDist    = 75.0;               // S8: trailing stop mesafesi (T1 sonrası)
+var S9_T1_Mult      = 1.0;               // S9: T1 = OR × 1.0
+var S9_T2_Mult      = 1.25;              // S9: T2 = OR × 1.25 (Optimize)
+var S9_Stop_Mult    = 1.0;               // S9: Stop = OR × 1.0
+var S8_ZamanStop    = "11:30:00";         // S8: zaman stopu
+var S9_ZamanStop    = "15:00:00";         // S9: zaman stopu
+var PiramitAktif    = true;               // T1'de 2. lot ekle
+
+// --- DURUM DEĞİŞKENLERİ ---
+var Anahtar      = Sistem.Name + "," + EmirSembol;
+double IslemFiyat = 0;
+DateTime IslemTarih;
+var Pozisyon     = Sistem.PozisyonKontrolOku(Anahtar, out IslemFiyat, out IslemTarih);
+var SonFiyat     = Sistem.SonFiyat(EmirSembol);
+
+// Durum kayıtları (SayiTablosu ile saklanır)
+// S_* = strateji tipi kayıtları
+// 0=boşta, 1=S8 açık, 2=S9 açık
+var RobotDurum      = (int)Sistem.SayiTablosu(Anahtar + "_Durum");
+var EntryFiyat      = Sistem.SayiTablosu(Anahtar + "_Entry");
+var StopLvl         = Sistem.SayiTablosu(Anahtar + "_Stop");
+var T1Lvl           = Sistem.SayiTablosu(Anahtar + "_T1");
+var T2Lvl           = Sistem.SayiTablosu(Anahtar + "_T2");
+var T1_Hit          = Sistem.SayiTablosu(Anahtar + "_T1Hit") > 0;
+var BestPrice       = Sistem.SayiTablosu(Anahtar + "_Best");
+var OR_High         = Sistem.SayiTablosu(Anahtar + "_ORH");
+var OR_Low          = Sistem.SayiTablosu(Anahtar + "_ORL");
+var OR_Range        = Sistem.SayiTablosu(Anahtar + "_ORR");
+var GapDir          = (int)Sistem.SayiTablosu(Anahtar + "_GapDir");  // +1=UP, -1=DOWN
+var PrevClose       = Sistem.SayiTablosu(Anahtar + "_PrevClose");
+var OR_Hazir        = Sistem.SayiTablosu(Anahtar + "_ORHazir") > 0;
+var EmirleriGonderildi = Sistem.SayiTablosu(Anahtar + "_EGonderildi") > 0;
+var LotAdet         = (int)Sistem.SayiTablosu(Anahtar + "_LotAdet");
+if (LotAdet == 0) LotAdet = 1;
+
+// ================================================================================================
+// BÖLÜM 1: 09:25 — GAP TESPİT (EMIR TOPLAMA BARI)
+// ================================================================================================
+if (Sistem.SaatAraligi("09:25:00", "09:29:59") && SonFiyat > 0)
+{
+    // Akşam kapanışını oku (önceki gün kayıtlı)
+    var AksamKapanis = Sistem.SayiTablosu(Anahtar + "_AksamK");
+    if (AksamKapanis <= 0) AksamKapanis = SonFiyat;  // fallback
+
+    var Teorik   = SonFiyat;         // 09:25 fiyatı = teorik açılış
+    var GapFark  = Teorik - AksamKapanis;
+    var GapAbs   = Math.Abs(GapFark);
+
+    if (GapAbs >= MinGapPuan && GapAbs <= MaxGapPuan)
+    {
+        Sistem.SayiTablosuGuncelle(Anahtar + "_GapDir",    GapFark > 0 ? 1 : -1);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_PrevClose", AksamKapanis);
+        // OR seviyelerini sıfırla ki 09:30 barında gerçek fiyatlarla dolsun!
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORH",       0);   
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORL",       999999); 
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORHazir",   0);          
+        Sistem.SayiTablosuGuncelle(Anahtar + "_EGonderildi", 0);        
+    }
+    else
+    {
+        Sistem.SayiTablosuGuncelle(Anahtar + "_GapDir", 0);  // gap yok / dışarıda
+    }
+}
+
+// ================================================================================================
+// BÖLÜM 2: 09:30 — OR1 BARI (Opening Range oluşumu)
+// ================================================================================================
+if (Sistem.SaatAraligi("09:30:00", "09:30:59") && GapDir != 0)
+{
+    // OR1 barında sürekli güncelle (tick bazlı)
+    var CurH = Sistem.SayiTablosu(Anahtar + "_ORH");
+    var CurL = Sistem.SayiTablosu(Anahtar + "_ORL");
+    if (SonFiyat > CurH)
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORH", SonFiyat);
+    if (SonFiyat < CurL)
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORL", SonFiyat);
+}
+
+// ================================================================================================
+// BÖLÜM 3: 09:31 — OR HAZIR, EMİRLERİ GÖNDER (bir kez)
+// ================================================================================================
+if (Sistem.Saat.CompareTo("09:31:00") >= 0 &&
+    Sistem.Saat.CompareTo("09:31:59") <= 0 &&
+    GapDir != 0 && !OR_Hazir && !EmirleriGonderildi && Pozisyon == 0)
+{
+    // OR range hesapla
+    var ORL = Sistem.SayiTablosu(Anahtar + "_ORL");
+    var ORH = Sistem.SayiTablosu(Anahtar + "_ORH");
+    var ORR = ORH - ORL;
+
+    if (ORR > 1.0 && ORH > 0 && ORL < 999999) // Valid range
+    {
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORR",     ORR);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORHazir", 1);
+
+        // === S8 EMİRİ (Gap tersine kırılımda) ===
+        // UP gap → S8 SHORT: OR_Low kırılınca SAT
+        // DOWN gap → S8 LONG: OR_High kırılınca AL
+        if (GapDir == 1)  // UP gap → S8 SHORT
+        {
+            Sistem.EmirSembol    = EmirSembol;
+            Sistem.EmirIslem     = "Satis";
+            Sistem.EmirMiktari   = LotSize;
+            Sistem.EmirTipi      = "Limitli";
+            Sistem.EmirFiyati    = ORL;
+            Sistem.EmirSartBool  = true;
+            Sistem.EmirSartSembol = EmirSembol;
+            Sistem.EmirSartFiyat = ORL;
+            Sistem.EmirSartTipi  = "SATIS <= Sart Fiyat";
+            Sistem.EmirSuresi    = "GUN";
+            Sistem.EmirGonder();
+            Sistem.Mesaj("S8 EMİR: SATIŞ STOP @ " + ORL.ToString("0.00"));
+
+            // === S9 EMİRİ (Gap yönünde kırılımda) ===
+            // UP gap → S9 LONG: OR_High kırılınca AL
+            Sistem.EmirSembol    = EmirSembol;
+            Sistem.EmirIslem     = "Alis";
+            Sistem.EmirMiktari   = LotSize;
+            Sistem.EmirTipi      = "Limitli";
+            Sistem.EmirFiyati    = ORH;
+            Sistem.EmirSartBool  = true;
+            Sistem.EmirSartSembol = EmirSembol;
+            Sistem.EmirSartFiyat = ORH;
+            Sistem.EmirSartTipi  = "ALIS >= Sart Fiyat";
+            Sistem.EmirSuresi    = "GUN";
+            Sistem.EmirGonder();
+            Sistem.Mesaj("S9 EMİR: ALIŞ STOP @ " + ORH.ToString("0.00"));
+        }
+        else  // DOWN gap → S8 LONG + S9 SHORT
+        {
+            // S8 LONG
+            Sistem.EmirSembol    = EmirSembol;
+            Sistem.EmirIslem     = "Alis";
+            Sistem.EmirMiktari   = LotSize;
+            Sistem.EmirTipi      = "Limitli";
+            Sistem.EmirFiyati    = ORH;
+            Sistem.EmirSartBool  = true;
+            Sistem.EmirSartSembol = EmirSembol;
+            Sistem.EmirSartFiyat = ORH;
+            Sistem.EmirSartTipi  = "ALIS >= Sart Fiyat";
+            Sistem.EmirSuresi    = "GUN";
+            Sistem.EmirGonder();
+            Sistem.Mesaj("S8 EMİR: ALIŞ STOP @ " + ORH.ToString("0.00"));
+
+            // S9 SHORT
+            Sistem.EmirSembol    = EmirSembol;
+            Sistem.EmirIslem     = "Satis";
+            Sistem.EmirMiktari   = LotSize;
+            Sistem.EmirTipi      = "Limitli";
+            Sistem.EmirFiyati    = ORL;
+            Sistem.EmirSartBool  = true;
+            Sistem.EmirSartSembol = EmirSembol;
+            Sistem.EmirSartFiyat = ORL;
+            Sistem.EmirSartTipi  = "SATIS <= Sart Fiyat";
+            Sistem.EmirSuresi    = "GUN";
+            Sistem.EmirGonder();
+            Sistem.Mesaj("S9 EMİR: SATIŞ STOP @ " + ORL.ToString("0.00"));
+        }
+
+        Sistem.SayiTablosuGuncelle(Anahtar + "_EGonderildi", 1);
+    }
+}
+
+// ================================================================================================
+// BÖLÜM 4: POZİSYON TAKİBİ — Hangisi tetiklendi? (SonFiyat döngüsü)
+// ================================================================================================
+// Pozisyon açıldıysa ve durum henüz bilinmiyorsa belirle
+if (Pozisyon != 0 && RobotDurum == 0 && EmirleriGonderildi)
+{
+    var ORL = Sistem.SayiTablosu(Anahtar + "_ORL");
+    var ORH = Sistem.SayiTablosu(Anahtar + "_ORH");
+    var ORR = Sistem.SayiTablosu(Anahtar + "_ORR");
+    var PC  = Sistem.SayiTablosu(Anahtar + "_PrevClose");
+
+    if (GapDir == 1)  // UP gap
+    {
+        if (Pozisyon < 0)  // SHORT → S8 tetiklendi
+        {
+            RobotDurum = 1;
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Durum",  1);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Entry",  ORL);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop",   ORH + StopBuffer);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T1",     PC);               // S8 T1 = fill
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T2",     PC - T2Bonus);     // S8 T2 = fill - bonus
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best",   ORL);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet",LotSize);
+            Sistem.Mesaj("S8 TETİKLENDİ: SHORT @ " + ORL + " | Stop: " + (ORH + StopBuffer) + " | T1: " + PC);
+        }
+        else  // LONG → S9 tetiklendi
+        {
+            RobotDurum = 2;
+            var T1 = ORH + ORR * S9_T1_Mult;
+            var T2 = ORH + ORR * S9_T2_Mult;
+            var St = ORH - ORR * S9_Stop_Mult;
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Durum",  2);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Entry",  ORH);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop",   St);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T1",     T1);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T2",     T2);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best",   ORH);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet",LotSize);
+            Sistem.Mesaj("S9 TETİKLENDİ: LONG @ " + ORH + " | Stop: " + St + " | T1: " + T1 + " | T2: " + T2);
+        }
+    }
+    else  // DOWN gap
+    {
+        if (Pozisyon > 0)  // LONG → S8 tetiklendi
+        {
+            RobotDurum = 1;
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Durum",  1);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Entry",  ORH);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop",   ORL - StopBuffer);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T1",     PC);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T2",     PC + T2Bonus);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best",   ORH);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet",LotSize);
+            Sistem.Mesaj("S8 TETİKLENDİ: LONG @ " + ORH);
+        }
+        else  // SHORT → S9 tetiklendi
+        {
+            RobotDurum = 2;
+            var T1 = ORL - ORR * S9_T1_Mult;
+            var T2 = ORL - ORR * S9_T2_Mult;
+            var St = ORL + ORR * S9_Stop_Mult;
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Durum",  2);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Entry",  ORL);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop",   St);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T1",     T1);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T2",     T2);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best",   ORL);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet",LotSize);
+            Sistem.Mesaj("S9 TETİKLENDİ: SHORT @ " + ORL);
+        }
+    }
+}
+
+// ================================================================================================
+// BÖLÜM 5: STOP / T1 / T2 / ZAMAN TAKİBİ (aktif pozisyon varsa)
+// ================================================================================================
+if (Pozisyon != 0 && RobotDurum > 0 && SonFiyat > 0)
+{
+    var T1   = Sistem.SayiTablosu(Anahtar + "_T1");
+    var T2   = Sistem.SayiTablosu(Anahtar + "_T2");
+    var St   = Sistem.SayiTablosu(Anahtar + "_Stop");
+    var Best = Sistem.SayiTablosu(Anahtar + "_Best");
+    var CurLot = (int)Sistem.SayiTablosu(Anahtar + "_LotAdet");
+
+    bool KapatSinyal = false;
+    var KapatNeden   = "";
+
+    // --- S8: trailing stop güncelle (T1 sonrası) ---
+    if (RobotDurum == 1 && T1_Hit)
+    {
+        if (Pozisyon < 0 && SonFiyat < Best)
+        {
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best", SonFiyat);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop", SonFiyat + TrailingDist);
+            St = SonFiyat + TrailingDist;
+        }
+        else if (Pozisyon > 0 && SonFiyat > Best)
+        {
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Best", SonFiyat);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_Stop", SonFiyat - TrailingDist);
+            St = SonFiyat - TrailingDist;
+        }
+    }
+
+    // --- T1 kontrolü ve piramit ---
+    if (!T1_Hit && PiramitAktif && CurLot == LotSize)
+    {
+        bool T1_Vuruldu = false;
+        if (Pozisyon < 0 && SonFiyat <= T1)  T1_Vuruldu = true;
+        if (Pozisyon > 0 && SonFiyat >= T1)  T1_Vuruldu = true;
+
+        if (T1_Vuruldu)
+        {
+            Sistem.SayiTablosuGuncelle(Anahtar + "_T1Hit", 1);
+            Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet", CurLot + LotSize);
+
+            // S8'de trailing stop aktif et
+            if (RobotDurum == 1)
+            {
+                if (Pozisyon < 0)
+                    Sistem.SayiTablosuGuncelle(Anahtar + "_Stop", SonFiyat + TrailingDist);
+                else
+                    Sistem.SayiTablosuGuncelle(Anahtar + "_Stop", SonFiyat - TrailingDist);
+                Sistem.SayiTablosuGuncelle(Anahtar + "_Best", SonFiyat);
+            }
+
+            // 2. lot ekle (piyasa emri)
+            Sistem.EmirSembol  = EmirSembol;
+            Sistem.EmirIslem   = Pozisyon < 0 ? "Satis" : "Alis";
+            Sistem.EmirMiktari = LotSize;
+            Sistem.EmirTipi    = "Piyasa";
+            Sistem.EmirSuresi  = "KIE";
+            Sistem.EmirGonder();
+            Sistem.Mesaj("PİRAMİT: T1 vuruldu, 2. lot eklendi @ " + SonFiyat.ToString("0.00"));
+        }
+    }
+
+    // --- Stop kontrolü ---
+    if (Pozisyon < 0 && SonFiyat >= St)  { KapatSinyal = true; KapatNeden = "STOP"; }
+    if (Pozisyon > 0 && SonFiyat <= St)  { KapatSinyal = true; KapatNeden = "STOP"; }
+
+    // --- T2 hedef ---
+    if (Pozisyon < 0 && SonFiyat <= T2)  { KapatSinyal = true; KapatNeden = "T2"; }
+    if (Pozisyon > 0 && SonFiyat >= T2)  { KapatSinyal = true; KapatNeden = "T2"; }
+
+    // --- Zaman stopu ---
+    string ZamanStop = RobotDurum == 1 ? S8_ZamanStop : S9_ZamanStop;
+    if (Sistem.Saat.CompareTo(ZamanStop) >= 0 &&
+        Sistem.Saat.CompareTo("18:10:00") <= 0)
+    {
+        KapatSinyal = true; KapatNeden = "ZAMAN";
+    }
+
+    // --- Akşam seansı kapatma (18:10 gündüz sonu) ---
+    if (Sistem.Saat.CompareTo("18:08:00") >= 0 &&
+        Sistem.Saat.CompareTo("18:10:00") <= 0)
+    {
+        KapatSinyal = true; KapatNeden = "GUN_SONU";
+    }
+
+    // --- Kapatma emri ---
+    if (KapatSinyal)
+    {
+        var KapatLot = (int)Sistem.SayiTablosu(Anahtar + "_LotAdet");
+        if (KapatLot <= 0) KapatLot = LotSize;
+
+        Sistem.PozisyonKontrolGuncelle(Anahtar, 0, SonFiyat, KapatNeden);
+        Sistem.EmirSembol  = EmirSembol;
+        Sistem.EmirIslem   = Pozisyon < 0 ? "Alis" : "Satis";  // kapat
+        Sistem.EmirMiktari = Math.Abs(Pozisyon);
+        Sistem.EmirTipi    = "Piyasa";
+        Sistem.EmirSuresi  = "KIE";
+        Sistem.EmirGonder();
+
+        // Durumu sıfırla
+        Sistem.SayiTablosuGuncelle(Anahtar + "_Durum",     0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_Entry",     0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_Stop",      0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_T1",        0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_T2",        0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_T1Hit",     0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_Best",      0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_GapDir",    0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_LotAdet",   LotSize);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_EGonderildi",0);
+        Sistem.SayiTablosuGuncelle(Anahtar + "_ORHazir",   0);
+        Sistem.Mesaj("KAPANDI: " + KapatNeden + " @ " + SonFiyat.ToString("0.00"));
+    }
+}
+
+// ================================================================================================
+// BÖLÜM 6: AKŞAM SEANSINDA AKTİF BEKLEYEN EMİRLERİ TAKIP ET
+// ================================================================================================
+// Akşam seansında (19:00-23:00) işlem yapmıyoruz.
+// Gün sonuna kadar tetiklenmeyen şartlı emirler borsada otomatik iptal olur (GUN süresi).
+
+// ================================================================================================
+// BÖLÜM 7: AKŞAM KAPANIŞINI KAYDET (ertesi gün gap referansı için)
+// ================================================================================================
+if (Sistem.SaatAraligi("22:55:00", "22:59:59") && SonFiyat > 0)
+{
+    Sistem.SayiTablosuGuncelle(Anahtar + "_AksamK", SonFiyat);
+}
+
+// ================================================================================================
+// BÖLÜM 8: PANEL (Anlık durum göstergesi)
+// ================================================================================================
+var PanelStr = "S8+S9 GAP ROBOT\n";
+PanelStr += "Durum: " + (RobotDurum == 0 ? "Boşta" : RobotDurum == 1 ? "S8-REV" : "S9-MOM") + "\n";
+PanelStr += "Pozisyon: " + Pozisyon + " lot\n";
+PanelStr += "Son Fiyat: " + SonFiyat.ToString("0.00") + "\n";
+if (RobotDurum > 0)
+{
+    PanelStr += "Entry: " + EntryFiyat.ToString("0.00") + "\n";
+    PanelStr += "Stop: " + StopLvl.ToString("0.00") + "\n";
+    PanelStr += "T1: " + T1Lvl.ToString("0.00") + (T1_Hit ? " ✓" : "") + "\n";
+    PanelStr += "T2: " + T2Lvl.ToString("0.00") + "\n";
+}
+
+Sistem.Dortgen(1, 5, 30, 220, 160, Color.Black, Color.DarkBlue, Color.Cyan);
+Sistem.YaziEkle(PanelStr, 1, 10, 45, Color.Cyan, "Courier New", 9);

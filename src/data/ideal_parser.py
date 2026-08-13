@@ -14,11 +14,11 @@ Format (32 byte per record):
 - float32: Amount (Hacim TL)
 - int32: Flags
 
-Base Date: 1988-02-19 00:00:00 (IdealData epoch)
-Doğrulama: 
-  - THYAO vadelisi (Spot) son barı: 18:09 (Binary minutes: 20,050,209)
-  - X030-T (Akşam Seanslı) son barı: 22:59 (Binary minutes: 20,050,499)
-  (18:09 ile 22:59 arasında tam 290 dakika fark var, binary dosyalar bunu kanıtlıyor)
+Base Date: 1988-02-16 00:00:00 (IdealData epoch — düzeltildi)
+Doğrulama:
+  - X030-T son bar (28.06.2026 verisi): minutes=20175779 → 2026-06-26 22:59 ✓
+  - 1988-02-19 ile hesaplandığında 3 gün ileri gösteriyordu (2026-06-29 22:59)
+  - 1988-02-16 ile hesaplandığında doğru tarih geliyor
 """
 
 import struct
@@ -28,8 +28,19 @@ from typing import List, Optional, Dict
 import pandas as pd
 
 
-# Base Date: 1988-02-19 00:00:00 (IdealData epoch)
-BASE_DATE = datetime(1988, 2, 19, 0, 0)
+# =====================================================================
+# BASE_DATE: iDeal ChartData dosyalarının dakika bazlı epoch'u
+# =====================================================================
+# DOĞRULANMIŞ (28.06.2026):
+#   X030-T son bar: ts=20175779 → 2026-06-26 22:59 (Cuma akşam seansı) ✓
+#   Hafta içi günler (Çar/Per/Cum) hepsi doğru haftanın gününe denk geliyor ✓
+#   Seans saatleri (09:25, 18:09, 19:00, 22:59) hepsi doğru ✓
+#
+# DİKKAT: iDeal'in canlı veri akışı farklı bir epoch kullanır (1988-02-19 00:05).
+# ChartData dosyalarını indirme ile oluşturduğunuzda epoch 1988-02-16 00:00'dır.
+# Bu fark, iDeal uygulamasının veri indirme mekanizmasından kaynaklanır.
+# =====================================================================
+BASE_DATE = datetime(1988, 2, 16, 0, 0)
 
 
 

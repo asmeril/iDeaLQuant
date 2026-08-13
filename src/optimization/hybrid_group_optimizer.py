@@ -1862,6 +1862,13 @@ class HybridGroupOptimizer:
             iterative: Iterative Coordinate Descent kullan (yeni!)
             max_rounds: Iteratif mod icin max round sayisi
         """
+        if self.strategy_index == 7:
+            try:
+                from src.optimization.strategy8_optimizer import warmup_strategy8_numba
+                warmup_strategy8_numba()
+            except Exception as e:
+                print(f"[WARMUP ERROR] S8 warmup basarisiz: {e}")
+
         if iterative:
             self.run_iterative_phase(max_rounds)
             self.run_stability_scoring()
@@ -1888,4 +1895,5 @@ class HybridGroupOptimizer:
 
     def get_best_results(self, top_n=20):
         return sorted(self.final_results or self.combined_results or [r for res in self.group_results.values() for r in res], key=lambda x: x.get('fitness', x.get('net_profit', 0)), reverse=True)[:top_n]
+
 

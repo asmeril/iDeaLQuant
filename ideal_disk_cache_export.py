@@ -34,8 +34,10 @@ MAX_BARS = 5000
 ENCODING = "cp1254"
 
 # Timestamp Epoch (1-dk, 5-dk, 60-dk dosyaları için dakika bazlı)
-# Doğrulama: ts=20058355 → 2026-04-09 10:00 TRT
-EPOCH_MIN_UTC = datetime.datetime(1988, 2, 18, 21, 5, 0)
+# DİKKAT: Canlı veri akışı ile indirilen ChartData dosyalarının epoch'u FARKLI!
+# Canlı veri: 1988-02-18 21:05 UTC (eski referans, artık kullanılmıyor)
+# ChartData indirme: 1988-02-16 00:00 TRT (doğrulanmış — X030-T son bar = Cuma 22:59)
+EPOCH_MIN_UTC = datetime.datetime(1988, 2, 15, 21, 0, 0)  # UTC → +3h = 1988-02-16 00:00 TRT
 TRT_OFFSET = datetime.timedelta(hours=3)
 
 # Günlük (G) dosyası için referans: ts=778089 = 2026-04-09

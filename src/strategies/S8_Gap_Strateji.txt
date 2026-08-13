@@ -1,0 +1,470 @@
+﻿// ===============================================================================================
+// STRATEJİ: S8 GAP REVERSAL (Görsel Backtest Kodu)
+// ===============================================================================================
+// Periyot   : 1 Dakika
+// Vade Tipi : ENDEKS
+//
+// NOT: Önceki versiyondaki OR (Açılış Aralığı) zamanlama hatası düzeltildi! 
+// 09:25 emir toplama barı yerine, gerçek piyasa açılışı olan ilk 09:30 barı 
+// Opening Range olarak referans alınmıştır.
+// ===============================================================================================
+
+var V = Sistem.GrafikVerileri;
+var O = Sistem.GrafikFiyatSec("Acilis");
+var H = Sistem.GrafikFiyatSec("Yuksek");
+var L = Sistem.GrafikFiyatSec("Dusuk");
+var C = Sistem.GrafikFiyatSec("Kapanis");
+
+for (int i = 0; i < Sistem.BarSayisi; i++) Sistem.Yon[i] = "";
+
+// --- PARAMETRELER (Yeni Optimizasyon Sonuçları) ---
+// Not: İki strateji aynı gap filtlerini kullandığı için ortak bir denge seçildi (10 - 150)
+double MinGapPuan   = 10.0;     // Ortak Denge (S9: 8, S8: 21)
+double MaxGapPuan   = 150.0;    // Ortak Denge
+double S8_Izleyen_Stop_Yuzde = 1.5; // S8 Fiyat zirveden %1.5 duserse stop
+double S8_Kar_Al_Yuzde = 1.0;       // S8 Fiyat %1.0 kar yaparsa direkt cikar
+int OrBars          = 1;        // OR bar s resi (09:30 bar )
+
+// --- DURUM DEĞİŞKENLERİ  ---
+var GercekFiyat = Sistem.Liste(0); // Gercek Fiyatlari tutmak icin
+int in_pos = 0; // 1 = long, -1 = short
+double entry_price = 0;
+double t1_lvl = 0;
+double t2_lvl = 0;
+bool t1_hit = false;
+double extreme_price_s8 = 0;
+bool is_s8 = false;
+
+bool gap_active = false;
+int gap_dir = 0;
+double or_high = 0;
+double or_low = float.MaxValue;
+bool or_complete = false;
+int or_start_bar = -1;
+double gap_fill_lvl = 0;
+
+double last_aksam_close = 0;
+bool prev_is_gun = false;
+
+string SonYon = "";
+
+for (int i = 1; i < Sistem.BarSayisi; i++)
+{
+    var dt = V[i].Date;
+    double th = dt.Hour + dt.Minute / 60.0;
+    string Sinyal = "";
+    
+    bool is_aksam = 19.0 <= th && th <= 23.0;
+    bool is_gun = (9 + 30.0 / 60.0) <= th && th <= (18 + 15.0 / 60.0);
+    bool is_first_gun_bar = is_gun && !prev_is_gun;
+    prev_is_gun = is_gun;
+    
+    // Gece kapanışını kaydet
+    if (is_aksam && dt.Hour >= 22 && dt.Minute >= 55) {
+        last_aksam_close = C[i];
+    }
+    
+    // Yeni günün İLK işlem barı (09:30)
+    if (is_first_gun_bar) 
+    {
+        //  Önceki günden pozisyon kaldıysa zorunlu kapat (Safety)
+        if (in_pos != 0) {
+            double sabah_cikis = O[i];
+            in_pos = 0;
+            Sinyal = "F"; 
+            GercekFiyat[i] = (float)sabah_cikis;
+        }
+        
+        double ref_close = last_aksam_close > 0 ? last_aksam_close : C[i - 1];
+        double raw_gap = O[i] - ref_close; // 09:30 Açılışı ile dünkü kapanış arası fark
+        double gap_abs = Math.Abs(raw_gap);
+        
+        if (gap_abs >= MinGapPuan && gap_abs <= MaxGapPuan) {
+            gap_active = true;
+            gap_dir = raw_gap > 0 ? 1 : -1;
+            gap_fill_lvl = ref_close;
+            or_start_bar = i;
+            or_high = H[i];
+            or_low = L[i];
+            or_complete = false;
+        } else {
+            gap_active = false;
+        }
+        last_aksam_close = 0;
+    }
+    
+    // OR oluşumu (09:30 barı ve gerekirse sonrası)
+    if (gap_active && !or_complete && is_gun) {
+        int elapsed = i - or_start_bar;
+        if (elapsed < OrBars) {
+            if (H[i] > or_high) or_high = H[i];
+            if (L[i] < or_low) or_low = L[i];
+        } else {
+            or_complete = true;
+        }
+    }
+    
+    // Giriş (Entry) Mantığı (09:31 ve sonrası)
+    if (gap_active && or_complete && in_pos == 0) 
+    {
+        int or_end_bar = or_start_bar + OrBars;
+        bool s8_zaman_ok = (i - or_end_bar) < 120; // S8 zaman limiti (~11:30)
+                double or_range = or_high - or_low;
+        
+        if (gap_dir == 1) // YUKARI GAP
+        {
+            // S8 Ters Yön Kırılım (Short)
+            if (s8_zaman_ok && L[i] <= or_low && H[i] > gap_fill_lvl) {
+                in_pos = -1;
+                is_s8 = true;
+                entry_price = Math.Min(O[i], or_low);
+                extreme_price_s8 = entry_price;
+                GercekFiyat[i] = (float)entry_price;
+                Sinyal = "S";
+            }
+        }
+        else if (gap_dir == -1) // AŞAĞI GAP
+        {
+            // S8 Ters Yön Kırılım (Long)
+            if (s8_zaman_ok && H[i] >= or_high && L[i] < gap_fill_lvl) {
+                in_pos = 1;
+                is_s8 = true;
+                entry_price = Math.Max(O[i], or_high);
+                extreme_price_s8 = entry_price;
+                GercekFiyat[i] = (float)entry_price;
+                Sinyal = "A";
+            }
+        }
+    }
+    
+    //   Çıkış (Exit) Mantığı
+    if (in_pos == 1 && Sinyal == "") 
+    {
+        if (is_s8) {
+            if (H[i] > extreme_price_s8) extreme_price_s8 = H[i];
+            
+            double tp_lvl = entry_price * (1 + S8_Kar_Al_Yuzde / 100.0);
+            double sl_lvl = extreme_price_s8 * (1 - S8_Izleyen_Stop_Yuzde / 100.0);
+            
+            bool kar_al_hit = (S8_Kar_Al_Yuzde > 0) && (H[i] >= tp_lvl);
+            bool stop_hit = (S8_Izleyen_Stop_Yuzde > 0) && (L[i] <= sl_lvl);
+            
+            bool zaman_doldu = (i - (or_start_bar + OrBars)) >= 120;
+            bool aksam_kapa = is_aksam && th >= (22 + 50.0 / 60.0);
+            bool gun_sonu = th >= (18 + 8.0 / 60.0) && th <= (18 + 10.0 / 60.0);
+            
+            if (kar_al_hit || stop_hit || zaman_doldu || aksam_kapa || gun_sonu) {
+                Sinyal = "F";
+                in_pos = 0;
+                gap_active = false;
+                GercekFiyat[i] = (float)(kar_al_hit ? tp_lvl : (stop_hit ? sl_lvl : C[i]));
+            }
+        }
+    }
+    else if (in_pos == -1 && Sinyal == "") 
+    {
+        if (is_s8) {
+            if (extreme_price_s8 == 0 || L[i] < extreme_price_s8) extreme_price_s8 = L[i];
+            
+            double tp_lvl = entry_price * (1 - S8_Kar_Al_Yuzde / 100.0);
+            double sl_lvl = extreme_price_s8 * (1 + S8_Izleyen_Stop_Yuzde / 100.0);
+            
+            bool kar_al_hit = (S8_Kar_Al_Yuzde > 0) && (L[i] <= tp_lvl);
+            bool stop_hit = (S8_Izleyen_Stop_Yuzde > 0) && (H[i] >= sl_lvl);
+            
+            bool zaman_doldu = (i - (or_start_bar + OrBars)) >= 120;
+            bool aksam_kapa = is_aksam && th >= (22 + 50.0 / 60.0);
+            bool gun_sonu = th >= (18 + 8.0 / 60.0) && th <= (18 + 10.0 / 60.0);
+            
+            if (kar_al_hit || stop_hit || zaman_doldu || aksam_kapa || gun_sonu) {
+                Sinyal = "F";
+                in_pos = 0;
+                gap_active = false;
+                GercekFiyat[i] = (float)(kar_al_hit ? tp_lvl : (stop_hit ? sl_lvl : C[i]));
+            }
+        }
+    }
+    
+    if (Sinyal != "" && SonYon != Sinyal) {
+        SonYon = Sinyal;
+        Sistem.Yon[i] = SonYon;
+    }
+}
+
+
+// ===============================================================================================
+// PERFORMANS PANELİ (3 KUTULU PRO SÜRÜM - GERÇEK PİRAMİT MATEMATİĞİ)
+// ===============================================================================================
+bool GetiriTarihcesiGoster = true;
+bool DetayPerformans = true;
+string GetiriTarih = "01.01.2024";
+float GetiriKayma = 0.0f;
+
+var renk = Color.Black;
+var Grafikler = Sistem.GrafikVerileri;
+
+DateTime dateBaslangicTarih = (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture) > Grafikler[0].Date) ? (DateTime.ParseExact(GetiriTarih, "dd.MM.yyyy", System.Globalization.CultureInfo.CurrentCulture)) : Grafikler[0].Date;
+
+int InitBarNo = 0;
+for (int i = 0; i < Grafikler.Count; i++) {
+    if (Grafikler[i].Date >= dateBaslangicTarih) { InitBarNo = i; break; }
+}
+
+// 1. ADIM: GERÇEK PİRAMİT MATEMATİĞİ İLE GETİRİ EĞRİSİ
+var SanalGetiri = Sistem.Liste(0);
+int poz = 0;
+float entry1 = 0;
+float entry2 = 0;
+float kapananKZ = 0;
+float kayma = GetiriKayma;
+
+float ZirveBakiye = 0f;
+float GercekMaxDD = 0f;
+DateTime GercekMaxDDTarih = DateTime.MinValue;
+
+List<float> IslemGetirileri = new List<float>();
+float ToplamKar = 0f;
+float ToplamZarar = 0f;
+int KarliIslemSayisi = 0;
+int ZararliIslemSayisi = 0;
+
+for (int i = 1; i < Grafikler.Count; i++)
+{
+    float anlikKapananIslemKari = 0;
+    bool islemKapandi = false;
+
+    if (Grafikler[i].Date >= dateBaslangicTarih)
+    {
+        float gercekFiy = (GercekFiyat[i] > 0) ? GercekFiyat[i] : C[i];
+
+        if (Sistem.Yon[i] == "A") {
+            if (poz < 0) {
+                anlikKapananIslemKari = (poz == -1) ? (entry1 - gercekFiy - kayma) : ((entry1 - gercekFiy - kayma) + (entry2 - gercekFiy - kayma));
+                kapananKZ += anlikKapananIslemKari; islemKapandi = true;
+            }
+            poz = 1;
+            entry1 = gercekFiy + kayma;
+        }
+        else if (Sistem.Yon[i] == "AEK" && poz == 1) {
+            poz = 2;
+            entry2 = gercekFiy + kayma;
+        }
+        else if (Sistem.Yon[i] == "S") {
+            if (poz > 0) {
+                anlikKapananIslemKari = (poz == 1) ? (gercekFiy - entry1 - kayma) : ((gercekFiy - entry1 - kayma) + (gercekFiy - entry2 - kayma));
+                kapananKZ += anlikKapananIslemKari; islemKapandi = true;
+            }
+            poz = -1;
+            entry1 = gercekFiy - kayma;
+        }
+        else if (Sistem.Yon[i] == "SEK" && poz == -1) {
+            poz = -2;
+            entry2 = gercekFiy - kayma;
+        }
+        else if (Sistem.Yon[i] == "F" && poz != 0) {
+            if (poz == 1) anlikKapananIslemKari = (gercekFiy - entry1 - kayma);
+            else if (poz == 2) anlikKapananIslemKari = (gercekFiy - entry1 - kayma) + (gercekFiy - entry2 - kayma);
+            else if (poz == -1) anlikKapananIslemKari = (entry1 - gercekFiy - kayma);
+            else if (poz == -2) anlikKapananIslemKari = (entry1 - gercekFiy - kayma) + (entry2 - gercekFiy - kayma);
+            
+            kapananKZ += anlikKapananIslemKari;
+            islemKapandi = true;
+            poz = 0;
+        }
+
+        if (islemKapandi) {
+            IslemGetirileri.Add(anlikKapananIslemKari);
+            if (anlikKapananIslemKari > 0) { ToplamKar += anlikKapananIslemKari; KarliIslemSayisi++; }
+            else if (anlikKapananIslemKari < 0) { ToplamZarar += Math.Abs(anlikKapananIslemKari); ZararliIslemSayisi++; }
+        }
+
+        float acikKZ = 0;
+        if (poz == 1) acikKZ = C[i] - entry1;
+        else if (poz == 2) acikKZ = (C[i] - entry1) + (C[i] - entry2);
+        else if (poz == -1) acikKZ = entry1 - C[i];
+        else if (poz == -2) acikKZ = (entry1 - C[i]) + (entry2 - C[i]);
+
+        SanalGetiri[i] = kapananKZ + acikKZ;
+
+        if (SanalGetiri[i] > ZirveBakiye) ZirveBakiye = SanalGetiri[i];
+        float anlikDD = ZirveBakiye - SanalGetiri[i];
+        if (anlikDD > GercekMaxDD) { GercekMaxDD = anlikDD; GercekMaxDDTarih = Grafikler[i].Date; }
+    }
+}
+
+// Mutlu/Mutsuz Gün Hesabı
+int MutluGun = 0, MutsuzGun = 0;
+float prevDayEnd = 0;
+DateTime prevDate = Grafikler[InitBarNo].Date;
+for (int i = InitBarNo + 1; i < Grafikler.Count; i++) {
+    if (Grafikler[i].Date.Day != prevDate.Day) {
+        float dailyPnL = SanalGetiri[i-1] - prevDayEnd;
+        if (dailyPnL > 0) MutluGun++;
+        else if (dailyPnL < 0) MutsuzGun++;
+        prevDayEnd = SanalGetiri[i-1];
+        prevDate = Grafikler[i].Date;
+    }
+}
+float lastDaily = SanalGetiri[Grafikler.Count-1] - prevDayEnd;
+if (lastDaily > 0) MutluGun++; else if (lastDaily < 0) MutsuzGun++;
+
+// Günlük Hesaplamalar
+var DateBugun = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+var DateDunSonBarNo = 0;
+for (int i = Grafikler.Count - 1; i > 0; i--) { if (Grafikler[i].Date < DateBugun) { DateDunSonBarNo = i; break; } }
+var gunluk_getiri = SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateDunSonBarNo];
+var kzbugunx = gunluk_getiri.ToString("0.0");
+string Labelsx = "Bugün\r\n";
+string Resultsx = kzbugunx + "\r\n";
+renk = (gunluk_getiri > 0) ? Color.Green : (gunluk_getiri < 0 ? Color.Red : Color.Black);
+
+int ilksatirYy = 240;
+Sistem.Dortgen(1, 10, ilksatirYy - 5, 90, 25, renk, Color.Black, Color.White);
+Sistem.GradientYaziEkle(Labelsx, 1, 15, ilksatirYy, Color.White, Color.White, "Tahoma", 8);
+Sistem.GradientYaziEkle(Resultsx, 1, 60, ilksatirYy, Color.Yellow, Color.DarkOrange, "Tahoma", 8);
+
+if (Sistem.Parametreler[3] == "X")
+{
+    int ilksatirY = 33;
+    var Sure = ((DateTime.Now - dateBaslangicTarih).TotalDays / 30.4);
+    var SureTxt = Sure.ToString("0.0");
+    
+    var kzSure = SanalGetiri[Grafikler.Count - 1].ToString("0.0");
+    var kzbugun = gunluk_getiri.ToString("0.0");
+    var yuzde_kz = (O[InitBarNo] != 0) ? ((SanalGetiri[Grafikler.Count - 1] * 100.0f) / O[InitBarNo]) : 0;
+    var kzSure_yuzde = "  %" + yuzde_kz.ToString("0.0");
+
+    int ToplamIslemSayisi = KarliIslemSayisi + ZararliIslemSayisi;
+    string ToplamIslem = ToplamIslemSayisi.ToString("0");
+    string OrtalamaIslem = (Sure > 0) ? (ToplamIslemSayisi / Sure).ToString("0") : "0";
+    var KarliIslemOran = (ToplamIslemSayisi > 0) ? (((float)KarliIslemSayisi / ToplamIslemSayisi) * 100).ToString("0.00") : "0.00";
+    var ProfitFactor = (ToplamZarar > 0) ? (ToplamKar / ToplamZarar).ToString("0.00") : "99.9";
+
+    var MaxDD = GercekMaxDD.ToString("0.0");
+    var MaxDDTarihi = (GercekMaxDDTarih != DateTime.MinValue) ? GercekMaxDDTarih.ToString("dd.MM.yyyy") : "-"; 
+
+    // EĞRİLER (Kırmızı/Yeşil Dolgulu Kümülatif Getiri)
+    var CizgiGunSonuKZ = Sistem.Liste(0);
+    var CizgiAyKZ = Sistem.Liste(0);
+    float yesterdayEnd = 0f;
+    float lastMonthEnd = 0f;
+    int lastDay = (Grafikler.Count > 0) ? Grafikler[0].Date.Day : 0;
+    int lastMonth = (Grafikler.Count > 0) ? Grafikler[0].Date.Month : 0;
+    
+    for (int i = 1; i < Grafikler.Count; i++) {
+        if (Grafikler[i].Date.Day != lastDay) {
+            yesterdayEnd = SanalGetiri[i-1];
+            lastDay = Grafikler[i].Date.Day;
+        }
+        if (Grafikler[i].Date.Month != lastMonth) {
+            lastMonthEnd = SanalGetiri[i-1];
+            lastMonth = Grafikler[i].Date.Month;
+        }
+        CizgiGunSonuKZ[i] = yesterdayEnd;
+        CizgiAyKZ[i] = lastMonthEnd;
+    }
+
+    Sistem.Cizgiler[0].Deger = SanalGetiri; 
+    Sistem.Cizgiler[0].Aciklama = "Gün KZ (Kapalı)"; 
+    Sistem.Cizgiler[0].ActiveBool = true;
+    Sistem.Cizgiler[0].Renk = Color.Transparent;
+    
+    Sistem.Cizgiler[1].Deger = CizgiGunSonuKZ;
+    Sistem.Cizgiler[1].Aciklama = "Gün Sonu KZ"; 
+    Sistem.Cizgiler[1].ActiveBool = true;
+    Sistem.Cizgiler[1].Renk = Color.Transparent;
+    
+    Sistem.DolguEkle(0, 1, Color.Green, Color.Red);
+
+    Sistem.Cizgiler[2].Deger = CizgiAyKZ; 
+    Sistem.Cizgiler[2].Aciklama =  "Aylık Getiri"; 
+    Sistem.Cizgiler[2].ActiveBool = true;
+
+    // 3. ADIM: YENİ MATEMATİKSEL METRİKLER (PANEL 3 İÇİN)
+    float OrtalamaKar = (KarliIslemSayisi > 0) ? (ToplamKar / KarliIslemSayisi) : 0f;
+    float OrtalamaZarar = (ZararliIslemSayisi > 0) ? (ToplamZarar / ZararliIslemSayisi) : 0f;
+    float PayoffRatio = (OrtalamaZarar > 0) ? (OrtalamaKar / OrtalamaZarar) : 0f;
+    
+    float WinRate = (IslemGetirileri.Count > 0) ? ((float)KarliIslemSayisi / IslemGetirileri.Count) : 0f;
+    float Expectancy = (WinRate * OrtalamaKar) - ((1f - WinRate) * OrtalamaZarar);
+    
+    float RecoveryFactor = (GercekMaxDD > 0) ? (SanalGetiri[Grafikler.Count - 1] / GercekMaxDD) : 0f;
+    float YillikGetiri = (Sure > 0) ? (SanalGetiri[Grafikler.Count - 1] / (float)(Sure / 12f)) : 0f;
+    float CalmarRatio = (GercekMaxDD > 0) ? (YillikGetiri / GercekMaxDD) : 0f;
+
+    float ToplamG = 0f; foreach(var r in IslemGetirileri) ToplamG += r;
+    float OrtGetiri = (IslemGetirileri.Count > 0) ? (ToplamG / IslemGetirileri.Count) : 0f;
+    float KarelerToplami = 0f; foreach(var r in IslemGetirileri) KarelerToplami += (float)Math.Pow(r - OrtGetiri, 2);
+    float StandartSapma = (IslemGetirileri.Count > 1) ? (float)Math.Sqrt(KarelerToplami / (IslemGetirileri.Count - 1)) : 0f;
+    float SharpeT = (StandartSapma > 0) ? ((OrtGetiri / StandartSapma) * (float)Math.Sqrt(IslemGetirileri.Count)) : 0f;
+
+    if (GetiriTarihcesiGoster)
+    {
+        int daysToSubtract = (int)DateTime.Now.DayOfWeek - (int)DayOfWeek.Monday;
+        if (daysToSubtract < 0) daysToSubtract += 7; 
+        
+        var DateHaftaBasi = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day).AddDays(-daysToSubtract);
+        var DateHaftaBasiBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateHaftaBasi) { DateHaftaBasiBarNo = i; break; }
+        var kzBuHafta = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateHaftaBasiBarNo]).ToString("0.0");
+
+        var DateBuAy = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+        var DateBuAyBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateBuAy) { DateBuAyBarNo = i; break; }
+        var kzbuay = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateBuAyBarNo]).ToString("0.0");
+
+        var Date30 = DateTime.Now.AddDays(-30);
+        var Date30BarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date30) { Date30BarNo = i; break; }
+        var kz30 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date30BarNo]).ToString("0.0");
+
+        var Date60 = DateTime.Now.AddDays(-60);
+        var Date60BarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date60) { Date60BarNo = i; break; }
+        var kz60 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date60BarNo]).ToString("0.0");
+
+        var Date90 = DateTime.Now.AddDays(-90);
+        var Date90BarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date90) { Date90BarNo = i; break; }
+        var kz90 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date90BarNo]).ToString("0.0");
+
+        var Date180 = DateTime.Now.AddDays(-180);
+        var Date180BarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date180) { Date180BarNo = i; break; }
+        var kz180 = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date180BarNo]).ToString("0.0");
+
+        var DateYilBasi = new DateTime(DateTime.Now.Year, 1, 1);
+        var DateYilBasiBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date < DateYilBasi) { DateYilBasiBarNo = i; break; }
+        var kzBuYil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[DateYilBasiBarNo]).ToString("0.0");
+
+        var Date1Yil = DateTime.Now.AddYears(-1);
+        var Date1YilBarNo = 0;
+        for (int i = Grafikler.Count - 1; i > 0; i--) if (Grafikler[i].Date <= Date1Yil) { Date1YilBarNo = i; break; }
+        var kz1Yil = (SanalGetiri[Grafikler.Count - 1] - SanalGetiri[Date1YilBarNo]).ToString("0.0");
+
+        string Labels = SureTxt + " Ay\r\nBugün\r\nBu Hafta\r\nBu Ay\r\n30 Gün\r\n60 Gün\r\n90 Gün\r\n180 Gün\r\nBu Yıl\r\nSon 1 Yıl";
+        string Results = kzSure + kzSure_yuzde + "\r\n" + kzbugun + "\r\n" + kzBuHafta + "\r\n" + kzbuay + "\r\n" + kz30 + "\r\n" + kz60 + "\r\n" + kz90 + "\r\n" + kz180 + "\r\n" + kzBuYil + "\r\n" + kz1Yil;
+
+        Sistem.Dortgen(2, 10, ilksatirY - 8, 230, 180, Color.Black, Color.Black, Color.White);
+        Sistem.GradientYaziEkle(Labels, 2, 20, ilksatirY, Color.White, Color.White, "Tahoma", 10);
+        Sistem.GradientYaziEkle(Results, 2, 90, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
+    }
+
+    if (DetayPerformans)
+    {
+        string Labels2 = "İslem / Ortalama\r\nKarlı İşlem Oranı\r\nProfit Factor\r\nMutlu Gün\r\nMutsuz Gün\r\nMaxDD\r\nMaxDD Tarihi";
+        string Results2 = ToplamIslem + " / " + OrtalamaIslem + "\r\n%" + KarliIslemOran + "\r\n" + ProfitFactor + "\r\n" + MutluGun + "\r\n" + MutsuzGun + "\r\n" + MaxDD + "\r\n" + MaxDDTarihi;
+
+        Sistem.Dortgen(2, 250, ilksatirY - 8, 215, 130, Color.Black, Color.Black, Color.White);
+        Sistem.GradientYaziEkle(Labels2, 2, 260, ilksatirY, Color.White, Color.White, "Tahoma", 10);
+        Sistem.GradientYaziEkle(Results2, 2, 380, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
+
+        string Labels3 = "Ort. Kâr / Zarar\r\nPayoff Ratio (R/R)\r\nExpectancy\r\nRecovery Factor\r\nCalmar Oranı\r\nSharpe Oranı";
+        string Results3 = OrtalamaKar.ToString("0.0") + " / " + OrtalamaZarar.ToString("0.0") + "\r\n" + PayoffRatio.ToString("0.00") + "\r\n" + Expectancy.ToString("0.0") + " Puan\r\n" + RecoveryFactor.ToString("0.00") + "\r\n" + CalmarRatio.ToString("0.00") + "\r\n" + SharpeT.ToString("0.00");
+
+        Sistem.Dortgen(2, 475, ilksatirY - 8, 215, 115, Color.Black, Color.Black, Color.White);
+        Sistem.GradientYaziEkle(Labels3, 2, 485, ilksatirY, Color.White, Color.White, "Tahoma", 10);
+        Sistem.GradientYaziEkle(Results3, 2, 605, ilksatirY, Color.Yellow, Color.DarkOrange, "Tahoma", 10);
+    }
+}

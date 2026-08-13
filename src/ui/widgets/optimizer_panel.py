@@ -2030,6 +2030,9 @@ class OptimizationWorker(QThread):
             elif self.strategy_index == 7:
                 from src.strategies.gap_reversal_strategy import GapReversalStrategy
                 strategy = GapReversalStrategy.from_config_dict(test_cache, params)
+            elif self.strategy_index == 8:
+                from src.strategies.gap_momentum_strategy import GapMomentumStrategy
+                strategy = GapMomentumStrategy.from_config_dict(test_cache, params)
             else:
                 from src.strategies.ars_trend_v2 import ARSTrendStrategyV2
                 strategy = ARSTrendStrategyV2.from_config_dict(test_cache, params)

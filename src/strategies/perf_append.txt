@@ -1,0 +1,143 @@
+
+// ===============================================================================================
+// PERFORMANS PANELİ & GÜNLÜK PnL GRAFİĞİ
+// ===============================================================================================
+Sistem.GetiriHesapla("01.01.2010", 0.0f);
+var Getiri = Sistem.GetiriKZ;
+
+float Zirve = 0f;
+float MaxDD = 0f;
+int Karlar = 0;
+int Zararlar = 0;
+float ToplamKar = 0f;
+float ToplamZarar = 0f;
+List<float> TradeList = new List<float>();
+
+float entryP = 0f;
+int poz = 0;
+for(int i = 1; i < V.Count; i++) {
+    if (Getiri[i] > Zirve) Zirve = Getiri[i];
+    float dd = Zirve - Getiri[i];
+    if (dd > MaxDD) MaxDD = dd;
+    
+    if (Sistem.Yon[i] == "A" || Sistem.Yon[i] == "S") {
+        if (poz != 0) {
+            float pnl = (poz == 1) ? (C[i] - entryP) : (entryP - C[i]);
+            if (pnl > 0) { Karlar++; ToplamKar += pnl; } else { Zararlar++; ToplamZarar += -pnl; }
+            TradeList.Add(pnl);
+        }
+        poz = (Sistem.Yon[i] == "A") ? 1 : -1;
+        entryP = C[i];
+    } else if (Sistem.Yon[i] == "F") {
+        if (poz != 0) {
+            float pnl = (poz == 1) ? (C[i] - entryP) : (entryP - C[i]);
+            if (pnl > 0) { Karlar++; ToplamKar += pnl; } else { Zararlar++; ToplamZarar += -pnl; }
+            TradeList.Add(pnl);
+            poz = 0;
+        }
+    }
+}
+
+// GÜNLÜK HİSTOGRAM HESAPLAMA (Karlı = Yeşil, Zararlı = Kırmızı)
+var CizgiGunlukKar = Sistem.Liste(0);
+var CizgiGunlukZarar = Sistem.Liste(0);
+
+float prevDayEnd = 0;
+int lastDay = (V.Count > 0) ? V[0].Date.Day : 0;
+
+for (int i = 1; i < V.Count; i++)
+{
+    if (V[i].Date.Day != lastDay)
+    {
+        prevDayEnd = Getiri[i - 1];
+        lastDay = V[i].Date.Day;
+    }
+
+    float gunlukPnL = Getiri[i] - prevDayEnd;
+    
+    // Histogramı çizgi grafiği gibi sadece barlara işliyoruz
+    if (gunlukPnL >= 0) {
+        CizgiGunlukKar[i] = gunlukPnL;
+    } else {
+        CizgiGunlukZarar[i] = gunlukPnL;
+    }
+}
+
+// ÇİZGİLER (Grafik)
+Sistem.Cizgiler[0].Deger = Getiri;
+Sistem.Cizgiler[0].Aciklama = "Net Getiri (Puan)";
+Sistem.Cizgiler[0].Tip = "Cizgi";
+Sistem.Cizgiler[0].Kalinlik = 2;
+Sistem.Cizgiler[0].Renk = Color.Gold;
+Sistem.Cizgiler[0].ActiveBool = true;
+
+Sistem.Cizgiler[1].Deger = CizgiGunlukKar;
+Sistem.Cizgiler[1].Aciklama = "Günlük Kâr";
+Sistem.Cizgiler[1].Tip = "Histogram";
+Sistem.Cizgiler[1].Renk = Color.LimeGreen;
+Sistem.Cizgiler[1].ActiveBool = true;
+
+Sistem.Cizgiler[2].Deger = CizgiGunlukZarar;
+Sistem.Cizgiler[2].Aciklama = "Günlük Zarar";
+Sistem.Cizgiler[2].Tip = "Histogram";
+Sistem.Cizgiler[2].Renk = Color.OrangeRed;
+Sistem.Cizgiler[2].ActiveBool = true;
+
+// UI PANELLERİ (Aynı detaylı performans göstergeleri)
+float yuzde_kz = (V.Count > 0 && O[0] != 0) ? ((Getiri[V.Count - 1] * 100.0f) / O[0]) : 0;
+int ToplamIslemSayisi = Karlar + Zararlar;
+float KarliIslemOran = (ToplamIslemSayisi > 0) ? (((float)Karlar / ToplamIslemSayisi) * 100f) : 0f;
+float ProfitFactor = (ToplamZarar > 0) ? (ToplamKar / ToplamZarar) : 99.9f;
+float OrtalamaKar = (Karlar > 0) ? (ToplamKar / Karlar) : 0f;
+float OrtalamaZarar = (Zararlar > 0) ? (ToplamZarar / Zararlar) : 0f;
+float WinRate = (ToplamIslemSayisi > 0) ? ((float)Karlar / ToplamIslemSayisi) : 0f;
+float Expectancy = (WinRate * OrtalamaKar) - ((1f - WinRate) * OrtalamaZarar);
+float RecoveryFactor = (MaxDD > 0) ? (Getiri[V.Count - 1] / MaxDD) : 0f;
+
+double SureGun = (V.Count > 0) ? (DateTime.Now - V[0].Date).TotalDays : 1.0;
+double SureAy = SureGun / 30.4;
+float YillikGetiri = (SureAy > 0) ? (Getiri[V.Count - 1] / (float)(SureAy / 12f)) : 0f;
+
+// Ekrana Çizim (Şeffaf Kutular)
+int X = 1;
+int ilksatirY = 33;
+Color arkaPlan = Color.FromArgb(140, 20, 20, 20); // Yarı şeffaf siyah
+Color borderColor = Color.Gray;
+
+Sistem.Dortgen(1, X, ilksatirY, 260, 240, arkaPlan, borderColor, Color.White);
+
+string solKolon = 
+    "Süre (Ay)\r\n" +
+    "Net Kâr (Puan)\r\n" +
+    "Net Kâr (%)\r\n" +
+    "Toplam İşlem\r\n" +
+    "Kârlı İşlem (%)\r\n" +
+    "Kârlı/Zararlı Adet\r\n" +
+    "Profit Factor\r\n" +
+    "Max DD (Puan)\r\n" +
+    "Beklenti (Puan/İşlem)\r\n" +
+    "Recovery Factor\r\n" +
+    "Ort. Kâr / Ort. Zarar";
+
+string sagKolon = 
+    SureAy.ToString("0.0") + "\r\n" +
+    Getiri[V.Count - 1].ToString("0.0") + "\r\n" +
+    "%" + yuzde_kz.ToString("0.0") + "\r\n" +
+    ToplamIslemSayisi.ToString("0") + "\r\n" +
+    "%" + KarliIslemOran.ToString("0.0") + "\r\n" +
+    Karlar + " / " + Zararlar + "\r\n" +
+    ProfitFactor.ToString("0.00") + "\r\n" +
+    MaxDD.ToString("0.0") + "\r\n" +
+    Expectancy.ToString("0.0") + "\r\n" +
+    RecoveryFactor.ToString("0.0") + "\r\n" +
+    OrtalamaKar.ToString("0.0") + " / " + OrtalamaZarar.ToString("0.0");
+
+Sistem.GradientYaziEkle(solKolon, 1, X + 10, ilksatirY + 10, Color.White, Color.White, "Tahoma", 9);
+Sistem.GradientYaziEkle(sagKolon, 1, X + 150, ilksatirY + 10, Color.Gold, Color.Orange, "Tahoma", 9);
+
+// Bugün Kutusu
+var gunluk_getiri = Getiri[V.Count - 1] - prevDayEnd;
+var renk = (gunluk_getiri > 0) ? Color.LimeGreen : (gunluk_getiri < 0 ? Color.OrangeRed : Color.Black);
+Sistem.Dortgen(1, X, ilksatirY + 250, 260, 25, renk, Color.Black, Color.White);
+Sistem.GradientYaziEkle("Bugün Kâr/Zarar:", 1, X + 10, ilksatirY + 255, Color.White, Color.White, "Tahoma", 9);
+Sistem.GradientYaziEkle(gunluk_getiri.ToString("0.0") + " Puan", 1, X + 150, ilksatirY + 255, Color.White, Color.White, "Tahoma", 9);

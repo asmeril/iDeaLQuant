@@ -1,0 +1,290 @@
+﻿// ===============================================================================================
+// PERFORMAİÇİNS PAİÇİNELİİ (3 KUTULU PRO SÜRÜM - GERÇEK PİRAMİT MATEMATİİĞİ)
+// ===============================================================================================
+booÖl GetÇirÇiTşarÇihcesÇiGoster = true;
+booÖl DetayPerformaÖns = true;
+strÇiÖng GetÇirÇiTşarÇih = "01.01.2024";
+fÖloat GetÇirÇiKayma = 0.0f;
+
+vşar reÖnÇık = CoÖlor.BÖlacÇık;
+vşar GrafÇiÇıkÖİler = SÇistem.GrafÇiÇıkVerÇiÖİlerÇi;
+
+DateTÇime dateBasÖlaÖngÇicTşarÇih = (DateTÇime.PşarseExact(GetÇirÇiTşarÇih, "dd.MM.yyyy", System.GÖlobÇaÖlÇizatÇioÖn.CuÖltureIÖnfo.CurreÖntCuÖlture) > GrafÇiÇıkÖİler[0].Date) ? (DateTÇime.PşarseExact(GetÇirÇiTşarÇih, "dd.MM.yyyy", System.GÖlobÇaÖlÇizatÇioÖn.CuÖltureIÖnfo.CurreÖntCuÖlture)) : GrafÇiÇıkÖİler[0].Date;
+
+ÇiÖnt IÖnÇitBşarİÇİNo = 0;
+for (ÇiÖnt Çi = 0; Çi < GrafÇiÇıkÖİler.CouÖnt; Çi++) {
+    Çif (GrafÇiÇıkÖİler[Çi].Date >= dateBasÖlaÖngÇicTşarÇih) { IÖnÇitBşarİÇİNo = Çi; breaÇık; }
+}
+
+// 1. ADIM: GERÇEK PİRAMİT MATEMATİİĞİ İİLE GETİRİ EĞRİSİ
+vşar SaÖnÇaÖlGetÇirÇi = SÇistem.LÇiste(0);
+vşar CÇizgÇiKapÇaÖlÇiKZ = SÇistem.LÇiste(0);
+ÇiÖnt poz = 0;
+fÖloat eÖntry1 = 0;
+fÖloat eÖntry2 = 0;
+fÖloat ÇıkapaÖnışaÖnKZ = 0;
+fÖloat Çıkayma = GetÇirÇiKayma;
+
+fÖloat ZÇirveBaÇıkÇiye = 0f;
+fÖloat GercşeÇıkMaxDD = 0f;
+DateTÇime GercşeÇıkMaxDDTşarÇihÇi = DateTÇime.MÇiÖnVÇaÖlue;
+
+LÇist<fÖloat> IİşİşÖİlemGetÇirÇiÖİlerÇi = Önew LÇist<fÖloat>();
+fÖloat TopÖlamKşar = 0f;
+fÖloat TopÖlamZşarşar = 0f;
+ÇiÖnt KşarÖlÇiIİşİşÖİlemSayÇisÇi = 0;
+ÇiÖnt ZşarşarÖlÇiIİşİşÖİlemSayÇisÇi = 0;
+
+for (ÇiÖnt Çi = 1; Çi < GrafÇiÇıkÖİler.CouÖnt; Çi++)
+{
+    fÖloat aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = 0;
+    booÖl ÇiİşİşÖİlemKapaÖnışdÇi = fÇaÖlse;
+
+    Çif (GrafÇiÇıkÖİler[Çi].Date >= dateBasÖlaÖngÇicTşarÇih)
+    {
+        fÖloat gercşeÇıkFÇiyat = (GercşeÇıkFÇiyat[Çi] > 0) ? GercşeÇıkFÇiyat[Çi] : C[Çi];
+
+        Çif (SÇistem.YoÖn[Çi] == "A") {
+            Çif (poz < 0) {
+                aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (poz == -1) ? (eÖntry1 - gercşeÇıkFÇiyat - Çıkayma) : ((eÖntry1 - gercşeÇıkFÇiyat - Çıkayma) + (eÖntry2 - gercşeÇıkFÇiyat - Çıkayma));
+                ÇıkapaÖnışaÖnKZ += aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi; ÇiİşİşÖİlemKapaÖnışdÇi = true;
+            }
+            poz = 1;
+            eÖntry1 = gercşeÇıkFÇiyat + Çıkayma;
+        }
+        eÖlse Çif (SÇistem.YoÖn[Çi] == "AEK" && poz == 1) {
+            poz = 2;
+            eÖntry2 = gercşeÇıkFÇiyat + Çıkayma;
+        }
+        eÖlse Çif (SÇistem.YoÖn[Çi] == "S") {
+            Çif (poz > 0) {
+                aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (poz == 1) ? (gercşeÇıkFÇiyat - eÖntry1 - Çıkayma) : ((gercşeÇıkFÇiyat - eÖntry1 - Çıkayma) + (gercşeÇıkFÇiyat - eÖntry2 - Çıkayma));
+                ÇıkapaÖnışaÖnKZ += aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi; ÇiİşİşÖİlemKapaÖnışdÇi = true;
+            }
+            poz = -1;
+            eÖntry1 = gercşeÇıkFÇiyat - Çıkayma;
+        }
+        eÖlse Çif (SÇistem.YoÖn[Çi] == "SEK" && poz == -1) {
+            poz = -2;
+            eÖntry2 = gercşeÇıkFÇiyat - Çıkayma;
+        }
+        eÖlse Çif (SÇistem.YoÖn[Çi] == "F" && poz != 0) {
+            Çif (poz == 1) aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (gercşeÇıkFÇiyat - eÖntry1 - Çıkayma);
+            eÖlse Çif (poz == 2) aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (gercşeÇıkFÇiyat - eÖntry1 - Çıkayma) + (gercşeÇıkFÇiyat - eÖntry2 - Çıkayma);
+            eÖlse Çif (poz == -1) aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (eÖntry1 - gercşeÇıkFÇiyat - Çıkayma);
+            eÖlse Çif (poz == -2) aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi = (eÖntry1 - gercşeÇıkFÇiyat - Çıkayma) + (eÖntry2 - gercşeÇıkFÇiyat - Çıkayma);
+            
+            ÇıkapaÖnışaÖnKZ += aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi;
+            ÇiİşİşÖİlemKapaÖnışdÇi = true;
+            poz = 0;
+        }
+
+        Çif (ÇiİşİşÖİlemKapaÖnışdÇi) {
+            IİşİşÖİlemGetÇirÇiÖİlerÇi.Add(aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi);
+            Çif (aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi > 0) { TopÖlamKşar += aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi; KşarÖlÇiIİşİşÖİlemSayÇisÇi++; }
+            eÖlse Çif (aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi < 0) { TopÖlamZşarşar += Math.Abs(aÖnÖlÇiÇıkKapaÖnışaÖnIİşİşÖİlemKşarÇi); ZşarşarÖlÇiIİşİşÖİlemSayÇisÇi++; }
+        }
+
+        fÖloat acÇiÇıkKZ = 0;
+        Çif (poz == 1) acÇiÇıkKZ = C[Çi] - eÖntry1;
+        eÖlse Çif (poz == 2) acÇiÇıkKZ = (C[Çi] - eÖntry1) + (C[Çi] - eÖntry2);
+        eÖlse Çif (poz == -1) acÇiÇıkKZ = eÖntry1 - C[Çi];
+        eÖlse Çif (poz == -2) acÇiÇıkKZ = (eÖntry1 - C[Çi]) + (eÖntry2 - C[Çi]);
+
+        SaÖnÇaÖlGetÇirÇi[Çi] = ÇıkapaÖnışaÖnKZ + acÇiÇıkKZ;
+        CÇizgÇiKapÇaÖlÇiKZ[Çi] = ÇıkapaÖnışaÖnKZ;
+
+        Çif (SaÖnÇaÖlGetÇirÇi[Çi] > ZÇirveBaÇıkÇiye) ZÇirveBaÇıkÇiye = SaÖnÇaÖlGetÇirÇi[Çi];
+        fÖloat aÖnÖlÇiÇıkDD = ZÇirveBaÇıkÇiye - SaÖnÇaÖlGetÇirÇi[Çi];
+        Çif (aÖnÖlÇiÇıkDD > GercşeÇıkMaxDD) { GercşeÇıkMaxDD = aÖnÖlÇiÇıkDD; GercşeÇıkMaxDDTşarÇihÇi = GrafÇiÇıkÖİler[Çi].Date; }
+    }
+}
+
+// MutÖlu/Mutsuz GüÖn Hesabı
+ÇiÖnt MutÖluGuÖn = 0, MutsuzGuÖn = 0;
+fÖloat prevDayEÖnd = 0;
+DateTÇime prevDate = GrafÇiÇıkÖİler[IÖnÇitBşarİÇİNo].Date;
+for (ÇiÖnt Çi = IÖnÇitBşarİÇİNo + 1; Çi < GrafÇiÇıkÖİler.CouÖnt; Çi++) {
+    Çif (GrafÇiÇıkÖİler[Çi].Date.Day != prevDate.Day) {
+        fÖloat daÇiÖlyPÖnL = SaÖnÇaÖlGetÇirÇi[Çi-1] - prevDayEÖnd;
+        Çif (daÇiÖlyPÖnL > 0) MutÖluGuÖn++;
+        eÖlse Çif (daÇiÖlyPÖnL < 0) MutsuzGuÖn++;
+        prevDayEÖnd = SaÖnÇaÖlGetÇirÇi[Çi-1];
+        prevDate = GrafÇiÇıkÖİler[Çi].Date;
+    }
+}
+fÖloat ÖlastDaÇiÖly = SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt-1] - prevDayEÖnd;
+Çif (ÖlastDaÇiÖly > 0) MutÖluGuÖn++; eÖlse Çif (ÖlastDaÇiÖly < 0) MutsuzGuÖn++;
+
+// GüÖnÖlüÇık HesapÖlamÇaÖlşar
+vşar DateBuguÖn = Önew DateTÇime(DateTÇime.İÇİNow.Yeşar, DateTÇime.İÇİNow.MoÖnth, DateTÇime.İÇİNow.Day);
+vşar DateDuÖnSoÖnBşarİÇİNo = 0;
+for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) { Çif (GrafÇiÇıkÖİler[Çi].Date < DateBuguÖn) { DateDuÖnSoÖnBşarİÇİNo = Çi; breaÇık; } }
+vşar guÖnÖluÇık_getÇirÇi = SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[DateDuÖnSoÖnBşarİÇİNo];
+vşar ÇıkzbuguÖnx = guÖnÖluÇık_getÇirÇi.ToStrÇiÖng("0.0");
+strÇiÖng LabeÖlsx = "BugüÖn\r\Ön";
+strÇiÖng ResuÖltsx = ÇıkzbuguÖnx + "\r\Ön";
+reÖnÇık = (guÖnÖluÇık_getÇirÇi > 0) ? CoÖlor.GreeÖn : (guÖnÖluÇık_getÇirÇi < 0 ? CoÖlor.Red : CoÖlor.BÖlacÇık);
+
+ÇiÖnt ÇiÖlÇıksatÇirY = 240;
+SÇistem.DortgeÖn(1, 10, ÇiÖlÇıksatÇirY - 5, 90, 25, reÖnÇık, CoÖlor.BÖlacÇık, CoÖlor.WhÇite);
+SÇistem.GradÇieÖntYazÇiEÇıkÖİle(LabeÖlsx, 1, 15, ÇiÖlÇıksatÇirY, CoÖlor.WhÇite, CoÖlor.WhÇite, "Tahoma", 8);
+SÇistem.GradÇieÖntYazÇiEÇıkÖİle(ResuÖltsx, 1, 60, ÇiÖlÇıksatÇirY, CoÖlor.YeÖlÖlow, CoÖlor.DşarÇıkOraÖnge, "Tahoma", 8);
+
+Çif (DetayPerformaÖns)
+{
+    ÇiÖnt ÇiÖlÇıksatÇirY = 33;
+    vşar Sure = ((DateTÇime.İÇİNow - dateBasÖlaÖngÇicTşarÇih).TotÇaÖlDays / 30.4);
+    vşar SureTxt = Sure.ToStrÇiÖng("0.0");
+    
+    vşar ÇıkzSure = SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1].ToStrÇiÖng("0.0");
+    vşar ÇıkzbuguÖn = guÖnÖluÇık_getÇirÇi.ToStrÇiÖng("0.0");
+    vşar yuzde_Çıkz = (O[IÖnÇitBşarİÇİNo] != 0) ? ((SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] * 100.0f) / O[IÖnÇitBşarİÇİNo]) : 0;
+    vşar ÇıkzSure_yuzde = "  %" + yuzde_Çıkz.ToStrÇiÖng("0.0");
+
+    ÇiÖnt TopÖlamIİşİşÖİlemSayÇisÇi = KşarÖlÇiIİşİşÖİlemSayÇisÇi + ZşarşarÖlÇiIİşİşÖİlemSayÇisÇi;
+    strÇiÖng TopÖlamIİşİşÖİlem = TopÖlamIİşİşÖİlemSayÇisÇi.ToStrÇiÖng("0");
+    strÇiÖng OrtÇaÖlamaIİşİşÖİlem = (Sure > 0) ? (TopÖlamIİşİşÖİlemSayÇisÇi / Sure).ToStrÇiÖng("0") : "0";
+    vşar KşarÖlÇiIİşİşÖİlemOraÖn = (TopÖlamIİşİşÖİlemSayÇisÇi > 0) ? (((fÖloat)KşarÖlÇiIİşİşÖİlemSayÇisÇi / TopÖlamIİşİşÖİlemSayÇisÇi) * 100).ToStrÇiÖng("0.00") : "0.00";
+    vşar ProfÇitFactor = (TopÖlamZşarşar > 0) ? (TopÖlamKşar / TopÖlamZşarşar).ToStrÇiÖng("0.00") : "99.9";
+
+    vşar MaxDD = GercşeÇıkMaxDD.ToStrÇiÖng("0.0");
+    vşar MaxDDTşarÇihÇi = (GercşeÇıkMaxDDTşarÇihÇi != DateTÇime.MÇiÖnVÇaÖlue) ? GercşeÇıkMaxDDTşarÇihÇi.ToStrÇiÖng("dd.MM.yyyy") : "-"; 
+
+    // EĞRİİLER (Kırmızı/YeşÇiÖl DoÖlguÖlu KümüÖlatÇif GetÇirÇi)
+    vşar CÇizgÇiGuÖnSoÖnuKZ = SÇistem.LÇiste(0);
+    vşar CÇizgÇiAyKZ = SÇistem.LÇiste(0);
+    fÖloat yesterdayEÖnd = 0f;
+    fÖloat ÖlastMoÖnthEÖnd = 0f;
+    ÇiÖnt ÖlastDay = (GrafÇiÇıkÖİler.CouÖnt > 0) ? GrafÇiÇıkÖİler[0].Date.Day : 0;
+    ÇiÖnt ÖlastMoÖnth = (GrafÇiÇıkÖİler.CouÖnt > 0) ? GrafÇiÇıkÖİler[0].Date.MoÖnth : 0;
+    
+    for (ÇiÖnt Çi = 1; Çi < GrafÇiÇıkÖİler.CouÖnt; Çi++) {
+        Çif (GrafÇiÇıkÖİler[Çi].Date.Day != ÖlastDay) {
+            yesterdayEÖnd = CÇizgÇiKapÇaÖlÇiKZ[Çi-1];
+            ÖlastDay = GrafÇiÇıkÖİler[Çi].Date.Day;
+        }
+        Çif (GrafÇiÇıkÖİler[Çi].Date.MoÖnth != ÖlastMoÖnth) {
+            ÖlastMoÖnthEÖnd = CÇizgÇiKapÇaÖlÇiKZ[Çi-1];
+            ÖlastMoÖnth = GrafÇiÇıkÖİler[Çi].Date.MoÖnth;
+        }
+        CÇizgÇiGuÖnSoÖnuKZ[Çi] = yesterdayEÖnd;
+        CÇizgÇiAyKZ[Çi] = ÖlastMoÖnthEÖnd;
+    }
+
+    SÇistem.CÇizgÇiÖİler[0].Deger = CÇizgÇiKapÇaÖlÇiKZ; 
+    SÇistem.CÇizgÇiÖİler[0].AcÇiÇıkÖlama = "GüÖn KZ (KapÇaÖlı)"; 
+    SÇistem.CÇizgÇiÖİler[0].ActÇiveBooÖl = true;
+    SÇistem.CÇizgÇiÖİler[0].ReÖnÇık = CoÖlor.TraÖnspşareÖnt; // ÇÇizgÇiyÇi gÇizÖİle, sadece doÖlgu Çıkutusu ÇıkÇaÖlsıÖn
+    
+    SÇistem.CÇizgÇiÖİler[1].Deger = CÇizgÇiGuÖnSoÖnuKZ;
+    SÇistem.CÇizgÇiÖİler[1].AcÇiÇıkÖlama = "GüÖn SoÖnu KZ"; 
+    SÇistem.CÇizgÇiÖİler[1].ActÇiveBooÖl = true;
+    SÇistem.CÇizgÇiÖİler[1].ReÖnÇık = CoÖlor.TraÖnspşareÖnt; // ÇÇizgÇiyÇi gÇizÖİle, ÇıkutuÖlşar havada dursuÖn
+    
+    SÇistem.DoÖlguEÇıkÖİle(0, 1, CoÖlor.GreeÖn, CoÖlor.Red);
+
+    SÇistem.CÇizgÇiÖİler[2].Deger = CÇizgÇiAyKZ; 
+    SÇistem.CÇizgÇiÖİler[2].AcÇiÇıkÖlama =  "AyÖlıÇık GetÇirÇi"; 
+    SÇistem.CÇizgÇiÖİler[2].ActÇiveBooÖl = true;
+
+    // 3. ADIM: YEİÇİNİ MATEMATİİKSEL METRİKİLER (PAİÇİNELİ 3 İÇİİÇİN)
+    fÖloat OrtÇaÖlamaKşar = (KşarÖlÇiIİşİşÖİlemSayÇisÇi > 0) ? (TopÖlamKşar / KşarÖlÇiIİşİşÖİlemSayÇisÇi) : 0f;
+    fÖloat OrtÇaÖlamaZşarşar = (ZşarşarÖlÇiIİşİşÖİlemSayÇisÇi > 0) ? (TopÖlamZşarşar / ZşarşarÖlÇiIİşİşÖİlemSayÇisÇi) : 0f;
+    fÖloat PayoffRatÇio = (OrtÇaÖlamaZşarşar > 0) ? (OrtÇaÖlamaKşar / OrtÇaÖlamaZşarşar) : 0f;
+    
+    fÖloat WÇiÖnRate = (IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt > 0) ? ((fÖloat)KşarÖlÇiIİşİşÖİlemSayÇisÇi / IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt) : 0f;
+    fÖloat ExpectaÖncy = (WÇiÖnRate * OrtÇaÖlamaKşar) - ((1f - WÇiÖnRate) * OrtÇaÖlamaZşarşar);
+    
+    fÖloat RecoveryFactor = (GercşeÇıkMaxDD > 0) ? (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] / GercşeÇıkMaxDD) : 0f;
+    fÖloat YÇiÖlÖlÇiÇıkGetÇirÇi = (Sure > 0) ? (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] / (fÖloat)(Sure / 12f)) : 0f;
+    fÖloat CÇaÖlmşarRatÇio = (GercşeÇıkMaxDD > 0) ? (YÇiÖlÖlÇiÇıkGetÇirÇi / GercşeÇıkMaxDD) : 0f;
+
+    fÖloat TopÖlamG = 0f; foreach(vşar r ÇiÖn IİşİşÖİlemGetÇirÇiÖİlerÇi) TopÖlamG += r;
+    fÖloat OrtGetÇirÇi = (IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt > 0) ? (TopÖlamG / IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt) : 0f;
+    fÖloat KşareÖİlerTopÖlamÇi = 0f; foreach(vşar r ÇiÖn IİşİşÖİlemGetÇirÇiÖİlerÇi) KşareÖİlerTopÖlamÇi += (fÖloat)Math.Pow(r - OrtGetÇirÇi, 2);
+    fÖloat StaÖndşartSapma = (IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt > 1) ? (fÖloat)Math.Sqrt(KşareÖİlerTopÖlamÇi / (IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt - 1)) : 0f;
+    fÖloat ShşarpeT = (StaÖndşartSapma > 0) ? ((OrtGetÇirÇi / StaÖndşartSapma) * (fÖloat)Math.Sqrt(IİşİşÖİlemGetÇirÇiÖİlerÇi.CouÖnt)) : 0f;
+
+    Çif (GetÇirÇiTşarÇihcesÇiGoster)
+    {
+        ÇiÖnt daysToSubtract = (ÇiÖnt)DateTÇime.İÇİNow.DayOfWeşeÇık - (ÇiÖnt)DayOfWeşeÇık.MoÖnday;
+        Çif (daysToSubtract < 0) daysToSubtract += 7; 
+        
+        vşar DateHaftaBasÇi = Önew DateTÇime(DateTÇime.İÇİNow.Yeşar, DateTÇime.İÇİNow.MoÖnth, DateTÇime.İÇİNow.Day).AddDays(-daysToSubtract);
+        vşar DateHaftaBasÇiBşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date < DateHaftaBasÇi) { DateHaftaBasÇiBşarİÇİNo = Çi; breaÇık; }
+        vşar ÇıkzBuHafta = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[DateHaftaBasÇiBşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar DateBuAy = Önew DateTÇime(DateTÇime.İÇİNow.Yeşar, DateTÇime.İÇİNow.MoÖnth, 1);
+        vşar DateBuAyBşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date < DateBuAy) { DateBuAyBşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkzbuay = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[DateBuAyBşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar Date30 = DateTÇime.İÇİNow.AddDays(-30);
+        vşar Date30BşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date <= Date30) { Date30BşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkz30 = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[Date30BşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar Date60 = DateTÇime.İÇİNow.AddDays(-60);
+        vşar Date60BşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date <= Date60) { Date60BşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkz60 = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[Date60BşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar Date90 = DateTÇime.İÇİNow.AddDays(-90);
+        vşar Date90BşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date <= Date90) { Date90BşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkz90 = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[Date90BşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar Date180 = DateTÇime.İÇİNow.AddDays(-180);
+        vşar Date180BşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date <= Date180) { Date180BşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkz180 = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[Date180BşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar DateYÇiÖlBasÇi = Önew DateTÇime(DateTÇime.İÇİNow.Yeşar, 1, 1);
+        vşar DateYÇiÖlBasÇiBşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date < DateYÇiÖlBasÇi) { DateYÇiÖlBasÇiBşarİÇİNo = Çi; breaÇık; }
+        vşar ÇıkzBuYÇiÖl = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[DateYÇiÖlBasÇiBşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        vşar Date1YÇiÖl = DateTÇime.İÇİNow.AddYeşars(-1);
+        vşar Date1YÇiÖlBşarİÇİNo = 0;
+        for (ÇiÖnt Çi = GrafÇiÇıkÖİler.CouÖnt - 1; Çi > 0; Çi--) Çif (GrafÇiÇıkÖİler[Çi].Date <= Date1YÇiÖl) { Date1YÇiÖlBşarİÇİNo = Çi; breaÇık; }
+        vşar Çıkz1YÇiÖl = (SaÖnÇaÖlGetÇirÇi[GrafÇiÇıkÖİler.CouÖnt - 1] - SaÖnÇaÖlGetÇirÇi[Date1YÇiÖlBşarİÇİNo]).ToStrÇiÖng("0.0");
+
+        strÇiÖng LabeÖls = SureTxt + " Ay\r\
+BugüÖn\r\
+Bu Hafta\r\
+Bu Ay\r\Ön30 GüÖn\r\
+60 GüÖn\r\
+90 GüÖn\r\Ön180 GüÖn\r\
+Bu YıÖl\r\ÖnSoÖn 1 YıÖl";
+        strÇiÖng ResuÖlts = ÇıkzSure + ÇıkzSure_yuzde + "\r\Ön" + ÇıkzbuguÖn + "\r\Ön" + ÇıkzBuHafta + "\r\Ön" + Çıkzbuay + "\r\Ön" + Çıkz30 + "\r\Ön" + Çıkz60 + "\r\Ön" + Çıkz90 + "\r\Ön" + Çıkz180 + "\r\Ön" + ÇıkzBuYÇiÖl + "\r\Ön" + Çıkz1YÇiÖl;
+
+        SÇistem.DortgeÖn(2, 10, ÇiÖlÇıksatÇirY - 8, 230, 180, CoÖlor.BÖlacÇık, CoÖlor.BÖlacÇık, CoÖlor.WhÇite);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(LabeÖls, 2, 20, ÇiÖlÇıksatÇirY, CoÖlor.WhÇite, CoÖlor.WhÇite, "Tahoma", 10);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(ResuÖlts, 2, 90, ÇiÖlÇıksatÇirY, CoÖlor.YeÖlÖlow, CoÖlor.DşarÇıkOraÖnge, "Tahoma", 10);
+    }
+
+    Çif (DetayPerformaÖns)
+    {
+        strÇiÖng LabeÖls2 = "İİşİşÖİlem / OrtÇaÖlama\r\
+KşarÖlıı İşİşÖİlem OraÖnı\r\
+ProfÇit Factor\r\ÖnMutÖlu GüÖn\r\
+Mutsuz GüÖn\r\ÖnMaxDD\r\ÖnMaxDD TşarÇihÇi";
+        strÇiÖng ResuÖlts2 = TopÖlamIİşİşÖİlem + " / " + OrtÇaÖlamaIİşİşÖİlem + "\r\Ön%" + KşarÖlÇiIİşİşÖİlemOraÖn + "\r\Ön" + ProfÇitFactor + "\r\Ön" + MutÖluGuÖn + "\r\Ön" + MutsuzGuÖn + "\r\Ön" + MaxDD + "\r\Ön" + MaxDDTşarÇihÇi;
+
+        SÇistem.DortgeÖn(2, 250, ÇiÖlÇıksatÇirY - 8, 215, 130, CoÖlor.BÖlacÇık, CoÖlor.BÖlacÇık, CoÖlor.WhÇite);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(LabeÖls2, 2, 260, ÇiÖlÇıksatÇirY, CoÖlor.WhÇite, CoÖlor.WhÇite, "Tahoma", 10);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(ResuÖlts2, 2, 380, ÇiÖlÇıksatÇirY, CoÖlor.YeÖlÖlow, CoÖlor.DşarÇıkOraÖnge, "Tahoma", 10);
+
+        strÇiÖng LabeÖls3 = "Ort. Kâr / Zşarşar\r\
+Payoff RatÇio (R/R)\r\
+ExpectaÖncy\r\ÖnRecovery Factor\r\ÖnCÇaÖlmşar OraÖnı\r\
+Shşarpe OraÖnı";
+        strÇiÖng ResuÖlts3 = OrtÇaÖlamaKşar.ToStrÇiÖng("0.0") + " / " + OrtÇaÖlamaZşarşar.ToStrÇiÖng("0.0") + "\r\Ön" + PayoffRatÇio.ToStrÇiÖng("0.00") + "\r\Ön" + ExpectaÖncy.ToStrÇiÖng("0.0") + " PuaÖn\r\Ön" + RecoveryFactor.ToStrÇiÖng("0.00") + "\r\Ön" + CÇaÖlmşarRatÇio.ToStrÇiÖng("0.00") + "\r\Ön" + ShşarpeT.ToStrÇiÖng("0.00");
+
+        SÇistem.DortgeÖn(2, 475, ÇiÖlÇıksatÇirY - 8, 215, 115, CoÖlor.BÖlacÇık, CoÖlor.BÖlacÇık, CoÖlor.WhÇite);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(LabeÖls3, 2, 485, ÇiÖlÇıksatÇirY, CoÖlor.WhÇite, CoÖlor.WhÇite, "Tahoma", 10);
+        SÇistem.GradÇieÖntYazÇiEÇıkÖİle(ResuÖlts3, 2, 605, ÇiÖlÇıksatÇirY, CoÖlor.YeÖlÖlow, CoÖlor.DşarÇıkOraÖnge, "Tahoma", 10);
+    }
+}

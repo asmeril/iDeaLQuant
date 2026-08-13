@@ -1,0 +1,144 @@
+--- S8_S9_Gap_Strateji.txt
+
++++ S8_Gap_Strateji.txt
+
+@@ -1,5 +1,5 @@
+
+ ﻿// ===============================================================================================
+-// STRATEJİ: S8 GAP REVERSAL + S9 GAP MOMENTUM (Görsel Backtest Kodu)
++// STRATEJİ: S8 GAP REVERSAL (Görsel Backtest Kodu)
+ // ===============================================================================================
+ // Periyot   : 1 Dakika
+ // Vade Tipi : ENDEKS
+@@ -23,8 +23,6 @@
+
+ double MaxGapPuan   = 150.0;    // Ortak Denge
+ double S8_Izleyen_Stop_Yuzde = 1.5; // S8 Fiyat zirveden %1.5 duserse stop
+ double S8_Kar_Al_Yuzde = 1.0;       // S8 Fiyat %1.0 kar yaparsa direkt cikar
+-double S9_Izleyen_Stop_Yuzde = 1.20; // S9 Fiyat zirveden %1.2 duserse stop
+-double S9_Kar_Al_Yuzde = 0.0;        // 0 = Sadece Izleyen Stop calissin
+ int OrBars          = 1;        // OR bar s resi (09:30 bar )
+ 
+ // --- DURUM DEĞİŞKENLERİ  ---
+@@ -35,9 +33,7 @@
+
+ double t2_lvl = 0;
+ bool t1_hit = false;
+ double extreme_price_s8 = 0;
+-double extreme_price_s9 = 0;
+ bool is_s8 = false;
+-bool is_s9 = false;
+ 
+ bool gap_active = false;
+ int gap_dir = 0;
+@@ -113,28 +109,18 @@
+
+     {
+         int or_end_bar = or_start_bar + OrBars;
+         bool s8_zaman_ok = (i - or_end_bar) < 120; // S8 zaman limiti (~11:30)
+-        bool s9_zaman_ok = (i - or_end_bar) < 330; // S9 zaman limiti (~15:00)
+-        double or_range = or_high - or_low;
++                double or_range = or_high - or_low;
+         
+         if (gap_dir == 1) // YUKARI GAP
+         {
+             // S8 Ters Yön Kırılım (Short)
+             if (s8_zaman_ok && L[i] <= or_low && H[i] > gap_fill_lvl) {
+                 in_pos = -1;
+-                is_s8 = true; is_s9 = false;
++                is_s8 = true;
+                 entry_price = Math.Min(O[i], or_low);
+                 extreme_price_s8 = entry_price;
+                 GercekFiyat[i] = (float)entry_price;
+                 Sinyal = "S";
+-            }
+-            // S9 Aynı Yön Kırılım (Long)
+-            else if (s9_zaman_ok && or_range >= 1.0 && H[i] >= or_high) {
+-                in_pos = 1;
+-                is_s9 = true; is_s8 = false;
+-                entry_price = Math.Max(O[i], or_high);
+-                extreme_price_s9 = entry_price;
+-                GercekFiyat[i] = (float)entry_price;
+-                Sinyal = "A";
+             }
+         }
+         else if (gap_dir == -1) // AŞAĞI GAP
+@@ -142,20 +128,11 @@
+
+             // S8 Ters Yön Kırılım (Long)
+             if (s8_zaman_ok && H[i] >= or_high && L[i] < gap_fill_lvl) {
+                 in_pos = 1;
+-                is_s8 = true; is_s9 = false;
++                is_s8 = true;
+                 entry_price = Math.Max(O[i], or_high);
+                 extreme_price_s8 = entry_price;
+                 GercekFiyat[i] = (float)entry_price;
+                 Sinyal = "A";
+-            }
+-            // S9 Aynı Yön Kırılım (Short)
+-            else if (s9_zaman_ok && or_range >= 1.0 && L[i] <= or_low) {
+-                in_pos = -1;
+-                is_s9 = true; is_s8 = false;
+-                entry_price = Math.Min(O[i], or_low);
+-                extreme_price_s9 = entry_price;
+-                GercekFiyat[i] = (float)entry_price;
+-                Sinyal = "S";
+             }
+         }
+     }
+@@ -183,26 +160,6 @@
+
+                 GercekFiyat[i] = (float)(kar_al_hit ? tp_lvl : (stop_hit ? sl_lvl : C[i]));
+             }
+         }
+-        else if (is_s9) {
+-            if (H[i] > extreme_price_s9) extreme_price_s9 = H[i];
+-            
+-            double tp_lvl = entry_price * (1 + S9_Kar_Al_Yuzde / 100.0);
+-            double sl_lvl = extreme_price_s9 * (1 - S9_Izleyen_Stop_Yuzde / 100.0);
+-            
+-            bool kar_al_hit = (S9_Kar_Al_Yuzde > 0) && (H[i] >= tp_lvl);
+-            bool stop_hit = (S9_Izleyen_Stop_Yuzde > 0) && (L[i] <= sl_lvl);
+-            
+-            bool zaman_doldu = (i - (or_start_bar + OrBars)) >= 330;
+-            bool aksam_kapa = is_aksam && th >= (22 + 50.0 / 60.0);
+-            bool gun_sonu = th >= (18 + 8.0 / 60.0) && th <= (18 + 10.0 / 60.0);
+-            
+-            if (kar_al_hit || stop_hit || zaman_doldu || aksam_kapa || gun_sonu) {
+-                Sinyal = "F";
+-                in_pos = 0;
+-                gap_active = false;
+-                GercekFiyat[i] = (float)(kar_al_hit ? tp_lvl : (stop_hit ? sl_lvl : C[i]));
+-            }
+-        }
+     }
+     else if (in_pos == -1 && Sinyal == "") 
+     {
+@@ -216,26 +173,6 @@
+
+             bool stop_hit = (S8_Izleyen_Stop_Yuzde > 0) && (H[i] >= sl_lvl);
+             
+             bool zaman_doldu = (i - (or_start_bar + OrBars)) >= 120;
+-            bool aksam_kapa = is_aksam && th >= (22 + 50.0 / 60.0);
+-            bool gun_sonu = th >= (18 + 8.0 / 60.0) && th <= (18 + 10.0 / 60.0);
+-            
+-            if (kar_al_hit || stop_hit || zaman_doldu || aksam_kapa || gun_sonu) {
+-                Sinyal = "F";
+-                in_pos = 0;
+-                gap_active = false;
+-                GercekFiyat[i] = (float)(kar_al_hit ? tp_lvl : (stop_hit ? sl_lvl : C[i]));
+-            }
+-        }
+-        else if (is_s9) {
+-            if (extreme_price_s9 == 0 || L[i] < extreme_price_s9) extreme_price_s9 = L[i];
+-            
+-            double tp_lvl = entry_price * (1 - S9_Kar_Al_Yuzde / 100.0);
+-            double sl_lvl = extreme_price_s9 * (1 + S9_Izleyen_Stop_Yuzde / 100.0);
+-            
+-            bool kar_al_hit = (S9_Kar_Al_Yuzde > 0) && (L[i] <= tp_lvl);
+-            bool stop_hit = (S9_Izleyen_Stop_Yuzde > 0) && (H[i] >= sl_lvl);
+-            
+-            bool zaman_doldu = (i - (or_start_bar + OrBars)) >= 330;
+             bool aksam_kapa = is_aksam && th >= (22 + 50.0 / 60.0);
+             bool gun_sonu = th >= (18 + 8.0 / 60.0) && th <= (18 + 10.0 / 60.0);
+             
