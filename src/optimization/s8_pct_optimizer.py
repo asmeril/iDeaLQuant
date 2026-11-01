@@ -8,7 +8,7 @@ import datetime
 # ==============================================================================
 
 RECORD_SIZE = 32
-EPOCH_MIN_UTC = datetime.datetime(1988, 2, 15, 21, 0, 0)
+EPOCH_MIN_UTC = datetime.datetime(1988, 2, 9, 21, 0, 0)
 TRT_OFFSET = datetime.timedelta(hours=3)
 
 def ts_to_datetime_trt(ts_raw: int) -> datetime.datetime:

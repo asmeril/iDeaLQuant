@@ -37,12 +37,12 @@ ENCODING = "cp1254"
 # DİKKAT: Canlı veri akışı ile indirilen ChartData dosyalarının epoch'u FARKLI!
 # Canlı veri: 1988-02-18 21:05 UTC (eski referans, artık kullanılmıyor)
 # ChartData indirme: 1988-02-16 00:00 TRT (doğrulanmış — X030-T son bar = Cuma 22:59)
-EPOCH_MIN_UTC = datetime.datetime(1988, 2, 15, 21, 0, 0)  # UTC → +3h = 1988-02-16 00:00 TRT
+EPOCH_MIN_UTC = datetime.datetime(1988, 2, 9, 21, 0, 0)  # UTC → +3h = 1988-02-16 00:00 TRT
 TRT_OFFSET = datetime.timedelta(hours=3)
 
 # Günlük (G) dosyası için referans: ts=778089 = 2026-04-09
-DAILY_REF_DATE = datetime.date(2026, 4, 9)
-DAILY_REF_TS = 778089
+DAILY_REF_DATE = datetime.date(2026, 10, 30)
+DAILY_REF_TS = 778302
 
 # Sembol listesi — TeFo.txt'den dinamik yüklenir
 # Format: her satır "IMKBH'SEMBOL" veya "VIP'VIP-SEMBOL"

@@ -19,11 +19,23 @@ def main():
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
     
     # 2. Önceden kalıcı build klasörlerini temizle
-    print("Temizleme islami basliyor (build/ ve dist/)...")
-    if os.path.exists("build"):
-        shutil.rmtree("build")
-    if os.path.exists("dist"):
-        shutil.rmtree("dist")
+    print("Temizleme islemi basliyor (build/ ve dist/)...")
+    def _safe_remove(folder):
+        if os.path.exists(folder):
+            import stat
+            for root, dirs, files in os.walk(folder):
+                for f in files:
+                    try:
+                        os.chmod(os.path.join(root, f), stat.S_IWRITE)
+                    except Exception:
+                        pass
+            try:
+                shutil.rmtree(folder)
+            except Exception as e:
+                print(f"Uyari: {folder} tam silinemedi ({e}), PyInstaller --clean ile devam ediliyor.")
+
+    _safe_remove("build")
+    _safe_remove("dist")
     
     # 3. PyInstaller komut argümanları
     main_script = os.path.join("src", "ui", "main.py")

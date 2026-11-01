@@ -40,7 +40,16 @@ import pandas as pd
 # ChartData dosyalarını indirme ile oluşturduğunuzda epoch 1988-02-16 00:00'dır.
 # Bu fark, iDeal uygulamasının veri indirme mekanizmasından kaynaklanır.
 # =====================================================================
-BASE_DATE = datetime(1988, 2, 16, 0, 0)
+# DOĞRULANMIŞ (30.10.2026):
+#   X030-T son bar: ts=20365859 → 2026-10-30 22:59 (Cuma akşam seansı sonu) ✓
+#   Hafta içi günler ve hafta sonları (Cuma 22:59 -> Pazartesi 09:25) tam uyumlu ✓
+#   28 Ekim 12:39 yarım gün kapanışı ve 29 Ekim Cumhuriyet Bayramı tatili tam uyumlu ✓
+#   Seans saatleri (09:25, 18:09, 19:00, 22:59) hepsi doğru ✓
+BASE_DATE = datetime(1988, 2, 10, 0, 0)
+
+# Günlük (.G) dosyaları için referans tarihi ve timestamp
+DAILY_REF_DATE = datetime(2026, 10, 30).date()
+DAILY_REF_TS = 778302
 
 
 
@@ -84,6 +93,9 @@ def read_ideal_data(file_path: str) -> pd.DataFrame:
         data = f.read()
     
     num_records = len(data) // RECORD_SIZE
+    ext = path.suffix.upper()
+    is_60 = (ext == '.60')
+    is_daily = (ext == '.G')
     
     for i in range(num_records):
         offset = i * RECORD_SIZE
@@ -96,8 +108,13 @@ def read_ideal_data(file_path: str) -> pd.DataFrame:
             # Little-endian: int32, float32 x6, int32
             time_minutes, o, h, l, c, volume, amount, flags = struct.unpack('<i6fi', chunk)
             
-            # Calculate datetime from minutes since base date
-            bar_datetime = BASE_DATE + timedelta(minutes=time_minutes)
+            if is_60:
+                bar_datetime = BASE_DATE + timedelta(hours=time_minutes)
+            elif is_daily:
+                d = DAILY_REF_DATE + timedelta(days=time_minutes - DAILY_REF_TS)
+                bar_datetime = datetime(d.year, d.month, d.day, 0, 0, 0)
+            else:
+                bar_datetime = BASE_DATE + timedelta(minutes=time_minutes)
             
             records.append({
                 'DateTime': bar_datetime,
@@ -344,9 +361,15 @@ def write_ideal_data(df: pd.DataFrame, file_path: str) -> int:
     with open(path, 'wb') as f:
         for _, row in df.iterrows():
             dt = pd.Timestamp(row['DateTime'])
-            # Dakika farkı: BASE_DATE'den itibaren
-            delta = dt - pd.Timestamp(BASE_DATE)
-            time_minutes = int(delta.total_seconds() / 60)
+            ext = path.suffix.upper()
+            if ext == '.60':
+                delta = dt - pd.Timestamp(BASE_DATE)
+                time_minutes = int(delta.total_seconds() / 3600)
+            elif ext == '.G':
+                time_minutes = DAILY_REF_TS + (dt.date() - DAILY_REF_DATE).days
+            else:
+                delta = dt - pd.Timestamp(BASE_DATE)
+                time_minutes = int(delta.total_seconds() / 60)
             
             o = float(row['Open'])
             h = float(row['High'])
