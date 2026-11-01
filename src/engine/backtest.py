@@ -44,7 +44,7 @@ class Trade:
             self.pnl_pct = (price / self.entry_price - 1) * 100
         else:  # SHORT
             self.pnl = self.entry_price - price
-            self.pnl_pct = (self.entry_price / price - 1) * 100
+            self.pnl_pct = (self.entry_price - price) / self.entry_price * 100
 
 
 @dataclass

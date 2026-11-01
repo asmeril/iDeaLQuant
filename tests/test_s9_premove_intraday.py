@@ -11,7 +11,7 @@ S9 PreMove Intraday Strategy — Unit Testler
   - C# formül karşılaştırmalı sayısal testler
 """
 import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pytest
 import numpy as np

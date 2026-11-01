@@ -798,6 +798,7 @@ class OptimizationWorker(QThread):
         self.narrowed_ranges = narrowed_ranges  # Cascade icin dar araliklar
         self.do_oos = do_oos
         self.train_pct = train_pct
+        self.test_offset = 0
         self.commission = 0.0
         self.train_pct = train_pct
         self.commission = 0.0
@@ -856,11 +857,18 @@ class OptimizationWorker(QThread):
         if self.do_oos and self.data is not None:
             split_idx = int(len(self.data) * (self.train_pct / 100.0))
             train_data = self.data.iloc[:split_idx].copy()
-            test_data = self.data.iloc[split_idx:].copy()
+            
+            # [FIX] Warmup Koruması: Test verisine split öncesi 250 bar ekle (indikatör ısınması için)
+            warmup = 250
+            test_slice_start = max(0, split_idx - warmup)
+            self.test_offset = split_idx - test_slice_start
+            test_data = self.data.iloc[test_slice_start:].copy()
             
             # Optimizer sadece train verisini görsün
             self.data = train_data
-            self.progress.emit(0, f"Veri bölündü: %{self.train_pct} Egitim ({len(train_data)} bar), %{100-self.train_pct} Test ({len(test_data)} bar)", "", "--:--")
+            self.progress.emit(0, f"Veri bölündü: %{self.train_pct} Egitim ({len(train_data)} bar), %{100-self.train_pct} Test ({len(test_data) - self.test_offset} bar)", "", "--:--")
+        else:
+            self.test_offset = 0
         
         self.test_data = test_data
         
@@ -2047,7 +2055,7 @@ class OptimizationWorker(QThread):
                 except: pass
 
             net, trades, pf, dd, sharpe = self._simple_backtest(
-                test_cache.closes, signals, ex_long, ex_short, trading_days=trading_days
+                test_cache.closes, signals, ex_long, ex_short, trading_days=trading_days, start_idx=self.test_offset
             )
             
             return {
@@ -2121,7 +2129,7 @@ class OptimizationWorker(QThread):
             print(f"S4 Validasyon hatasi: {e}")
             return {}
 
-    def _simple_backtest(self, closes, signals, ex_long, ex_short, trading_days: float = 252.0):
+    def _simple_backtest(self, closes, signals, ex_long, ex_short, trading_days: float = 252.0, start_idx: int = 0):
         """Basit backtest ve Sharpe hesabi"""
         pos, entry_price = 0, 0.0
         gross_profit, gross_loss, trades = 0.0, 0.0, 0
@@ -2132,7 +2140,7 @@ class OptimizationWorker(QThread):
         current_equity = 0.0
         max_dd = 0.0
         
-        for i in range(len(closes)):
+        for i in range(start_idx, len(closes)):
             pnl = 0.0
             
             # Exit

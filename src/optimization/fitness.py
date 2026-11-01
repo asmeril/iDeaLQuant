@@ -150,14 +150,16 @@ def quick_fitness(
         penalty_factor = math.exp((dd_ratio - 0.25) * 10) - 1
         dd_score = max(0, 25 - penalty_factor * 20)
         
-    # İşlem başı kâr
+    # İşlem başı kâr (Sermaye ölçekli kâr - 10000 sermayede 30 puan = %0.30)
+    cap_ref = initial_capital if initial_capital > 0 else 10000.0
     avg_pnl = adj_profit / trades
-    if avg_pnl >= 30:
+    avg_pnl_scaled = (avg_pnl / cap_ref) * 10000.0  # initial_capital=10000 iken birebir aynıdır
+    if avg_pnl_scaled >= 30:
         avg_score = 50
-    elif avg_pnl >= 15:
-        avg_score = 25 + (avg_pnl - 15) / 15 * 25  # 25-50 arası
-    elif avg_pnl >= 5:
-        avg_score = (avg_pnl - 5) / 10 * 25         # 0-25 arası
+    elif avg_pnl_scaled >= 15:
+        avg_score = 25 + (avg_pnl_scaled - 15) / 15 * 25  # 25-50 arası
+    elif avg_pnl_scaled >= 5:
+        avg_score = (avg_pnl_scaled - 5) / 10 * 25         # 0-25 arası
     else:
         avg_score = 0
     
@@ -208,14 +210,17 @@ def quick_fitness(
             oos_multiplier = 0.1
         else:
             pf_degradation = test_pf / pf if pf > 0 else 1.0
-            profit_degradation = test_net_profit / adj_profit if adj_profit > 0 else 1.0
+            # [FIX] Zaman Normalizasyonu: Test periyodu (%30) Train periyodundan (%70) daha kısadır.
+            # Ham kârları doğrudan bölmek yerine (30/70 = 0.43 baz), birim zaman kâr oranını karşılaştırıyoruz:
+            expected_time_ratio = 30.0 / 70.0  # Varsayılan %70 Train / %30 Test oranı
+            profit_degradation = (test_net_profit / adj_profit) / expected_time_ratio if adj_profit > 0 else 1.0
             
             if pf_degradation < 0.5 or profit_degradation < 0.3:
                 oos_multiplier = 0.4
-            elif pf_degradation < 0.8:
+            elif pf_degradation < 0.8 or profit_degradation < 0.7:
                 oos_multiplier = 0.8  # Hafif ceza
-            elif pf_degradation > 1.0 and profit_degradation > 1.0:
-                oos_multiplier = 1.2  # OOS'de daha iyi performans (Nadir)
+            elif pf_degradation >= 1.0 and profit_degradation >= 1.0:
+                oos_multiplier = 1.2  # OOS'de en az Train kadar veya daha iyi performans
                 
     # =========================================================================
     # BİRLEŞİK SKOR (4 faktör eşit ağırlıklı)

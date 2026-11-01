@@ -308,7 +308,16 @@ def fast_backtest_strategy8(
             ters = (closes[i] < or_low) and (bars_in_pos > 3)
 
             if stop_hit or target_hit or zaman_doldu or aksam_kapa or ters:
-                trade_pnl = closes[i] - entry_price
+                # [FIX] Gerçekçi dolum fiyatı
+                if stop_hit and target_hit:
+                    exit_p = min(opens[i], stop_level)
+                elif stop_hit:
+                    exit_p = min(opens[i], stop_level)
+                elif target_hit:
+                    exit_p = max(opens[i], gap_fill_lvl)
+                else:
+                    exit_p = closes[i]
+                trade_pnl = exit_p - entry_price
                 current_equity += trade_pnl
                 if trade_pnl > 0.0:
                     total_profit += trade_pnl
@@ -337,7 +346,16 @@ def fast_backtest_strategy8(
             ters = (closes[i] > or_high) and (bars_in_pos > 3)
 
             if stop_hit or target_hit or zaman_doldu or aksam_kapa or ters:
-                trade_pnl = entry_price - closes[i]
+                # [FIX] Gerçekçi dolum fiyatı
+                if stop_hit and target_hit:
+                    exit_p = max(opens[i], stop_level)
+                elif stop_hit:
+                    exit_p = max(opens[i], stop_level)
+                elif target_hit:
+                    exit_p = min(opens[i], gap_fill_lvl)
+                else:
+                    exit_p = closes[i]
+                trade_pnl = entry_price - exit_p
                 current_equity += trade_pnl
                 if trade_pnl > 0.0:
                     total_profit += trade_pnl

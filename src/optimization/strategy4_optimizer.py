@@ -466,9 +466,7 @@ def fast_backtest_strategy4(closes,
                 sum_pnl_sq += pnl * pnl
                 n_closed += 1
                 pos = 0 # Flat
-                # SonYon remains 1? In user code exit logic isn't explicit but normally exits don't change SonYon direction flag in Ideal, just Sinyal="F"
-                # But user code loop doesn't have "F" logic shown. Assuming "Always In" unless specialized exit.
-                # Adding Flat for consistency with optimization goals.
+                son_yon = 0 # [FIX] Reset son_yon to Flat (0) so future breakouts can re-enter
                 
         elif pos == -1:
             if closes[i] < extreme_price: extreme_price = closes[i]
@@ -487,7 +485,8 @@ def fast_backtest_strategy4(closes,
                 sum_pnl += pnl
                 sum_pnl_sq += pnl * pnl
                 n_closed += 1
-                pos = 0
+                pos = 0 # Flat
+                son_yon = 0 # [FIX] Reset son_yon to Flat (0) so future breakouts can re-enter
                 
         # Update DD
         if current_equity > peak_equity: peak_equity = current_equity

@@ -1,39 +1,52 @@
+# Python cache and virtual environments
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 .Python
 env/
 venv/
-.env
+.venv/
+
+# Tooling and local IDE state
 .vscode/
 .idea/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local databases and runtime data
 *.db
-*.sqlite3
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.env
-.vscode/
-.idea/
-*.db
+*.sqlite
 *.sqlite3
 /data/
 /TARAMA_LOG/
 debug_*.txt
-
 src/crash_log.txt
+
+# Build artifacts
 build/
 dist/
 *.spec
+*.egg-info/
 
+# Logs and temporary files
+*.log
+*.tmp
+
+# Secrets and local credentials
+.env
 .env.*
 !.env.example
 Config.json
 twitter_cookies.json
 twitter_cookies*.json
 tradingview_cookies*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local scripts and decompile cache
+run_idealquant.bat
+*.lscache
+**/obj/

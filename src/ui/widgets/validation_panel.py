@@ -59,19 +59,21 @@ class MonteCarloWorker(QThread):
         simulations = []
         
         for i in range(self.n_simulations):
-            # İşlemleri rastgele sırala
-            shuffled = np.random.permutation(trades)
+            # [FIX] Bootstrap Resampling with Replacement (I.I.D. Monte Carlo)
+            # Permutation sadece işlem sırasını değiştirir ve kâr toplamını sabit bırakır (Std=0 olur).
+            # Gerçekçi güven aralığı (%5-%95) ve kârlılık olasılığı için replace=True şarttır.
+            sample = np.random.choice(trades, size=n, replace=True)
             
             # Equity curve
-            equity = np.cumsum(shuffled)
+            equity = np.cumsum(sample)
             
             # Max drawdown hesapla
             peak = np.maximum.accumulate(equity)
             dd = peak - equity
-            max_dd = np.max(dd)
+            max_dd = float(np.max(dd))
             
-            # Final equity
-            final_equity = equity[-1]
+            # Final equity (her simülasyonda değişken kâr)
+            final_equity = float(equity[-1])
             
             simulations.append({
                 'final_equity': final_equity,
@@ -170,33 +172,42 @@ class WFAWorker(QThread):
                 
                 split_idx = w_start + int(w_len * self.split_ratio)
                 
-                # === [FIX] LOOK-AHEAD BIAS: Her pencere kendi izole cache'i ile sinyal üretir ===
-                # IS (eğitim) penceresi: yalnızca [w_start:split_idx] bar'larla çalışan cache
+                # === [FIX] ZERO LOOK-AHEAD & ZERO COLD-START: Warmup korumalı izole cache ===
+                warmup = 250
                 if original_df is not None:
-                    # DataFrame slice — indikatorler sadece bu aralıktan hesaplanır
-                    is_df_slice = original_df.iloc[w_start:split_idx].reset_index(drop=True)
-                    oos_df_slice = original_df.iloc[split_idx:w_end].reset_index(drop=True)
+                    # IS dilimi: Geçmiş warmup barları eklenir, ancak test w_start'tan başlar
+                    is_slice_start = max(0, w_start - warmup)
+                    is_offset = w_start - is_slice_start
+                    is_df_slice = original_df.iloc[is_slice_start:split_idx].reset_index(drop=True)
+                    
+                    # OOS dilimi: Split öncesi warmup barları eklenir, ancak test split_idx'ten başlar
+                    oos_slice_start = max(0, split_idx - warmup)
+                    oos_offset = split_idx - oos_slice_start
+                    oos_df_slice = original_df.iloc[oos_slice_start:w_end].reset_index(drop=True)
+                    
                     is_cache = IndicatorCache(is_df_slice)
                     oos_cache = IndicatorCache(oos_df_slice)
                 else:
-                    # Fallback: eski davranış (sliced signals)
                     is_cache = None
                     oos_cache = None
+                    is_offset = 0
+                    oos_offset = 0
                 
                 if is_cache is not None:
-                    # İzole sinyal hesabı — look-ahead yok
                     is_strategy = self._make_strategy(is_cache)
                     is_sigs, is_ex_l, is_ex_s = is_strategy.generate_all_signals()
                     is_pnl, is_trades, is_pf, _, is_gp, is_gl = backtest_with_summary(
                         is_cache.closes, is_sigs, is_ex_l, is_ex_s,
-                        self.costs['commission'], self.costs['slippage']
+                        self.costs['commission'], self.costs['slippage'],
+                        start_idx=is_offset
                     )
                     
                     oos_strategy = self._make_strategy(oos_cache)
                     oos_sigs, oos_ex_l, oos_ex_s = oos_strategy.generate_all_signals()
                     oos_pnl, oos_trades, oos_pf, _, oos_gp, oos_gl = backtest_with_summary(
                         oos_cache.closes, oos_sigs, oos_ex_l, oos_ex_s,
-                        self.costs['commission'], self.costs['slippage']
+                        self.costs['commission'], self.costs['slippage'],
+                        start_idx=oos_offset
                     )
                 else:
                     # Fallback: eski yöntem (tüm veriden sinyaller)
@@ -218,10 +229,12 @@ class WFAWorker(QThread):
                 oos_bars = w_end - split_idx
                 is_daily = is_pnl / max(1, is_bars / 500)
                 oos_daily = oos_pnl / max(1, oos_bars / 500)
-                w_eff = (oos_daily / is_daily * 100) if is_daily > 0 else 0
+                w_eff = (oos_daily / is_daily * 100) if (is_daily > 0 and oos_daily > 0) else 0.0
+                w_eff = min(200.0, max(0.0, w_eff)) # Outlier patlamalarını engelle
                 
                 window_results.append({
                     'window': w + 1,
+                    'is_bars': is_bars, 'oos_bars': oos_bars,
                     'is_pnl': is_pnl, 'is_trades': is_trades, 'is_pf': is_pf,
                     'oos_pnl': oos_pnl, 'oos_trades': oos_trades, 'oos_pf': oos_pf,
                     'efficiency': w_eff
@@ -244,13 +257,21 @@ class WFAWorker(QThread):
             total_is_pf = (total_is_gross_profit / total_is_gross_loss) if total_is_gross_loss > 0 else 9.9
             total_oos_pf = (total_oos_gross_profit / total_oos_gross_loss) if total_oos_gross_loss > 0 else 9.9
             
-            # Toplam efficiency
-            avg_efficiency = sum(wr['efficiency'] for wr in window_results) / len(window_results) if window_results else 0
+            # Toplam efficiency - Pardo Kümülatif WFE Formülü (Aritmetik ortalama yerine toplam oran)
+            total_is_bars = sum(wr.get('is_bars', 1) for wr in window_results)
+            total_oos_bars = sum(wr.get('oos_bars', 1) for wr in window_results)
+            total_is_daily = total_is_pnl / max(1, total_is_bars / 500)
+            total_oos_daily = total_oos_pnl / max(1, total_oos_bars / 500)
+            
+            if total_is_daily > 0 and total_oos_daily > 0:
+                aggregate_efficiency = min(200.0, (total_oos_daily / total_is_daily) * 100)
+            else:
+                aggregate_efficiency = 0.0
             
             self.result.emit({
                 'is_pnl': total_is_pnl, 'is_trades': total_is_trades, 'is_pf': round(total_is_pf, 2),
                 'oos_pnl': total_oos_pnl, 'oos_trades': total_oos_trades, 'oos_pf': round(total_oos_pf, 2),
-                'efficiency': avg_efficiency,
+                'efficiency': aggregate_efficiency,
                 'n_windows': self.n_windows,
                 'window_results': window_results,
                 'look_ahead_fixed': original_df is not None  # Hangi modda çalıştığını raporla
@@ -261,11 +282,11 @@ class WFAWorker(QThread):
             self.error.emit(f"{e}\n{traceback.format_exc()}")
 
 
-def backtest_with_summary(closes, signals, ex_long, ex_short, comm, slip):
+def backtest_with_summary(closes, signals, ex_long, ex_short, comm, slip, start_idx=0):
     """Basit özet backtest helper - (net, trades, pf, dd, gross_profit, gross_loss) döndür"""
     pos, entry_price, gross_profit, gross_loss, trades = 0, 0.0, 0.0, 0.0, 0
     cost = comm + slip
-    for i in range(len(closes)):
+    for i in range(start_idx, len(closes)):
         if pos == 1 and ex_long[i]:
             pnl = (closes[i] - entry_price) - cost
             if pnl > 0: gross_profit += pnl
@@ -436,25 +457,33 @@ class BatchAnalysisWorker(QThread):
             oos_days = max(1, (n - split) / 500)
             return max(0, ((oos_pnl / oos_days) / (is_pnl / is_days)) * 100)
 
-        # [FIX] Look-ahead bias: IS ve OOS için izole cache kullan
+        # [FIX] Look-ahead bias YOK + Warmup korumalı izole cache
         original_df = getattr(self.cache, 'df', None)
         if original_df is None:
             original_df = getattr(self.cache, 'data', None)
         if original_df is not None:
+            warmup = 250
+            oos_start = split
+            oos_slice_start = max(0, oos_start - warmup)
+            oos_offset = oos_start - oos_slice_start
+            
             is_df = original_df.iloc[:split].reset_index(drop=True)
-            oos_df = original_df.iloc[split:].reset_index(drop=True)
+            oos_df = original_df.iloc[oos_slice_start:].reset_index(drop=True)
+            
             is_cache = IndicatorCache(is_df)
             oos_cache = IndicatorCache(oos_df)
             
             is_s = self._make_strategy(is_cache, idx, params)
             is_sig, is_ex_l, is_ex_s = is_s.generate_all_signals()
             is_pnl = backtest_with_summary(is_cache.closes, is_sig, is_ex_l, is_ex_s,
-                                          self.process_costs['commission'], self.process_costs['slippage'])[0]
+                                          self.process_costs['commission'], self.process_costs['slippage'],
+                                          start_idx=0)[0]
             
             oos_s = self._make_strategy(oos_cache, idx, params)
             oos_sig, oos_ex_l, oos_ex_s = oos_s.generate_all_signals()
             oos_pnl = backtest_with_summary(oos_cache.closes, oos_sig, oos_ex_l, oos_ex_s,
-                                           self.process_costs['commission'], self.process_costs['slippage'])[0]
+                                           self.process_costs['commission'], self.process_costs['slippage'],
+                                           start_idx=oos_offset)[0]
         else:
             # Fallback: eski yöntem (look-ahead mevcut ama veri kaynaği yok)
             s = self._make_strategy(self.cache, idx, params)
@@ -613,11 +642,13 @@ class BatchAnalysisWorker(QThread):
         initial_capital = 10000.0 # Varsayılan
         
         for _ in range(n_sim):
-            # İşlemleri karıştır
-            shuffled_trades = random.sample(trades_pnl, len(trades_pnl))
+            # [FIX] Bootstrap Resampling with Replacement (random.choices)
+            # random.sample yerine koymadan karıştırdığı için toplam kâr hep aynı kalıyordu (hep %100 veya %0).
+            # random.choices ile gerçek bootstrap simülasyonu yapılır.
+            bootstrap_trades = random.choices(trades_pnl, k=len(trades_pnl))
             
             # Kümülatif kar
-            net_profit = sum(shuffled_trades)
+            net_profit = sum(bootstrap_trades)
             
             # Max DD kontrolü (Opsiyonel: Ruin olasılığı için)
             # equity = np.cumsum(shuffled_trades)
