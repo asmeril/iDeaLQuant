@@ -10,13 +10,20 @@ def main():
     project_root = os.path.dirname(os.path.abspath(__file__))
     os.chdir(project_root)
     
-    # 1. PyInstaller kurulu mu kontrolü
+    # 1. PyInstaller ve Optuna kurulu mu kontrolü
     try:
         import PyInstaller
         print(f"PyInstaller version found: {PyInstaller.__version__}")
     except ImportError:
         print("PyInstaller not found. Installing...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyinstaller"])
+
+    try:
+        import optuna
+        print(f"Optuna version found: {optuna.__version__}")
+    except ImportError:
+        print("Optuna not found. Installing...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "optuna"])
     
     # 2. Önceden kalıcı build klasörlerini temizle
     print("Temizleme islemi basliyor (build/ ve dist/)...")
@@ -30,9 +37,16 @@ def main():
                     except Exception:
                         pass
             try:
-                shutil.rmtree(folder)
+                temp_name = f"{folder}_old_{os.getpid()}"
+                if os.path.exists(temp_name):
+                    shutil.rmtree(temp_name, ignore_errors=True)
+                os.rename(folder, temp_name)
+                shutil.rmtree(temp_name, ignore_errors=True)
             except Exception as e:
-                print(f"Uyari: {folder} tam silinemedi ({e}), PyInstaller --clean ile devam ediliyor.")
+                try:
+                    shutil.rmtree(folder, ignore_errors=True)
+                except Exception:
+                    pass
 
     _safe_remove("build")
     _safe_remove("dist")
@@ -45,7 +59,6 @@ def main():
         "--name=IdealQuant_v5.0",
         "--onefile",           # Tek bir EXE haline getir
         "--noconfirm",         # Sormadan uzerine yaz
-        "--clean",
         "--windowed",          # Konsol penceresi acma (Sadece arayuz)
         # Core
         "--hidden-import=multiprocessing.pool",
@@ -55,6 +68,7 @@ def main():
         "--hidden-import=numba.core",
         "--hidden-import=numba.typed",
         "--hidden-import=optuna",
+        "--collect-all=optuna",
         "--hidden-import=scipy.optimize",
         # Strategies
         "--hidden-import=src.strategies",
