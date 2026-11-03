@@ -15,6 +15,7 @@ from PySide6.QtGui import QFont
 from typing import Dict, Any
 
 from src.core.database import db
+from src.export.idealdata_exporter import IdealDataExporter
 
 
 class ExportPanel(QWidget):
@@ -369,7 +370,7 @@ class ExportPanel(QWidget):
             s2_params = self.final_params.get(1, {})
             
             # Dosya adı
-            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "TOTT_HOTT", "DeepScalp", "GapReversal", "GapMomentum", "Combined"]
+            strategy_names = ["Gatekeeper", "ARS_Trend_v2", "Paradise", "TOMA_Momentum", "Oliver_Kell", "TOTT_HOTT", "DeepScalp", "GapReversal", "Combined"]
             filename = f"{symbol}_{period}DK_{strategy_names[strategy_idx]}.cs"
             filepath = output_dir / filename
             

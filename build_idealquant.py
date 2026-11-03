@@ -104,6 +104,7 @@ def main():
         "--hidden-import=src.indicators",
         "--hidden-import=src.core",
         "--hidden-import=src.export",
+        "--hidden-import=src.export.idealdata_exporter",
         f"--add-data=src/ui/assets{os.pathsep}src/ui/assets",
         f"--add-data=src/ui/styles{os.pathsep}src/ui/styles",
         f"--add-data=presets{os.pathsep}presets", 

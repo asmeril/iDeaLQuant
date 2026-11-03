@@ -231,7 +231,7 @@ Sistem.GradientYaziEkle(Labelsx, 1, 15, ilksatirYy, Color.White, Color.White, "T
 Sistem.GradientYaziEkle(Resultsx, 1, 60, ilksatirYy, Color.Yellow, Color.DarkOrange, "Tahoma", 8);
 //-----------------------------------------------
 
-if (Sistem.Parametreler.Count > 3 && Sistem.Parametreler[3] == "X")
+if (DetayPerformans || (Sistem.Parametreler.Count > 3 && Sistem.Parametreler[3] == "X"))
 {
     int ilksatirY = 33;
     var Sure = ((DateTime.Now - dateBaslangicTarih).TotalDays / 30.4);
@@ -1839,6 +1839,46 @@ string YON = "CIFT";
             mode_label = "VIOP Endeks Vadeli — Çift Yön"
         
         is_spot = (vade_tipi == "SPOT")
+        if is_spot:
+            s5_short_giris = ""
+            s5_pozisyon_comment = ""
+            s5_reverse_a = ""
+            s5_short_entry = ""
+            s5_short_exit = ""
+        else:
+            s5_short_giris = '''else if (shortTrend && shortBreak && shortADX && gucluHacim)
+    {
+        Sistem.Yon[i] = "S"; // SAT
+    }'''
+            s5_pozisyon_comment = ", -1=S"
+            s5_reverse_a = 'if (pozisyon == -1) { Sistem.Yon[i] = "A"; } // Reverse'
+            s5_short_entry = '''else if (Sistem.Yon[i] == "S")
+    {
+        if (pozisyon == 1) { Sistem.Yon[i] = "S"; } // Reverse
+        pozisyon = -1;
+        ucUcMesafe = C[i];
+        stopSeviyesi = H[i];
+    }'''
+            s5_short_exit = '''else if (pozisyon == -1)
+    {
+        // Trailing stop guncelle
+        if (C[i] < ucUcMesafe)
+        {
+            ucUcMesafe = C[i];
+            float yeniStop = ucUcMesafe * (1.0f + iz_yuzde);
+            if (yeniStop < stopSeviyesi || stopSeviyesi == 0) stopSeviyesi = yeniStop;
+        }
+        // Cikis: EMA crossback veya Izleyen Stop (bar-ici: H[i] kontrol)
+        bool emaCrossback = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
+        if (emaCrossback || H[i] >= stopSeviyesi)
+        {
+            Sistem.Yon[i] = "F"; // FLAT
+            pozisyon = 0;
+            ucUcMesafe = 0f;
+            stopSeviyesi = 0f;
+        }
+    }'''
+
 
         code = f'''// ===============================================================================================
 // STRATEJI 5: Oliver Kell — Base 'n Break
@@ -1898,34 +1938,25 @@ for (int i = Math.Max(EMA_Slow_P, Math.Max(ADX_P, Math.Max(Breakout_P, VolMA_P))
     {{
         Sistem.Yon[i] = "A"; // AL
     }}
-    {"" if is_spot else '''else if (shortTrend && shortBreak && shortADX && gucluHacim)
-    {
-        Sistem.Yon[i] = "S"; // SAT
-    }'''}
+    {s5_short_giris}
 }}
 
 // === ÇIKIŞ: EMA CROSSBACK + İZLEYEN STOP ===
 float iz_yuzde = TrailingStopPct / 100.0f;
 float ucUcMesafe = 0f;
 float stopSeviyesi = 0f;
-int pozisyon = 0; // 0=F, 1=A{'' if is_spot else ', -1=S'}
+int pozisyon = 0; // 0=F, 1=A{s5_pozisyon_comment}
 
 for (int i = 1; i < Grafikler.Count; i++)
 {{
     if (Sistem.Yon[i] == "A")
     {{
-        {'' if is_spot else 'if (pozisyon == -1) { Sistem.Yon[i] = "A"; } // Reverse'}
+        {s5_reverse_a}
         pozisyon = 1;
         ucUcMesafe = C[i];
         stopSeviyesi = L[i];
     }}
-    {'' if is_spot else '''else if (Sistem.Yon[i] == "S")
-    {{
-        if (pozisyon == 1) {{ Sistem.Yon[i] = "S"; }} // Reverse
-        pozisyon = -1;
-        ucUcMesafe = C[i];
-        stopSeviyesi = H[i];
-    }}'''}
+    {s5_short_entry}
     else if (pozisyon == 1)
     {{
         // Trailing stop güncelle
@@ -1945,25 +1976,7 @@ for (int i = 1; i < Grafikler.Count; i++)
             stopSeviyesi = 0f;
         }}
     }}
-    {'' if is_spot else '''else if (pozisyon == -1)
-    {{
-        // Trailing stop güncelle
-        if (C[i] < ucUcMesafe)
-        {{
-            ucUcMesafe = C[i];
-            float yeniStop = ucUcMesafe * (1.0f + iz_yuzde);
-            if (yeniStop < stopSeviyesi || stopSeviyesi == 0) stopSeviyesi = yeniStop;
-        }}
-        // Çıkış: EMA crossback veya İzleyen Stop (bar-içi: H[i] kontrol)
-        bool emaCrossback = C[i] > EMA_Fast[i] && C[i] > EMA_Slow[i];
-        if (emaCrossback || H[i] >= stopSeviyesi)
-        {{
-            Sistem.Yon[i] = "F"; // FLAT
-            pozisyon = 0;
-            ucUcMesafe = 0f;
-            stopSeviyesi = 0f;
-        }}
-    }}'''}
+    {s5_short_exit}
 }}
 
 // === ÇİZİMLER (Index 3+ — Pro Performance Panel ile çakışmaz) ===
@@ -2009,6 +2022,28 @@ Sistem.Cizgiler[5].ActiveBool = true;
             mode_label = f"VIOP — Çift Yön ({vade_tipi})"
         
         half_gate = max(1, gate_period // 2)
+
+        if is_spot:
+            s6_sat_block = ""
+            s6_sinyal_s = ""
+            s6_exit_s = ""
+        else:
+            s6_sat_block = '''if (mov_i > ott_big_i)
+    {
+        sat = (mov_i < ott_small_i * mult_dn) && sott_short && lott_gate;
+    }
+    else
+    {
+        sat = (mov_i < ott_small_i) && sott_short && lott_gate;
+    }'''
+            s6_sinyal_s = '''else if (sat && SonYon != "S" && YON_MODU != "SADECE_AL")
+    {
+        Sinyal = "S";
+    }'''
+            s6_exit_s = '''else if (SonYon == "S" && !sat)
+    {
+        Sinyal = "F";
+    }'''
 
         code = f'''// ===============================================================================================
 // STRATEJI 6: TOTT_HOTT — OTT Tabanlı Trend + Stochastic Bölge + HHV/LLV Kapı
@@ -2221,31 +2256,18 @@ for (int i = warmupBars; i < Veriler.Count; i++)
     
     // SAT Koşulları
     bool sat = false;
-    {"" if is_spot else '''if (mov_i > ott_big_i)
-    {{
-        sat = (mov_i < ott_small_i * mult_dn) && sott_short && lott_gate;
-    }}
-    else
-    {{
-        sat = (mov_i < ott_small_i) && sott_short && lott_gate;
-    }}'''}
+    {s6_sat_block}
     
     if (al && SonYon != "A" && YON_MODU != "SADECE_SAT")
     {{
         Sinyal = "A";
     }}
-    {"" if is_spot else '''else if (sat && SonYon != "S" && YON_MODU != "SADECE_AL")
-    {{
-        Sinyal = "S";
-    }}'''}
+    {s6_sinyal_s}
     else if (SonYon == "A" && !al)
     {{
         Sinyal = "F";
     }}
-    {"" if is_spot else '''else if (SonYon == "S" && !sat)
-    {{
-        Sinyal = "F";
-    }}'''}
+    {s6_exit_s}
     
     // Yön Modu Kontrolü (Ekstra Güvenlik)
     if (YON_MODU == "SADECE_AL" && Sinyal == "S") Sinyal = "F";
